@@ -1,8 +1,10 @@
-IS_INTERNATIONAL = false
+IS_INTERNATIONAL = true
 
 timer.Simple(5, function()
 	if (!IS_INTERNATIONAL) then
 		RunConsoleCommand("nut_language", "korean")
+	else
+		RunConsoleCommand("nut_language", "english") -- kek
 	end
 end)
 
