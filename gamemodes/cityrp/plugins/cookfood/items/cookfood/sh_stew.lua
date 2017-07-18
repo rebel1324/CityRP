@@ -1,0 +1,10 @@
+ITEM.name = "Stew"
+ITEM.model = "models/props_c17/metalPot001a.mdl"
+ITEM.hungerAmount = 100
+ITEM.mustCooked = true
+ITEM.foodDesc = "stewDesc"
+ITEM.quantity = 8
+ITEM.width = 2
+ITEM.price = 300
+ITEM.height = 2
+ITEM.staminaAmount = 15

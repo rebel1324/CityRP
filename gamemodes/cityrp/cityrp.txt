@@ -1,0 +1,15 @@
+"darkrp"
+{
+	"base"		"sandbox"
+    "title"  "CityRP"
+    "version"   "2.7.0"
+    "menusystem"	"0"
+
+    "author_name"   "Black Tea Za rebel1324 'Kyu Yeon Lee'"
+    "author_email"  ""
+    "author_url"    "https://github.com/rebel1324"
+
+    "icon"  ""
+    "info"  ""
+    "hide"  "0"
+}
