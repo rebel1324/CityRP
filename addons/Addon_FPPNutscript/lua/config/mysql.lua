@@ -6,14 +6,14 @@ In this file you can find a manual for MySQL configuration and the MySQL config 
 ]]
 
 
-FPP_MySQLConfig.EnableMySQL = true     -- Set to true if you want to use an external MySQL database, false if you want to use the built in SQLite database (garrysmod/sv.db) of Garry's mod.
+FPP_MySQLConfig.EnableMySQL = false     -- Set to true if you want to use an external MySQL database, false if you want to use the built in SQLite database (garrysmod/sv.db) of Garry's mod.
 FPP_MySQLConfig.Host = "127.0.0.1"      -- This is the IP address of the MySQL host. Make sure the IP address is correct and in quotation marks (" ")
-FPP_MySQLConfig.Username = "root"       -- This is the username to log in on the MySQL server.
+FPP_MySQLConfig.Username = ""       -- This is the username to log in on the MySQL server.
                                         -- contact the owner of the server about the username and password. Make sure it's in quotation marks! (" ")
-FPP_MySQLConfig.Password = "nt50857197-"   -- This is the Password to log in on the MySQL server,
+FPP_MySQLConfig.Password = "-"   -- This is the Password to log in on the MySQL server,
                                         -- Everyone who has access to FTP on the server can read this password.
                                         -- Make sure you know who to trust. Make sure it's in quotation marks (" ")
-FPP_MySQLConfig.Database_name = "nutscript_fpp"   -- This is the name of the Database on the MySQL server. Contact the MySQL server host to find out what this is
+FPP_MySQLConfig.Database_name = ""   -- This is the name of the Database on the MySQL server. Contact the MySQL server host to find out what this is
 FPP_MySQLConfig.Database_port = 3306    -- This is the port of the MySQL server. Again, contact the MySQL server host if you don't know this.
 
 
