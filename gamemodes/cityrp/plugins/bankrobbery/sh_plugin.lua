@@ -1,7 +1,7 @@
 local PLUGIN = PLUGIN
-PLUGIN.name = "은행 털이 플러그인"
+PLUGIN.name = "Bank Robbery Plugin"
 PLUGIN.author = "Black Tea"
-PLUGIN.desc = "이 플러그인으로 은행털이가 가능해집니다."
+PLUGIN.desc = "This plugin allows people to rob the bank."
 
 PLUGIN.lastRaid = RealTime()
 PLUGIN.reward = 10000
@@ -12,41 +12,41 @@ PLUGIN.penalty = 2000
 
 nut.bankrob = nut.bankrob or {}
 
-nut.config.add("raidGovernment", true, "바로 현상수배가 되는지 확인", nil, {
+nut.config.add("raidGovernment", true, "WiP", nil, {
 	category = "raid"
 })
 
-nut.config.add("raidWanted", true, "바로 현상수배가 되는지 확인", nil, {
+nut.config.add("raidWanted", true, "Wanted player when they steal the money", nil, {
 	category = "raid"
 })
 
-nut.config.add("raidLaws", 5, "은행털이시 필요한 경찰 인원.", nil, {
+nut.config.add("raidLaws", 5, "Amount of police needed to steal the bank money.", nil, {
 	data = {min = 1, max = 10},
 	category = "raid"
 })
 
-nut.config.add("raidTimer", 100, "은행털이 환전시간", nil, {
-	data = {min = 1, max = 600},
+nut.config.add("raidTimer", 100, "Amount of time needed to convert the money to the funt", nil, {
+	data = {min = 1, max = 900},
 	category = "raid"
 })
 
-nut.config.add("raidMoneyWorth", 500, "1회 사용시 돈.", nil, {
+nut.config.add("raidMoneyWorth", 500, "Amount of money steal per use on Bank Reserve", nil, {
 	data = {min = 1, max = 5000},
 	category = "raid"
 })
 
-nut.config.add("raidSpawn", 150, "돈다발이 소환되는 시간을 설정합니다.", nil, {
+nut.config.add("raidSpawn", 5500, "Respawn time of the Bank Reserve.", nil, {
 	data = {min = 1, max = 20000},
 	category = "raid"
 })
 
 
-nut.config.add("rewardKill", 10, "은행강도를 죽일시 보상해주는 양입니다.", nil, {
+nut.config.add("rewardKill", 10, ".", nil, {
 	data = {min = 1, max = 360},
 	category = "raid"
 })
 
-nut.config.add("rewardArrest", 20, "은행강도를 체포시 보상해주는 양입니다.", nil, {
+nut.config.add("rewardArrest", 20, ".", nil, {
 	data = {min = 1, max = 360},
 	category = "raid"
 })
@@ -90,10 +90,10 @@ if (CLIENT) then
 		local client = LocalPlayer()
 		
 		if (client and client:getChar() and client:getStolenMoney() > 0) then
-			local tx, ty = nut.util.drawText("은행 털이중!", 36, 40, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutBigFont")
-			local a, b = nut.util.drawText("환전 시간: " .. math.Round(math.max(0, client:getNetVar("rTimer") - CurTime())) .. "초", 40, 40 + ty*.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
+			local tx, ty = nut.util.drawText("On Bank Robbery!", 36, 40, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutBigFont")
+			local a, b = nut.util.drawText("Time Left: " .. math.Round(math.max(0, client:getNetVar("rTimer") - CurTime())) .. " seconds", 40, 40 + ty*.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
 			a, b = a + tx, b + ty*.9
-			tx, ty = nut.util.drawText("훔친 돈: " .. nut.currency.get(client:getStolenMoney()), 40, 40 + b, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
+			tx, ty = nut.util.drawText("Stolen Money: " .. nut.currency.get(client:getStolenMoney()), 40, 40 + b, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
 		end
 	end	
 else
@@ -131,7 +131,7 @@ else
 
 		if (!client:isWanted()) then
 			nut.log.add(client, "robbery")
-			client:wanted(true, "은행털이", client)
+			client:wanted(true, "Bank Robbery", client)
 		end		
 	end
 
