@@ -23,7 +23,7 @@ nut.command.add("gunlicense", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	alias = {"건라", "건라이센스"}
+	--alias = {"건라", "건라이센스"}
 })
 
 nut.command.add("revokegunlicense", {
@@ -50,7 +50,7 @@ nut.command.add("revokegunlicense", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	alias = {"건라뺏기", "건라취소"}
+	--alias = {"건라뺏기", "건라취소"}
 })
 
 nut.command.add("drop", {
@@ -103,7 +103,7 @@ nut.command.add("drop", {
 			end
 		end
 	end,
-	alias = {"드랍", "버리기"}
+	--alias = {"드랍", "버리기"}
 })
 
 nut.command.add("lockdown", {
@@ -125,7 +125,7 @@ nut.command.add("lockdown", {
 			SCHEMA.nextLockdown = CurTime() + 120
 		end
 	end,
-	alias = {"계엄령"}
+	--alias = {"계엄령"}
 })
 
 nut.command.add("refund", {
@@ -141,7 +141,7 @@ nut.command.add("refund", {
 			hook.Run("OnPlayerRefundEntity", client, entity)
 		end
 	end,
-	alias = {"환불"}
+	--alias = {"환불"}
 })
 
 nut.command.add("stuck", {
@@ -159,7 +159,7 @@ nut.command.add("stuck", {
 		client.nextStuck = CurTime() + 300
 		client:Spawn()
 	end,
-	alias = {"자살", "끼임", "꼈음"}
+	--alias = {"자살", "끼임", "꼈음"}
 })
 
 nut.command.add("search", {
@@ -186,7 +186,7 @@ nut.command.add("search", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	alias = {"수색"}
+	--alias = {"수색"}
 })
 
 nut.command.add("lawboard", {
@@ -221,7 +221,7 @@ nut.command.add("lawboard", {
 		
 		client:notifyLocalized("spawnedLawboard")
 	end,
-	alias = {"법판"}
+	--alias = {"법판"}
 })
 
 nut.command.add("bankdeposit", {
@@ -255,7 +255,7 @@ nut.command.add("bankdeposit", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	alias = {"입금"}
+	--alias = {"입금"}
 })
 
 nut.command.add("bankwithdraw", {
@@ -290,7 +290,7 @@ nut.command.add("bankwithdraw", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	alias = {"출금"}
+	--alias = {"출금"}
 })
 
 nut.command.add("banktransfer", {
@@ -331,7 +331,7 @@ nut.command.add("banktransfer", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	alias = {"송금"}
+	--alias = {"송금"}
 })
 
 nut.command.add("banklongtransfer", {
@@ -361,7 +361,7 @@ nut.command.add("banklongtransfer", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	alias = {"장거리송금"}
+	--alias = {"장거리송금"}
 })
 
 nut.command.add("setprice", {
@@ -455,7 +455,7 @@ nut.command.add("buyentity", {
 
 		end
 	end,
-	alias = {"구매"}
+	--alias = {"구매"}
 })
 
 nut.command.add("beclass", {
@@ -517,7 +517,7 @@ nut.command.add("beclass", {
 			client:notifyLocalized("illegalAccess")
 		end
 	end,
-	alias = {"직업", "job"}
+	--alias = {"직업", "job"}
 })
 
 nut.command.add("demote", {
@@ -602,7 +602,7 @@ nut.command.add("jailpos", {
 			return L("prisonAdded", client, name)
 		end
 	end,
-	alias = {"감옥추가"}
+	--alias = {"감옥추가"}
 })
 
 nut.command.add("setjailpos", {
@@ -621,7 +621,7 @@ nut.command.add("setjailpos", {
 			return L("prisonReset", client, name)
 		end
 	end,
-	alias = {"감옥설정"}
+	--alias = {"감옥설정"}
 })
 
 
@@ -668,7 +668,7 @@ nut.command.add("crappos", {
 			return L("crapAdded", client, name)
 		end
 	end,
-	alias = {}
+	--alias = {}
 })
 
 nut.command.add("setcrappos", {
@@ -684,7 +684,7 @@ nut.command.add("setcrappos", {
 			return L("crapReset", client, name)
 		end
 	end,
-	alias = {}
+	--alias = {}
 })
 
 nut.command.add("hit", {
@@ -769,12 +769,12 @@ nut.command.add("hit", {
 			end
 		end
 	end,
-	alias = {"의뢰"}
+	--alias = {"의뢰"}
 })
 
 
 nut.command.add("removelaw", {
-	syntax = "<플레이어 이름> [이유]",
+	syntax = "<number index>",
 	onRun = function(client, arguments)
 		local char = client:getChar()
 		if (!char) then return end
@@ -801,11 +801,11 @@ nut.command.add("removelaw", {
 			end
 		end
 	end,
-	alias = {"법삭제"}
+	--alias = {"법삭제"}
 })
 
 nut.command.add("addlaw", {
-	syntax = "<플레이어 이름> [이유]",
+	syntax = "<number index> [string law]",
 	onRun = function(client, arguments)
 		local char = client:getChar()
 		if (!char) then return end
@@ -834,12 +834,12 @@ nut.command.add("addlaw", {
 			end
 		end
 	end,
-	alias = {"법추가"}
+	--alias = {"법추가"}
 })
 
 
 nut.command.add("broadcast", {
-	syntax = "[텍스트]",
+	syntax = "<string text>",
 	onRun = function(client, arguments)
 		local char = client:getChar()
 		if (!char) then return end
@@ -864,7 +864,7 @@ nut.command.add("broadcast", {
 			v:BroadcastMSG(message, 60)
 		end
 	end,
-	alias = {"방송"}
+	--alias = {"방송"}
 })
 
 -- I'm giving you second chance.
@@ -895,7 +895,7 @@ if (IS_INTERNATIONAL != true) then
 end
 
 nut.chat.register("tc", {
-	format = "(팀) %s: %s",
+	format = "(TEAM) %s: %s",
 	onGetColor = function(speaker, text)
 		local color = nut.chat.classes.ic.onGetColor(speaker, text)
 
@@ -922,7 +922,7 @@ nut.chat.register("tc", {
 
 		return false
 	end,
-	prefix = {"/t", "/팀", "/g"}
+	--prefix = {"/t", "/팀", "/g"}
 })
 
 -- Advert Chat Type
@@ -935,7 +935,7 @@ nut.chat.register("advert", {
 	onChatAdd = function(speaker, text)
 		chat.AddText(Color(180, 255, 10), L"advert", nut.config.get("chatColor"), speaker:Name()..": "..text)
 	end,
-	prefix = {"/ad", "/광고"}
+	--prefix = {"/ad", "/광고"}
 })
 
 -- Advert Chat Type
@@ -960,13 +960,13 @@ nut.chat.register("cr", {
 		return false
 	end,
 	onChatAdd = function(speaker, text)
-		chat.AddText(Color(255, 40, 40), "[신고] ", nut.config.get("chatColor"), speaker:Name()..": "..text)
+		chat.AddText(Color(255, 40, 40), "[911] ", nut.config.get("chatColor"), speaker:Name()..": "..text)
 	end,
-	prefix = {"/신고", "/119", "/경찰"}
+	prefix = {"/911"}
 })
 
 nut.command.add("unwanted", {
-	syntax = "<플레이어 이름>",
+	syntax = "<string name>",
 	onRun = function(client, arguments)
 		local target = nut.command.findPlayer(client, arguments[1])
 		local message = table.concat(arguments, " ", 2)
@@ -994,11 +994,11 @@ nut.command.add("unwanted", {
 			target:wanted(false, message, client)
 		end
 	end,
-	alias = {"수배해제", "현상수배해제"}
+	--alias = {"수배해제", "현상수배해제"}
 })
 
 nut.command.add("wanted", {
-	syntax = "<플레이어 이름> <수배 사유>",
+	syntax = "<string name> <string reason>",
 	onRun = function(client, arguments)
 		local target = nut.command.findPlayer(client, arguments[1])
 		local message = table.concat(arguments, " ", 2)
@@ -1028,11 +1028,11 @@ nut.command.add("wanted", {
 			end
 		end
 	end,
-	alias = {"수배", "현상수배"}
+	--alias = {"수배", "현상수배"}
 })
 
 nut.command.add("searchwarrant", {
-	syntax = "<플레이어 이름> <사유>",
+	syntax = "<string name> <string reason>",
 	onRun = function(client, arguments)
 		local target = nut.command.findPlayer(client, arguments[1])
 		local message = table.concat(arguments, " ", 2)
@@ -1071,11 +1071,11 @@ nut.command.add("searchwarrant", {
 			end)
 		end
 	end,
-	alias = {"수색영장"}
+	--alias = {"수색영장"}
 })
 
 nut.command.add("password", {
-	syntax = "<패스워드>",
+	syntax = "<4-digit number>",
 	onRun = function(client, arguments)
 			-- Get the Vehicle Spawn position.
 		traceData = {}
@@ -1106,11 +1106,11 @@ nut.command.add("password", {
 			end
 		end
 	end,
-	alias = {"비번", "비밀번호"}
+	--alias = {"비번", "비밀번호"}
 })
 
+-- kek
 nut.command.add("savemap", {
-	syntax = "<패스워드>",
 	onRun = function(client, arguments)
 		if (client:IsSuperAdmin()) then
 			hook.Run("SaveData")

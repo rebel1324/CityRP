@@ -277,7 +277,7 @@ else
 				ang:RotateAroundAxis( self:GetRight(), -90 )
 				ang:RotateAroundAxis( self:GetForward(), 90 )
 				cam.Start3D2D(pos, ang, 0.3)
-					nut.util.drawText("쓰레기 처리기", 0, 0, Color(255, 255, 255, distalpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, "ChatFont")
+					nut.util.drawText("Recycling Machine", 0, 0, Color(255, 255, 255, distalpha), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, "ChatFont")
 				cam.End3D2D()
 			end
 		end

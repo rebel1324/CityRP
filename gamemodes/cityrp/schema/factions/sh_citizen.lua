@@ -1,5 +1,5 @@
 -- The 'nice' name of the faction.
-FACTION.name = "시민"
+FACTION.name = "Citizen"
 -- This faction is default by the server.
 -- This faction does not requires a whitelist.
 FACTION.isDefault = true

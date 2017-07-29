@@ -17,6 +17,7 @@ if (SERVER) then
 			client:setAction("@unTying", 5)
 			client:doStaredAction(entity, function()
 				entity:setRestricted(false)
+				entity:setNetVar("Handcuffed", false)
 				entity.nutBeingUnTied = false
 
 				client:EmitSound("npc/roller/blade_in.wav")

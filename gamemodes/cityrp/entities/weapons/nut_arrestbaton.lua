@@ -1,5 +1,7 @@
 AddCSLuaFile()
 
+--local ARREST_TIME = nut.config.get("jailTime")
+
 if (CLIENT) then
 	SWEP.PrintName = "Arrest/Unarrest Baton"
 	SWEP.Slot = 1
@@ -9,7 +11,7 @@ if (CLIENT) then
 end
 
 SWEP.Category = "Nutscript"
-SWEP.Author = "Black Tea"
+SWEP.Author = "Black Tea and AngryBaldMan"
 SWEP.Instructions = ""
 SWEP.Purpose = ""
 SWEP.Drop = false
@@ -47,6 +49,7 @@ SWEP.FireWhenLowered = true
 
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 0, "Activated")
+	--self:NetworkVar("Bool", 1, "Arrested")
 end
 
 function SWEP:Precache()
@@ -84,14 +87,21 @@ function SWEP:PrimaryAttack()
 			data.filter = self.Owner
 		local trace = util.TraceLine(data)
 	self.Owner:LagCompensation(false)
-
+	
 	if (SERVER and trace.Hit) then
 		self.Owner:EmitSound("weapons/stunstick/stunstick_impact"..math.random(1, 2)..".wav")
 
 		local entity = trace.Entity
 
 		if (IsValid(entity) and entity:IsPlayer()) then
-			entity:arrest(true, self.Owner)
+			--entity:arrest(true, self.Owner)
+			if entity:getNetVar("Handcuffed") == true then
+			entity:setNetVar("Handcuffed", false)
+			entity:arrest(true)
+           else
+           self.Owner:notify("They must be handcuffed!")
+           end
+	
 		end
 	end
 end
@@ -133,8 +143,16 @@ function SWEP:SecondaryAttack()
 		local entity = trace.Entity
 
 		if (IsValid(entity) and entity:IsPlayer()) then
-			entity:arrest(false, self.Owner)
+			--entity:arrest(false, self.Owner)
+		if entity:arrest() == true then
+			entity:Spawn()
+			entity:notify("You have been released from prison by " .. self.Owner:Nick() .. ".")
+			timer.Stop(entity:UniqueID() .. "_jailTimer")
+			entity:arrest(false)
+		else
+			self.Owner:notify("They're not arrested!")
 		end
+	end
 	end
 end
 

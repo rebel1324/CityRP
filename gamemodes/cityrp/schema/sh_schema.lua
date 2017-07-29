@@ -1,6 +1,6 @@
 SCHEMA.name = "Doshi" -- Change this name if you're going to create new schema.
 SCHEMA.author = "Black Tea / RealKallos"
-SCHEMA.desc = "새로운 세계에 오신것을 환영합니다."
+SCHEMA.desc = "Welcome to the new world."
 
 -- Schema Help Menu. You can add more stuffs in cl_hooks.lua.
 SCHEMA.helps = {
@@ -43,12 +43,15 @@ nut.util.include("sh_dev.lua") -- Developer Functions
 nut.util.include("sh_character.lua")
 nut.util.include("sv_schema.lua")
 
+-- Mafia Model Animation Registeration
 nut.anim.setModelClass("models/fearless/mafia02.mdl", "player")
 nut.anim.setModelClass("models/fearless/mafia04.mdl", "player")
 nut.anim.setModelClass("models/fearless/mafia06.mdl", "player")
 nut.anim.setModelClass("models/fearless/mafia07.mdl", "player")
 nut.anim.setModelClass("models/fearless/mafia09.mdl", "player")
+nut.anim.setModelClass("models/fearless/don1.mdl", "player")
 
+-- Police Model Animation Registeration
 nut.anim.setModelClass("models/humans/nypd1940/male_01.mdl", "player")
 nut.anim.setModelClass("models/humans/nypd1940/male_02.mdl", "player")
 nut.anim.setModelClass("models/humans/nypd1940/male_03.mdl", "player")
@@ -58,6 +61,7 @@ nut.anim.setModelClass("models/humans/nypd1940/male_06.mdl", "player")
 nut.anim.setModelClass("models/humans/nypd1940/male_07.mdl", "player")
 nut.anim.setModelClass("models/humans/nypd1940/male_09.mdl", "player")
 
+-- Black Tea Citizen Model Registeration
 nut.anim.setModelClass("models/btcitizen/male_01.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/male_02.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/male_03.mdl", "player")
@@ -72,7 +76,6 @@ nut.anim.setModelClass("models/btcitizen/male_11.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/male_12.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/male_13.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/male_14.mdl", "player")
-
 nut.anim.setModelClass("models/btcitizen/female_01.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_02.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_03.mdl", "player")
@@ -88,14 +91,23 @@ nut.anim.setModelClass("models/btcitizen/female_12.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_13.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_14.mdl", "player")
 
-local fuckoff = {
-	chatbox  = false,
-	wepselect = false,
-	thirdperson = false,
-	spawnsaver = false,
-	saveitems = false,
-	recognition = false,
+-- This hook prevents default Nutscript plugins to load.
+local noLoad = {
+	chatbox  = false, -- CityRP is using XPChat as default chat.
+	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
+	thirdperson = false, -- CityRP does not use Thridperson.
+	spawnsaver = false, -- CityRP does not use spawnsaver (returning back to defualt location)
+	saveitems = false, -- CityRP does not save any items on the map.
+	recognition = false, -- CityRP does not need recognition.
 }
 function SCHEMA:PluginShouldLoad(uniqueID)
-	return fuckoff[uniqueID]
+	return noLoad[uniqueID] -- true = don't load the specified plugin.
+end
+
+if (SERVER) then
+	resource.AddFile("resource/fonts/Rajdhani-Bold.ttf")
+	resource.AddFile("resource/fonts/Rajdhani-Light.ttf")
+	resource.AddFile("resource/fonts/Rajdhani-Medium.ttf")
+	resource.AddFile("resource/fonts/Rajdhani-Regular.ttf")
+	resource.AddFile("resource/fonts/Rajdhani-Semibold.ttf")
 end

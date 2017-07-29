@@ -6,6 +6,8 @@ PLUGIN.slotCategory = {
 	[3] = "primary",
 	[4] = "primary",
 }
+
+-- I don't want to make them to buy 50 different kind of ammo
 PLUGIN.changeAmmo = {
 	["7.92x33mm Kurz"] = "ar2",
 	["300 AAC Blackout"] = "ar2",
@@ -87,4 +89,5 @@ PLUGIN.ammoInfo["sniperround"] = {
 }
 
 nut.util.include("presets/sh_defcw.lua")
+nut.util.include("presets/sh_customweapons.lua")
 

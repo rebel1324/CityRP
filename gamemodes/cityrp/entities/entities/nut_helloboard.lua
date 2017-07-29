@@ -34,7 +34,7 @@ if (SERVER) then
 	end
 
 	function ENT:Use(client)
-		client:SendLua("gui.OpenURL('http://steamcommunity.com/groups/lacrpseason5/discussions/')")
+		client:SendLua("gui.OpenURL('http://steamcommunity.com/groups/cityrpdev/discussions/0/')")
 	end
 else
 	local text = L"helloBoard"

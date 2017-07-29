@@ -98,7 +98,7 @@ local PANEL = {}
 		self.info:Dock(BOTTOM)
 		self.info:SetTall(36)
 		self.info:DockMargin(0, 0, 0, 32)
-		self.info:SetText("스페이스를 눌러서 계속")
+		self.info:SetText("Press (Space) To Continue")
 		self.info:SetFont("nutIntroSmallFont")
 		self.info:SetContentAlignment(2)
 		self.info:SetAlpha(0)

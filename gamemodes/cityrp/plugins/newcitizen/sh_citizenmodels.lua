@@ -166,16 +166,9 @@ OUTFIT_DATA = {
 		uid = "bmale",
 		facemap = "models/btcitizen/facemaps/erdim_facemap",
 		skins = {
-			"facemaps/erdim_facemap",
-			"facemaps/erdim_facemap2",
-			"facemaps/erdim_facemap3",
-			"facemaps/erdim_facemap4",
 			"facemaps/ffactory/erdim_cylmap",
-			"facemaps/freshman/erdim_cylmap",
-			"facemaps/freshman/erdim_facemap",
 			"facemaps/rusty/erdim_facemap",
 			"facemaps/rusty2/erdim_facemap",
-			"facemaps/zombie/erdim_cylmap",
 		},
 	},
 	["models/btcitizen/male_10.mdl"] = {

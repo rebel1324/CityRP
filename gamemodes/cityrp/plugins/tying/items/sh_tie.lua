@@ -1,4 +1,4 @@
-ITEM.name = "Handcuffs"
+ITEM.name = "Zip Ties"
 ITEM.desc = "ziptieDesc"
 ITEM.price = 50
 ITEM.model = "models/items/crossbowrounds.mdl"
@@ -40,6 +40,7 @@ ITEM.functions.Use = {
 
 			target:setNetVar("tying", true)
 			target:setAction("@beingTied", 5)
+			target:setNetVar("Handcuffed", true)
 		else
 			item.player:notifyLocalized("plyNotValid")
 		end

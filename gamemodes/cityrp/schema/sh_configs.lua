@@ -263,6 +263,16 @@ nut.config.add("jailTime", 200, "감옥에 수감되는 시간입니다.", nil, 
 	category = "schema"
 })
 
+nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
+	data = {min = 0, max = 600},
+	category = "schema"
+})
+
+nut.config.add("tazeTime", 5, "The ammount of time someone is tazed for.", nil, {
+	data = {min = 0, max = 600},
+	category = "schema"
+})
+
 nut.config.add("incomeRate", .1, "은행 이자율을 설정합니다 (1이 1퍼센트임.).", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
@@ -454,6 +464,7 @@ function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyConditio
 	return nut.bent.list[entClass] 
 end
 
+--[[
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
 	'월급은 바로 은행으로 들어오기 때문에 현금화가 필요합니다.',
@@ -464,6 +475,21 @@ nut.tips = {
 	'책을 읽으면 한번에 많은 양의 숙련 경험치를 얻지만, 가격이 매우 높습니다.',
 	'C메뉴를 통해서 이 팁을 끌 수 있습니다. 옵션은 화면의 오른쪽 위 구석에 위치하고 있습니다.',
 }
+]]
+
+--Translated By AngryBaldMan
+nut.tips = {
+	--'Most items can be used immediately by pressing Ctrl and clicking.',
+	'The salary comes directly into the bank, so cash is required.',
+	'Inventory can also be opened directly with F3.',
+	'Stats can be raised by repeating certain actions',
+	'Sometimes it can be a positive effect just to give it to people around you. ',
+	'Punch dolls give "only when you hit with a punch" experience',
+	'When you read a book, you get a lot of experience at a time, but the price is very high.',
+	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
+}
+
+
 
 nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
 
@@ -570,7 +596,7 @@ bentstr.onSpawn = function(entity, client, char, info)
 	end
 end
 
-
+--[[
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
 	'월급은 바로 은행으로 들어오기 때문에 현금화가 필요합니다.',
@@ -600,4 +626,37 @@ nut.tips = {
 	'!신고 명령어로 어드민에게 신고를 할 수 있습니다.',
 	'!신고 명령어로 어드민에게 신고를 할 수 있습니다.',
 	'!신고 명령어로 어드민에게 신고를 할 수 있습니다.',
+}
+]]
+
+// Translation by AngryBaldMan
+nut.tips = {
+	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
+	'The salary comes directly into the bank, so cash is required.',
+	'Inventory can also be opened directly with F3.',
+	'Stats can be raised by repeating certain actions. ',
+	'Sometimes it can be a positive effect just to give it to people around you.. ',
+	'Punch dolls gives you "experience only when you hit with a punch".',
+	'When you read a book, you get a lot of experience at a time, but the price is very high.',
+	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
+	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
+	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
+	'Shooting Dolls will give you "Experienced".',
+	'Some traders sell things only to certain jobs.',
+	'Its garbage but you can see it.',
+	'Mobs, gangsters, and policemen can only chat with each other / team.',
+	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
+	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
+	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
+	'Money You can earn money by hiding copiers.',
+	'Police can make money by processing money copiers.',
+	'Please separate IC and OOC!',
+	'Please separate IC and OOC!',
+	'Please check MOTD and IC / OOC before declaring.',
+	'Please check MOTD and IC / OOC before declaring.',
+	'Please check MOTD and IC / OOC before declaring.',
+	'We can report to administrator with report command.',
+	'We can report to administrator with report command.',
+	'We can report to administrator with report command.',
+	'We can report to administrator with report command.',
 }

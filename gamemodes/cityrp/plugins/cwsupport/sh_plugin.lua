@@ -2,6 +2,24 @@ PLUGIN.name = "Macro Weapon Register"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Gun Jesus have arrived."
 
+/*
+	MODIFICATION TUTORIAL
+		- sh_config
+		 This file contains ammo structure.
+		- sh_languages
+		 This file contains language sets for the weapons.
+		- cl_cw3d2d
+		 This file contains modification for CW 2.0 HUDs
+		- sh_attachments
+		 This file contains information and of attachment items.
+
+
+		
+
+
+
+
+*/
 
 nut.util.include("sh_configs.lua")
 nut.util.include("sh_languages.lua")
@@ -233,7 +251,7 @@ function PLUGIN:InitializedPlugins()
 						local attText = ""
 						local mods = self:getData("mod", {})
 						for _, att1 in pairs(mods) do
-							attText = attText .. "\n<color=39, 174, 96>" .. L(att1[1]) .. "</color>"
+							attText = attText .. "\n<color=39, 174, 96>" .. L(att1[1] or "ERROR") .. "</color>"
 						end
 
 						text = text .. L("gunInfoAttachments", attText)
@@ -255,7 +273,7 @@ function PLUGIN:InitializedPlugins()
 
                 for k, v in pairs(item:getData("mod", {})) do
                     table.insert(targets, {
-                        name = L(v[1]),
+                        name = L(v[1] or "ERROR"),
                         data = k,
                     })
                 end
@@ -297,14 +315,16 @@ function PLUGIN:InitializedPlugins()
 										else
 											item:setData("mod", mods)
 										end
-										client:notifyLocalized("attDetached")
+										
+										-- Yeah let them know you did something with your dildo
+										client:EmitSound("cw/holster4.wav")
 									else
-										client:notifyLocalized("wtfNoMod?")
+										client:notifyLocalized("notAttachment")
 									end
 								end
 							end
 						else
-							client:notifyLocalized("specifyShit")
+							client:notifyLocalized("detTarget")
 						end
 
 						return false
@@ -313,6 +333,7 @@ function PLUGIN:InitializedPlugins()
 
 				HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
 
+				-- Register Language name for the gun.
 				if (CLIENT) then
 					if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
 						ITEM.name = v.PrintName 
@@ -326,7 +347,8 @@ function PLUGIN:InitializedPlugins()
 	end
 
 	-- Reconfigure Customizable Weaponry in here	
-	do
+	do	
+		-- There is no Customization Keys.
 		CustomizableWeaponry.customizationMenuKey = "" -- the key we need to press to toggle the customization menu
 		CustomizableWeaponry.canDropWeapon = false
 		CustomizableWeaponry.enableWeaponDrops = false

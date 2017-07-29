@@ -612,9 +612,20 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 	if (isArrest) then
 		if (IsValid(arrester)) then
 			nut.log.add(arrester, "arrest")
+			arrester:notify("You have arrested " .. entity:Nick() .. " for " .. nut.config.get("jailTime") ..  " seconds." )
 		end
 		if (IsValid(arrested)) then
 			nut.log.add(arrested, "arrested")
+			arrested:notify("You have been arrested for " .. nut.config.get("jailTime") ..  " seconds." )
+			arrested:Spawn()
+			arrested:SetPos( Vector( 2924.674316, -3200.367920, -119.968750 ) )
+			arrested:setAction("Releasing", nut.config.get("jailTime"))
+			arrested:StripWeapons()
+            timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
+                arrested:Spawn()
+				arrested:notify("You have been released from prison")
+				arrested:arrest(false)
+            end)
 		end
 	else
 		if (IsValid(arrester)) then
@@ -1432,4 +1443,24 @@ function SCHEMA:ShutDown()
 			v:Remove()
 		end
 	end
+end
+
+local meta = FindMetaTable("Player")
+ 
+function meta:Stun()
+    --if not IsValid(self) then return false end
+    self.Stunned = true
+    self:setNetVar("Stunned", true)
+    umsg.Start("StunEffect", self)
+        umsg.String("1")
+    umsg.End()
+end
+ 
+function meta:Unstun()
+    --if not IsValid(self) then return false end
+    self.Stunned = false
+    self:setNetVar("Stunned", false)
+    umsg.Start("StunEffect", self)
+        umsg.String("0")
+    umsg.End()
 end

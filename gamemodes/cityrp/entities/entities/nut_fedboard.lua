@@ -26,14 +26,14 @@ else
 	local gradient2 = nut.util.getMaterial("vgui/gradient-u")
 
 	surface.CreateFont("nutFedTitle", {
-		font = "Malgun Gothic",
+		font = "Calibri",
 		extended = true,
 		size = 66,
 		weight = 1000
 	})
 
 	surface.CreateFont("nutFedSubTitle", {
-		font = "Malgun Gothic",
+		font = "Calibri",
 		extended = true,
 		size = 44,
 		weight = 1000
@@ -86,25 +86,25 @@ else
 					end
 				end
 
-				nut.util.drawText("정부 소지금", w/2 + scroll
+				nut.util.drawText("Goverment Fund", w/2 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(nut.currency.get(100000), w/2 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
 
-				nut.util.drawText("현재 활동중인 시민", w/2 + w + scroll
+				nut.util.drawText("Citizens in the City", w/2 + w + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
-				local time = Format("%s 명", players)
+				local time = Format("%s Citizens", players)
 				nut.util.drawText(time, w/2 + w + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
 
-				local text = "현재 가능"
+				local text = "is Active"
 				do
 					if (laws < nut.config.get("raidLaws", 5)) then
-						text = Format("경찰 (%s/%s)", laws, nut.config.get("raidLaws", 5))
+						text = Format("Need more Police (%s/%s)", laws, nut.config.get("raidLaws", 5))
 					end
 				end
 
-				nut.util.drawText("은행털이 가능여부", w/2 + w*2 + scroll
+				nut.util.drawText("Bankrobbery", w/2 + w*2 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(text, w/2 + w*2 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
@@ -120,12 +120,12 @@ else
 					end
 				end
 
-				nut.util.drawText("현재 수감중인 인원", w/2 + w*3 + scroll
+				nut.util.drawText("Arrested Convicts", w/2 + w*3 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
-				nut.util.drawText(num .. "명", w/2 + w*3 + scroll
+				nut.util.drawText(num .. "Convicts", w/2 + w*3 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
 
-				nut.util.drawText("정부 소지금", w/2 + w*4 + scroll
+				nut.util.drawText("Goverment Fund", w/2 + w*4 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(nut.currency.get(100000), w/2 + w*4 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
@@ -188,6 +188,7 @@ else
 		self.screen.pos = pos
 		self.screen.ang = renderAng
 		self.screen.ent = self
+		self.screen.renderCode = renderCode
 
 		-- If The Screen has no Focus(If player is not touching it), Increase Idle Screen's Alpha.
 		if (self.screen.hasFocus) then

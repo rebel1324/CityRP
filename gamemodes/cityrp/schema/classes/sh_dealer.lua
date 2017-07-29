@@ -21,6 +21,16 @@ CLASS.business = {
 	["meleeskillbook"] = 1,
 	["stmbook"] = 1,
 	
+	-- Bags
+	["civbag"] = 1,
+	["civbag2"] = 1,
+	["civbag3"] = 1,
+	["buttbag"] = 1,
+	["gunjang"] = 1,
+	["hugebag"] = 1,
+	["smallbag"] = 1,
+	["largebag"] = 1,
+
 	-- Weapons
 	["nut_m_hook"] = 1,
 	["nut_m_pickaxe"] = 1,
@@ -34,25 +44,6 @@ CLASS.business = {
 	["sodabottle"] = 1,	
 	["sodacan"] = 1,	
 }
-
---[[
-	-- Ammo
-	["ammo10x25"] = 1,
-	["ammo12gauge"] = 1,
-	["ammo23x75"] = 1,
-	["ammo357sig"] = 1,
-	["ammo380acp"] = 1,
-	["ammo44mag"] = 1,
-	["ammo45acp"] = 1,
-	["ammo454casull"] = 1,
-	["ammo50ae"] = 1,
-	["ammo50bmg"] = 1,
-	["ammo545x39"] = 1,
-	["ammo556x45"] = 1,
-	["ammo762x39"] = 1,
-	["ammo762x51"] = 1,
-	["ammo9x18"] = 1,
-	["ammo9x19"] = 1,]]
 
 function CLASS:OnSet(client)
 end

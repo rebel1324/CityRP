@@ -1,2 +1,0 @@
--- Acecool
-local a

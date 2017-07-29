@@ -30,7 +30,6 @@ CLASS.model = {
 	"models/humans/nypd1940/male_04.mdl",
 	"models/humans/nypd1940/male_05.mdl",
 	"models/humans/nypd1940/male_06.mdl",
-	"models/humans/nypd1940/male_07.mdl",
 	"models/humans/nypd1940/male_09.mdl"
 }
 

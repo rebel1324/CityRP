@@ -15,7 +15,7 @@ if (SERVER) then
 	scripted_ents.Register(ENT, "hooker")
 	ENT = nil
 
-	local fuckoffCunt = {
+	local goAway = {
 		[2746] = true,
 		[2747] = true,
 		[2748] = true,
@@ -137,10 +137,10 @@ if (SERVER) then
 			if (v:MapCreationID() == BANK_ENTITY_LIST.off) then
 				v:SetKeyValue("OnTrigger", "hooker,BankAlarmOff,0,0,-1")
 			end
-			if (fuckoffCunt[v:MapCreationID()] == true) then
+			if (goAway[v:MapCreationID()] == true) then
 				v:Remove()
-			elseif (fuckoffCunt[v:MapCreationID()] != nil) then
-				fuckoffCunt[v:MapCreationID()](v)
+			elseif (goAway[v:MapCreationID()] != nil) then
+				goAway[v:MapCreationID()](v)
 			end
 		end
     end

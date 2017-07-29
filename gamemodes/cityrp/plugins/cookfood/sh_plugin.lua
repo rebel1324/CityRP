@@ -199,7 +199,7 @@ else
 				end
 			end
 
-			thinkTime = CurTime() + .5
+			thinkTime = CurTime() + nut.config.get("hungerTime")
 		end
 	end
 end

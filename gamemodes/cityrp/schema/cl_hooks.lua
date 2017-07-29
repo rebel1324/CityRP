@@ -552,7 +552,7 @@ netstream.Hook("nutLockdown", function(bool)
 	end
 
 	CHAT_CLASS = {font = "nutJailBig"}
-		chat.AddText(color_white, bool and L"lockdownOn" or L"lockdownOff")
+		chat.AddText(color_red, bool and L"lockdownOn" or L"lockdownOff")
 	CHAT_CLASS = nil
 end)
 

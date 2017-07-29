@@ -48,7 +48,7 @@ if (CLIENT) then
 		end
 
         NV_Status = bool
-		NV_NIGGERTYPE = 1
+		NV_NIGHTTYPE = 1
         
         if bool then        
             CurScale = 0.2
