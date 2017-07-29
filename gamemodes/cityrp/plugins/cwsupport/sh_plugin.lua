@@ -2,6 +2,7 @@ PLUGIN.name = "Macro Weapon Register"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Gun Jesus have arrived."
 
+if (!CustomizableWeaponry) then return end
 /*
 	MODIFICATION TUTORIAL
 		- sh_config
