@@ -119,9 +119,9 @@ DROPITEM = {
 -- 불법 아이템. 1이면 회수율 100%, 0이면 회수율 0%. 500원짜리 엔티티 회수, 변수 1 = 500의 100%, 500$를 받는다.
 -- 엔티티가 판매 목록에 포함되지 않았다면 회수 비용은 0으로 고정된다.
 ILLEGAL_ENTITY = {
-	["circl_printer_amazing_samsung"] = 0.8,
-	["circl_printer_amazing_helg"] = 0.8,
-	["circl_printer_amazing_agple"] = 0.8,
+	["moneyprinter_samsung"] = 0.8,
+	["moneyprinter_agple"] = 0.8,
+	["moneyprinter_lg"] = 0.8,
 	["nut_d_lamp"] = 0.8,
 	["nut_d_pot"] = 0.8,
 }
@@ -493,9 +493,9 @@ nut.tips = {
 
 nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
 
-nut.bent.add("circl_printer_amazing_samsung", "models/props_c17/consolebox01a.mdl", "printerNameSamsung", 2, 1000, notLaw)
-nut.bent.add("circl_printer_amazing_helg", "models/props_c17/consolebox01a.mdl", "printerNameLG", 2, 1000, notLaw)
-nut.bent.add("circl_printer_amazing_agple", "models/props_c17/consolebox01a.mdl", "printerNameApple", 2, 1000, notLaw)
+nut.bent.add("moneyprinter_samsung", "models/props_c17/consolebox01a.mdl", "printerNameSamsung", 2, 1000, notLaw)
+nut.bent.add("moneyprinter_agple", "models/props_c17/consolebox01a.mdl", "printerNameLG", 2, 1000, notLaw)
+nut.bent.add("moneyprinter_lg", "models/props_c17/consolebox01a.mdl", "printerNameApple", 2, 1000, notLaw)
 
 nut.bent.add("nut_vnd_food", "models/props_wasteland/kitchen_stove002a.mdl", "foodVendor", 1, 800, cookOnly)
 nut.bent.add("nut_vnd_soda", "models/rebel1324/sodavendor.mdl", "sodaVendor", 1, 1000, cookOnly)
