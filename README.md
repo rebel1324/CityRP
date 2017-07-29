@@ -30,3 +30,5 @@ Using my script with dismissing this conditions may get you a DMCA Copyright Not
 3. Put Nutscript Framework in garrysmod/gamemodes
 4. Put CityRP schema in garrysmod/gamemodes
 5. put +gamemode cityrp in your server's commandline to run the CityRP server.
+
+https://www.youtube.com/watch?v=1kWjgLYK1Os
