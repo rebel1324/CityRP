@@ -25,4 +25,8 @@ Me, Black Tea Za rebel1324 proudly presents this schema for you after 3 months o
 Using my script with dismissing this conditions may get you a DMCA Copyright Notice.
 
 ## How to Install
-
+1. Download Nutscript Framework https://github.com/rebel1324/NutScript/archive/1.1.zip
+2. Download CityRP Schema https://github.com/rebel1324/CityRP/archive/master.zip
+3. Put Nutscript Framework in garrysmod/gamemodes
+4. Put CityRP schema in garrysmod/gamemodes
+5. put +gamemode cityrp in your server's commandline to run the CityRP server.
