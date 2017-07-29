@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if( CLIENT ) then
-	SWEP.PrintName = "불법물품 감지기";
+	SWEP.PrintName = "Illegal Entity Detector";
 	SWEP.Slot = 1;
 	SWEP.SlotPos = 0;
 end

@@ -115,9 +115,7 @@ DROPITEM = {
 	["raweed"] = 1,
 }
 
--- ILLEGAL_ENTITY : 불법 아이템
--- 불법 아이템. 1이면 회수율 100%, 0이면 회수율 0%. 500원짜리 엔티티 회수, 변수 1 = 500의 100%, 500$를 받는다.
--- 엔티티가 판매 목록에 포함되지 않았다면 회수 비용은 0으로 고정된다.
+-- ILLEGAL_ENTITY
 ILLEGAL_ENTITY = {
 	["moneyprinter_samsung"] = 0.8,
 	["moneyprinter_agple"] = 0.8,
