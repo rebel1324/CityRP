@@ -103,7 +103,7 @@ function SCHEMA:OnCharTradeVendor(client, entity, uniqueID, isSellingToVendor)
 	end
 
 	if (isSellingToVendor) then
-		if (entity:getNetVar("name") == "마약상") then
+		if (entity:getNetVar("name") == "Narcotic") then
 			if (entity.items and entity.items["raweed"]) then
 				entity.scale = math.max(entity.scale - 0.03, WEEDTABLE.min)
 
@@ -121,7 +121,7 @@ function SCHEMA:UpdateVendors()
 
 		if (v:GetClass() == "nut_vendor") then
 
-			if (v:getNetVar("name") == "암상인") then
+			if (v:getNetVar("name") == "Black Market Dealer") then
 				v.currentStock = v.currentStock or 0
 				v.currentStock = (v.currentStock + 1) % #WEAPON_STOCKS
 

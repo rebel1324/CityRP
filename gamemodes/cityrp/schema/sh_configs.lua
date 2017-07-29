@@ -171,7 +171,7 @@ WEAPON_STOCKS = {
 -- Adding Schema Specific Configs.
 nut.config.setDefault("font", "Bitstream Vera Sans")
 
-nut.config.add("garbageInterval", 20, "쓰레기가 소환되는 시간입니다.", 
+nut.config.add("garbageInterval", 20, "How long trash regen takes.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutGrabage")) then
 			timer.Adjust("nutGrabage", newValue, 0, SCHEMA.CrapPayload)
@@ -181,32 +181,32 @@ nut.config.add("garbageInterval", 20, "쓰레기가 소환되는 시간입니다
 	category = "schema"
 })
 
-nut.config.add("hitCost", 500, "히트맨을 부를떄 쓰는 비용을 설정합니다.", nil, {
+nut.config.add("hitCost", 500, "Amount of money for requesting hit.", nil, {
 	data = {min = 250, max = 5000},
 	category = "schema"
 })
 
-nut.config.add("garbageMax", 25, "월드에 쓰레기가 최대 몇개 나올지 제한합니다.", nil, {
+nut.config.add("garbageMax", 25, "How many trash can be in single world.", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("garbageCount", 7, "쓰레기가 한번에 몇개 나올지 제한합니다.", nil, {
+nut.config.add("garbageCount", 7, "How many trash spawned in one tick.", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("voteJob", 25, "직업 투표를 할때 필요한 플레이어 찬성수입니다. (기본 25%)", nil, {
+nut.config.add("voteJob", 25, "Percentage of vote to get a job", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("voteDemote", 25, "탄핵 투표를 할때 필요한 플레이어 찬성수입니다. (기본 25%)", nil, {
+nut.config.add("voteDemote", 25, "Percentage of vote to demote people", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("vendorWeedInterval", 3600, "마약상의 업데이트 시간을 설정합니다.", 
+nut.config.add("vendorWeedInterval", 3600, "Amount of seconds to update Narcotic NPC Shops.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutVendorWeedSell")) then
 			timer.Adjust("nutVendorWeedSell", newValue, 0, SCHEMA.UpdateWeedVendors)
@@ -216,7 +216,7 @@ nut.config.add("vendorWeedInterval", 3600, "마약상의 업데이트 시간을 
 	category = "schema"
 })
 
-nut.config.add("vendorInterval", 3600, "암상인의 업데이트 시간을 설정합니다.", 
+nut.config.add("vendorInterval", 3600, "Amount of seconds to update Black Market Dealer NPC Shops.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutVendorSell")) then
 			timer.Adjust("nutVendorSell", newValue, 0, SCHEMA.UpdateVendors)
@@ -226,7 +226,7 @@ nut.config.add("vendorInterval", 3600, "암상인의 업데이트 시간을 설�
 	category = "schema"
 })
 
-nut.config.add("wageInterval", 180, "월급이 나오는 시간을 설정합니다.", 
+nut.config.add("wageInterval", 180, "Amount of seconds to distribute paycheck on players.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutSalary")) then
 			timer.Adjust("nutSalary", newValue, 0, SCHEMA.SalaryPayload)
@@ -236,7 +236,7 @@ nut.config.add("wageInterval", 180, "월급이 나오는 시간을 설정합니�
 	category = "schema"
 })
 
-nut.config.add("incomeInterval", 1000, "은행 이자가 나오는 시간을 설정합니다.", 
+nut.config.add("incomeInterval", 1000, "Amount of seconds to distribute bank income.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutBankIncome")) then
 			timer.Adjust("nutBankIncome", newValue, 0, SCHEMA.BankIncomePayload)
@@ -246,7 +246,7 @@ nut.config.add("incomeInterval", 1000, "은행 이자가 나오는 시간을 설
 	category = "schema"
 })
 
-nut.config.add("doorTaxInterval", 300, "문 세금 시간을 설정합니다.", 
+nut.config.add("doorTaxInterval", 300, "Amount of seconds to get door tax.", 
 	function(oldValue, newValue)
 		if (timer.Exists("nutDoorTax")) then
 			timer.Adjust("nutDoorTax", newValue, 0, SCHEMA.BuildingTaxPayload)
@@ -256,7 +256,7 @@ nut.config.add("doorTaxInterval", 300, "문 세금 시간을 설정합니다.",
 	category = "schema"
 })
 
-nut.config.add("jailTime", 200, "감옥에 수감되는 시간입니다.", nil, {
+nut.config.add("jailTime", 200, "Amount of seconds.", nil, {
 	data = {min = 0, max = 600},
 	category = "schema"
 })
@@ -271,17 +271,17 @@ nut.config.add("tazeTime", 5, "The ammount of time someone is tazed for.", nil, 
 	category = "schema"
 })
 
-nut.config.add("incomeRate", .1, "은행 이자율을 설정합니다 (1이 1퍼센트임.).", nil, {
+nut.config.add("incomeRate", .1, "Percentage of income.", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("dpBank", 10, "죽을때 몇 퍼센트의 돈을 잃는지 설정합니다 (1이 1퍼센트임.).", nil, {
+nut.config.add("dpBank", 10, "Percentage of Money to lose in Death Penalty.", nil, {
 	data = {min = 0, max = 100},
 	category = "schema"
 })
 
-nut.config.add("potPerLaw", 4, "경찰 1인당 몇개의 대마 화분을 소유 가능한지 설정합니다.", nil, {
+nut.config.add("potPerLaw", 4, "Week Pot limit.", nil, {
 	data = {min = 0, max = 10},
 	category = "schema"
 })
@@ -296,20 +296,20 @@ nut.config.add("startMoney", 5000, "Start money for new character.", nil, {
 	category = "schema"
 })
 
-nut.config.add("deathMoney", true, "죽을때 돈을 잃습니다.", nil, {
+nut.config.add("deathMoney", true, "Lose money on death.", nil, {
 	category = "penalty"
 })
 
-nut.config.add("deathWeapon", false, "죽을때 장착한 무기를 잃습니다. 떨어진 무기는 30초뒤 삭제됩니다.", nil, {
+nut.config.add("deathWeapon", true, "Lose weapon on death.", nil, {
 	category = "penalty"
 })
 
-nut.config.add("afkDemote", 240, "몇초 잠수시 몰수하는지 결정합니다.", nil, {
+nut.config.add("afkDemote", 240, "afk Demote.", nil, {
 	data = {min = 0, max = 1000},
 	category = "schema"
 })
 
-nut.config.add("doorTax", 100, "문 1개당 세금을 설정합니다.", nil, {
+nut.config.add("doorTax", 100, "door tax.", nil, {
 	data = {min = 0, max = 1000},
 	category = "schema"
 })
@@ -539,12 +539,12 @@ nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bit
 nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly)
 nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly)
 nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly)
-
+/*
 -- need to get better shit.
 local bentstr = nut.bent.add("nut_storage", "models/rebel1324/footlocker.mdl", "5x3 아이템 상자", 2, 1000, all)
 hook.Add("InitializedPlugins", "registerFootlockers", function()
 	STORAGE_DEFINITIONS["models/rebel1324/footlocker.mdl"] = {
-		name = "상자",
+		name = "Crate",
 		desc = "5x3의 공간을 가지고 있는 상자입니다.",
 		width = 5,
 		height = 3,
@@ -593,7 +593,7 @@ bentstr.onSpawn = function(entity, client, char, info)
 		entity:Remove()
 	end
 end
-
+*/
 --[[
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
