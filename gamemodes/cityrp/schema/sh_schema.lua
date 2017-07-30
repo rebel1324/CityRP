@@ -1,4 +1,4 @@
-SCHEMA.name = "Doshi" -- Change this name if you're going to create new schema.
+SCHEMA.name = "CityRP" -- Change this name if you're going to create new schema.
 SCHEMA.author = "Black Tea / RealKallos"
 SCHEMA.desc = "Welcome to the new world."
 
