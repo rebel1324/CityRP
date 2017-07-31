@@ -1,11 +1,15 @@
 if (SERVER) then return end
 
-surface.CreateFont("nutOutfitFont", {
-	font = "Arial",
-	extended = true,
-	size = ScreenScale(30),
-	weight = 1000
-})
+
+hook.Add("LoadFonts", "nutOutfitPororiFont", function(font, genericFont)
+	surface.CreateFont("nutOutfitFont", {
+		font = font,
+		extended = true,
+		size = ScreenScale(30),
+		weight = 1000
+	})
+end)
+
 
 local PANEL = {}
 	function PANEL:setOutfit(data)

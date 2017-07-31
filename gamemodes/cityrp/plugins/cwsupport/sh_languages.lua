@@ -39,6 +39,23 @@ PLUGIN.englishTranslation = {
     notCW = "This weapon cannot be modded.",
     notAttachment = "This is not valid attachment.",
     noWeapon = "Can't find the target.",
+
+    cwReloading = "Reloading %s%%",
+    cwMagKappa = "%s / %s",
+    cwGrenades = "%sx Grenade",
+    cwEmptyM203 = "Reload M203",
+    cwFilledM203 = "M203 Reloaded",
+    cw40mm = "%sx Grenade",
+    cwGrenType = "Type: %s",
+    cwUse = "[USE]", 
+    cwStablize = "%s - Stabilize",
+
+    cwAmmo_ar2 = "Rifle Ammo",
+    cwAmmo_smg1 = "SMG Ammo",
+    cwAmmo_pistol = "Pistol Ammo",
+    cwAmmo_357 = "Magnum Ammo",
+	cwAmmo_sniperround = "Sniper Rifle Ammo",
+	cwAmmo_buckshot = "Buckshot Ammo",
 }
 
 PLUGIN.koreanTranslation = {
@@ -98,5 +115,22 @@ PLUGIN.koreanTranslation = {
     notCW = "이 무기는 개조가능한 무기가 아닙니다.",
     notAttachment = "이건 올바른 총기 부품이 아닙니다.",
     noWeapon = "대상을 찾을수 없습니다.",
+
+    cwReloading = "장전중 %s%%",
+    cwMagKappa = "%s / %s",
+    cwGrenades = "%sx 수류탄",
+    cwEmptyM203 = "M203 장전필요",
+    cwFilledM203 = "M203 장전 됨",
+    cw40mm = "%sx 유탄",
+    cwGrenType = "유탄종류: %s",
+    cwUse = "[사용 키]", 
+    cwStablize = "%s - 안정화",
+
+    cwAmmo_ar2 = "소총 탄",
+    cwAmmo_smg1 = "SMG 탄",
+    cwAmmo_pistol = "권총 탄",
+    cwAmmo_357 = "매그넘 탄",
+	cwAmmo_sniperround = "저격소총 탄",
+	cwAmmo_buckshot = "산탄 쉘",
 }
 

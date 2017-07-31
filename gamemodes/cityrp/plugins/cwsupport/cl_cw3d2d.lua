@@ -1,49 +1,53 @@
+
+hook.Add("LoadFonts", "nutCW3D2D", function(font, genericFont)
+	surface.CreateFont("CW_HUD72", {font = font, extended = true, size = 72, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD60", {font = font, extended = true, size = 60, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD52", {font = font, extended = true, size = 52, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD48", {font = font, extended = true, size = 48, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD40", {font = font, extended = true, size = 40, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD38", {font = font, extended = true, size = 38, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD36", {font = font, extended = true, size = 36, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD32", {font = font, extended = true, size = 32, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD28", {font = font, extended = true, size = 28, weight = 700, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD24", {font = font, extended = true, size = 24, weight = 500, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD22", {font = font, extended = true, size = 22, weight = 500, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD20", {font = font, extended = true, size = 20, weight = 500, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD16", {font = font, extended = true, size = 16, weight = 500, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD14", {font = font, extended = true, size = 14, weight = 500, blursize = 0, antialias = true, shadow = false})
+	surface.CreateFont("CW_HUD12", {font = font, extended = true, size = 12, weight = 500, blursize = 0, antialias = true, shadow = false})
+end)
+
 local function CW20_HUD_REPLACEMENT()
 		local translated = {
-			["ar2"] = "Rifle Rounds",
-			["ar2altfire"] = "",
-			["pistol"] = "Pistol Rounds",
-			["smg1"] = "SMG Rounds",
-			["357"] = "Magnum Rounds",
-			["xbowbolt"] = "",
-			["buckshot"] = "Buckshot",
-			["rpg_round"] = "",
-			["smg1_grenade"] = "",
-			["grenade"] = "",
-			["slam"] = "",
-			["alyxgun"] = "",
-			["sniperround"] = "",
-			["sniperpenetratedround"] = "",
-			["thumper"] = "",
-			["gravity"] = "",
-			["battery"] = "",
-			["gaussenergy	"] = "",
-			["combinecannon"] = "",
-			["airboatgun"] = "",
-			["striderminigun"] = "",
-			["helicoptergun"] = "",
-			["9mmround"] = "",
-			["mp5_grenade"] = "",
-			["hornet"] = "",
-			["striderminigundirect"] = "",
-			["combineheavycannon"] = "",
+			["ar2"] = true,
+			["ar2altfire"] = true,
+			["pistol"] = true,
+			["smg1"] = true,
+			["357"] = true,
+			["xbowbolt"] = true,
+			["buckshot"] = true,
+			["rpg_round"] = true,
+			["smg1_grenade"] = true,
+			["grenade"] = true,
+			["slam"] = true,
+			["alyxgun"] = true,
+			["sniperround"] = true,
+			["sniperpenetratedround"] = true,
+			["thumper"] = true,
+			["gravity"] = true,
+			["battery"] = true,
+			["gaussenergy	"] = true,
+			["combinecannon"] = true,
+			["airboatgun"] = true,
+			["striderminigun"] = true,
+			["helicoptergun"] = true,
+			["9mmround"] = true,
+			["mp5_grenade"] = true,
+			["hornet"] = true,
+			["striderminigundirect"] = true,
+			["combineheavycannon"] = true,
 		}
 
-		surface.CreateFont("CW_HUD72", {font = "Arial", extended = true, size = 72, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD60", {font = "Arial", extended = true, size = 60, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD52", {font = "Arial", extended = true, size = 52, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD48", {font = "Arial", extended = true, size = 48, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD40", {font = "Arial", extended = true, size = 40, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD38", {font = "Arial", extended = true, size = 38, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD36", {font = "Arial", extended = true, size = 36, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD32", {font = "Arial", extended = true, size = 32, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD28", {font = "Arial", extended = true, size = 28, weight = 700, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD24", {font = "Arial", extended = true, size = 24, weight = 500, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD22", {font = "Arial", extended = true, size = 22, weight = 500, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD20", {font = "Arial", extended = true, size = 20, weight = 500, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD16", {font = "Arial", extended = true, size = 16, weight = 500, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD14", {font = "Arial", extended = true, size = 14, weight = 500, blursize = 0, antialias = true, shadow = false})
-		surface.CreateFont("CW_HUD12", {font = "Arial", extended = true, size = 12, weight = 500, blursize = 0, antialias = true, shadow = false})
 		surface.CreateFont("CW_KillIcons", {font = "csd", extended = true, size = ScreenScale(20), weight = 500, blursize = 0, antialias = true, shadow = false})
 		surface.CreateFont("CW_SelectIcons", {font = "csd", extended = true, size = ScreenScale(60), weight = 500, blursize = 0, antialias = true, shadow = false})
 
@@ -75,10 +79,6 @@ local function CW20_HUD_REPLACEMENT()
 		local draw = draw
 		local dst = draw.SimpleText
 
-		SWEP.HUD_HealthTextColor = Color(255, 255, 255, 255)
-		SWEP.HUD_MagTextColor = Color(255, 255, 255, 255)
-		SWEP.HUD_ReserveTextColor = Color(255, 255, 255, 255)
-		SWEP.HUD_MagText = "MAG: "
 		SWEP.HUD_BreathAlpha = 1
 
 		function draw.ShadowText(text, font, x, y, colortext, colorshadow, dist, xalign, yalign)
@@ -149,9 +149,11 @@ local function CW20_HUD_REPLACEMENT()
 					
 					-- only show the reload progress if we're reloading
 					if reloadProgress then
-						draw.ShadowText("Reloading " .. reloadProgress .. "%", "CW_HUD60", 90, 50, self.HUD_3D2D_MagColor, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						-- lang: cwReloading = "Reloading %s%%",
+						draw.ShadowText(L("cwReloading", reloadProgress), "CW_HUD60", 90, 50, self.HUD_3D2D_MagColor, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					else
-						draw.ShadowText(self:getMagCapacity() .. " / " .. self:getReserveAmmoText(), "CW_HUD60", 90, 50, self.HUD_3D2D_MagColor, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						-- lang: cwMagKappa = "%s / %s",
+						draw.ShadowText(L("cwMagKappa", self:getMagCapacity(), self:getReserveAmmoText()), "CW_HUD60", 90, 50, self.HUD_3D2D_MagColor, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					end
 					
 					if self.BulletDisplay and self.BulletDisplay > 0 then
@@ -180,12 +182,14 @@ local function CW20_HUD_REPLACEMENT()
 						end
 					end
 					
-					draw.ShadowText(translated[self.Primary.Ammo] or self.Primary.Ammo, "CW_HUD48", 90, 100, self.HUDColors.white, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+					local bool = translated[self.Primary.Ammo]
+					draw.ShadowText(bool and L("cwAmmo_" .. self.Primary.Ammo) or self.Primary.Ammo, "CW_HUD48", 90, 100, self.HUDColors.white, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					
 					local grenades = self.Owner:GetAmmoCount("Frag Grenades")
 					
 					if grenades > 0 then
-						draw.ShadowText(grenades .. "x Grenade", "CW_HUD40", 90, 140, self.HUDColors.white, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+						-- lang: cwGrenades = "%sx Grenade",
+						draw.ShadowText(L("cwGrenades", grenades), "CW_HUD40", 90, 140, self.HUDColors.white, self.HUDColors.black, 2, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 					end
 					
 					self.HUDColors.white.a = 255
@@ -195,15 +199,19 @@ local function CW20_HUD_REPLACEMENT()
 						-- display the text when we either have a round in, or have no rounds but aren't aiming
 						if (not self.M203Chamber and self.dt.State ~= CW_AIMING) or self.M203Chamber then
 							if not self.M203Chamber then
-								draw.ShadowText("Reload M203", "CW_HUD40", 90, -70, self.HUDColors.red, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+								-- lang: cwEmptyM203 = "Reload M203",
+								draw.ShadowText(L"cwEmptyM203", "CW_HUD40", 90, -70, self.HUDColors.red, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 							else
-								draw.ShadowText("M203 Reloaded", "CW_HUD40", 90, -70, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+								-- lang: cwFilledM203 = "M203 Reloaded",
+								draw.ShadowText(L"cwFilledM203", "CW_HUD40", 90, -70, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 							end
 							
 							local curGrenade = CustomizableWeaponry.grenadeTypes.getGrenadeText(self)
 							
-							draw.ShadowText(self.Owner:GetAmmoCount("40MM") .. "x Grenade", "CW_HUD32", 90, -40, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-							draw.ShadowText("Type: " .. curGrenade, "CW_HUD32", 90, -10, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							-- lang: cw40mm = "%sx Grenade",
+							draw.ShadowText(L("cw40mm", self.Owner:GetAmmoCount("40MM")), "CW_HUD32", 90, -40, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+							-- lang: cwGrenType = "Type: %s",
+							draw.ShadowText(L("cwGrenType", curGrenade), "CW_HUD32", 90, -10, self.HUDColors.white, self.HUDColors.black, 1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 						end
 					end
 					
@@ -331,7 +339,8 @@ local function CW20_HUD_REPLACEMENT()
 			if not self.dt.BipodDeployed then 
 				if self.BipodInstalled then
 					if self:CanRestWeapon(self.BipodDeployHeightRequirement) then
-						draw.ShadowText("[USE]", cwhud24, x / 2, y / 2 + 100, White, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						-- lang: cwUse = "[USE]", 
+						draw.ShadowText(L"cwUse", cwhud24, x / 2, y / 2 + 100, White, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						
 						surface.SetTexture(Deploy)
 						
@@ -357,7 +366,7 @@ local function CW20_HUD_REPLACEMENT()
 					end
 				end
 			else
-				draw.ShadowText("[USE]", cwhud24, x / 2, y / 2 + 100, White, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+				draw.ShadowText(L"cwUse", cwhud24, x / 2, y / 2 + 100, White, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					
 				surface.SetTexture(UnDeploy)
 					
@@ -390,7 +399,8 @@ local function CW20_HUD_REPLACEMENT()
 							finalColorSecondary = self.HUDColors.red
 						end
 						
-						draw.ShadowText(self:getKeyBind("+speed") .. " - Stabilize", cwhud24, x / 2, y / 2 + 120, finalColorMain, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						-- lang: cwStablize = "%s - Stabilize",
+						draw.ShadowText(L("cwStablize", self:getKeyBind("+speed")), cwhud24, x / 2, y / 2 + 120, finalColorMain, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 						draw.ShadowText(math.Round(self.BreathLeft * 100) .. "%", cwhud24, x / 2, y / 2 + 140, finalColorSecondary, Black, 2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				else

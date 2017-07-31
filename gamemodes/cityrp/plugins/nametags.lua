@@ -14,7 +14,6 @@ local ntWanted = Color(222, 22, 22)
 local ntGood = Color(166, 222, 166)
 local ntRed = Color(255 ,0, 0)
 local ntGreen = Color(100, 255, 100)
-local font = "Arial"
 local ntLocalPlayer = LocalPlayer()
 local txt = {
 {75, "injured1"},
