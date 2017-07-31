@@ -1,7 +1,7 @@
 if (SERVER) then return end
 
 surface.CreateFont("nutOutfitFont", {
-	font = "Malgun Gothic",
+	font = "Arial",
 	extended = true,
 	size = ScreenScale(30),
 	weight = 1000

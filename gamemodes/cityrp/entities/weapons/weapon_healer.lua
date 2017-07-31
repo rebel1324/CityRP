@@ -190,7 +190,7 @@ end
 
 if (CLIENT) then
 	surface.CreateFont("MedFont", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 60,
 		weight = 800,
@@ -198,7 +198,7 @@ if (CLIENT) then
 	})
 
 	surface.CreateFont("MedSubFont", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 22,
 		weight = 500,

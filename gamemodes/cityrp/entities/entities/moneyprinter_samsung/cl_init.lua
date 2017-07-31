@@ -4,7 +4,7 @@ Tomas
 include("shared.lua")
 
 surface.CreateFont( "SmallInfoFont", {
-	font = "Malgun Gothic",
+	font = "Arial",
 		extended = true,
 	size = 12,
 	weight = 800,
@@ -22,7 +22,7 @@ surface.CreateFont( "SmallInfoFont", {
 } )
 
 surface.CreateFont( "InfoFont", {
-	font = "Malgun Gothic",
+	font = "Arial",
 		extended = true,
 	size = 17,
 	weight = 800,
@@ -40,7 +40,7 @@ surface.CreateFont( "InfoFont", {
 } )
 
 surface.CreateFont( "BigInfoFont", {
-	font = "Malgun Gothic",
+	font = "Arial",
 		extended = true,
 	size = 32,
 	weight = 0,
@@ -58,7 +58,7 @@ surface.CreateFont( "BigInfoFont", {
 } )
 
 surface.CreateFont( "BiggestInfoFont", {
-	font = "Malgun Gothic",
+	font = "Arial",
 		extended = true,
 	size = 30,
 	weight = 1000,

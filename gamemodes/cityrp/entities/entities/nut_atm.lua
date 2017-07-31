@@ -43,14 +43,14 @@ else
 
 
 	surface.CreateFont("nutNATMFont", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 40,
 		weight = 1000
 	})
 
 	surface.CreateFont("nutSubNATMFont", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 24,
 		weight = 500

@@ -46,21 +46,21 @@ else
 	local curTime = 0
 
 	surface.CreateFont("nutLawTitle", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 66,
 		weight = 1000
 	})
 
 	surface.CreateFont("nutLawSubTitle", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 44,
 		weight = 1000
 	})
 
 	surface.CreateFont("nutLawContent", {
-		font = "Malgun Gothic",
+		font = "Arial",
 		extended = true,
 		size = 32,
 		weight = 500
