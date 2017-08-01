@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-ENT.Base = "keypad"
+--ENT.Base = "keypad"
 ENT.PrintName = "Keypad"
 ENT.Author = "Black Tea"
 ENT.Category = "NutScript - Security"
