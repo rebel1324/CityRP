@@ -103,11 +103,3 @@ local noLoad = {
 function SCHEMA:PluginShouldLoad(uniqueID)
 	return noLoad[uniqueID] -- true = don't load the specified plugin.
 end
-
-if (SERVER) then
-	resource.AddFile("resource/fonts/Rajdhani-Bold.ttf")
-	resource.AddFile("resource/fonts/Rajdhani-Light.ttf")
-	resource.AddFile("resource/fonts/Rajdhani-Medium.ttf")
-	resource.AddFile("resource/fonts/Rajdhani-Regular.ttf")
-	resource.AddFile("resource/fonts/Rajdhani-Semibold.ttf")
-end
