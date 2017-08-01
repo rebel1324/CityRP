@@ -62,7 +62,7 @@ hook.Add("BuildHelpMenu", "nutBasicHelp", function(tabs)
 	end
 end)
 
--- This hook adds up some new stuffs in F1 Menu.
+--[[This hook adds up some new stuffs in F1 Menu.
 function SCHEMA:BuildHelpMenu(tabs)
 	tabs["homepage"] = "http://183.106.89.97:8002/indexutil.html"
 	tabs["motd"] = "http://183.106.89.97:8002/motd.html"
@@ -76,7 +76,7 @@ function SCHEMA:BuildHelpMenu(tabs)
 
 		return body
 	end
-end
+end--]]
 
 -- This hook loads the fonts
 function SCHEMA:LoadFonts(font)
