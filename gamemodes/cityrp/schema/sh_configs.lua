@@ -1,13 +1,5 @@
 IS_INTERNATIONAL = true
 
-timer.Simple(5, function()
-	if (!IS_INTERNATIONAL) then
-		RunConsoleCommand("nut_language", "korean")
-	else
-		RunConsoleCommand("nut_language", "english") -- kek
-	end
-end)
-
 WEAPON_REQSKILLS = {}
 
 -- 아이템 스킬 필요도 초기화 함수
