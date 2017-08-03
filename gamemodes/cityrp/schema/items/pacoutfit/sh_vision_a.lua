@@ -43,7 +43,7 @@ if (CLIENT) then
     local sndOff = Sound( "items/nvg_off.wav" )
 	
 	netstream.Hook("nutNVToggle", function(bool)
-		if not ply:Alive() then
+		if not LocalPlayer():Alive() then
 			return
 		end
 
