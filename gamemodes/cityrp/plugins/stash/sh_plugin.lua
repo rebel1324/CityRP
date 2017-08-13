@@ -48,31 +48,20 @@ CREATE TABLE IF NOT EXISTS `nut_stash` (
 		function PLUGIN:CharacterLoaded(id)
 			-- legacy support
 			local char = nut.char.loaded[id]
-			local legacy = false
-
-			if (char:getData("stash")) then
-				char:setStash(char:getData("stash"))
-				char:setData("stash", nil)
-				legacy = true
-			end
 
 			nut.db.query("SELECT _items FROM nut_stash WHERE _charID = "..id, function(data)
 				if (data and #data > 0) then
 					for k, v in ipairs(data) do
 						local data = util.JSONToTable(v._items or "[]")
 
-						if (!legacy) then
-							char:setStash(data)
-						end
+						char:setStash(data)
 					end
 				else
 					nut.db.insertTable({
 						_items = {},
 						_charID = id,
 					}, function(data)
-						if (!legacy) then
-							char:setStash({})
-						end
+						char:setStash({})
 					end, "stash")
 				end
 			end)
