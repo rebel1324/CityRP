@@ -210,15 +210,18 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 				if (ntChar:getDesc() and ntChar:getDesc() != "") then
 					local lines, maxW = nut.util.wrapText(ntChar:getDesc(), ntMax, btNameTag.font[2 + 2*(1)])
 					surface.SetFont(btNameTag.font[2 + 2*(1)])
+					local amountAdded = 0
 					if( lines and #lines > 0 ) then
 						for k,v in next, lines do
 							if( k > 3 ) then break end
+							
 							local fontW, fontH = surface.GetTextSize(v)
 							btNameTag:drawText(v, ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
 							ntY = ntY + fontH
+							amountAdded = amountAdded + fontH
 						end
 					end
-					ntY = ntY - 60
+					ntY = ntY - 60 - amountAdded
 				end
 
 				if (ntClass or client:IsBot()) then
