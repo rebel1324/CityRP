@@ -208,7 +208,7 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 				
 				ntClass = ntChar:getClass()
 				if (ntChar:getDesc() and ntChar:getDesc() != "") then
-					local lines, maxW = nut.util.wrapText(ntChar:getDesc(), ntMax, btNameTag.font[2 + 2*(1)])
+					local lines, maxW = nut.util.wrapText(ntChar:getDesc(), 128, btNameTag.font[2 + 2*(1)])
 					surface.SetFont(btNameTag.font[2 + 2*(1)])
 					local amountAdded = 0
 					if( lines and #lines > 0 ) then
