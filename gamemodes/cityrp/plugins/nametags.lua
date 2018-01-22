@@ -214,7 +214,7 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 						for k,v in next, lines do
 							local fontW, fontH = surface.GetTextSize(v)
 							btNameTag:drawText(v, ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
-							ntY = ntY - fontH
+							ntY = ntY + fontH
 						end
 					end
 					ntY = ntY - 60
