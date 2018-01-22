@@ -212,6 +212,7 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 					surface.SetFont(btNameTag.font[2 + 2*(1)])
 					if( lines and #lines > 0 ) then
 						for k,v in next, lines do
+							if( k > 3 ) then break end
 							local fontW, fontH = surface.GetTextSize(v)
 							btNameTag:drawText(v, ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
 							ntY = ntY + fontH
