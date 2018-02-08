@@ -214,7 +214,6 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 						local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
 						client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
 						client.oldDesc = description
-						PrintTable(client.oldDescObject)
 					end
 					
 					for i = 1, #client.oldDescObject do
