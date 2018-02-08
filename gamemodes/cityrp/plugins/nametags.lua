@@ -207,9 +207,20 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 				ntAlpha = 255*(1 - ntDist)
 				
 				ntClass = ntChar:getClass()
-				if (ntChar:getDesc() and ntChar:getDesc() != "") then
-					btNameTag:drawText(ntChar:getDesc(), ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
-					ntY = ntY - 60
+				local description = ntChar:getDesc()
+				
+				if (description and description != "") then
+					if (true or !client.oldDesc or client.oldDesc != description) then
+						local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
+						client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
+						client.oldDesc = description
+						PrintTable(client.oldDescObject)
+					end
+					
+					for i = 1, #client.oldDescObject do
+						btNameTag:drawText(client.oldDescObject[#client.oldDescObject - i + 1], ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
+						ntY = ntY - 60
+					end
 				end
 
 				if (ntClass or client:IsBot()) then
@@ -218,7 +229,6 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 						ntY = ntY - 80
 					else
 						ntClassInfo = nut.class.list[ntClass]
-
 						if (ntClassInfo) then
 							btNameTag:drawText(L(ntClassInfo.name), ntX, ntY, ColorAlpha(ntCol, ntAlpha), 1)
 							ntY = ntY - 75
@@ -227,6 +237,9 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 						btNameTag:drawText(client:Name(), ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
 						ntY = ntY - 80
 					end
+				else
+					ntY = ntY - 25
+					btNameTag:drawText(client:Name(), ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
 				end
 
 				for _, info in ipairs(btNameTag.info) do
