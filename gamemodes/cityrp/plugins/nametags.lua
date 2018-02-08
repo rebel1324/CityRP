@@ -210,7 +210,7 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 				local description = ntChar:getDesc()
 				
 				if (description and description != "") then
-					if (true or !client.oldDesc or client.oldDesc != description) then
+					if (!client.oldDesc or client.oldDesc != description) then
 						local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
 						client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
 						client.oldDesc = description
