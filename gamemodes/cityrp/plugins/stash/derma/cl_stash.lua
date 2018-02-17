@@ -51,7 +51,7 @@ local PANEL = {}
 	function PANEL:setStash()
 		local char = LocalPlayer():getChar()
 
-		self.stash.title:SetText(L("stash", char:getStashCount(), nut.config.get("maxStash")))
+		self.stash.title:SetText("Storage ("..char:getStashCount().."/"..char:getStashMax()..")")
 
 		self.stash.items:Clear()
 		self.inv.items:Clear()
