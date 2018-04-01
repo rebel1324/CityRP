@@ -45,7 +45,7 @@ else
 	local function renderCode(self, ent, w, h)
 		local char = LocalPlayer():getChar()
 
-		if (char) then
+		if (false and char) then
 			curTime = RealTime() - oldTime
 			oldTime = RealTime()
 
@@ -64,50 +64,55 @@ else
 
 			local scroll = RealTime()*.05%1 * w*4*-1
 
-
+			do
 				local laws = 0
 				local players = 0
-				do
-					-- get police
+				
+				for k, v in ipairs(player.GetAll()) do
+					local char = v:getChar()
 
-					for k, v in ipairs(player.GetAll()) do
-						local char = v:getChar()
+					if (char) then
+						local class = char:getClass()
+						local classData = nut.class.list[class]
 
-						if (char) then
-							local class = char:getClass()
-							local classData = nut.class.list[class]
-
-							if (classData and classData.law) then
-								laws = laws + 1
-							end
-
-							players = players + 1
+						if (classData and classData.law) then
+							laws = laws + 1
 						end
+
+						players = players + 1
 					end
 				end
+			end
 
+			do
 				nut.util.drawText("Goverment Fund", w/2 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(nut.currency.get(100000), w/2 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
+			end
 
+			do
 				nut.util.drawText("Citizens in the City", w/2 + w + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				local time = Format("%s Citizens", players)
 				nut.util.drawText(time, w/2 + w + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
 
-				local text = "is Active"
-				do
-					if (laws < nut.config.get("raidLaws", 5)) then
-						text = Format("Need more Police (%s/%s)", laws, nut.config.get("raidLaws", 5))
-					end
-				end
+			end
 
+			do
+				local text = "is Active"
+				if (laws < nut.config.get("raidLaws", 5)) then
+					text = Format("Need more Police (%s/%s)", laws, nut.config.get("raidLaws", 5))
+				end
+				
 				nut.util.drawText("Bankrobbery", w/2 + w*2 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(text, w/2 + w*2 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
+			end
+
+			do
 
 				local num = 0
 				for k, v in ipairs(player.GetAll()) do
@@ -124,11 +129,14 @@ else
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(num .. "Convicts", w/2 + w*3 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
+			end
 
+			do
 				nut.util.drawText("Goverment Fund", w/2 + w*4 + scroll
 					, scale*52, color_white, 1, 1, "nutFedSubTitle")
 				nut.util.drawText(nut.currency.get(100000), w/2 + w*4 + scroll
 					, scale*66, color_white, 1, 1, "nutFedTitle")
+			end
 				
 		end
 	end

@@ -2,31 +2,11 @@ PLUGIN.name = "Macro Weapon Register"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Gun Jesus have arrived."
 
-if (!CustomizableWeaponry) then return end
-/*
-	MODIFICATION TUTORIAL
-		- sh_config
-		 This file contains ammo structure.
-		- sh_languages
-		 This file contains language sets for the weapons.
-		- cl_cw3d2d
-		 This file contains modification for CW 2.0 HUDs
-		- sh_attachments
-		 This file contains information and of attachment items.
-
-
-		
-
-
-
-
-*/
-
 nut.util.include("sh_configs.lua")
 nut.util.include("sh_languages.lua")
-nut.util.include("cl_cw3d2d.lua")
-nut.util.include("sh_attachments.lua")
 
+if (!CustomizableWeaponry) then
+	
 function PLUGIN:InitializedPlugins()
 	table.Merge(nut.lang.stored["korean"], self.koreanTranslation)
 	table.Merge(nut.lang.stored["english"], self.englishTranslation)
@@ -44,6 +24,54 @@ function PLUGIN:InitializedPlugins()
 			ITEM.ammoAmount = ammoInfo.amount or 30
 			ITEM.price = ammoInfo.price or 200
 			ITEM.model = ammoInfo.model or AMMO_BOX
+			ITEM.isStackable = true
+			ITEM.maxQuantity = ammoInfo.maxQuantity
+			ITEM.exRender = true
+
+			function ITEM:getDesc()
+				return L("ammoDesc", self.ammoAmount, L(self.ammo))
+			end
+		end
+	end
+end
+	
+return end
+/*
+	MODIFICATION TUTORIAL
+		- sh_config
+		 This file contains ammo structure.
+		- sh_languages
+		 This file contains language sets for the weapons.
+		- cl_cw3d2d
+		 This file contains modification for CW 2.0 HUDs
+		- sh_attachments
+		 This file contains information and of attachment items.
+*/
+
+nut.util.include("cl_cw3d2d.lua")
+nut.util.include("sh_attachments.lua")
+
+function PLUGIN:InitializedPlugins()
+	table.Merge(nut.lang.stored["korean"], self.koreanTranslation)
+	table.Merge(nut.lang.stored["english"], self.englishTranslation)
+
+	-- Create Items with Lua
+	do
+		-- ammunition
+		for name, data in pairs(self.ammoInfo) do
+			print(name)
+			local uniqueID = "ammo_"..name:lower()
+			local ammoInfo = data
+
+			local ITEM = nut.item.register(uniqueID, "base_ammo", nil, nil, true)
+			ITEM.name = ammoInfo.name
+			ITEM.ammo = name
+			ITEM.ammoAmount = ammoInfo.amount or 30
+			ITEM.price = ammoInfo.price or 200
+			ITEM.model = ammoInfo.model or AMMO_BOX
+			ITEM.isStackable = true
+			ITEM.maxQuantity = ammoInfo.maxQuantity
+			ITEM.exRender = true
 
 			function ITEM:getDesc()
 				return L("ammoDesc", self.ammoAmount, L(self.ammo))

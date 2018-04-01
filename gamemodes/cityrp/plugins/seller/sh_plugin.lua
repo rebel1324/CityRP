@@ -155,8 +155,8 @@ end
 function PLUGIN:DrawItemDescription(entity, x, y, color, alpha)
 	local price, owner = entity:getNetVar("sellPrice"), entity:getNetVar("sellOwner")
 	if (price and owner) then
-		y = y + 16
-		nut.util.drawText(L("priceDesc", nut.currency.get(price), owner), x, y, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
+		y = y + 28
+		nut.util.drawText(L("priceDesc", nut.currency.get(price), owner), x, y, ColorAlpha(color_white, 255), 1, 1, "nutSmallFont", 255)
 			
 		return x, y
 	end

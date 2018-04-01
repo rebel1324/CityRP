@@ -127,7 +127,9 @@ if (SERVER) then
 						end
 					end
 
-					if (char:getInv():add(self.item)) then
+					local a, b = char:getInv():add(self.item)
+					print(a, b)
+					if (a) then
 						if (owner and owner:IsValid()) then
 							char:addReserve(profit)
 
