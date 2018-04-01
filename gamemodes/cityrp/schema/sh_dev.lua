@@ -213,12 +213,15 @@ if (CLIENT) then
 				self.menu:AddItem(button)
 
 				function button:DoClick()
-					LocalPlayer():ConCommand(Format('say /chargiveitem "%s" "%s"', LocalPlayer():Name(), d.uniqueID))
+					if (d.isStackable == true) then
+						LocalPlayer():ConCommand(Format('say /chargiveitem "%s" "%s" "%s"', LocalPlayer():Name(), d.uniqueID, d.maxQuantity or 1))
+					else
+						LocalPlayer():ConCommand(Format('say /chargiveitem "%s" "%s"', LocalPlayer():Name(), d.uniqueID))
+					end
 				end
 			end
 		end
 	end
-
 	vgui.Register("nutItemMenu", PANEL, "DFrame")
 
 	netstream.Hook("nutItemMenu", function()
