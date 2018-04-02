@@ -599,6 +599,8 @@ if (SERVER) then
 		end
 	end
 else
+	local sizeGenerate = 512
+	
 	local function drawMaterial(exIcon, w, h, name, type)
 		surface.SetDrawColor(Color(187, 187, 187))
 		surface.DrawRect(0, 0, sizeGenerate, sizeGenerate)
