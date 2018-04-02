@@ -1,5 +1,6 @@
 PLUGIN.gunData = {}
 PLUGIN.modelCam = {}
+
 PLUGIN.slotCategory = {
 	[1] = "secondary",
 	[2] = "primary",

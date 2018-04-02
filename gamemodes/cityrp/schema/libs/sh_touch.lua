@@ -156,7 +156,6 @@ if (CLIENT) then
 		
 		-- Print the error.
 		if !succ then
-			print(err)
 			return err
 		end
 	end

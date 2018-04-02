@@ -59,7 +59,6 @@ function PLUGIN:InitializedPlugins()
 	do
 		-- ammunition
 		for name, data in pairs(self.ammoInfo) do
-			print(name)
 			local uniqueID = "ammo_"..name:lower()
 			local ammoInfo = data
 
@@ -251,6 +250,49 @@ function PLUGIN:InitializedPlugins()
 				ITEM.width = dat.width or 1
 				ITEM.height = dat.height or 1
 				ITEM.weaponCategory = slot or "primary"
+
+				function ITEM:onGetDropModel()
+					if (dat.width >= 3 and dat.height >= 2) then
+						return "models/props_junk/cardboard_box003a.mdl"
+					end
+
+					return "models/props_junk/cardboard_box004a.mdl"
+				end
+
+				function ITEM:drawEntity(entity)
+					local name = self.uniqueID
+					local exIcon = ikon:getIcon(name)
+					local type
+					if (self.width >= 3 and self.height >= 2) then
+						type = 0
+					else
+						type = 1
+					end
+
+					if (exIcon) then  
+						if (!entity.initText and !entity.customText) then
+							entity.initText = true
+
+							itemRTTextrue.loadItemTex(entity, self, exIcon, type)
+						end
+
+						if (entity.customText) then
+							render.MaterialOverrideByIndex(0, entity.customText)
+						end
+
+						entity:DrawModel()
+						
+						render.MaterialOverrideByIndex(1)
+					else
+						ikon:renderIcon(
+							self.uniqueID,
+							self.width,
+							self.height,
+							self.model,
+							self.iconCam
+						)
+					end
+				end
 
 				function ITEM:onEquipWeapon(client, weapon)
 				end
@@ -555,5 +597,58 @@ if (SERVER) then
 				end
 			end
 		end
+	end
+else
+	local function drawMaterial(exIcon, w, h, name, type)
+		surface.SetDrawColor(Color(187, 187, 187))
+		surface.DrawRect(0, 0, sizeGenerate, sizeGenerate)
+		
+		--[[
+			surface.SetMaterial(temporalMaterial)
+			surface.SetDrawColor(color_white)
+			surface.DrawTexturedRect(0, 0, sizeGenerate, sizeGenerate)
+		]]--
+		if (type == 1) then
+			nut.util.drawText(name, sizeGenerate*.24, sizeGenerate*.03, color_white, 1, 1, "nutItemDisplayRT2", 255)
+			
+			if (exIcon) then
+				local iw, ih = sizeGenerate/8*w/2, sizeGenerate/8*h/2
+				surface.SetMaterial(exIcon)
+				surface.SetDrawColor(color_black)
+				surface.DrawTexturedRect(sizeGenerate*.24 - iw/2, sizeGenerate*.085 - ih/2, iw, ih)
+			end
+		else
+			nut.util.drawText(name, sizeGenerate*.2, sizeGenerate*.23, color_white, 1, 1, "nutItemDisplayRT", 255)
+			
+			if (exIcon) then
+				local iw, ih = sizeGenerate/8*w/1.5, sizeGenerate/8*h/1.5
+				surface.SetMaterial(exIcon)
+				surface.SetDrawColor(color_black)
+				surface.DrawTexturedRect(sizeGenerate*.2 - iw/2, sizeGenerate*.35 - ih/2, iw, ih)
+			end
+		end
+	end
+
+	function itemRTTextrue.loadItemTex(entity, itemTable, exIcon, type)
+		local oldRT = render.GetRenderTarget()
+		local newText
+			
+		local tamp = entity:EntIndex() .. "_custoDiam"
+		itemRTTextrue.RT = GetRenderTarget(tamp, sizeGenerate, sizeGenerate, false)
+		render.PushRenderTarget(itemRTTextrue.RT)
+			cam.Start2D()
+				render.Clear(0,0,0,255)
+				render.ClearDepth()
+				
+				surface.SetMaterial(Material("anslogo.png"))
+				surface.SetDrawColor(color_white)
+				surface.DrawTexturedRect(0, 0, 512, 512)
+				drawMaterial(exIcon, itemTable.width, itemTable.height, itemTable.name, type)
+			cam.End2D()
+		render.PopRenderTarget()
+				
+		local wtf = CreateMaterial(RealTime() .. "_custodium", "VertexLitGeneric")
+		wtf:SetTexture("$basetexture", itemRTTextrue.RT)
+		entity.customText = wtf
 	end
 end

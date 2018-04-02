@@ -440,8 +440,6 @@ nut.command.add("buyentity", {
 								hook.Run("EntityPurchased", client, char, ent, entTable)
 
 								client:notify(L("purchaseEntity", client, entTable.name, nut.currency.get(price)))
-							else
-								print("what the fuck mate")
 							end
 						end
 					else

@@ -29,6 +29,18 @@ nut.vote.list = nut.vote.list or {}
 nut.bent = nut.bent or {}
 nut.bent.list = {}
 
+if (CLIENT) then
+	nut.playerInteract.addFunc("giveMoney", {
+		nameLocalized = "giveMoney",
+		callback = function(target)
+			print("hi")
+		end,
+		canSee = function(target)
+			return true
+		end
+	})
+end
+
 nut.util.include("sv_database.lua")
 nut.util.include("sh_configs.lua")
 nut.util.include("cl_effects.lua")
