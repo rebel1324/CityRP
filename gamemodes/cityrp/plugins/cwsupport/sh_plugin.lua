@@ -21,7 +21,6 @@ function PLUGIN:InitializedPlugins()
 			local ITEM = nut.item.register(uniqueID, "base_ammo", nil, nil, true)
 			ITEM.name = ammoInfo.name
 			ITEM.ammo = name
-			ITEM.ammoAmount = ammoInfo.amount or 30
 			ITEM.price = ammoInfo.price or 200
 			ITEM.model = ammoInfo.model or AMMO_BOX
 			ITEM.isStackable = true
@@ -29,7 +28,7 @@ function PLUGIN:InitializedPlugins()
 			ITEM.exRender = true
 
 			function ITEM:getDesc()
-				return L("ammoDesc", self.ammoAmount, L(self.ammo))
+				return L("ammoDesc", self:getQuantity(), L(self.ammo))
 			end
 		end
 	end
@@ -65,7 +64,6 @@ function PLUGIN:InitializedPlugins()
 			local ITEM = nut.item.register(uniqueID, "base_ammo", nil, nil, true)
 			ITEM.name = ammoInfo.name
 			ITEM.ammo = name
-			ITEM.ammoAmount = ammoInfo.amount or 30
 			ITEM.price = ammoInfo.price or 200
 			ITEM.model = ammoInfo.model or AMMO_BOX
 			ITEM.isStackable = true
@@ -73,10 +71,13 @@ function PLUGIN:InitializedPlugins()
 			ITEM.exRender = true
 
 			function ITEM:getDesc()
-				return L("ammoDesc", self.ammoAmount, L(self.ammo))
+				return L("ammoDesc", self:getQuantity(), L(self.ammo))
 			end
 		end
+	end
 
+	-- Create Items with Lua
+	do
 		-- they were ass.
 		local assWeapons = {
 			["cw_ber_cz75"] = "muzzleflash_6",
