@@ -213,7 +213,7 @@ LANGUAGE = {
 	cookGood = "A fantastic dish",
 	cookNeeded = "This dish must be cooked.",
 	cookedLevel = "Current cooking status: ",
-	ammoDesc = "%sInitiative %s Ammunition box containing ammunition.",
+	ammoDesc = "%s %s Ammunition box containing ammunition.",
 	/*
 		CONFIG TRANSLATION
 	*/
@@ -398,6 +398,7 @@ LANGUAGE = {
 	guest = "Customer",
 	none = "none",
 	ctrlInv = "Quick Use with \"Control\" + Click",
+	ctrlInv2 = "Quick Split with \"Shift\" + Click",
 	lockdownOff = "The Lockdown has been lifted.",
 	lockdownOn = "The mayor declared a Lockdown!",
 	clientPlay = "You're playing in the server for %s hours.",

@@ -562,6 +562,7 @@ function SCHEMA:PostDrawInventory(pnl)
 		local w, h = pnl:GetSize()
 		local color = nut.config.get("color")
 		local tx, ty = nut.util.drawText(L("ctrlInv"), x + 5, y + h, ColorAlpha(color, 255))
+		tx, ty = nut.util.drawText(L("ctrlInv2"), x + 5, y + h + ty, ColorAlpha(color, 255))
 	end
 end
 

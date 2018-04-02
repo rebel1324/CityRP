@@ -526,6 +526,8 @@ OUTFIT_REGISTERED = {
 				{data = "citizensheet/sheet_31", name = "sheet", price = 4500},
 				{data = "citizensheet/costage_sheet", name = "sheet", price = 4500},
 				{data = "citizensheet/hostage_sheet", name = "sheet", price = 4500},
+				{data = "citizensheet/hostage_sheet_white", name = "sheet", price = 4500},
+				{data = "citizensheet/hostage_sheet_black", name = "sheet", price = 4500},
 				{data = "citizensheet/security_sheet", name = "sheet", price = 4500},
 				{data = "citizensheet/military_sheet", name = "sheet", price = 4500},
 				{data = "citizensheet/monk_sheet", name = "sheet", price = 4500},
@@ -767,6 +769,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 5, mat = "models/btcitizen/summersheet/citizen_summer9"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 5, mat = "models/btcitizen/summersheet/citizen_summer10"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 5, mat = "models/btcitizen/summersheet/citizen_summer11"},
+				{price = 15000, find = "models/btcitizen/citizen_summer", group = 5, mat = "models/btcitizen/summersheet/citizen_summer12"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 5, mat = "models/btcitizen/summersheet/citizen_summer_camo"},
 
 				{price = 5000, group = 6},
@@ -1033,6 +1036,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 4, mat = "models/btcitizen/summersheet/citizen_summer9"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 4, mat = "models/btcitizen/summersheet/citizen_summer10"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 4, mat = "models/btcitizen/summersheet/citizen_summer11"},
+				{price = 5000, find = "models/btcitizen/citizen_summer", group = 4, mat = "models/btcitizen/summersheet/citizen_summer12"},
 				{price = 5000, find = "models/btcitizen/citizen_summer", group = 4, mat = "models/btcitizen/summersheet/citizen_summer_camo"},
 			},
 			func = function(entity, outfit, orig)
