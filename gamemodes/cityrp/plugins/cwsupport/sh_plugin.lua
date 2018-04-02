@@ -632,25 +632,27 @@ else
 	end
 
 	function itemRTTextrue.loadItemTex(entity, itemTable, exIcon, type)
-		local oldRT = render.GetRenderTarget()
-		local newText
-			
-		local tamp = entity:EntIndex() .. "_custoDiam"
-		itemRTTextrue.RT = GetRenderTarget(tamp, sizeGenerate, sizeGenerate, false)
-		render.PushRenderTarget(itemRTTextrue.RT)
-			cam.Start2D()
-				render.Clear(0,0,0,255)
-				render.ClearDepth()
+		if (exIcon) then
+			local oldRT = render.GetRenderTarget()
+			local newText
 				
-				surface.SetMaterial(Material("anslogo.png"))
-				surface.SetDrawColor(color_white)
-				surface.DrawTexturedRect(0, 0, 512, 512)
-				drawMaterial(exIcon, itemTable.width, itemTable.height, itemTable.name, type)
-			cam.End2D()
-		render.PopRenderTarget()
-				
-		local wtf = CreateMaterial(RealTime() .. "_custodium", "VertexLitGeneric")
-		wtf:SetTexture("$basetexture", itemRTTextrue.RT)
-		entity.customText = wtf
+			local tamp = entity:EntIndex() .. "_custoDiam"
+			itemRTTextrue.RT = GetRenderTarget(tamp, sizeGenerate, sizeGenerate, false)
+			render.PushRenderTarget(itemRTTextrue.RT)
+				cam.Start2D()
+					render.Clear(0,0,0,255)
+					render.ClearDepth()
+					
+					surface.SetMaterial(Material("anslogo.png"))
+					surface.SetDrawColor(color_white)
+					surface.DrawTexturedRect(0, 0, 512, 512)
+					drawMaterial(exIcon, itemTable.width, itemTable.height, itemTable.name, type)
+				cam.End2D()
+			render.PopRenderTarget()
+					
+			local wtf = CreateMaterial(RealTime() .. "_custodium", "VertexLitGeneric")
+			wtf:SetTexture("$basetexture", itemRTTextrue.RT)
+			entity.customText = wtf
+		end
 	end
 end
