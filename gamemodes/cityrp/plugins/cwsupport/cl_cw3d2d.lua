@@ -416,7 +416,6 @@ local function CW20_HUD_REPLACEMENT()
 				if self.CrosshairEnabled and GetConVarNumber("cw_crosshair") > 0 then
 					lp = self.Owner:ShouldDrawLocalPlayer()
 					
-					if lp or self.freeAimOn then
 						td.start = self.Owner:GetShootPos()
 						td.endpos = td.start + (self.Owner:EyeAngles() + self.Owner:GetPunchAngle()):Forward() * 16384
 						td.filter = self.Owner
@@ -425,9 +424,6 @@ local function CW20_HUD_REPLACEMENT()
 						
 						x2 = tr.HitPos:ToScreen()
 						x2, y2 = x2.x, x2.y
-					else
-						x2, y2 = math.Round(x * 0.5), math.Round(y * 0.5)
-					end
 					
 					if not self:crosshairVisible() then
 						self.CrossAlpha = LerpCW20(FT * 20, self.CrossAlpha, 0)
