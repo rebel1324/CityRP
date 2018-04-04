@@ -18,7 +18,7 @@ function playerMeta:CanAddEffects()
 	local entity = Entity(self:getLocalVar("ragdoll", 0))
 	local ragdoll = self:GetRagdollEntity()
 	if ((nut.gui.char and !nut.gui.char:IsVisible()) and
-		(NUT_CVAR_EFFECTS and NUT_CVAR_EFFECTS:GetBool() or true) and
+		(NUT_CVAR_EFFECTS and NUT_CVAR_EFFECTS:GetBool()) and
 		!self:ShouldDrawLocalPlayer() and
 		IsValid(self) and
 		self:getChar() and
@@ -31,7 +31,7 @@ function playerMeta:CanAddEffects()
 end
 
 if (SERVER) then
-	function PLUGIN:EntityTakeDamage()
+	function PLUGIN:EntityTakeDamage(target, dmgInfo)
 		if (target:IsPlayer()) then
 			local char = target:getChar()
 	
