@@ -1444,23 +1444,3 @@ function SCHEMA:ShutDown()
 		end
 	end
 end
-
-local meta = FindMetaTable("Player")
- 
-function meta:Stun()
-    --if not IsValid(self) then return false end
-    self.Stunned = true
-    self:setNetVar("Stunned", true)
-    umsg.Start("StunEffect", self)
-        umsg.String("1")
-    umsg.End()
-end
- 
-function meta:Unstun()
-    --if not IsValid(self) then return false end
-    self.Stunned = false
-    self:setNetVar("Stunned", false)
-    umsg.Start("StunEffect", self)
-        umsg.String("0")
-    umsg.End()
-end

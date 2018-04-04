@@ -235,3 +235,21 @@ end
 function PLAYER:isLegBroken()
     return self:getNetVar("legBroken", false)
 end
+
+function PLAYER:Stun()
+    --if not IsValid(self) then return false end
+    self.Stunned = true
+    self:setNetVar("Stunned", true)
+    umsg.Start("StunEffect", self)
+        umsg.String("1")
+    umsg.End()
+end
+ 
+function PLAYER:Unstun()
+    --if not IsValid(self) then return false end
+    self.Stunned = false
+    self:setNetVar("Stunned", false)
+    umsg.Start("StunEffect", self)
+        umsg.String("0")
+    umsg.End()
+end
