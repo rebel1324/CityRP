@@ -734,6 +734,8 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/sheet_31"},
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/costage_sheet"},
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/hostage_sheet"},
+				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/hostage_sheet_white"},
+				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/hostage_sheet_black"},
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/security_sheet"},
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/military_sheet"},
 				{price = 5000, find = "models/btcitizen/citizen_sheet", group = 0, mat = "citizensheet/monk_sheet"},
