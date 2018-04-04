@@ -314,10 +314,9 @@ end
 
 function PLUGIN:HUDPaint()
     if (NUT_CVAR_HELPERS:GetBool()) then
-
         local client = LocalPlayer()
         local char = client:getChar()
-        if (!signal.open and client and char) then        
+        if (signal and !signal.open and client and char) then        
             local wep = client:GetActiveWeapon()
             
             if (IsValid(wep)) then
