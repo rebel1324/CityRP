@@ -152,7 +152,7 @@ LANGUAGE = {
 	sprayCanDesc = "It is a can that allows to use spray.",
 	balivestDesc = "It's a vest designed to stop bullets.\nCostume type: Vest\nDamage reduction rate: <color=39, 174, 96>40%%</color>",
 	balivestDescEntity = "It's a vest designed to stop a bullet.",
-	poliVestDesc = "A Vest made for the Law Enforcement Forces to save their lives from Harzadous Urban Crimescene. This vest has good quality with the approval mark of the Government on the Vest. This vest is designed to stop the bullet and reduce the damage from it.\nOutfit Slot: Vest\nDamage Reduction: <color=39, 174, 96>25%%</color>\n<color=192, 57, 43>Only Law Enforcement Force can use this Item!",
+	poliVestDesc = "A Vest made for the Law Enforcement Forces to save their lives from Hazardous Urban Crimescene. This vest has good quality with the approval mark of the Government on the Vest. This vest is designed to stop the bullet and reduce the damage from it.\nOutfit Slot: Vest\nDamage Reduction: <color=39, 174, 96>25%%</color>\n<color=192, 57, 43>Only Law Enforcement Force can use this Item!",
 	poliVestDescEntity = "A vest designed to prevent being hurt by bullets.",
 	scarfDesc = "A cool scarf with no other features.",
 	advBalivestDesc = "It is a vest designed to stop bullets.\nCostume type: Vest\nDamage reduction rate: <color=39, 174, 96>40%%</color>",
