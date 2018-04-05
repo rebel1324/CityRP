@@ -35,7 +35,7 @@ function PLUGIN:InitializedPlugins()
 end
 	
 return end
-/*
+--[[
 	MODIFICATION TUTORIAL
 		- sh_config
 		 This file contains ammo structure.
@@ -45,7 +45,7 @@ return end
 		 This file contains modification for CW 2.0 HUDs
 		- sh_attachments
 		 This file contains information and of attachment items.
-*/
+--]]
 
 nut.util.include("cl_cw3d2d.lua")
 nut.util.include("sh_attachments.lua")

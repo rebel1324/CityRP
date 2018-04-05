@@ -140,9 +140,9 @@ if (CLIENT) then
 					end
 				end
 			elseif (aowl) then
-				/*
+				--[[
 					aowl.cmds[cmd] = {callback = callback, group = group or "players", cmd = cmd, hidechat = hidechat }
-				*/
+				--]]
 
 				local aabb =  aowl.cmds
 				for cmd, data in SortedPairs(aabb) do

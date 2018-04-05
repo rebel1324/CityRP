@@ -148,7 +148,7 @@ meta.src=function(f)
 	return src:sub(start+1,stop-1)
 end
 
-/*meta.findval=function(f,str,regex)
+--[[meta.findval=function(f,str,regex)
 	local i=0
 	while true do
 		i=i+1
@@ -168,9 +168,9 @@ end
 			return val,key
 		end
 	end
-end*/
+end--]]
 
-/*meta.upvalues=function(f)
+--[[meta.upvalues=function(f)
 	local i,t=0,{}
 	while true do
 		i=i+1
@@ -179,5 +179,5 @@ end*/
 		t[key]=val
 	end
 	return t
-end*/
+end--]]
 -- meta.getupvalues = meta.upvalues

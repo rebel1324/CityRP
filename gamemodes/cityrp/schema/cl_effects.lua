@@ -156,7 +156,7 @@ function EFFECT:Init( data )
 		smoke:SetAirResistance(450)
 	end
 
-	/*
+	--[[
 	local smoke = self.emitter:Add( "particle/Particle_Glow_04_Additive", pos + dir * 2 * scale)
 	smoke:SetDieTime(math.Rand(.05,.1))
 	smoke:SetStartAlpha(255)
@@ -165,7 +165,7 @@ function EFFECT:Init( data )
 	smoke:SetEndSize(math.random(55,88)*scale)
 	smoke:SetRoll(math.Rand(180,480))
 	smoke:SetRollDelta(math.Rand(-3,3))
-	*/
+	--]]
 
 	local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + dir * 5)
 	smoke:SetVelocity(dir*350*scale)
@@ -192,7 +192,7 @@ function EFFECT:Init( data )
 	smoke:SetGravity( Vector( 0, 0, 20 ) )
 	smoke:SetAirResistance(250)
 
-	/*
+	--[[
 	local smoke = self.emitter:Add( "particle/Particle_Glow_04_Additive", pos + dir * 1)
 	smoke:SetVelocity(dir*400*scale)
 	smoke:SetDieTime(math.Rand(.05,.1))
@@ -205,7 +205,7 @@ function EFFECT:Init( data )
 	smoke:SetGravity(Vector(0, 0, 20))
 	smoke:SetColor(255, 200, 50)
 	smoke:SetAirResistance(250)
-	*/
+	--]]
 	local smoke = self.emitter:Add( "effects/muzzleflash" .. math.random(1, 4), pos + dir * 6)
 	smoke:SetVelocity(dir*300*scale)
 	smoke:SetDieTime(math.Rand(.05,.1))
@@ -299,7 +299,7 @@ function EFFECT:Init( data )
 		smoke:SetGravity(Vector(0, 0, -600)*1)
 	end
 
-	/*
+	--[[
 	local smoke = self.emitter:Add( "particle/Particle_Glow_04_Additive", pos + dir * 1)
 	smoke:SetVelocity(dir*400*scale)
 	smoke:SetDieTime(math.Rand(.05,.1))
@@ -312,7 +312,7 @@ function EFFECT:Init( data )
 	smoke:SetGravity(Vector(0, 0, 20))
 	smoke:SetColor(255, 255, 211)
 	smoke:SetAirResistance(250)
-	*/
+	--]]
 
 	sound.Play("weapons/fx/rics/ric" .. math.random(1, 4) .. ".wav", pos, 50, math.random(90, 110))
 end

@@ -2,9 +2,9 @@ FPP = FPP or {}
 FPP.DisconnectedPlayers = FPP.DisconnectedPlayers or {}
 
 
-/*---------------------------------------------------------------------------
+--[[
 Checks is a model is blocked
----------------------------------------------------------------------------*/
+--]]
 local function isBlocked(model)
     if model == "" or not FPP.Settings or not FPP.Settings.FPP_BLOCKMODELSETTINGS1 or
         not tobool(FPP.Settings.FPP_BLOCKMODELSETTINGS1.toggle)
@@ -29,9 +29,9 @@ local function isBlocked(model)
     return false
 end
 
-/*---------------------------------------------------------------------------
+--[[
 Prevents spawning a prop or effect when its model is blocked
----------------------------------------------------------------------------*/
+--]]
 local function propSpawn(ply, model)
     local blocked, msg = isBlocked(model)
     if blocked then
@@ -44,9 +44,9 @@ hook.Add("PlayerSpawnProp", "FPP_SpawnProp", propSpawn) -- PlayerSpawnObject isn
 hook.Add("PlayerSpawnEffect", "FPP_SpawnEffect", propSpawn)
 hook.Add("PlayerSpawnRagdoll", "FPP_SpawnEffect", propSpawn)
 
-/*---------------------------------------------------------------------------
+--[[
 Setting owner when someone spawns something
----------------------------------------------------------------------------*/
+--]]
 
 local fuckoff = {
     nut_vendor = true,

@@ -11,10 +11,10 @@ JAILMANAGER_ANG = Angle(-0.000, 180.000, 0.000)
 JAILBUZZER_POS = Vector(-2053.437988, 321.362732, -70.718750)
 SCREEN_POS = Vector(-1063.031250, -1431.750122, 253.791711)
 SCREEN_ANG = Angle(0.000, 180.000, 0.000)
-/*
+--[[
 -1062.031250 -1431.750122 252.691711
 -0.000 180.000 0.000
-*/
+--]]
 
 if (SERVER) then
 	
@@ -166,7 +166,7 @@ else
 					scr.curSelection = i
 				end
 			end
-			/*
+			--[[
 			local wm = wide/10
 			local bw, bh = wide - wm*2, 100
 			local bool = (scr:cursorInBox(wm, tall/2 - bh/2, bw, bh) and !scr.IN_USE)
@@ -182,7 +182,7 @@ else
 			surface.DrawOutlinedRect(wm + 1, tall/2 - bh/2 + 1, bw - 2, bh - 2)
 
 			nut.util.drawText("ACTIVATE", wide/2, tall/2, color_white, 1, 1, "nutATMFont")
-			*/
+			--]]
 		end
 		SCREEN_2.onMouseClick = function(scr, key)
 			if (key and scr.curSelection) then

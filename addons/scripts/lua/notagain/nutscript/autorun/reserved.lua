@@ -570,7 +570,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, group = 3},
 			},
 			func = function(entity, outfit, orig)
-				/*
+				--[[
 				local bodygroup = tonumber(outfit.data)
 				local part = orig.bodygroup
 
@@ -578,7 +578,7 @@ OUTFIT_REGISTERED = {
 					if (part) then
 						entity:SetBodygroup(part, bodygroup)
 					end
-				end*/
+				end--]]
 				if (orig.bodygroup) then
 					local find = outfit.find
 					
@@ -752,7 +752,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 0, mat = "citizensheetf/sheet_15"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 0, mat = "citizensheetf/sheet_suit"},
 
-				/*
+				--[[
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_01"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_02"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_03"},
@@ -769,7 +769,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_14"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_15"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_suit"},
-				*/
+				--]]
 
 				{price = 5000, find = "models/btcitizen/prague_civ_rioter_body_col_a", group = 2, mat = "models/btcitizen/prague_civ_rioter_body_col_a"},
 				{price = 5000, find = "models/btcitizen/prague_civ_rioter_body_col_a", group = 2, mat = "models/btcitizen/prague_civ_rioter_body_col_b"},
@@ -841,7 +841,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, group = 1},
 			},
 			func = function(entity, outfit, orig)
-				/*
+				--[[
 				local bodygroup = tonumber(outfit.data)
 				local part = orig.bodygroup
 
@@ -849,7 +849,7 @@ OUTFIT_REGISTERED = {
 					if (part) then
 						entity:SetBodygroup(part, bodygroup)
 					end
-				end*/
+				end--]]
 				if (orig.bodygroup) then
 					local find = outfit.find
 					

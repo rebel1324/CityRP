@@ -94,7 +94,7 @@ end
 hook.Add("ShutDown", "material_restore", materials.RestoreAll)
 
 module 	( "ms" , package.seeall )
-/*
+--[[
 local replace = {
 	"PLAY_ASSIST/PA_AMMO_SHELF",
 	"PLAY_ASSIST/PA_HEALTH02",
@@ -115,4 +115,4 @@ for k,v in pairs(replace) do
 	end
 end
 
-*/
+--]]

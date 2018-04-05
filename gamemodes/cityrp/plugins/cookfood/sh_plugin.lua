@@ -54,7 +54,7 @@ if (CLIENT) then
 	local hungerBar, percent, wave
 	function PLUGIN:Think()
 		-- This schema does not requires the bar.
-		/*hungerBar = hungerBar or nut.bar.get("hunger")
+		--[[hungerBar = hungerBar or nut.bar.get("hunger")
 		percent = (1 - LocalPlayer():getHungerPercent())
 
 		if (percent < .33) then -- if hunger is 33%
@@ -64,7 +64,7 @@ if (CLIENT) then
 			hungerBar.color = Color(color.r + wave, color.g - wave, color.b - wave)
 		else
 			hungerBar.color = color
-		end*/
+		end--]]
 	end
 
 	local timers = {5, 15, 30}
