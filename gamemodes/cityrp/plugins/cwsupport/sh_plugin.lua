@@ -91,15 +91,8 @@ function PLUGIN:InitializedPlugins()
 
 		for k, v in ipairs(weapons.GetList()) do
 			local class = v.ClassName
-			local prefix
 
-			if (class:find("cw_")) then
-				prefix = "cw_"
-			elseif (class:find("ma85_")) then
-				prefix = "ma85_"
-			end
-			
-			if (prefix and !class:find("base")) then
+			if (weapons.IsBasedOn(v.ClassName, "cw_base")) then
 				-- Configure Weapon's Variables
 				v.CanRicochet = false
 				v.isGoodWeapon = true
@@ -132,6 +125,54 @@ function PLUGIN:InitializedPlugins()
 						v.SpreadCooldown = (v.FireDelay or 0)*0.3
 					end
 					v.AddSpreadSpeed = v.SpreadPerShot*5
+				end
+
+				if (!v.oldcrosshairVisible) then
+					v.oldcrosshairVisible = v.crosshairVisible
+				end
+
+				function v:crosshairVisible()
+					-- not visible if we're aiming
+					if self.dt.State == CW_AIMING and self.FadeCrosshairOnAim then
+						return false
+					end
+					
+					-- or are in an inactive state (action in progress/running)
+					if self.InactiveWeaponStates[self.dt.State] then
+						return false
+					end
+
+					-- or have safety turned on
+					if self.dt.Safe then
+						return false
+					end
+					
+					-- or are in a vehicle
+					if self.Owner:InVehicle() then
+						return false 
+					end
+					
+					-- or are near a wall
+					if self.NearWall then
+						return false
+					end
+					
+					-- or are reloading the weapon
+					if (self.IsReloading or self.IsFiddlingWithSuppressor) and self.Cycle <= 0.9 then
+						return false
+					end
+					
+					-- or are reloading the M203
+					if self.reloadingM203 then
+						return false
+					end
+
+					local owner = self:GetOwner()
+					if (IsValid(owner) and owner:IsPlayer() and !owner:isWepRaised()) then
+						return false
+					end
+
+					return true
 				end
 
 				-- lol fuck you 
@@ -228,8 +269,7 @@ function PLUGIN:InitializedPlugins()
 				end
 
 				-- Generate Items
-				local uniqueID = string.Replace(class, prefix, ""):lower()
-				local dat = self.gunData[prefix .. uniqueID] or {}
+				local dat = self.gunData[class] or {}
 
 				v.Slot = dat.slot or 2
 				local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
@@ -237,7 +277,7 @@ function PLUGIN:InitializedPlugins()
 				ITEM.price = dat.price or 4000
 				ITEM.exRender = dat.exRender or false
 				ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
-				ITEM.class = prefix .. uniqueID
+				ITEM.class = class
 				ITEM.holsterDrawInfo = dat.holster
 				ITEM.isCW = true
 
@@ -410,8 +450,8 @@ function PLUGIN:InitializedPlugins()
 					if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
 						ITEM.name = v.PrintName 
 
-						nut.lang.stored["english"][prefix .. uniqueID] = v.PrintName 
-						nut.lang.stored["korean"][prefix .. uniqueID] = v.PrintName 
+						nut.lang.stored["english"][class] = v.PrintName 
+						nut.lang.stored["korean"][class] = v.PrintName 
 					end
 				end
 			end
@@ -478,13 +518,27 @@ function PLUGIN:InitializedPlugins()
 				
 				SafeRemoveEntityDelayed(ent, removetime)
 			end
+
+			CustomizableWeaponry.callbacks:addNew("adjustViewmodelPosition", "nutHolster", function(weapon, pos, ang)
+				local owner = weapon:GetOwner()
+
+				if (IsValid(owner) and owner:IsPlayer() and !owner:isWepRaised()) then
+					if (weapon.dt.State == CW_IDLE) then
+						if (weapon.ViewModelFlip) then
+							return pos, (ang + Vector(-12, -20, 20))
+						else
+							return pos, (ang + Vector(-12, 20, -20))
+						end
+					end
+				end
+			end)
 		end
 
 		do
 			CustomizableWeaponry.callbacks:addNew("finishReload", "nutExperience", function(weapon)
 				if (CLIENT) then return end
 
-				local owner = weapon.Owner
+				local owner = weapon:GetOwner()
 
 				if (IsValid(owner) and owner:IsPlayer()) then
 					local char = owner:getChar()
@@ -513,13 +567,13 @@ function PLUGIN:InitializedPlugins()
 						if (weapon.recalculateStats) then
 							weapon:recalculateStats()
 							
-							netstream.Start(weapon.Owner, "nutUpdateWeapon", weapon)
+							netstream.Start(weapon:GetOwner(), "nutUpdateWeapon", weapon)
 						end
 					end
 				end)
 
 				local class = weapon:GetClass():lower()
-				local client = weapon.Owner
+				local client = weapon:GetOwner()
 
 				if (!client) then return end
 				if (weapon.attLoaded) then return end

@@ -5,129 +5,141 @@ PLUGIN.desc = "Gun Jesus have arrived."
 nut.util.include("sh_configs.lua")
 nut.util.include("cl_effects.lua")
 
-if (true) then return end -- NO TFA
-
 function PLUGIN:InitializedPlugins()
-	-- Create Items with Lua
-	do
-	
-		-- WEAPON REGISTERATION
-		for k, v in ipairs(weapons.GetList()) do
-			local class = v.ClassName
-			local prefix
+	-- WEAPON REGISTERATION
+	for k, v in ipairs(weapons.GetList()) do
+		local class = v.ClassName
 
-			if (class:find("tfa_")) then
-				prefix = "tfa_"
+		if (weapons.IsBasedOn(class, "tfa_gun_base")) then
+			local infoDat = self.TFAInfo[class]
+
+			v.Primary.DefaultClip = 0
+
+			if (self.changeAmmo[v.Primary.Ammo]) then
+				v.Primary.Ammo = self.changeAmmo[v.Primary.Ammo]
 			end
-			
-			if (prefix and !class:find("base")) then
-				local infoDat = self.TFAInfo[class]
 
-				v.Primary.DefaultClip = 0
+			v.RenderGroup = RENDERGROUP_BOTH
 
-				if (self.changeAmmo[v.Primary.Ammo]) then
-					v.Primary.Ammo = self.changeAmmo[v.Primary.Ammo]
+			if (!v.oldGetViewModelPosition) then
+				v.oldGetViewModelPosition = v.GetViewModelPosition
+			end
+
+			function v:GetViewModelPosition( pos, ang )
+				if (IsValid(self:GetOwner()) and !self:GetOwner():isWepRaised()) then
+					return pos, ang
 				end
 
+				return self:oldGetViewModelPosition(pos, ang)
+			end
 
-				v.RenderGroup = RENDERGROUP_BOTH
-				function v:PostDrawViewModel()
-					local weapon = LocalPlayer():GetViewModel()
+			if (!v.oldCalcViewModelView) then
+				v.oldCalcViewModelView = v.CalcViewModelView
+			end
 
-					local at
-					if (self.Akimbo) then
-						at = weapon:GetAttachment(2 - (game.SinglePlayer() and self:GetNW2Int("AnimCycle", 1) or self.AnimCycle))
-					else
-						at = weapon:GetAttachment(1)
-					end
-					
-					if (!at) then return end
+			function v:CalcViewModelView(vm,oldPos,oldAng,pos,ang)
+	
 
-					weapon.emitter = weapon.emitter or ParticleEmitter(Vector())
-					weapon.emitter:SetNoDraw(true)
-					weapon.emitter:DrawAt(at.Pos, EyeAngles())
+				return self:oldCalcViewModelView(vm,oldPos,oldAng,pos,ang)
+			end
+
+			function v:PostDrawViewModel()
+				local weapon = LocalPlayer():GetViewModel()
+
+				local at
+				if (self.Akimbo) then
+					at = weapon:GetAttachment(2 - (game.SinglePlayer() and self:GetNW2Int("AnimCycle", 1) or self.AnimCycle))
+				else
+					at = weapon:GetAttachment(1)
 				end
-				function v:DrawWorldModelTranslucent()
-					local weapon = self
 				
-					local at
-					if (weapon.Akimbo) then
-						at = weapon:GetAttachment(2 - (game.SinglePlayer() and self:GetNW2Int("AnimCycle", 1) or self.AnimCycle))
+				if (!at) then return end
+
+				weapon.emitter = weapon.emitter or ParticleEmitter(Vector())
+				weapon.emitter:SetNoDraw(true)
+				weapon.emitter:DrawAt(at.Pos, EyeAngles())
+			end
+
+			function v:DrawWorldModelTranslucent()
+				local weapon = self
+			
+				local at
+				if (weapon.Akimbo) then
+					at = weapon:GetAttachment(2 - (game.SinglePlayer() and self:GetNW2Int("AnimCycle", 1) or self.AnimCycle))
+				else
+					at = weapon:GetAttachment(1)
+				end
+
+				if (!at) then return end
+
+				weapon.emitter = weapon.emitter or ParticleEmitter(Vector())
+				weapon.emitter:SetNoDraw(true)
+				
+				if (infoDat) then
+					local bork = infoDat.muzDir
+
+					if (bork) then
+						weapon.emitter:DrawAt(at.Pos, self.muzDir[bork](at.Ang))
 					else
-						at = weapon:GetAttachment(1)
+						weapon.emitter:DrawAt(at.Pos, at.Ang:Up():Angle())
+					end
+				else
+					weapon.emitter:DrawAt(at.Pos, at.Ang:Forward():Angle())
+				end
+			end
+
+			if (infoDat) then
+				v.Slot = infoDat.slot
+				v.shell = infoDat.shell
+				v.viewScale = infoDat.viewMuzzle
+				v.worldScale = infoDat.worldMuzzle
+
+				local ITEM = nut.item.register(class, "base_weapons", nil, nil, true)
+				ITEM.name = class
+				ITEM.desc = v.Primary.Ammo .. "를 사용하는 총기"
+				ITEM.price = infoDat.price or 4000
+				ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
+				ITEM.class = class
+				ITEM.holsterDrawInfo = infoDat.holster
+
+				if (infoDat.holster) then
+					ITEM.holsterDrawInfo.model = v.WorldModel
+				end
+
+				ITEM.model = v.WorldModel
+
+				local slot = self.slotCategory[v.Slot]
+				ITEM.width = 1
+				ITEM.height = 1
+				ITEM.weaponCategory = slot or "primary"
+
+				function ITEM:onEquipWeapon(client, weapon)
+				end
+
+				function ITEM:paintOver(item, w, h)
+					local x, y = w - 14, h - 14
+
+					if (item:getData("equip")) then
+						surface.SetDrawColor(110, 255, 110, 100)
+						surface.DrawRect(x, y, 8, 8)
+
+						x = x - 8*1.6
 					end
 
-					if (!at) then return end
-
-					weapon.emitter = weapon.emitter or ParticleEmitter(Vector())
-					weapon.emitter:SetNoDraw(true)
-					
-					if (infoDat) then
-						local bork = infoDat.muzDir
-
-						if (bork) then
-							weapon.emitter:DrawAt(at.Pos, self.muzDir[bork](at.Ang))
-						else
-							weapon.emitter:DrawAt(at.Pos, at.Ang:Up():Angle())
-						end
-					else
-						weapon.emitter:DrawAt(at.Pos, at.Ang:Forward():Angle())
+					if (item:getData("mod")) then
+						surface.SetDrawColor(255, 255, 110, 100)
+						surface.DrawRect(x, y, 8, 8)
 					end
 				end
 
-				if (infoDat) then
-					v.Slot = infoDat.slot
-					v.shell = infoDat.shell
-					v.viewScale = infoDat.viewMuzzle
-					v.worldScale = infoDat.worldMuzzle
+				HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
 
-					local ITEM = nut.item.register(class, "base_weapons", nil, nil, true)
-					ITEM.name = class
-					ITEM.desc = v.Primary.Ammo .. "를 사용하는 총기"
-					ITEM.price = infoDat.price or 4000
-					ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
-					ITEM.class = prefix .. uniqueID
-					ITEM.holsterDrawInfo = infoDat.holster
+				if (CLIENT) then
+					if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
+						ITEM.name = v.PrintName 
 
-					if (infoDat.holster) then
-						ITEM.holsterDrawInfo.model = v.WorldModel
-					end
-
-					ITEM.model = v.WorldModel
-
-					local slot = self.slotCategory[v.Slot]
-					ITEM.width = 1
-					ITEM.height = 1
-					ITEM.weaponCategory = slot or "primary"
-
-					function ITEM:onEquipWeapon(client, weapon)
-					end
-
-					function ITEM:paintOver(item, w, h)
-						local x, y = w - 14, h - 14
-
-						if (item:getData("equip")) then
-							surface.SetDrawColor(110, 255, 110, 100)
-							surface.DrawRect(x, y, 8, 8)
-
-							x = x - 8*1.6
-						end
-
-						if (item:getData("mod")) then
-							surface.SetDrawColor(255, 255, 110, 100)
-							surface.DrawRect(x, y, 8, 8)
-						end
-					end
-
-					HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
-
-					if (CLIENT) then
-						if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
-							ITEM.name = v.PrintName 
-
-							nut.lang.stored["english"][prefix .. uniqueID] = v.PrintName 
-							nut.lang.stored["korean"][prefix .. uniqueID] = v.PrintName 
-						end
+						nut.lang.stored["english"][class] = v.PrintName 
+						nut.lang.stored["korean"][class] = v.PrintName 
 					end
 				end
 			end

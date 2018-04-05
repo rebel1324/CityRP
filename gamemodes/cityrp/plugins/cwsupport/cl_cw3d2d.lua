@@ -450,9 +450,7 @@ local function CW20_HUD_REPLACEMENT()
 					self:drawClumpSpread(x2, y2, self.ClumpSpread, self.CrossAlpha)
 
 					self.CrossAmount = LerpCW20(FT * 30, self.CrossAmount, (self.CurCone * 350) * (90 / (math.Clamp(GetConVarNumber("fov_desired"), 75, 90) - self.CurFOVMod)))
-					surface.SetDrawColor(0, 0, 0, self.CrossAlpha * 0.75) -- BLACK crosshair parts
-					
-					surface.SetDrawColor(255, 255, 255, self.CrossAlpha) -- WHITE crosshair parts
+					surface.SetDrawColor(255, 255, 255, self.CrossAlpha)
 					surface.SetMaterial(Material("chairs.png"))
 					if self.CrosshairParts.left then
 						surface.DrawTexturedRectRotated(x2 - self.CrossAmount - 13, y2, 5, 25, -90) -- left cross

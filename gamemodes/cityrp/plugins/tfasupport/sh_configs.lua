@@ -5,6 +5,9 @@
 		[3] = function(a) return a:Forward():Angle() end,
 	}
 
+	PLUGIN.changeAmmo = {
+	}
+
 	PLUGIN.TFAInfo = {
 		tfa_tfap_dp210 = {
 			holster = {
