@@ -80,6 +80,7 @@ LANGUAGE = {
 	stashIn = "Keep",
 	stashOut = "Eject",
 	stashError = "Failed to store things in the warehouse.",
+	stashBag = "You can't store a bag in here!",
 	stashMenu = "Stash Menu",
 	stashDesc = "You can safely store your items here.",
 	notAllowed = "The conditions for this action are insufficient.",
