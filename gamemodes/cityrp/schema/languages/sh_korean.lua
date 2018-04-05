@@ -54,6 +54,7 @@ LANGUAGE = {
 	stashIn = "보관",
 	stashOut = "꺼내기",
 	stashError = "물건을 창고에 보관하는데 실패하였습니다.",
+	stashBag = "이곳에는 가방 보관이 불가능합니다!",
 	stashMenu = "창고 메뉴",
 	stashDesc = "당신의 아이템을 이곳에 안전히 보관할 수 있습니다.",
 	notAllowed = "이 행동을 하기 위한 조건이 불충분합니다.",
