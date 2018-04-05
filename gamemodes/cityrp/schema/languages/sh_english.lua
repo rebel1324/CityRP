@@ -147,8 +147,8 @@ LANGUAGE = {
 	*/
 	raweedDesc = "You can't use it too much every time. You can refine it by combining three blueprints with a combination blueprint.",
 	lockpickDesc = "It is a tool that forcibly can open a door. Quantity: %s",
-	keypadDesc = "Keypad to lock a box or a money printer, default password is 1337",
-	keycardDesc = "Key card that can lock a box or a money printer, default password is 1337",
+	keypadDesc = "Keypad to lock a box or a money printer. The default password is 1337",
+	keycardDesc = "Key card that can lock a box or a money printer. The default password is 1337",
 	scarfDesc = "A cool scarf with no other features.",
 	sprayCanDesc = "A can of spray paint. Allows you to use your spray.",
 	balivestDesc = "It's a vest designed to stop bullets.\nCostume type: Vest\nDamage reduction rate: <color=39, 174, 96>40%%</color>",
