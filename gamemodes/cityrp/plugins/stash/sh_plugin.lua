@@ -223,7 +223,10 @@ if (SERVER) then
 			local clientStash = char:getStash()
 
 			-- If client is trying to put bag in the stash, reject the request.
-			if (item.base == "base_bags" or clientStash[itemID] or item:getOwner() != client) then
+			if item.base == "base_bags" then
+				client:notify(L("stashBag", client))
+				return
+			elseif clientStash[itemID] or item:getOwner() ~= client then
 				client:notify(L("stashError", client))
 				return
 			end
