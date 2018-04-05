@@ -165,7 +165,7 @@ PANEL = {}
 			end
 		end
 
-		//panel.overlay:SetToolTip(L("itemPriceInfo", nut.currency.get(price), nut.currency.get(price2)))
+		--panel.overlay:SetToolTip(L("itemPriceInfo", nut.currency.get(price), nut.currency.get(price2)))
 		self.itemPanels[uniqueID] = panel
 
 		return panel

@@ -137,8 +137,8 @@ function methods:ReadLumpDispInfo()
 		local MapFace = ReadUShort(f)
 		local LightmapAlphaStart = ReadInt(f)
 		local LightmapSamplePositionStart = ReadInt(f)
-		local EdgeNeighbors = // TODO: Read these in properly. (See bspfile.h)
-		local CornerNeighbors = //
+		local EdgeNeighbors = -- TODO: Read these in properly. (See bspfile.h)
+		local CornerNeighbors = --
 		table.insert(dispinfo,{
 			startPosition = startPosition,
 			DispVertStart = DispVertStart,

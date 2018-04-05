@@ -36,7 +36,7 @@ if (CLIENT) then
 	end
 end
 
-// On player uneqipped the item, Removes a weapon from the player and keep the ammo in the item.
+-- On player uneqipped the item, Removes a weapon from the player and keep the ammo in the item.
 ITEM.functions.toggle = { -- sorry, for name order.
 	name = "Toggle",
 	tip = "useTip",

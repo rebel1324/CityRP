@@ -622,7 +622,7 @@ nut.tips = {
 }
 ]]
 
-// Translation by AngryBaldMan
+-- Translation by AngryBaldMan
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
 	'The salary comes directly into the bank, so cash is required.',
