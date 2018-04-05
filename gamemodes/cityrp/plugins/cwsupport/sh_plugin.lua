@@ -50,6 +50,8 @@ return end
 nut.util.include("cl_cw3d2d.lua")
 nut.util.include("sh_attachments.lua")
 
+CW_GENERATE_ITEM = true 
+
 function PLUGIN:InitializedPlugins()
 	table.Merge(nut.lang.stored["korean"], self.koreanTranslation)
 	table.Merge(nut.lang.stored["english"], self.englishTranslation)
@@ -270,178 +272,180 @@ function PLUGIN:InitializedPlugins()
 
 				-- Generate Items
 				local dat = self.gunData[class] or {}
-
 				v.Slot = dat.slot or 2
-				local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
-				ITEM.name = uniqueID
-				ITEM.price = dat.price or 4000
-				ITEM.exRender = dat.exRender or false
-				ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
-				ITEM.class = class
-				ITEM.holsterDrawInfo = dat.holster
-				ITEM.isCW = true
 
-				if (dat.holster) then
-					ITEM.holsterDrawInfo.model = v.WorldModel
-				end
+				if (CW_GENERATE_ITEM) then
+					local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
+					ITEM.name = uniqueID
+					ITEM.price = dat.price or 4000
+					ITEM.exRender = dat.exRender or false
+					ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
+					ITEM.class = class
+					ITEM.holsterDrawInfo = dat.holster
+					ITEM.isCW = true
 
-				ITEM.model = v.WorldModel
-
-				local slot = self.slotCategory[v.Slot]
-				ITEM.width = dat.width or 1
-				ITEM.height = dat.height or 1
-				ITEM.weaponCategory = slot or "primary"
-
-				function ITEM:onGetDropModel()
-					if (dat.width >= 3 and dat.height >= 2) then
-						return "models/props_junk/cardboard_box003a.mdl"
+					if (dat.holster) then
+						ITEM.holsterDrawInfo.model = v.WorldModel
 					end
 
-					return "models/props_junk/cardboard_box004a.mdl"
-				end
+					ITEM.model = v.WorldModel
 
-				function ITEM:drawEntity(entity)
-					local name = self.uniqueID
-					local exIcon = ikon:getIcon(name)
-					local type
-					if (self.width >= 3 and self.height >= 2) then
-						type = 0
-					else
-						type = 1
-					end
+					local slot = self.slotCategory[v.Slot]
+					ITEM.width = dat.width or 1
+					ITEM.height = dat.height or 1
+					ITEM.weaponCategory = slot or "primary"
 
-					if (exIcon) then  
-						if (!entity.initText and !entity.customText) then
-							entity.initText = true
-
-							itemRTTextrue.loadItemTex(entity, self, exIcon, type)
+					function ITEM:onGetDropModel()
+						if (dat.width >= 3 and dat.height >= 2) then
+							return "models/props_junk/cardboard_box003a.mdl"
 						end
 
-						if (entity.customText) then
-							render.MaterialOverrideByIndex(0, entity.customText)
-						end
-
-						entity:DrawModel()
-						
-						render.MaterialOverrideByIndex(1)
-					else
-						ikon:renderIcon(
-							self.uniqueID,
-							self.width,
-							self.height,
-							self.model,
-							self.iconCam
-						)
-					end
-				end
-
-				function ITEM:onEquipWeapon(client, weapon)
-				end
-
-				function ITEM:paintOver(item, w, h)
-					local x, y = w - 14, h - 14
-
-					if (item:getData("equip")) then
-						surface.SetDrawColor(110, 255, 110, 100)
-						surface.DrawRect(x, y, 8, 8)
-
-						x = x - 8*1.6
+						return "models/props_junk/cardboard_box004a.mdl"
 					end
 
-					if (table.Count(item:getData("mod", {})) > 0) then
-						surface.SetDrawColor(255, 255, 110, 100)
-						surface.DrawRect(x, y, 8, 8)
-					end
-				end
-
-				function ITEM:getDesc()
-					if (!self.entity or !IsValid(self.entity)) then
-						local text = L("gunInfoDesc", L(v.Primary.Ammo)) .. "\n"
-
-						text = text .. L("gunInfoStat", v.Damage, L(self.weaponCategory), v.Primary.ClipSize) .. "\n"
-
-						local attText = ""
-						local mods = self:getData("mod", {})
-						for _, att1 in pairs(mods) do
-							attText = attText .. "\n<color=39, 174, 96>" .. L(att1[1] or "ERROR") .. "</color>"
-						end
-
-						text = text .. L("gunInfoAttachments", attText)
-
-						return text
-					else
-						local text = L("gunInfoDesc", L(v.Primary.Ammo))
-						return text
-					end
-				end
-				
-			ITEM.functions.use = {
-			name = "Detach",
-			tip = "useTip",
-			icon = "icon16/wrench.png",
-            isMulti = true,
-            multiOptions = function(item, client)
-                local targets = {}
-
-                for k, v in pairs(item:getData("mod", {})) do
-                    table.insert(targets, {
-                        name = L(v[1] or "ERROR"),
-                        data = k,
-                    })
-                end
-
-                return targets
-            end,
-			onCanRun = function(item)
-				if (table.Count(item:getData("mod", {})) <= 0) then
-					return false
-				end
-				
-				return (!IsValid(item.entity))
-			end,
-			onRun = function(item, data)
-						local client = item.player
-						if (data) then
-							local char = client:getChar()
-
-							if (char) then
-								local inv = char:getInv()
-
-								if (inv) then
-									local mods = item:getData("mod", {})
-									local attData = mods[data]
-
-									if (attData) then
-										inv:add(attData[1])
-
-										
-										local wepon = client:GetActiveWeapon()
-										if (IsValid(wepon) and wepon:GetClass() == item.class) then
-											wepon:detachSpecificAttachment(attData[2])
-										end
-
-										mods[data] = nil
-
-										if (table.Count(mods) == 0) then
-											item:setData("mod", nil)
-										else
-											item:setData("mod", mods)
-										end
-										
-										-- Yeah let them know you did something with your dildo
-										client:EmitSound("cw/holster4.wav")
-									else
-										client:notifyLocalized("notAttachment")
-									end
-								end
-							end
+					function ITEM:drawEntity(entity)
+						local name = self.uniqueID
+						local exIcon = ikon:getIcon(name)
+						local type
+						if (self.width >= 3 and self.height >= 2) then
+							type = 0
 						else
-							client:notifyLocalized("detTarget")
+							type = 1
 						end
 
-						return false
+						if (exIcon) then  
+							if (!entity.initText and !entity.customText) then
+								entity.initText = true
+
+								itemRTTextrue.loadItemTex(entity, self, exIcon, type)
+							end
+
+							if (entity.customText) then
+								render.MaterialOverrideByIndex(0, entity.customText)
+							end
+
+							entity:DrawModel()
+							
+							render.MaterialOverrideByIndex(1)
+						else
+							ikon:renderIcon(
+								self.uniqueID,
+								self.width,
+								self.height,
+								self.model,
+								self.iconCam
+							)
+						end
+					end
+
+					function ITEM:onEquipWeapon(client, weapon)
+					end
+
+					function ITEM:paintOver(item, w, h)
+						local x, y = w - 14, h - 14
+
+						if (item:getData("equip")) then
+							surface.SetDrawColor(110, 255, 110, 100)
+							surface.DrawRect(x, y, 8, 8)
+
+							x = x - 8*1.6
+						end
+
+						if (table.Count(item:getData("mod", {})) > 0) then
+							surface.SetDrawColor(255, 255, 110, 100)
+							surface.DrawRect(x, y, 8, 8)
+						end
+					end
+
+					function ITEM:getDesc()
+						if (!self.entity or !IsValid(self.entity)) then
+							local text = L("gunInfoDesc", L(v.Primary.Ammo)) .. "\n"
+
+							text = text .. L("gunInfoStat", v.Damage, L(self.weaponCategory), v.Primary.ClipSize) .. "\n"
+
+							local attText = ""
+							local mods = self:getData("mod", {})
+							for _, att1 in pairs(mods) do
+								attText = attText .. "\n<color=39, 174, 96>" .. L(att1[1] or "ERROR") .. "</color>"
+							end
+
+							text = text .. L("gunInfoAttachments", attText)
+
+							return text
+						else
+							local text = L("gunInfoDesc", L(v.Primary.Ammo))
+							return text
+						end
+					end
+					
+					ITEM.functions.use = {
+					name = "Detach",
+					tip = "useTip",
+					icon = "icon16/wrench.png",
+					isMulti = true,
+					multiOptions = function(item, client)
+						local targets = {}
+
+						for k, v in pairs(item:getData("mod", {})) do
+							table.insert(targets, {
+								name = L(v[1] or "ERROR"),
+								data = k,
+							})
+						end
+
+						return targets
 					end,
-			}
+					onCanRun = function(item)
+						if (table.Count(item:getData("mod", {})) <= 0) then
+							return false
+						end
+						
+						return (!IsValid(item.entity))
+					end,
+					onRun = function(item, data)
+								local client = item.player
+								if (data) then
+									local char = client:getChar()
+
+									if (char) then
+										local inv = char:getInv()
+
+										if (inv) then
+											local mods = item:getData("mod", {})
+											local attData = mods[data]
+
+											if (attData) then
+												inv:add(attData[1])
+
+												
+												local wepon = client:GetActiveWeapon()
+												if (IsValid(wepon) and wepon:GetClass() == item.class) then
+													wepon:detachSpecificAttachment(attData[2])
+												end
+
+												mods[data] = nil
+
+												if (table.Count(mods) == 0) then
+													item:setData("mod", nil)
+												else
+													item:setData("mod", mods)
+												end
+												
+												-- Yeah let them know you did something with your dildo
+												client:EmitSound("cw/holster4.wav")
+											else
+												client:notifyLocalized("notAttachment")
+											end
+										end
+									end
+								else
+									client:notifyLocalized("detTarget")
+								end
+
+								return false
+							end,
+					}
+				end
 
 				HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
 
