@@ -422,7 +422,7 @@ function SCHEMA:OnCharCreated(client, char)
 end
 
 function SCHEMA:KeyPress(client, key)
-	if (key == IN_RELOAD and SCHEMA.serious) then
+	if (key == IN_RELOAD and nut.config.get("isSerious", false)) then
 		timer.Create("nutToggleRaise"..client:SteamID(), 1, 1, function()
 			if (IsValid(client)) then
 				client:toggleWepRaised()
@@ -482,7 +482,7 @@ function SCHEMA:PostPlayerLoadout(client, reload)
 		char:setData("outfits", {})
 	end
 
-	if (!self.serious) then
+	if (!nut.config.get("isSerious", false)) then
 		client:Give("weapon_physgun")
 		client:Give("gmod_tool")
 		client:Give("gmod_camera")

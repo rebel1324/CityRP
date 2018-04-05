@@ -1,15 +1,5 @@
 local PLAYER = FindMetaTable("Player")
 
--- serious rp turned up
-PLAYER.oldRaised = PLAYER.isWepRaised
-function PLAYER:isWepRaised()
-	if (SCHEMA.serious) then
-		return self:oldRaised()
-	else
-		return true
-	end
-end
-
 function PLAYER:isArrested()
 	local char = self:getChar()
 

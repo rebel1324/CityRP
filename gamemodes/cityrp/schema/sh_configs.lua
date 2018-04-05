@@ -288,6 +288,10 @@ nut.config.add("startMoney", 5000, "Start money for new character.", nil, {
 	category = "schema"
 })
 
+nut.config.add("isSerious", false, "Turn on/off the serious mod of this schema", nil, {
+	category = "schema"
+})
+
 nut.config.add("deathMoney", true, "Lose money on death.", nil, {
 	category = "penalty"
 })
@@ -295,7 +299,6 @@ nut.config.add("deathMoney", true, "Lose money on death.", nil, {
 nut.config.add("deathWeapon", true, "Lose weapon on death.", nil, {
 	category = "penalty"
 })
-
 nut.config.add("afkDemote", 240, "afk Demote.", nil, {
 	data = {min = 0, max = 1000},
 	category = "schema"
