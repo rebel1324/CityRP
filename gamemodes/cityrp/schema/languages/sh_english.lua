@@ -286,8 +286,8 @@ LANGUAGE = {
 	allowVoice = "Whether or not voice chat is allowed.",
 	thirdperson = "Allow third-person in the server.",
 	wepAlwaysRaised = "Whether or not weapons are always raised.",
-	sbHeight = "Scoreboard's height within percent of screen height.",
-	sbWidth = "Scoreboard's width within percent of screen width.",
+	sbHeight = "The scoreboard height as percentage of screen height.",
+	sbWidth = "The scoreboard width as percentage of screen width.",
 	server = "Server",
 	visual = "",
 	/*
