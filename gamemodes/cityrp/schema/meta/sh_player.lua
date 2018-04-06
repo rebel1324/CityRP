@@ -259,3 +259,11 @@ function PLAYER:canAfford(amount)
     local char = self:getChar()
     return char and char:hasMoney(amount)
 end
+
+--- DarkRP Player:isCP() wrapper.
+--- Checks whether or not the player is part of the police.
+-- @return true if the player's team is CLASS_POLICE. Otherwise, false.
+function PLAYER:isCP()
+    local char = self:getChar()
+    return char and char:getClass() == CLASS_POLICE
+end
