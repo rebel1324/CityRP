@@ -257,10 +257,5 @@ end
 -- @return true if the player can afford the given amount. Otherwise, false.
 function PLAYER:canAfford(amount)
     local char = self:getChar()
-
-    if char then
-        return char:hasMoney(amount)
-    else
-        return false
-    end
+    return char and char:hasMoney(amount)
 end
