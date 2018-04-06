@@ -1,0 +1,19 @@
+# Denotes that this is the root config of the project.
+root = true
+
+# Applies to all file types.
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+tab_width = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Only applies to Lua files.
+[*.lua]
+spaces_around_brackets = none
+block_comment_start = --[[
+block_comment_end = --]]
+line_comment = --

@@ -72,7 +72,7 @@ hook.Add("AFK",Tag,function(client, afk, id, len)
 		return
 	end
 	
-	/*
+	--[[
 	Msg"[AFK] "
 	local name = (IsValid(client) and client:Name() or id)
 	local niceTime = string.NiceTime(len or 0)
@@ -87,7 +87,7 @@ hook.Add("AFK",Tag,function(client, afk, id, len)
 
 	if (!afk) then
 		chat.AddText(Color(100,255,100,255),"돌아오셨군요",Color(50,200,50,255),"!",Color(255,255,255,255)," 돌아오는데 걸린시간은 ",Color(200,200,255,255),secToTime(len).." 입니다",Color(100,255,100,255),".")	
-	end*/
+	end--]]
 end)
 
 hook.Add("AFKMonChanged",Tag,function(pl, isafk)

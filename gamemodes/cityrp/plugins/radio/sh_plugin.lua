@@ -151,7 +151,7 @@ else
 		end
 	end)
 
-	/* Do we need it?
+	--[[ Do we need it?
 	nut.command.add("freq", {
 		syntax = "<string name> [string flags]",
 		onRun = function(client, arguments)
@@ -178,7 +178,7 @@ else
 			end
 		end
 	})
-*/
+--]]
 end
 
 -- Yelling out loud.

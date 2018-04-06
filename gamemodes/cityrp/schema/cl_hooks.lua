@@ -371,14 +371,14 @@ end)
 
 
 netstream.Hook("nutHitman", function(target, client, message)
-	/*
+	--[[
 		local localman = LocalPlayer()
 		local char = localman:getChar()
 		if (!char) then return end
 
 		local class = char:getClass()
 		if (class != CLASS_HITMAN) then return end
-	*/
+	--]]
 	local what = vgui.Create("voteRequired")
 	what:SetTitle(L("hitRequestTitle", client:Name()))
 	what.name:SetText(L("hitRequestMsg", target:Name(), message))

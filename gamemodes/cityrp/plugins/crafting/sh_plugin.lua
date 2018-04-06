@@ -100,7 +100,7 @@ else
 	local PLUGIN = PLUGIN
 
 	function PLUGIN:LoadData()
-		/*
+		--[[
 		local savedTable = self:getData() or {}
 
 		for k, v in ipairs(savedTable) do
@@ -110,11 +110,11 @@ else
 			stove:Spawn()
 			stove:Activate()
 		end
-		*/
+		--]]
 	end
 	
 	function PLUGIN:SaveData()
-		/*
+		--[[
 		local savedTable = {}
 
 		for k, v in ipairs(ents.GetAll()) do
@@ -124,7 +124,7 @@ else
 		end
 
 		self:setData(savedTable)
-		*/
+		--]]
 	end
 
 	function PLUGIN:PlayerDeath(client)

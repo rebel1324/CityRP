@@ -1,12 +1,12 @@
 
 OUTFIT_DATA = {
-	/*
+	--[[
 		EXTENDED ENHANCED CITIZEN - FEMALE
 		strong default model packs for the casuals!
 
 		http://steamcommunity.com/sharedfiles/filedetails/?id=677125227
 		https://steamcommunity.com/sharedfiles/filedetails/?id=677129372
-	*/
+	--]]
 	["models/player/zelpa/female_01_extended.mdl"] = {uid = "efemale", skins = 18},
 	["models/player/zelpa/female_02_extended.mdl"] = {uid = "efemale", skins = 18},
 	["models/player/zelpa/female_03_extended.mdl"] = {uid = "efemale", skins = 21},
@@ -14,13 +14,13 @@ OUTFIT_DATA = {
 	["models/player/zelpa/female_06_extended.mdl"] = {uid = "efemale", skins = 18},
 	["models/player/zelpa/female_07_extended.mdl"] = {uid = "efemale", skins = 12},
 
-	/*
+	--[[
 		EXTENDED ENHANCED CITIZEN - MALE
 		strong default model packs for the casuals!
 
 		http://steamcommunity.com/sharedfiles/filedetails/?id=677125227
 		https://steamcommunity.com/sharedfiles/filedetails/?id=677129372
-	*/
+	--]]
 	["models/player/zelpa/male_01_extended.mdl"] = {uid = "emale", skins = 24},
 	["models/player/zelpa/male_02_extended.mdl"] = {uid = "emale", skins = 24},
 	["models/player/zelpa/male_03_extended.mdl"] = {uid = "emale", skins = 21},
@@ -33,12 +33,12 @@ OUTFIT_DATA = {
 	["models/player/zelpa/male_10_extended.mdl"] = {uid = "emale", skins = 6},
 	["models/player/zelpa/male_11_extended.mdl"] = {uid = "emale", skins = 12},
 	
-	/*
+	--[[
 		BLACK TEA CITIZENS - MALE
 		extended customization to the max!
 
 		https://steamcommunity.com/sharedfiles/filedetails/?id=951557268
-	*/
+	--]]
 	["models/btcitizen/male_01.mdl"] = {
 		uid = "bmale",
 		facemap = "models/btcitizen/facemaps/van_facemap",
@@ -197,12 +197,12 @@ OUTFIT_DATA = {
 		},
 	},
 
-	/*
+	--[[
 		BLACK TEA CITIZENS - FEMALE
 		extended customization to the max!
 
 		https://steamcommunity.com/sharedfiles/filedetails/?id=951557268
-	*/
+	--]]
 	["models/btcitizen/female_01.mdl"] = {
 		uid = "bfemale",
 		skins = {
@@ -818,7 +818,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, group = 3},
 			},
 			func = function(entity, outfit, orig)
-				/*
+				--[[
 				local bodygroup = tonumber(outfit.data)
 				local part = orig.bodygroup
 
@@ -826,7 +826,7 @@ OUTFIT_REGISTERED = {
 					if (part) then
 						entity:SetBodygroup(part, bodygroup)
 					end
-				end*/
+				end--]]
 				if (orig.bodygroup) then
 					local find = outfit.find
 					
@@ -1000,7 +1000,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 0, mat = "citizensheetf/sheet_15"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 0, mat = "citizensheetf/sheet_suit"},
 
-				/*
+				--[[
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_01"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_02"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_03"},
@@ -1017,7 +1017,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_14"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_15"},
 				{price = 5000, find = "models/btcitizen/female/citizen_sheet", group = 1, mat = "citizensheetf/sheet_suit"},
-				*/
+				--]]
 
 				{price = 5000, find = "models/btcitizen/prague_civ_rioter_body_col_a", group = 2, mat = "models/btcitizen/prague_civ_rioter_body_col_a"},
 				{price = 5000, find = "models/btcitizen/prague_civ_rioter_body_col_a", group = 2, mat = "models/btcitizen/prague_civ_rioter_body_col_b"},
@@ -1090,7 +1090,7 @@ OUTFIT_REGISTERED = {
 				{price = 5000, group = 1},
 			},
 			func = function(entity, outfit, orig)
-				/*
+				--[[
 				local bodygroup = tonumber(outfit.data)
 				local part = orig.bodygroup
 
@@ -1098,7 +1098,7 @@ OUTFIT_REGISTERED = {
 					if (part) then
 						entity:SetBodygroup(part, bodygroup)
 					end
-				end*/
+				end--]]
 				if (orig.bodygroup) then
 					local find = outfit.find
 					

@@ -1,7 +1,7 @@
 LANGUAGE = {
-	/*
+	--[[
 		LANGUAGE
-	*/
+	--]]
 	reserveSalary = "당신의 계좌에 %s 만큼의 월급이 들어왔습니다.",
 	reserveIncome = "당신의 계좌에 %s 만큼의 이자가 들어왔습니다.",
 	salaryRejected = "월급을 받지 못하였습니다",
@@ -75,9 +75,9 @@ LANGUAGE = {
 	maxReached = "이 종류의 기계는 더이상 구매가 불가능 합니다.",
 	maxReachedLaw = "이 종류의 기계는 경찰수에 비례하여 현재 %s개까지 소유가능합니다.",
 	weaponSlotFilled = "이미 이 종류의 아이템을 장착하고 있습니다.",
-	/*
+	--[[
 		ITEM CATEGORY TRANSLATION
-	*/
+	--]]
 	["Gun Efficiency"] = "총기 사격 기술",
 	["Medical Knowledge"] = "의료 지식",
 	["Melee Efficiency"] = "근접 전투 기술",
@@ -95,10 +95,10 @@ LANGUAGE = {
 	["Consumeable"] = "일용품",
 	["Storage"] = "가방",
 	["Education"] = "교육 물품",
-	/*
+	--[[
 		ENTITY TRANSLATION
 		NAME-DESCRIPTION TRANSLATION
-	*/
+	--]]
     synthesizer = "신디사이저",
     synthesizerGuitar = "신디사이저 기타",
     synthesizerPiano = "신디사이저 피아노",
@@ -128,10 +128,10 @@ LANGUAGE = {
 	medicalVendorDescPrice = "%s에 의료물품을 구매할 수 있습니다.",
 	foodVendorOwner = "주인: %s",
 	drinkVendorName = "음료 자판기",
-	/*
+	--[[
 		ITEM TRANSLATION
 		NAME-DESCRIPTION TRANSLATION
-	*/
+	--]]
     ["Raw Weed"] = "생대마",
     raweedDesc = "너무 써서 사용할 수 없는 대마다. 조합 청사진과 3개를 조합하면 정제할 수 있다.",
     ["Lockpick"] = "문따개",
@@ -271,9 +271,9 @@ LANGUAGE = {
     ammoDesc = "%s발의 %s 탄약이 들어있는 탄약상자",
     [""] = "",
     Desc = "",
-	/*
+	--[[
 		CONFIG TRANSLATION
-	*/
+	--]]
 	Permakill = "영구 사망",
 	pkActive = "목숨 1개",
 	pkWorld = "월드에서 사망",
@@ -346,12 +346,12 @@ LANGUAGE = {
 	sbWidth = "스코어보드 넓이",
 	server = "서버",
 	visual = "",
-	/*
+	--[[
 		UI TRANSLATION
-	*/
-	/*
+	--]]
+	--[[
 		MISC.
-	*/
+	--]]
 	Unequip = "장착 해제",
 	Equip = "장착",
 	Preview = "미리 보기",

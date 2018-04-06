@@ -534,7 +534,7 @@ nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bit
 nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly)
 nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly)
 nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly)
-/*
+--[[
 -- need to get better shit.
 local bentstr = nut.bent.add("nut_storage", "models/rebel1324/footlocker.mdl", "5x3 아이템 상자", 2, 1000, all)
 hook.Add("InitializedPlugins", "registerFootlockers", function()
@@ -588,7 +588,7 @@ bentstr.onSpawn = function(entity, client, char, info)
 		entity:Remove()
 	end
 end
-*/
+--]]
 --[[
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
@@ -622,7 +622,7 @@ nut.tips = {
 }
 ]]
 
-// Translation by AngryBaldMan
+-- Translation by AngryBaldMan
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
 	'The salary comes directly into the bank, so cash is required.',

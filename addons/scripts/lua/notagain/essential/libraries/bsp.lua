@@ -118,7 +118,7 @@ function methods:ReadLump(lumpID)
 	elseif(lumpID == BSP_LUMP_TEXDATA_STRING_TABLE) then return self:ReadLumpTextDataStringTable()
 	elseif(lumpID == BSP_LUMP_DISPINFO) then return self:ReadLumpDispInfo() end
 end
-/*
+--[[
 function methods:ReadLumpDispInfo()
 	local f = self.m_file
 	if(!f) then return end
@@ -137,8 +137,8 @@ function methods:ReadLumpDispInfo()
 		local MapFace = ReadUShort(f)
 		local LightmapAlphaStart = ReadInt(f)
 		local LightmapSamplePositionStart = ReadInt(f)
-		local EdgeNeighbors = // TODO: Read these in properly. (See bspfile.h)
-		local CornerNeighbors = //
+		local EdgeNeighbors = -- TODO: Read these in properly. (See bspfile.h)
+		local CornerNeighbors = --
 		table.insert(dispinfo,{
 			startPosition = startPosition,
 			DispVertStart = DispVertStart,
@@ -154,7 +154,7 @@ function methods:ReadLumpDispInfo()
 	end
 	return dispinfo
 end
-*/
+--]]
 function methods:ReadLumpPlanes()
 	local f = self.m_file
 	if(!f) then return end
