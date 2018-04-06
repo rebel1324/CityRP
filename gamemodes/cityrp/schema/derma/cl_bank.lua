@@ -8,7 +8,7 @@ local PANEL = {}
 	end
 vgui.Register("nutTransfer", PANEL, "DFrame")
 
-/*
+--[[
 netstream.Hook("nutBank", function()
 	if (nut.gui.bank and nut.gui.bank:IsVisible()) then
 		nut.gui.bank:Close()
@@ -17,4 +17,4 @@ netstream.Hook("nutBank", function()
 
 	vgui.Create("nutTransfer")
 end)
-*/
+--]]

@@ -1,6 +1,6 @@
-/*---------------------------------------------------------------------------
+--[[
 Tomas
----------------------------------------------------------------------------*/
+--]]
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
@@ -54,10 +54,10 @@ function ENT:Initialize()
 	end)
 	timer.Simple(self.PrintRate, function() if IsValid(self) then self:Work() end end)
 
-	//This is how much power this bitminer uses. This is used to determin if the generator can power it or not.
+	--This is how much power this bitminer uses. This is used to determin if the generator can power it or not.
 	self.powerUsage = 1
 
-	//This is the entity that we are "plugged" into. Will be nil if not pluged into any
+	--This is the entity that we are "plugged" into. Will be nil if not pluged into any
 	self.connectedEntity = nil
 
 	self.socket = {

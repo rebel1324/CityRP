@@ -9,7 +9,7 @@ local __index=metatable.__index -- okay, this was a bad idea
 	  __index.GetName=__index.Name
 	 -- __index.Nick=__index.Name
 
-	/*  __index.SteamID=function(s) return s.networkid end
+	--[[  __index.SteamID=function(s) return s.networkid end
 	  __index.SteamID64=function(s) return s.communityid end
 	  __index.UserID=function(s) return s.userid end
 	  __index.Team=function(s) return s.teamid end
@@ -20,7 +20,7 @@ local __index=metatable.__index -- okay, this was a bad idea
 	  __index.IsPlayer=function(s) return s.Entity and s.Entity:IsPlayer() end
 	  __index.IsBot=function(s) return tobool(s.bot) end
 	
-	*/
+	--]]
 
 local gameevent=gameevent
 

@@ -33,11 +33,11 @@ PLUGIN.modelCam["<WORLD MODEL PATH OF THE WEAPON>"] = {
 	fov = 13.190396880435
 }
 
-/*
+--[[
     Rifile Holster Position Template.
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",
 		ang = Angle(180, 0,20),
 		pos = Vector(4, 10, -2),
     },
-*/
+--]]

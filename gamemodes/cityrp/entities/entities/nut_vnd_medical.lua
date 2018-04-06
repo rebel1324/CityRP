@@ -109,12 +109,12 @@ if (SERVER) then
 					end
 
 					local owner = self:getOwner()
-					/*
+					--[[
 					local e = EffectData()
 					e:SetStart(self:GetPos() + self:OBBCenter())
 					e:SetScale(0.1)
 					util.Effect( "vendorGas", e )
-					*/
+					--]]
 
 					local ownerChar = owner:getChar()
 					local profit = price - item.price

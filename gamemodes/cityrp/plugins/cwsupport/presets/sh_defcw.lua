@@ -1,5 +1,5 @@
 
-/* PISTOLS */
+--[[ PISTOLS --]]
 PLUGIN.gunData.cw_fiveseven = {
     holster = {
 		bone = "ValveBiped.Bip01_R_Thigh",
@@ -84,7 +84,7 @@ PLUGIN.gunData.cw_shorty = {
     height = 1,
     exRender = true,
 }
-/* SHOTGUNS */
+--[[ SHOTGUNS --]]
 PLUGIN.gunData.cw_m3super90 = {
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",
@@ -97,7 +97,7 @@ PLUGIN.gunData.cw_m3super90 = {
     height = 2,
     exRender = true,
 }
-/* SMG */
+--[[ SMG --]]
 PLUGIN.gunData.cw_mac11 = {
     holster = {
 		bone = "ValveBiped.Bip01_R_Thigh",
@@ -122,7 +122,7 @@ PLUGIN.gunData.cw_ump45 = {
     height = 2,
     exRender = true,
 }
-/* RIFLES */
+--[[ RIFLES --]]
 PLUGIN.gunData.cw_g3a3 = {
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",

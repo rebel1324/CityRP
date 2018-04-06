@@ -101,10 +101,10 @@ LANGUAGE = {
 	maxReached = "This type of machine is no longer available for purchase.",
 	maxReachedLaw = "This type of machine can be owned up to %s at present in proportion to the number of police.",
 	weaponSlotFilled = "You already have this type of item.",
-	/*
+	--[[
 		ENTITY TRANSLATION
 		NAME-DESCRIPTION TRANSLATION
-	*/
+	--]]
 	synthesizer = "Synthesizer",
 	synthesizerGuitar = "Synthesizer guitar",
 	synthesizerPiano = "Synthesizer piano",
@@ -141,10 +141,10 @@ LANGUAGE = {
 	personalCovfefeDesc = "A machine that dispenses and brews coffee.",
 	drinkVendorName = "Soda Machine",
 	drinkVendorDesc = "A machine that produces a variety of refreshments.",
-	/*
+	--[[
 		ITEM TRANSLATION
 		NAME-DESCRIPTION TRANSLATION
-	*/
+	--]]
 	raweedDesc = "You can't use it too much every time. You can refine it by combining three blueprints with a combination blueprint.",
 	lockpickDesc = "It is a tool that forcibly can open a door. Quantity: %s",
 	keypadDesc = "Keypad to lock a box or a money printer. The default password is 1337",
@@ -215,9 +215,9 @@ LANGUAGE = {
 	cookNeeded = "This dish must be cooked.",
 	cookedLevel = "Current cooking status: ",
 	ammoDesc = "%s %s Ammunition box containing ammunition.",
-	/*
+	--[[
 		CONFIG TRANSLATION
-	*/
+	--]]
 	Permakill = "Permakill",
 	pkActive = "Whether or not permakill is activated on the server.",
 	pkWorld = "Whether or not world and self damage produce permanent death",
@@ -290,12 +290,12 @@ LANGUAGE = {
 	sbWidth = "The scoreboard width as percentage of screen width.",
 	server = "Server",
 	visual = "",
-	/*
+	--[[
 		UI TRANSLATION
-	*/
-	/*
+	--]]
+	--[[
 		MISC.
-	*/
+	--]]
 	shoes = "Shoes",
 	bentities = "Shop", --Not sure
 	business = "Business",
