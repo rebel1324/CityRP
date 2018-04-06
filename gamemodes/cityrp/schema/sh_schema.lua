@@ -106,7 +106,7 @@ nut.anim.setModelClass("models/btcitizen/female_14.mdl", "player")
 -- This hook prevents default Nutscript plugins to load.
 local noLoad = {
 	chatbox  = false, -- CityRP is using XPChat as default chat.
-	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
+	--wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
 	thirdperson = false, -- CityRP does not use Thridperson.
 	spawnsaver = false, -- CityRP does not use spawnsaver (returning back to defualt location)
 	saveitems = false, -- CityRP does not save any items on the map.
