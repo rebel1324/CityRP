@@ -2,7 +2,7 @@ PLUGIN.name = "CityRP HUD"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin adds good HUD."
 
-if (SERVER) then return end
+if (SERVER or true) then return end
 
 function SCHEMA:LoadFonts(font, genericFont)
 	surface.CreateFont("nutNumeric", {
