@@ -279,7 +279,7 @@ end
 --- DarkRP Player:isMayor() wrapper.
 --- Checks whether or not the player is the mayor.
 -- @return true if the player's team is CLASS_MAYOR. Otherwise, false.
-function PLAYER:isChief()
+function PLAYER:isMayor()
     local char = self:getChar()
     return char and char:getClass() == CLASS_MAYOR
 end
@@ -287,7 +287,7 @@ end
 --- DarkRP Player:isCook() wrapper.
 --- Checks whether or not the player is a cook.
 -- @return true if the player's team is CLASS_COOK. Otherwise, false.
-function PLAYER:isChief()
+function PLAYER:isCook()
     local char = self:getChar()
     return char and char:getClass() == CLASS_COOK
 end
@@ -295,7 +295,7 @@ end
 --- DarkRP Player:isHitman() wrapper.
 --- Checks whether or not the player is a cook.
 -- @return true if the player's team is CLASS_HITMAN. Otherwise, false.
-function PLAYER:isChief()
+function PLAYER:isHitman()
     local char = self:getChar()
     return char and char:getClass() == CLASS_HITMAN
 end
