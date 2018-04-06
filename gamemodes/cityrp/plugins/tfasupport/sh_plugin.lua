@@ -21,28 +21,6 @@ function PLUGIN:InitializedPlugins()
 
 			v.RenderGroup = RENDERGROUP_BOTH
 
-			if (!v.oldGetViewModelPosition) then
-				v.oldGetViewModelPosition = v.GetViewModelPosition
-			end
-
-			function v:GetViewModelPosition( pos, ang )
-				if (IsValid(self:GetOwner()) and !self:GetOwner():isWepRaised()) then
-					return pos, ang
-				end
-
-				return self:oldGetViewModelPosition(pos, ang)
-			end
-
-			if (!v.oldCalcViewModelView) then
-				v.oldCalcViewModelView = v.CalcViewModelView
-			end
-
-			function v:CalcViewModelView(vm,oldPos,oldAng,pos,ang)
-	
-
-				return self:oldCalcViewModelView(vm,oldPos,oldAng,pos,ang)
-			end
-
 			function v:PostDrawViewModel()
 				local weapon = LocalPlayer():GetViewModel()
 
