@@ -70,7 +70,7 @@ function PLAYER:isProtected()
 
 		 	local class = char:getClass()
 		 	local classData = nut.class.list[class]
-		 	
+
 		 	if (classData) then
 		 		if (classData.law) then
 		 			return 0.1, "class"
@@ -149,7 +149,7 @@ if (SERVER) then
                 timer.Destroy(k)
                 char:removeBoost(k, v[1])
             end
-            
+
             netstream.Start(self, "nutSyncBoostReset")
         end
     end
@@ -204,7 +204,7 @@ end
 if (SERVER) then
     function PLAYER:breakLegs(time)
         self:setNetVar("legBroken", true)
-        
+
         local char = self:getChar()
         local charID = char:getID()
 
@@ -234,7 +234,7 @@ function PLAYER:Stun()
         umsg.String("1")
     umsg.End()
 end
- 
+
 function PLAYER:Unstun()
     --if not IsValid(self) then return false end
     self.Stunned = false
@@ -242,4 +242,25 @@ function PLAYER:Unstun()
     umsg.Start("StunEffect", self)
         umsg.String("0")
     umsg.End()
+end
+
+--[[
+    Additional DarkRP wrapper functions.
+    This is only for legacy code; you should use the official NutScript
+    methods whenever possible.
+--]]
+
+
+--- DarkRP Player:canAfford() wrapper.
+--- Checks whether or not a player can afford a given value.
+-- @param amount The amount to check if the player can afford.
+-- @return true if the player can afford the given amount. Otherwise, false.
+function PLAYER:canAfford(amount)
+    local char = self:getChar()
+
+    if char then
+        return char:hasMoney(amount)
+    else
+        return false
+    end
 end
