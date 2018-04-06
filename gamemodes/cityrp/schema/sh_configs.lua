@@ -77,7 +77,7 @@ ALLOWED_ENTS = {
 	["nut_vnd_covfefe"] = true,
 	["nut_vnd_covfefe_refill"] = true,
 	["nut_seller"] = true,
-	
+
 	--------BITMINER 2
 	["bm2_bitminer_1"] = true,
 	["bm2_bitminer_2"] = true,
@@ -100,7 +100,7 @@ DEFAULT_PURCHASE = {
 }
 
 -- DROPITEM
--- Drops specified items when player dies. 
+-- Drops specified items when player dies.
 -- 1 means 100% chance to drop.
 -- 0 means never drops the item
 DROPITEM = {
@@ -163,7 +163,7 @@ WEAPON_STOCKS = {
 -- Adding Schema Specific Configs.
 nut.config.setDefault("font", "Bitstream Vera Sans")
 
-nut.config.add("garbageInterval", 20, "How long trash regen takes.", 
+nut.config.add("garbageInterval", 20, "How long trash regen takes.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutGrabage")) then
 			timer.Adjust("nutGrabage", newValue, 0, SCHEMA.CrapPayload)
@@ -198,7 +198,7 @@ nut.config.add("voteDemote", 25, "Percentage of vote to demote people", nil, {
 	category = "schema"
 })
 
-nut.config.add("vendorWeedInterval", 3600, "Amount of seconds to update Narcotic NPC Shops.", 
+nut.config.add("vendorWeedInterval", 3600, "Amount of seconds to update Narcotic NPC Shops.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutVendorWeedSell")) then
 			timer.Adjust("nutVendorWeedSell", newValue, 0, SCHEMA.UpdateWeedVendors)
@@ -208,7 +208,7 @@ nut.config.add("vendorWeedInterval", 3600, "Amount of seconds to update Narcotic
 	category = "schema"
 })
 
-nut.config.add("vendorInterval", 3600, "Amount of seconds to update Black Market Dealer NPC Shops.", 
+nut.config.add("vendorInterval", 3600, "Amount of seconds to update Black Market Dealer NPC Shops.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutVendorSell")) then
 			timer.Adjust("nutVendorSell", newValue, 0, SCHEMA.UpdateVendors)
@@ -218,7 +218,7 @@ nut.config.add("vendorInterval", 3600, "Amount of seconds to update Black Market
 	category = "schema"
 })
 
-nut.config.add("wageInterval", 180, "Amount of seconds to distribute paycheck on players.", 
+nut.config.add("wageInterval", 180, "Amount of seconds to distribute paycheck on players.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutSalary")) then
 			timer.Adjust("nutSalary", newValue, 0, SCHEMA.SalaryPayload)
@@ -228,7 +228,7 @@ nut.config.add("wageInterval", 180, "Amount of seconds to distribute paycheck on
 	category = "schema"
 })
 
-nut.config.add("incomeInterval", 1000, "Amount of seconds to distribute bank income.", 
+nut.config.add("incomeInterval", 1000, "Amount of seconds to distribute bank income.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutBankIncome")) then
 			timer.Adjust("nutBankIncome", newValue, 0, SCHEMA.BankIncomePayload)
@@ -238,7 +238,7 @@ nut.config.add("incomeInterval", 1000, "Amount of seconds to distribute bank inc
 	category = "schema"
 })
 
-nut.config.add("doorTaxInterval", 300, "Amount of seconds to get door tax.", 
+nut.config.add("doorTaxInterval", 300, "Amount of seconds to get door tax.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutDoorTax")) then
 			timer.Adjust("nutDoorTax", newValue, 0, SCHEMA.BuildingTaxPayload)
@@ -314,7 +314,7 @@ local function pianoOnly(client)
 
 	if (char) then
 		local class = char:getClass()
-		
+
 		if (class != CLASS_PIANIST) then return end
 
 		return true
@@ -328,7 +328,7 @@ local function djOnly(client)
 
 	if (char) then
 		local class = char:getClass()
-		
+
 		if (class != CLASS_DJ) then return end
 
 		return true
@@ -374,7 +374,7 @@ local function mobOnly(client)
 		local classData = nut.class.list[class]
 
 		if (!classData) then return end
-		if (classData.team == 2 or classData.team == 3) then 
+		if (classData.team == 2 or classData.team == 3) then
 			return true
 		end
 
@@ -405,7 +405,7 @@ local function docOnly(client)
 
 	if (char) then
 		local class = char:getClass()
-		
+
 		return class == CLASS_DOCTOR
 	end
 
@@ -417,7 +417,7 @@ local function busiOnly(client)
 
 	if (char) then
 		local class = char:getClass()
-		
+
 		return class == CLASS_BUSINESS
 	end
 
@@ -454,7 +454,7 @@ function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyConditio
 		condition = condt
 	}
 
-	return nut.bent.list[entClass] 
+	return nut.bent.list[entClass]
 end
 
 --[[
@@ -622,34 +622,32 @@ nut.tips = {
 }
 ]]
 
--- Translation by AngryBaldMan
+-- Translation by Omar Saleh Assadi / AngryBaldMan
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
-	'The salary comes directly into the bank, so cash is required.',
-	'Inventory can also be opened directly with F3.',
-	'Stats can be raised by repeating certain actions. ',
-	'Sometimes it can be a positive effect just to give it to people around you.. ',
-	'Punch dolls gives you "experience only when you hit with a punch".',
-	'When you read a book, you get a lot of experience at a time, but the price is very high.',
-	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
-	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
-	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
-	'Shooting Dolls will give you "Experienced".',
-	'Some traders sell things only to certain jobs.',
-	'Its garbage but you can see it.',
-	'Mobs, gangsters, and policemen can only chat with each other / team.',
-	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
-	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
-	'Bug and bug reports can be resolved very quickly if you attach an image or video.',
-	'Money You can earn money by hiding copiers.',
-	'Police can make money by processing money copiers.',
-	'Please separate IC and OOC!',
-	'Please separate IC and OOC!',
-	'Please check MOTD and IC / OOC before declaring.',
-	'Please check MOTD and IC / OOC before declaring.',
-	'Please check MOTD and IC / OOC before declaring.',
-	'We can report to administrator with report command.',
-	'We can report to administrator with report command.',
-	'We can report to administrator with report command.',
-	'We can report to administrator with report command.',
+	'Remember, your salary is automatically deposited into your bank account. Make sure to bring cash!',
+	'Did you know? The inventory can also be opened directly by pressing \'F3\'.',
+	'Reptitive actions will help train your skills.',
+	'Did you know? Punching-bag dolls will train your strength skill when hit.',
+	'Did you know? Reading books are great for boosting your stats!',
+	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
+	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',,
+	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',,
+	'Did you know? Shooting target dolls will train your firearms skill.',
+	'Certain traders will only sell things to you if you have the right job.',
+	'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.',
+	'Bug reports are resolved much quicker if you attach an image or video.',
+	'Bug reports are resolved much quicker if you attach an image or video.',
+	'Bug reports are resolved much quicker if you attach an image or video.',
+	'Did you know? You can earn ssome extra money using money printers.',
+	'Police receive rewards for confiscating money printers.',
+	'Please separate in-character chat and out of character chat!',
+	'Please separate in-character chat and out of character chat!',
+	'Please check MOTD and IC / OOC before asking for help.',
+	'Please check MOTD and IC / OOC before asking for help.',
+	'Please check MOTD and IC / OOC before asking for help.',
+	'Having an issue? You can file a report with an administrator using the report command.',
+	'Having an issue? You can file a report with an administrator using the report command.',
+	'Having an issue? You can file a report with an administrator using the report command.',
+	'Having an issue? You can file a report with an administrator using the report command.',
 }
