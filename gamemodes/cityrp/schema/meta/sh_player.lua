@@ -283,3 +283,11 @@ function PLAYER:isChief()
     local char = self:getChar()
     return char and char:getClass() == CLASS_MAYOR
 end
+
+--- DarkRP Player:isCook() wrapper.
+--- Checks whether or not the player is a cook.
+-- @return true if the player's team is CLASS_COOK. Otherwise, false.
+function PLAYER:isChief()
+    local char = self:getChar()
+    return char and char:getClass() == CLASS_COOK
+end
