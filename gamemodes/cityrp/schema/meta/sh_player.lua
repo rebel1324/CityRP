@@ -275,3 +275,11 @@ function PLAYER:isChief()
     local char = self:getChar()
     return char and char:getClass() == CLASS_POLICELEADER
 end
+
+--- DarkRP Player:isMayor() wrapper.
+--- Checks whether or not the player is the mayor.
+-- @return true if the player's team is CLASS_MAYOR. Otherwise, false.
+function PLAYER:isChief()
+    local char = self:getChar()
+    return char and char:getClass() == CLASS_MAYOR
+end
