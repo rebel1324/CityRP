@@ -276,7 +276,7 @@ function PLUGIN:InitializedPlugins()
 
 				if (CW_GENERATE_ITEM) then
 					local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
-					ITEM.name = uniqueID
+					ITEM.name = class
 					ITEM.price = dat.price or 4000
 					ITEM.exRender = dat.exRender or false
 					ITEM.iconCam = self.modelCam[v.WorldModel:lower()]
