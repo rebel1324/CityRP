@@ -140,9 +140,29 @@ function SCHEMA:ShouldDrawCrosshair()
 	end
 end
 
-function nut.bar.drawAll()
-	nut.bar.drawAction()
-end
+BAR_HEIGHT = 25
+
+local color_dark = Color(0, 0, 0, 225)
+local gradient = nut.util.getMaterial("vgui/gradient-u")
+local gradient2 = nut.util.getMaterial("vgui/gradient-d")
+local surface = surface
+
+function nut.bar.draw(x, y, w, h, value, color)
+	nut.util.drawBlurAt(x, y, w, h)
+
+	surface.SetDrawColor(255, 255, 255, 15)
+	surface.DrawRect(x, y, w, h)
+	surface.DrawOutlinedRect(x, y, w, h)
+
+	x, y, w, h = x + 2, y + 2, (w - 4) * math.min(value, 1), h - 4
+
+	surface.SetDrawColor(color.r, color.g, color.b, 250)
+	surface.DrawRect(x, y, w, h)
+
+	surface.SetDrawColor(255, 255, 255, 8)
+	surface.SetMaterial(gradient)
+	surface.DrawTexturedRect(x, y, w, h)
+end	
 
 local jailTimer = CurTime()
 local jailTime = 0
