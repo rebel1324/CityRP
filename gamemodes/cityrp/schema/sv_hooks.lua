@@ -271,6 +271,22 @@ end
 function SCHEMA:PlayerSpawn(client)
 	local char = client:getChar()
 
+	if (client:isArrested()) then
+		timer.Simple(0.1, function()
+			local prison = SCHEMA.prisonPositions
+
+			client:StripWeapons()
+			client:setAction("Releasing", timer.TimeLeft(client:UniqueID() .. "_jailTimer"))
+
+			if (#prison > 0) then
+				client:SetPos(table.Random(prison))
+			end
+		end)
+
+		client.deadChar = nil
+		return
+	end
+
 	if (char) then
 		if (client.deadChar and client.deadChar == char:getID() and char.lostMoney and char.lostMoney > 10) then
 			client:notify(L("hospitalPrice", client, nut.currency.get(char.lostMoney)))
@@ -621,11 +637,11 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			arrested:SetPos( Vector( 2924.674316, -3200.367920, -119.968750 ) )
 			arrested:setAction("Releasing", nut.config.get("jailTime"))
 			arrested:StripWeapons()
-            timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
-                arrested:Spawn()
+            		timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
+            			arrested:arrest(false)
+                		arrested:Spawn()
 				arrested:notify("You have been released from prison")
-				arrested:arrest(false)
-            end)
+            		end)
 		end
 	else
 		if (IsValid(arrester)) then
