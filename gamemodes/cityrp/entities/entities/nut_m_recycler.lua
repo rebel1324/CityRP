@@ -47,7 +47,9 @@ if (SERVER) then
 	end
 
 	function ENT:OnRemove()
-		self.loopsound:Stop()
+		if (IsValid(self.loopsound)) then
+			self.loopsound:Stop()
+		end
 	end
 
 	function ENT:TurnOff()
@@ -55,7 +57,9 @@ if (SERVER) then
 		self:SetDTBool(1, true)
 		self:SetDTInt(1, 0)
 		self:EmitSound("plats/elevator_stop.wav")
-		self.loopsound:Stop()
+		if (IsValid(self.loopsound)) then
+			self.loopsound:Stop()
+		end
 		self.idle = true
 
 		timer.Simple(1, function()
