@@ -5,6 +5,10 @@ PLUGIN.desc = "Organization plugin."
 nut.org = nut.org or {}
 nut.org.loaded = nut.org.loaded or {}
 
+ORGANIZATION_ENABLED = true
+
+if (ORGANIZATION_ENABLED != true) then return end
+
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
 
 nut.util.include("meta/sh_character.lua")
@@ -27,6 +31,7 @@ if (SERVER) then
                 nut.org.loaded[orgID] = org
 
                 if (callback) then
+                    org:sync()
                     callback(org)
                 end
             end
@@ -34,6 +39,7 @@ if (SERVER) then
     end
 
     function nut.org.delete(id)
+        nut.org.loaded[id]:unsync()
         nut.org.loaded[id] = nil
 		nut.db.query("DELETE FROM nut_organization WHERE _id IN ("..id..")")
     end
@@ -60,10 +66,10 @@ if (SERVER) then
                                 org.members[rank] = org.members[rank] or {}
                                 org.members[rank][tonumber(v._charID)] = true
                             end
+                        end
 
-                            if (callback) then
-                                callback(org)
-                            end
+                        if (callback) then
+                            callback(org)
                         end
                     end)
                 end
@@ -71,22 +77,9 @@ if (SERVER) then
         end)
         -- db callback.
     end
-
-    function nut.org.save(id)
-        local org = nut.org.loaded[id]
-
-        if (org) then
-            nut.db.updateTable({
-                _id = timeStamp,
-                _name = timeStamp,
-                _level = timeStamp,
-                _experience = timeStamp,
-                _data = timeStamp,
-            }, nil, "organization", "_id = "..id)
-        end
-    end
 end
 
+-- load org information when character's organization is not loaded in the server's memory.
 function PLUGIN:CharacterLoaded(id)
     local char = nut.char.loaded[id]
     
@@ -94,9 +87,78 @@ function PLUGIN:CharacterLoaded(id)
         local orgID = char:getOrganization()
 
         if (orgID and orgID > 0) then
-            nut.org.load(orgID)
+            if (!nut.org.loaded[orgID]) then
+                nut.org.load(orgID, function(org)
+                    org:sync()
+                end)
+            end
         end
     end
 end
 
+function PLUGIN:PlayerInitialSpawn(client)
+    for k, v in pairs(nut.org.loaded) do
+        v:sync(client)
+    end
+end
+
+if (CLIENT) then
+    --sync specific server organization data
+    netstream.Hook("nutOrgSync", function(id, data)
+        if (data) then
+            local org = nut.org.new()
+
+            for k, v in pairs(data) do
+                org[k] = v
+            end
+
+            nut.org.loaded[id] = org
+        else
+            print("got org sync request but no data found")
+        end
+    end)
+
+    netstream.Hook("nutOrgRemove", function(id)
+        nut.org.loaded[id] = nil
+    end)
+    --sync 
+    netstream.Hook("nutOrgSyncValue", function(id, key, value)
+        print(id, key, value)
+        if (nut.org.loaded[id]) then
+            nut.org.loaded[id][key] = value
+        end
+    end)
+
+    netstream.Hook("nutOrgSyncData", function(id, key, value)
+        if (nut.org.loaded[id] and nut.org.loaded[id].data) then
+            nut.org.loaded[id].data[key] = value
+        end
+    end)
+    
+    netstream.Hook("nutOrgSyncMember", function(id, rank, charID, isChange)
+        local org = nut.org.loaded[id]
+
+        if (org) then
+            if (isChange) then
+                for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+                    if (org.members[i] and org.members[i][charID]) then
+                        org.members[i][charID] = nil
+                        break
+                    end
+                end
+            end
+
+            org.members[rank] = org.members[rank] or {}
+            org.members[rank][charID] = true
+        end
+    end)
+
+    netstream.Hook("nutOrgSyncOfflineMembers", function(id, data)
+        
+    end)
+else
+
+end
+
 --TODO: on player change the name, update the organization db!
+--TODO: on player deletes the character, wipe out organization data!

@@ -29,24 +29,28 @@ if (SERVER) then
         return (self.id == other.id)
     end
 
-    function ORGANIZATION:addPlayer(char, rank, callback)
-        if (char) then
+    function ORGANIZATION:addCharacter(char, rank, callback)
+        local charID = (type(char) == "table" and char:getID() or char)
+        
+        if (charID) then
             rank = rank or ORGANIZATION_MEMBER
             self.members[rank] = self.members[rank] or {}
-            self.members[rank][char:getID()] = true -- member level.
+            self.members[rank][charID] = true -- member level.
 
-            if (SERVER) then
+            local targetChar = nut.char.loaded[charID]
+            if (SERVER and targetChar) then
                 char:setData("organization", self.id)
                 char:setData("organizationRank", rank)
-
-                nut.db.insertTable({
-                    _orgID = self.id,
-                    _charID = char:getID(), 
-                    _rank = rank,
-                    _name = char:getName()
-                }, function(succ) 
-                end, "orgmembers")
             end
+
+            nut.db.insertTable({
+                _orgID = self.id,
+                _charID = charID, 
+                _rank = rank,
+                _name = char:getName()
+            }, function(succ) 
+                netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
+            end, "orgmembers")
         else
             return false, "noChar"
         end
@@ -56,21 +60,21 @@ if (SERVER) then
 
     function ORGANIZATION:setName(text)
         self.name = text
+
+        nut.db.updateTable({
+            _name = text,
+        }, nil, "organization", "_id = ".. self.id)
+
+        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
     end
 
     function ORGANIZATION:adjustMemberRank(charID, rank)
-        local targetChar
-
-        if (type(charID) == "table" and charID.getID) then
-            targetChar = charID
-            charID = targetChar:getID()
-        end
+        local charID = (type(char) == "table" and char:getID() or char)
 
         if (charID) then
             for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
                 if (self.members[i] and self.members[i][charID]) then
                     self.members[i][charID] = nil
-
                     break
                 end
             end
@@ -78,6 +82,13 @@ if (SERVER) then
             self.members[rank] = self.members[rank] or {}
             self.members[rank][charID] = true 
 
+            nut.db.updateTable({
+                _rank = rank,
+            }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
+            
+            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
+
+            local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
                 targetChar:setData("organizationRank", rank)
             end
@@ -90,22 +101,27 @@ if (SERVER) then
         return false, "invalidRequest"
     end
 
-    function ORGANIZATION:removePlayer()
-        local charID = char:getID()
-        local targetChar = nut.char.loaded[charID]
+    function ORGANIZATION:removeCharacter(char)
+        local charID = (type(char) == "table" and char:getID() or char)
+        
+        local removed = false
+        for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+            if (self.members[i] and self.members[i][charID]) then
+                self.members[i][charID] = nil
 
-        if (self.members[char:getID()]) then
-            for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-                if (self.members[i][charID]) then
-                    self.members[i][charID] = nil
-                end
+                removed = true
             end
-            
+        end
+        
+        if (removed) then
+            local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
                 targetChar:setData("organization", nil)
                 targetChar:setData("organizationRank", nil)
             end
 
+            nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID .. " AND _orgID = " .. self.id)
+            
             return true
         else
             return false, "noMember"
@@ -116,13 +132,16 @@ if (SERVER) then
 
     function ORGANIZATION:setData(key, value)
         self.data[key] = value
-
-        -- send netstream to sync the value
-        --netstream.Start("nutOrgSync", id, key, value)
     end
 
-    function ORGANIZATION:setExperience()
+    function ORGANIZATION:setExperience(amt)
         self.experience = amt
+
+        nut.db.updateTable({
+            _experience = amt,
+        }, nil, "organization", "_id = ".. self.id)
+        
+        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "experience", amt)
     end
 
     function ORGANIZATION:addExperience(amt)
@@ -131,11 +150,17 @@ if (SERVER) then
 
     function ORGANIZATION:setLevel(amt)
         self.level = amt
+        
+        nut.db.updateTable({
+            _level = amt,
+        }, nil, "organization", "_id = ".. self.id)
+
+        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
     end
 
     function ORGANIZATION:setOwner(char)
         if (char) then
-            self:addPlayer(char, ORGANIZATION_OWNER)
+            self:addCharacter(char, ORGANIZATION_OWNER)
         end
     end
 
@@ -199,14 +224,27 @@ function ORGANIZATION:getOwner(char)
 end
 
 do
-    function ORGANIZATION:sync(recipient)
+    function ORGANIZATION:unsync(recipient)
+        recipient = recipient or player.GetAll()
 
+        netstream.Start(recipient, "nutOrgRemove", self.id)
+    end
+
+    function ORGANIZATION:sync(recipient)
+        recipient = recipient or player.GetAll()
+
+        netstream.Start(recipient, "nutOrgSync", self.id, self:getSyncInfo())
     end
 
     --client does not need every data.
     function ORGANIZATION:getSyncInfo()
         return {
-            name = self:getName()
+            name = self.name,
+            level = self.level,
+            experience = self.experience,
+            id = self.id,
+            data = self.data,
+            members = self.members
         }
     end
 end
