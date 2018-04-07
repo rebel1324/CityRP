@@ -39,8 +39,8 @@ if (SERVER) then
 
             local targetChar = nut.char.loaded[charID]
             if (SERVER and targetChar) then
-                char:setData("organization", self.id)
-                char:setData("organizationRank", rank)
+                char:setData("organization", self.id, nil, player.GetAll())
+                char:setData("organizationRank", rank, nil, player.GetAll())
             end
 
             nut.db.insertTable({
@@ -49,8 +49,9 @@ if (SERVER) then
                 _rank = rank,
                 _name = char:getName()
             }, function(succ) 
-                netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
             end, "orgmembers")
+
+            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
         else
             return false, "noChar"
         end
@@ -90,7 +91,7 @@ if (SERVER) then
 
             local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
-                targetChar:setData("organizationRank", rank)
+                targetChar:setData("organizationRank", rank, nil, player.GetAll())
             end
 
             return true
@@ -116,11 +117,11 @@ if (SERVER) then
         if (removed) then
             local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
-                targetChar:setData("organization", nil)
-                targetChar:setData("organizationRank", nil)
+                targetChar:setData("organization", nil, nil, player.GetAll())
+                targetChar:setData("organizationRank", nil, nil, player.GetAll())
             end
 
-            nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID .. " AND _orgID = " .. self.id)
+            nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)
             
             return true
         else
@@ -132,6 +133,13 @@ if (SERVER) then
 
     function ORGANIZATION:setData(key, value)
         self.data[key] = value
+
+        local serialized = pon.encode(self.data)
+        nut.db.updateTable({
+            _data = serialized,
+        }, nil, "organization", "_id = ".. self.id)
+        
+        netstream.Start(player.GetAll(), "nutOrgSyncData", self.id, key, value)
     end
 
     function ORGANIZATION:setExperience(amt)

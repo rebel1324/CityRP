@@ -100,9 +100,40 @@ function PLUGIN:PlayerInitialSpawn(client)
     for k, v in pairs(nut.org.loaded) do
         v:sync(client)
     end
+
+    local fookinData = {}
+    for k, v in ipairs(player.GetAll()) do
+        if (v == client) then continue end
+        
+        local char = v:getChar()
+
+        if (char) then
+            local id = char:getID()
+
+            if (char:getOrganization() != -1) then
+                fookinData[id] = {
+                    char:getData("organization"),
+                    char:getData("organizationRank")
+                }
+            end
+        end
+    end
+    netstream.Start(client, "nutOrgCharSync", fookinData)
 end
 
 if (CLIENT) then
+    netstream.Hook("nutOrgCharSync", function(data)
+        for id, syncDat in pairs(data) do
+            local character = nut.char.loaded[id]
+            
+            if (character) then
+                character.vars.data = character.vars.data or {}
+
+                character:getData()["organization"] = syncDat[1]
+                character:getData()["organizationRank"] = syncDat[2]
+            end
+        end
+    end)
     --sync specific server organization data
     netstream.Hook("nutOrgSync", function(id, data)
         if (data) then
@@ -123,13 +154,13 @@ if (CLIENT) then
     end)
     --sync 
     netstream.Hook("nutOrgSyncValue", function(id, key, value)
-        print(id, key, value)
         if (nut.org.loaded[id]) then
             nut.org.loaded[id][key] = value
         end
     end)
 
     netstream.Hook("nutOrgSyncData", function(id, key, value)
+        print(id, key, value)
         if (nut.org.loaded[id] and nut.org.loaded[id].data) then
             nut.org.loaded[id].data[key] = value
         end
