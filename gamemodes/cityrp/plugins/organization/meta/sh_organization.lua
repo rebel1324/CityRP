@@ -35,13 +35,19 @@ if (SERVER) then
         if (charID) then
             rank = rank or ORGANIZATION_MEMBER
             self.members[rank] = self.members[rank] or {}
-            self.members[rank][charID] = true -- member level.
+            self.members[rank][charID] = targetChar and targetChar:getName() or true -- member level.
 
             local targetChar = nut.char.loaded[charID]
             if (SERVER and targetChar) then
                 char:setData("organization", self.id, nil, player.GetAll())
                 char:setData("organizationRank", rank, nil, player.GetAll())
             end
+
+            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+                
+            nut.db.updateTable({
+                _lastModify = timeStamp,
+            }, nil, "organization", "_id = ".. self.id)
 
             nut.db.insertTable({
                 _orgID = self.id,
@@ -62,8 +68,10 @@ if (SERVER) then
     function ORGANIZATION:setName(text)
         self.name = text
 
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.updateTable({
             _name = text,
+            _lastModify = timeStamp,
         }, nil, "organization", "_id = ".. self.id)
 
         netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
@@ -81,10 +89,12 @@ if (SERVER) then
             end
 
             self.members[rank] = self.members[rank] or {}
-            self.members[rank][charID] = true 
+            self.members[rank][charID] = targetChar and targetChar:getName() or true 
 
+            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
             nut.db.updateTable({
                 _rank = rank,
+                _lastModify = timeStamp,
             }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
             
             netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
@@ -135,8 +145,10 @@ if (SERVER) then
         self.data[key] = value
 
         local serialized = pon.encode(self.data)
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.updateTable({
             _data = serialized,
+            _lastModify = timeStamp,
         }, nil, "organization", "_id = ".. self.id)
         
         netstream.Start(player.GetAll(), "nutOrgSyncData", self.id, key, value)
@@ -145,22 +157,22 @@ if (SERVER) then
     function ORGANIZATION:setExperience(amt)
         self.experience = amt
 
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.updateTable({
             _experience = amt,
+            _lastModify = timeStamp,
         }, nil, "organization", "_id = ".. self.id)
         
         netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "experience", amt)
     end
 
-    function ORGANIZATION:addExperience(amt)
-        self:setExperience(self:getExperience() + amt)
-    end
-
     function ORGANIZATION:setLevel(amt)
         self.level = amt
         
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.updateTable({
             _level = amt,
+            _lastModify = timeStamp,
         }, nil, "organization", "_id = ".. self.id)
 
         netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
@@ -170,6 +182,10 @@ if (SERVER) then
         if (char) then
             self:addCharacter(char, ORGANIZATION_OWNER)
         end
+    end
+
+    function ORGANIZATION:addExperience(amt)
+        self:setExperience(self:getExperience() + amt)
     end
 
     function ORGANIZATION:addLevel(amt)
@@ -189,8 +205,23 @@ function ORGANIZATION:getMemberRank(char)
     return char:getData("organizationRank", ORGANIZATION_MEMBER)
 end
 
-function ORGANIZATION:getRankMember(id)
-    return self.members[id]
+function ORGANIZATION:getMembersByRank(rank)
+    return self.members[rank] or {}
+end
+
+function ORGANIZATION:getMember(charID)
+    local member, rank
+    
+    for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+        if (self.members[i] and self.members[i][charID]) then
+            member = self.members[i][charID]
+            rank = i
+
+            break;
+        end
+    end
+
+    return member, rank
 end
 
 function ORGANIZATION:getData(key, default)

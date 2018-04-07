@@ -10,6 +10,7 @@ ORGANIZATION_ENABLED = true
 if (ORGANIZATION_ENABLED != true) then return end
 
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
+ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days if there is no activitiy on organizations.
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
@@ -19,8 +20,10 @@ if (SERVER) then
     function nut.org.create(callback)
         local ponNull = pon.encode({})
 
+		local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.insertTable({
             _name = ORGANIZATION_DEFUALT_NAME,
+            _lastModify = timeStamp,
             _level = 1, 
             _experience = 0,
             _data = ponNull
@@ -44,6 +47,29 @@ if (SERVER) then
 		nut.db.query("DELETE FROM nut_organization WHERE _id IN ("..id..")")
     end
 
+    function nut.org.syncAll(recipient)
+        local orgData = {}
+        for k, v in pairs(nut.org.loaded) do
+            orgData[k] = v:getSyncInfo()
+        end
+        netstream.Start(recipient, "nutOrgSyncAll", orgData)
+    end
+
+    function nut.org.purge(callback)
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time() - ORGANIZATION_AUTO_DELETE_TIME)
+        
+        nut.db.query("DELETE FROM nut_organization WHERE _lastModify <= '".. timeStamp .."'", function(data, data2)
+            print(data, data2)
+            if (data) then
+                PrintTable(data)
+            end
+
+            if (callback) then
+                callback()
+            end
+        end)
+    end
+
     function nut.org.load(id, callback)
         local org = nut.org.new()
 
@@ -59,12 +85,12 @@ if (SERVER) then
 
                     nut.org.loaded[org.id] = org
 
-                    nut.db.query("SELECT _orgID, _charID, _rank FROM nut_orgmembers WHERE _orgID IN ("..id..")", function(data)
+                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
                         if (data) then
                             for k, v in ipairs(data) do
                                 local rank = tonumber(v._rank)
                                 org.members[rank] = org.members[rank] or {}
-                                org.members[rank][tonumber(v._charID)] = true
+                                org.members[rank][tonumber(v._charID)] = v._name
                             end
                         end
 
@@ -75,50 +101,73 @@ if (SERVER) then
                 end
             end
         end)
-        -- db callback.
     end
-end
-
--- load org information when character's organization is not loaded in the server's memory.
-function PLUGIN:CharacterLoaded(id)
-    local char = nut.char.loaded[id]
     
-    if (char) then
-        local orgID = char:getOrganization()
+    function nut.org.loadAll(callback)
+        local org = nut.org.new()
 
-        if (orgID and orgID > 0) then
-            if (!nut.org.loaded[orgID]) then
-                nut.org.load(orgID, function(org)
-                    org:sync()
-                end)
+        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization", function(data)
+            if (data) then
+                for k, v in ipairs(data) do
+                    local org = nut.org.new()
+                    org.id = tonumber(v._id)
+                    org.name = v._name
+                    org.level = tonumber(v._level)
+                    org.experience = tonumber(v._experience)
+                    org.data = pon.decode(v._data)
+
+                    nut.org.loaded[org.id] = org
+
+                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
+                        if (data) then
+                            for k, v in ipairs(data) do
+                                local rank = tonumber(v._rank)
+                                org.members[rank] = org.members[rank] or {}
+                                org.members[rank][tonumber(v._charID)] = v._name
+                            end
+                        end
+
+                        if (callback) then
+                            callback(org)
+                        end
+                    end)
+                end
             end
-        end
+        end)
     end
 end
 
-function PLUGIN:PlayerInitialSpawn(client)
-    for k, v in pairs(nut.org.loaded) do
-        v:sync(client)
-    end
+if (SERVER) then
+    function PLUGIN:PlayerInitialSpawn(client)
+        nut.org.syncAll(client)
 
-    local fookinData = {}
-    for k, v in ipairs(player.GetAll()) do
-        if (v == client) then continue end
-        
-        local char = v:getChar()
+        local fookinData = {}
+        for k, v in ipairs(player.GetAll()) do
+            if (v == client) then continue end
+            
+            local char = v:getChar()
 
-        if (char) then
-            local id = char:getID()
+            if (char) then
+                local id = char:getID()
 
-            if (char:getOrganization() != -1) then
-                fookinData[id] = {
-                    char:getData("organization"),
-                    char:getData("organizationRank")
-                }
+                if (char:getOrganization() != -1) then
+                    fookinData[id] = {
+                        char:getData("organization"),
+                        char:getData("organizationRank")
+                    }
+                end
             end
         end
+        netstream.Start(client, "nutOrgCharSync", fookinData)
     end
-    netstream.Start(client, "nutOrgCharSync", fookinData)
+
+    function PLUGIN:InitializedPlugins()
+        nut.org.purge(function()
+            nut.org.loadAll(function(org)
+                hook.Run("OnOrganizationLoaded", org)
+            end)
+        end)
+    end
 end
 
 if (CLIENT) then
@@ -134,6 +183,23 @@ if (CLIENT) then
             end
         end
     end)
+    --sync specific server organization data
+    netstream.Hook("nutOrgSyncAll", function(orgsData)
+        if (data) then
+            for id, data in pairs(orgsData) do
+                local org = nut.org.new()
+
+                for k, v in pairs(data) do
+                    org[k] = v
+                end
+
+                nut.org.loaded[id] = org
+            end
+        else
+            print("got org sync request but no data found")
+        end
+    end)
+
     --sync specific server organization data
     netstream.Hook("nutOrgSync", function(id, data)
         if (data) then
@@ -179,8 +245,10 @@ if (CLIENT) then
                 end
             end
 
+            local char = nut.char.loaded[charID]
+
             org.members[rank] = org.members[rank] or {}
-            org.members[rank][charID] = true
+            org.members[rank][charID] = char and char:getName() or true
         end
     end)
 
