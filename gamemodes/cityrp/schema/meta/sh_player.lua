@@ -250,18 +250,13 @@ end
     methods whenever possible.
 --]]
 
-
---- DarkRP Player:canAfford() wrapper.
---- Checks whether or not a player can afford a given value.
--- @param amount The amount to check if the player can afford.
--- @return true if the player can afford the given amount. Otherwise, false.
-
 --- DarkRP Player:isCP() wrapper.
 --- Checks whether or not the player is part of the police.
--- @return true if the player's team is CLASS_POLICE. Otherwise, false.
+-- @return true if the player's team has the var "law" set to true.
+-- Otherwise, false.
 function PLAYER:isCP()
     local char = self:getChar()
-    return char and char:getClass() == CLASS_POLICE
+    return char and nut.class.list[char:getClass()].law
 end
 
 --- DarkRP Player:isChief() wrapper.
