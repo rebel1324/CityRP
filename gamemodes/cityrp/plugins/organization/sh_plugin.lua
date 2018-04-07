@@ -228,9 +228,9 @@ if (CLIENT) then
         end)
         --sync specific server organization data
         netstream.Hook("nutOrgSyncAll", function(orgsData)
-            if (data) then
+            if (orgsData) then
                 for id, data in pairs(orgsData) do
-                    local org = nut.org.new()
+                    local org = nut.org.loaded[id] or nut.org.new()
 
                     for k, v in pairs(data) do
                         org[k] = v
@@ -238,15 +238,13 @@ if (CLIENT) then
 
                     nut.org.loaded[id] = org
                 end
-            else
-                print("got org sync request but no data found")
             end
         end)
 
         --sync specific server organization data
         netstream.Hook("nutOrgSync", function(id, data)
             if (data) then
-                local org = nut.org.new()
+                local org = nut.org.loaded[id] or nut.org.new()
 
                 for k, v in pairs(data) do
                     org[k] = v
