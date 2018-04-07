@@ -257,8 +257,7 @@ if (CLIENT) then
 		end
 	end
 
-	local meta = getmetatable("Entity")
-
+	local meta = FindMetaTable("Entity")
 
 	function PLUGIN:PlayerBindPress(client, bind, pressed)
 		if (DOORSOMETHING) then
