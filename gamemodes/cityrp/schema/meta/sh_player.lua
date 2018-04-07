@@ -252,7 +252,8 @@ end
 
 --- DarkRP Player:isCP() wrapper.
 --- Checks whether or not the player is part of the police.
--- @return true if the player's team is CLASS_POLICE. Otherwise, false.
+-- @return true if the player's team has the var "law" set to true.
+-- Otherwise, false.
 function PLAYER:isCP()
     local char = self:getChar()
     return char and nut.class.list[char:getClass()].law
