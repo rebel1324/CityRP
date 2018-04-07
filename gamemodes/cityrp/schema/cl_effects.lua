@@ -319,9 +319,8 @@ end
 
 effects.Register( EFFECT, "btMetal" )
 
-local function DoStunEffect(Type)
-    local toggle = tobool(Type:ReadString())
-    if toggle then
+local function stunEffect(bool)
+    if (bool) then
         hook.Add("RenderScreenspaceEffects", "StunScreen", function()
             DrawMotionBlur(0.1,1,0)
             local modify = {}
@@ -334,10 +333,10 @@ local function DoStunEffect(Type)
             modify["$pp_colour_mulr"] = 0
             modify["$pp_colour_mulg"] = 0
             modify["$pp_colour_mulb"] = 0
-            DrawColorModify(modify)
-        end)
-    elseif toggle == false then
+			DrawColorModify(modify)
+		end)
+    else
         hook.Remove("RenderScreenspaceEffects", "StunScreen")
     end
 end
-usermessage.Hook("StunEffect", DoStunEffect)
+netstream.Hook("nutStunEffect", stunEffect)

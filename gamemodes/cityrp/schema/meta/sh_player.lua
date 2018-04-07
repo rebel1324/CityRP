@@ -230,18 +230,14 @@ function PLAYER:Stun()
     --if not IsValid(self) then return false end
     self.Stunned = true
     self:setNetVar("Stunned", true)
-    umsg.Start("StunEffect", self)
-        umsg.String("1")
-    umsg.End()
+    netstream.Start(self, "nutStunEffect", true)
 end
 
 function PLAYER:Unstun()
     --if not IsValid(self) then return false end
     self.Stunned = false
     self:setNetVar("Stunned", false)
-    umsg.Start("StunEffect", self)
-        umsg.String("0")
-    umsg.End()
+    netstream.Start(self, "nutStunEffect", false)
 end
 
 --[[
@@ -256,7 +252,7 @@ end
 -- Otherwise, false.
 function PLAYER:isCP()
     local char = self:getChar()
-    return char and nut.class.list[char:getClass()].law
+    return (char and nut.class.list[char:getClass()].law)
 end
 
 --- DarkRP Player:isChief() wrapper.
@@ -264,7 +260,7 @@ end
 -- @return true if the player's team is CLASS_POLICELEADER. Otherwise, false.
 function PLAYER:isChief()
     local char = self:getChar()
-    return char and char:getClass() == CLASS_POLICELEADER
+    return (char and char:getClass() == CLASS_POLICELEADER)
 end
 
 --- DarkRP Player:isMayor() wrapper.
@@ -272,7 +268,7 @@ end
 -- @return true if the player's team is CLASS_MAYOR. Otherwise, false.
 function PLAYER:isMayor()
     local char = self:getChar()
-    return char and char:getClass() == CLASS_MAYOR
+    return (char and char:getClass() == CLASS_MAYOR)
 end
 
 --- DarkRP Player:isCook() wrapper.
@@ -280,7 +276,7 @@ end
 -- @return true if the player's team is CLASS_COOK. Otherwise, false.
 function PLAYER:isCook()
     local char = self:getChar()
-    return char and char:getClass() == CLASS_COOK
+    return (char and char:getClass() == CLASS_COOK)
 end
 
 --- DarkRP Player:isHitman() wrapper.
@@ -288,5 +284,5 @@ end
 -- @return true if the player's team is CLASS_HITMAN. Otherwise, false.
 function PLAYER:isHitman()
     local char = self:getChar()
-    return char and char:getClass() == CLASS_HITMAN
+    return (char and char:getClass() == CLASS_HITMAN)
 end
