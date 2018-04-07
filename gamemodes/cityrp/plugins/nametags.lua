@@ -14,6 +14,7 @@ local ntWanted = Color(222, 22, 22)
 local ntGood = Color(166, 222, 166)
 local ntRed = Color(255 ,0, 0)
 local ntGreen = Color(100, 255, 100)
+local ntOrg = Color(52, 152, 219)
 local ntLocalPlayer = LocalPlayer()
 local txt = {
 {75, "injured1"},
@@ -22,6 +23,15 @@ local txt = {
 
 btNameTag = {}
 btNameTag.info = {
+	{
+		canDraw = function(client, char) return (ORGANIZATION_ENABLED and char:getOrganizationInfo()) and true or false end,
+		doDraw = function(client, ntX, ntY, ntCol)
+			local char = client:getChar()
+			local info = char:getOrganizationInfo()
+
+			return btNameTag:drawText(info:getName(), ntX, ntY, ColorAlpha(ntOrg, ntCol.a), 1)
+		end,
+	},
 	{
 		canDraw = function(client, char) return client:isLegBroken() end,
 		doDraw = function(client, ntX, ntY, ntCol)
@@ -135,7 +145,7 @@ hook.Add("LoadFonts", "nutFontNametag", function(font, genericFont)
 				weight 		= 800,
 				antialias 	= true,
 				additive 	= false,
-				blursize 	= 10,
+				blursize 	= 2,
 				extended = true,
 			}
 		)
@@ -157,8 +167,8 @@ function btNameTag:getHead(entity)
 end
 
 function btNameTag:drawText(text, x, y, tCol, a)
-	draw.SimpleText(text, btNameTag.font[2 + 2*(a or 0)], x, y, ColorAlpha(ntShadow, tCol.a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleText(text, btNameTag.font[1 + 2*(a or 0)], x, y, tCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(text, btNameTag.font[2 + 2*(a or 0)], x, y, ColorAlpha(ntShadow, math.min(tCol.a * 2, 255)), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(text, btNameTag.font[1 + 2*(a or 0)], x - 1, y - 1, tCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 hook.Add("PostPlayerDraw", "btNameTag", function(client)
