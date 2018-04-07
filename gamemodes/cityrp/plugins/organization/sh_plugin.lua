@@ -10,7 +10,7 @@ ORGANIZATION_ENABLED = true
 if (ORGANIZATION_ENABLED != true) then return end
 
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
-ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days if there is no activitiy on organizations.
+ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
@@ -59,11 +59,6 @@ if (SERVER) then
         local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time() - ORGANIZATION_AUTO_DELETE_TIME)
         
         nut.db.query("DELETE FROM nut_organization WHERE _lastModify <= '".. timeStamp .."'", function(data, data2)
-            print(data, data2)
-            if (data) then
-                PrintTable(data)
-            end
-
             if (callback) then
                 callback()
             end

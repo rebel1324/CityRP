@@ -133,6 +133,10 @@ if (SERVER) then
 
             nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)
             
+            if (self:getMemberCount() == 0) then
+                nut.org.delete(self.id)
+            end
+
             return true
         else
             return false, "noMember"
@@ -190,6 +194,18 @@ if (SERVER) then
 
     function ORGANIZATION:addLevel(amt)
         self:setLevel(self:getLevel() + amt)
+    end
+
+    function ORGANIZATION:getMemberCount()
+        local count = 0
+
+        for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+            if (self.members[i] and self.members[i][charID]) then
+                count = count + 1
+            end
+        end
+        
+        return count
     end
 end
 
