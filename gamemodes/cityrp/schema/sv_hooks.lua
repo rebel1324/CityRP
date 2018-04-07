@@ -348,12 +348,13 @@ end
 -- This hook enforces death penalty for dead players.
 function SCHEMA:PlayerDeath(client, inflicter, attacker)
 	local char = client:getChar()
-	local class = char:getClass()
-    local classData = nut.class.list[class] or nut.class.list[1]
-	local job = classData.name
-	local law = classData.law
 	
 	if (char) then
+		local class = char:getClass()
+		local classData = nut.class.list[class] or nut.class.list[1]
+		local job = classData.name
+		local law = classData.
+		
 		hook.Run("ResetVariables", client, SIGNAL_DEATH)
 
 		-- money penalty
