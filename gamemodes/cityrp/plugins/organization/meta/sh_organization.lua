@@ -29,14 +29,23 @@ if (SERVER) then
         return (self.id == other.id)
     end
 
-    function ORGANIZATION:addPlayer(char)
+    function ORGANIZATION:addPlayer(char, rank, callback)
         if (char) then
-            self.members[ORGANIZATION_MEMBER] = self.members[ORGANIZATION_MEMBER] or {}
-            self.members[ORGANIZATION_MEMBER][char:getID()] = true -- member level.
+            rank = rank or ORGANIZATION_MEMBER
+            self.members[rank] = self.members[rank] or {}
+            self.members[rank][char:getID()] = true -- member level.
 
             if (SERVER) then
                 char:setData("organization", self.id)
-                char:setData("organizationRank", ORGANIZATION_MEMBER)
+                char:setData("organizationRank", rank)
+
+                nut.db.insertTable({
+                    _orgID = self.id,
+                    _charID = char:getID(), 
+                    _rank = rank,
+                    _name = char:getName()
+                }, function(succ) 
+                end, "orgmembers")
             end
         else
             return false, "noChar"
@@ -126,8 +135,7 @@ if (SERVER) then
 
     function ORGANIZATION:setOwner(char)
         if (char) then
-            self:addPlayer(char)
-            self:adjustMemberRank(char:getID(), ORGANIZATION_OWNER)
+            self:addPlayer(char, ORGANIZATION_OWNER)
         end
     end
 

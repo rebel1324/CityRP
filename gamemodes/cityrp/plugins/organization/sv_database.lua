@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `nut_organization` (
 CREATE TABLE IF NOT EXISTS `nut_orgmembers` (
 	`_orgID` INT(11) NOT NULL,
 	`_charID` INT(11) NOT NULL,
+	`_rank` INT(1) NOT NULL,
 	`_name` TEXT NOT NULL,
 	PRIMARY KEY (`_orgID`,`_charID`)
 );
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS nut_organization (
 CREATE TABLE IF NOT EXISTS nut_orgmembers (
 	_orgID integer,
 	_charID integer,
+	_rank integer,
 	_name text
 );
 ]]

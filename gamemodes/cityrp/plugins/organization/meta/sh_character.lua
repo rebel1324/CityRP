@@ -12,7 +12,11 @@ function CHAR:canJoinOrganization(orgID)
     local org = nut.org.get(orgID)
 
     if (org) then
+        local client = self:getPlayer()
 
+        if (client) then
+            return hook.Run("PlayerCanJoinOrganization", client, org)
+        end
     end
 end
 

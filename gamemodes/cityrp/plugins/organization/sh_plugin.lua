@@ -17,7 +17,6 @@ if (SERVER) then
 
         nut.db.insertTable({
             _name = ORGANIZATION_DEFUALT_NAME,
-            _members = ponNull,
             _level = 1, 
             _experience = 0,
             _data = ponNull
@@ -39,22 +38,34 @@ if (SERVER) then
 		nut.db.query("DELETE FROM nut_organization WHERE _id IN ("..id..")")
     end
 
-    function nut.org.load(id)
+    function nut.org.load(id, callback)
         local org = nut.org.new()
 
-        nut.db.query("SELECT _id, _name, _members, _level, _experience, _data FROM nut_organization WHERE _id IN ("..id..")", function(data)
+        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization WHERE _id IN ("..id..")", function(data)
             if (data) then
                 for k, v in ipairs(data) do
-                    
                     local org = nut.org.new()
                     org.id = tonumber(v._id)
                     org.name = v._name
-                    org.members = pon.decode(v._members)
                     org.level = tonumber(v._level)
                     org.experience = tonumber(v._experience)
                     org.data = pon.decode(v._data)
 
-                    nut.org.loaded[orgID] = org
+                    nut.org.loaded[org.id] = org
+
+                    nut.db.query("SELECT _orgID, _charID, _rank FROM nut_orgmembers WHERE _orgID IN ("..id..")", function(data)
+                        if (data) then
+                            for k, v in ipairs(data) do
+                                local rank = tonumber(v._rank)
+                                org.members[rank] = org.members[rank] or {}
+                                org.members[rank][tonumber(v._charID)] = true
+                            end
+
+                            if (callback) then
+                                callback(org)
+                            end
+                        end
+                    end)
                 end
             end
         end)
@@ -68,7 +79,6 @@ if (SERVER) then
             nut.db.updateTable({
                 _id = timeStamp,
                 _name = timeStamp,
-                _members = timeStamp,
                 _level = timeStamp,
                 _experience = timeStamp,
                 _data = timeStamp,
