@@ -38,7 +38,9 @@ function SCHEMA:CanDrive()
 end
 
 function SCHEMA:PlayerSpawnProp(client)
-	return (!nut.config.get("isSerious", false))
+	if (!nut.config.get("isSerious", false)) then
+		return true
+	end
 end
 
 function SCHEMA:ShouldWeaponBeRaised()
