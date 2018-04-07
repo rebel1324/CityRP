@@ -255,10 +255,6 @@ end
 --- Checks whether or not a player can afford a given value.
 -- @param amount The amount to check if the player can afford.
 -- @return true if the player can afford the given amount. Otherwise, false.
-function PLAYER:canAfford(amount)
-    local char = self:getChar()
-    return char and char:hasMoney(amount)
-end
 
 --- DarkRP Player:isCP() wrapper.
 --- Checks whether or not the player is part of the police.
