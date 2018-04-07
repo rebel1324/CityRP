@@ -8,7 +8,7 @@ include("shared.lua")
 function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
 	self:SetModel("models/custom/rprinter.mdl")
-	
+
 	self.ModelColor = Color(47, 56, 90, 255)
 
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
@@ -44,13 +44,13 @@ function ENT:Initialize()
 	self:SetDTInt(2, self.PowerConsume)
 	self:SetDTInt(3, self.Stability)
 	self:SetDTInt(4, self.PlusSpeed)
-	
+
 	self:SetPrintRate(self.PrintRate)
-	timer.Simple(1, function() 
-		if IsValid(self) then 
+	timer.Simple(1, function()
+		if IsValid(self) then
 			self.NextPrint = CurTime() + self.PrintRate
 			self:SetNextPrint(self.NextPrint)
-		end 
+		end
 	end)
 	timer.Simple(self.PrintRate, function() if IsValid(self) then self:Work() end end)
 
@@ -78,9 +78,12 @@ function ENT:Destruct(dmg)
 	effectdata:SetOrigin(vPoint)
 	effectdata:SetScale(1)
 	util.Effect("Explosion", effectdata)
-	
+
 	local client = self:Getowning_ent()
-	client:notifyLocalized("printerGone")
+    if IsValid(client) then
+        client:notifyLocalized("printerGone")
+    end
+
 
 	hook.Run("OnMoneyPrinterDestroyed", self, client, (dmg and dmg:GetAttacker()))
 end
@@ -170,7 +173,7 @@ function ENT:Work()
 	end
 end
 
-function ENT:Use(ply)	
+function ENT:Use(ply)
 	if (self:getNetVar("locked")) then return end
 
 	if(ply:IsPlayer())then
@@ -250,11 +253,11 @@ netstream.Hook("printerUpgrade", function(client, upgNum, entity)
 				entity.PlusSpeed = entity.PlusSpeed + 10
 				entity:SetDTInt(4, entity.PlusSpeed)
 				entity:SetDTInt(5, entity.Speed)
-				
+
 				char:giveMoney(-money)
 			end
 		end
 	end
-end) 
+end)
 
 
