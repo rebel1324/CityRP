@@ -353,7 +353,7 @@ function SCHEMA:PlayerDeath(client, inflicter, attacker)
 		local class = char:getClass()
 		local classData = nut.class.list[class] or nut.class.list[1]
 		local job = classData.name
-		local law = classData.
+		local law = classData.law
 		
 		hook.Run("ResetVariables", client, SIGNAL_DEATH)
 
