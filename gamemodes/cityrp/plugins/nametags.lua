@@ -28,8 +28,9 @@ btNameTag.info = {
 		doDraw = function(client, ntX, ntY, ntCol)
 			local char = client:getChar()
 			local info = char:getOrganizationInfo()
+			local colData = info:getData("nameCol", ntOrg)
 
-			return btNameTag:drawText(info:getName(), ntX, ntY, ColorAlpha(ntOrg, ntCol.a), 1)
+			return btNameTag:drawText(info:getName(), ntX, ntY, ColorAlpha(colData, ntCol.a), 1)
 		end,
 	},
 	{
