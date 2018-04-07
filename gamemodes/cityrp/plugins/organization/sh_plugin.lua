@@ -26,6 +26,7 @@ if (SERVER) then
         nut.db.insertTable({
             _name = ORGANIZATION_DEFUALT_NAME,
             _lastModify = timeStamp,
+            _timeCreated = timeStamp,
             _level = 1, 
             _experience = 0,
             _data = ponNull
@@ -195,11 +196,21 @@ if (SERVER) then
     end
 
     function PLUGIN:CanChangeOrganizationVariable(client, key, value)
-
+        return true
     end
 
     function PLUGIN:CanCreateOrganization(client)
-        return true
+        local char = client:getChar()
+
+        if (char) then
+            if (char:getOrganizationInfo()) then
+                return false
+            else
+                return true
+            end
+        end
+
+        return false
     end
 
     function PLUGIN:OnCreateOrganization(client, organization)
@@ -207,7 +218,7 @@ if (SERVER) then
     end
 
     function PLUGIN:PlayerCanJoinOrganization()
-
+        return true
     end
 end
 
