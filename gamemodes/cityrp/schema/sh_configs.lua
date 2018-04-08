@@ -253,11 +253,6 @@ nut.config.add("jailTime", 200, "Amount of seconds.", nil, {
 	category = "schema"
 })
 
-nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
-	data = {min = 0, max = 600},
-	category = "schema"
-})
-
 nut.config.add("tazeTime", 5, "The ammount of time someone is tazed for.", nil, {
 	data = {min = 0, max = 600},
 	category = "schema"
