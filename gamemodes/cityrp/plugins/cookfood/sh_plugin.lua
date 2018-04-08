@@ -203,3 +203,8 @@ else
 		end
 	end
 end
+
+nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
+	data = {min = 0, max = 600},
+	category = "schema"
+})
