@@ -11,6 +11,15 @@ if (ORGANIZATION_ENABLED != true) then return end
 
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
 ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
+ORGANIZATION_INITIAL_MONEY = 5000
+ORGANIZATION_RANK_NAME = {
+    [ORGANIZATION_OWNER] = "orgRankOwner",
+    [ORGANIZATION_SUPERADMIN] = "orgRankSuperadmin",
+    [ORGANIZATION_ADMIN] = "orgRankAdmin",
+    [ORGANIZATION_MODERATOR] = "orgRankModerator",
+    [ORGANIZATION_TRUSTED] = "orgRankTrusted",
+    [ORGANIZATION_MEMBER] = "orgRankMember",
+}
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
@@ -28,6 +37,7 @@ if (SERVER) then
             _lastModify = timeStamp,
             _timeCreated = timeStamp,
             _level = 1, 
+            _money = ORGANIZATION_INITIAL_MONEY, 
             _experience = 0,
             _data = ponNull
         }, function(succ, orgID) 
@@ -400,7 +410,11 @@ else
                     local bool, reason = hook.Run("CanChangeOrganizationVariable", client, key, value)
 
                     if (bool) then
-                        org:setData(key, value)
+                        if (key == "name") then
+                            org:setName(value)
+                        else
+                            org:setData(key, value)
+                        end
                     else
                         client:notifyLocalized(reason)
                     end

@@ -15,6 +15,7 @@ function nut.org.new()
         id = 0,
         members = {},
         level = 1, 
+        money = ORGANIZATION_INITIAL_MONEY, 
         experience = 0,
         data = {}
     }, {__index = ORGANIZATION})
@@ -182,6 +183,18 @@ if (SERVER) then
         netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
     end
 
+    function ORGANIZATION:setMoney(amt)
+        self.level = amt
+        
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+        nut.db.updateTable({
+            _money = amt,
+            _lastModify = timeStamp,
+        }, nil, "organization", "_id = ".. self.id)
+
+        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
+    end
+
     function ORGANIZATION:setOwner(char)
         if (char) then
             self:addCharacter(char, ORGANIZATION_OWNER)
@@ -196,17 +209,21 @@ if (SERVER) then
         self:setLevel(self:getLevel() + amt)
     end
 
-    function ORGANIZATION:getMemberCount()
-        local count = 0
-
-        for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-            if (self.members[i] and self.members[i][charID]) then
-                count = count + 1
-            end
-        end
-        
-        return count
+    function ORGANIZATION:addMoney(amt)
+        self:setLevel(self:getLevel() + amt)
     end
+end
+
+function ORGANIZATION:getMemberCount()
+    local count = 0
+
+    for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+        if (self.members[i] and self.members[i][charID]) then
+            count = count + 1
+        end
+    end
+    
+    return count
 end
 
 function ORGANIZATION:getID()
@@ -250,6 +267,10 @@ end
 
 function ORGANIZATION:getLevel()
     return self.level
+end
+
+function ORGANIZATION:getLevel()
+    return self.money
 end
 
 -- returns 

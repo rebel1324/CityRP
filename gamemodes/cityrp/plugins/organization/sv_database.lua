@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `nut_organization` (
 	`_members` TEXT NOT NULL,
 	`_level` INT(12) NOT NULL,
 	`_experience` FLOAT(32) NOT NULL,
+	`_money` INT(32) NOT NULL,
 	`_lastModify` DATETIME NOT NULL,
 	`_timeCreated` DATETIME NOT NULL,
 	`_data` TEXT NOT NULL,
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS nut_organization (
 	_members text,
 	_level integer,
 	_experience float,
+	_money float,
 	_lastModify datetime,
 	_timeCreated datetime,
 	_data text
