@@ -12,14 +12,6 @@ if (ORGANIZATION_ENABLED != true) then return end
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
 ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
 ORGANIZATION_INITIAL_MONEY = 5000
-ORGANIZATION_RANK_NAME = {
-    [ORGANIZATION_OWNER] = "orgRankOwner",
-    [ORGANIZATION_SUPERADMIN] = "orgRankSuperadmin",
-    [ORGANIZATION_ADMIN] = "orgRankAdmin",
-    [ORGANIZATION_MODERATOR] = "orgRankModerator",
-    [ORGANIZATION_TRUSTED] = "orgRankTrusted",
-    [ORGANIZATION_MEMBER] = "orgRankMember",
-}
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
@@ -340,7 +332,8 @@ else
                     local bool, reason = char:canJoinOrganization()
 
                     if (bool != false) then
-                        org:addCharacter(char)
+                        org:addCharacter(char, ORGANIZATION_MEMBER)
+                        netstream.Start(client, "nutOrgJoined")
                     else
                         client:notifyLocalized(reason)
                     end

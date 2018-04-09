@@ -13,7 +13,7 @@ function CHAR:setOrganization(orgID)
 end
 
 function CHAR:canJoinOrganization(orgID)
-    local org = nut.org.get(orgID)
+    local org = nut.org.loaded[orgID]
 
     if (org) then
         local client = self:getPlayer()

@@ -1,5 +1,6 @@
 
-local ORGANIZATION = {}
+local ORGANIZATION = nut.org.meta or {}
+ORGANIZATION.__index = ORGANIZATION
 debug.getregistry().Organization = ORGANIZATION -- hi mark
 
 ORGANIZATION_OWNER = 5
@@ -8,6 +9,14 @@ ORGANIZATION_ADMIN = 3
 ORGANIZATION_MODERATOR = 2
 ORGANIZATION_TRUSTED = 1
 ORGANIZATION_MEMBER = 0
+ORGANIZATION_RANK_NAME = {
+    [ORGANIZATION_OWNER] = "orgRankOwner",
+    [ORGANIZATION_SUPERADMIN] = "orgRankSuperadmin",
+    [ORGANIZATION_ADMIN] = "orgRankAdmin",
+    [ORGANIZATION_MODERATOR] = "orgRankModerator",
+    [ORGANIZATION_TRUSTED] = "orgRankTrusted",
+    [ORGANIZATION_MEMBER] = "orgRankMember",
+}
 
 function nut.org.new()
     return setmetatable({
@@ -18,7 +27,7 @@ function nut.org.new()
         money = ORGANIZATION_INITIAL_MONEY, 
         experience = 0,
         data = {}
-    }, {__index = ORGANIZATION})
+    }, ORGANIZATION)
 end
 
 if (SERVER) then
@@ -324,3 +333,5 @@ do
         }
     end
 end
+
+nut.org.meta = ORGANIZATION

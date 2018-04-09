@@ -57,7 +57,7 @@ function PLUGIN:OnLoadTables()
 end
 
 function PLUGIN:OnWipeTables()
-	if (nut.db.module) then
+	if (nut.db.object) then
 		local queries = string.Explode(";", DROP_QUERY)
 
 		for i = 1, #queries do
