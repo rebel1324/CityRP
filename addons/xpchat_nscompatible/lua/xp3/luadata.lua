@@ -1,4 +1,4 @@
---[[
+﻿--[[
 	luadata by CapsAdmin (fuck copyright, do what you want with this)
 
 	-- encodes table to string
@@ -21,110 +21,102 @@
 		nil		luadata.SetModifier(type, callback)
 
 ]]
-
 --- luajit bytecode firewall --
 local opcode_checker
+
 do
-	local bcnames = "ISLT  ISGE  ISLE  ISGT  ISEQV ISNEV ISEQS ISNES ISEQN ISNEN ISEQP ISNEP ISTC  ISFC  IST   ISF   MOV   NOT   UNM   LEN   ADDVN SUBVN MULVN DIVVN MODVN ADDNV SUBNV MULNV DIVNV MODNV ADDVV SUBVV MULVV DIVVV MODVV POW   CAT   KSTR  KCDATAKSHORTKNUM  KPRI  KNIL  UGET  USETV USETS USETN USETP UCLO  FNEW  TNEW  TDUP  GGET  GSET  TGETV TGETS TGETB TSETV TSETS TSETB TSETM CALLM CALL  CALLMTCALLT ITERC ITERN VARG  ISNEXTRETM  RET   RET0  RET1  FORI  JFORI FORL  IFORL JFORL ITERL IITERLJITERLLOOP  ILOOP JLOOP JMP   FUNCF IFUNCFJFUNCFFUNCV IFUNCVJFUNCVFUNCC FUNCCW"
-	local jit = jit or require("jit")
-	local ver = jit.version_num
-	if ver < 20000 or ver> 20009 then
-		ErrorNoHalt"LUADATA SECURITY WARNING: Unable to load verifier, update me!\n"
-		opcode_checker = function() return function() return true end end
-	else
+    local bcnames = "ISLT  ISGE  ISLE  ISGT  ISEQV ISNEV ISEQS ISNES ISEQN ISNEN ISEQP ISNEP ISTC  ISFC  IST   ISF   MOV   NOT   UNM   LEN   ADDVN SUBVN MULVN DIVVN MODVN ADDNV SUBNV MULNV DIVNV MODNV ADDVV SUBVV MULVV DIVVV MODVV POW   CAT   KSTR  KCDATAKSHORTKNUM  KPRI  KNIL  UGET  USETV USETS USETN USETP UCLO  FNEW  TNEW  TDUP  GGET  GSET  TGETV TGETS TGETB TSETV TSETS TSETB TSETM CALLM CALL  CALLMTCALLT ITERC ITERN VARG  ISNEXTRETM  RET   RET0  RET1  FORI  JFORI FORL  IFORL JFORL ITERL IITERLJITERLLOOP  ILOOP JLOOP JMP   FUNCF IFUNCFJFUNCFFUNCV IFUNCVJFUNCVFUNCC FUNCCW"
+    local jit = jit or require("jit")
+    local ver = jit.version_num
 
+    if ver < 20000 or ver > 20009 then
+        ErrorNoHalt"LUADATA SECURITY WARNING: Unable to load verifier, update me!\n"
+        opcode_checker = function() return function() return true end end
+        --extract opcode names
+        --error("non-whitelisted: " .. )
+    else
+        local jutil = jit.util or require'jit.util'
+        local band = bit.band
+        local opcodes = {}
 
-		local jutil = jit.util or require'jit.util'
-		local band =  bit.band
+        for str in bcnames:gmatch"......" do
+            str = str:gsub("%s", "")
+            table.insert(opcodes, str)
+        end
 
+        local function getopnum(opname)
+            for k, v in next, opcodes do
+                if v == opname then
+                    return k
+                end
+            end
 
+            error("not found: " .. opname)
+        end
 
-		local opcodes = {}
+        local function getop(func, pc)
+            local ins = jutil.funcbc(func, pc)
 
-		--extract opcode names
-		for str in bcnames:gmatch "......" do
-			str = str:gsub("%s", "")
-			table.insert(opcodes, str)
-		end
+            return ins and (band(ins, 0xff) + 1)
+        end
 
-		local function getopnum(opname)
-			for k, v in next, opcodes do
-				if v == opname then
-					return k
-				end
+        opcode_checker = function(white)
+            local opwhite = {}
 
-			end
+            for i = 0, #opcodes do
+                table.insert(opwhite, false)
+            end
 
-			error("not found: " .. opname)
-		end
+            local function iswhitelisted(opnum)
+                local ret = opwhite[opnum]
 
+                if ret == nil then
+                    error("opcode not found " .. opnum)
+                end
 
-		local function getop(func, pc)
-			local ins = jutil.funcbc(func, pc)
-			return ins and (band(ins, 0xff)+1)
-		end
+                return ret
+            end
 
+            local function add_whitelist(num)
+                if opwhite[num] == nil then
+                    error"invalid opcode num"
+                end
 
-		opcode_checker = function(white)
+                opwhite[num] = true
+            end
 
-			local opwhite = {}
-			for i=0,#opcodes do table.insert(opwhite, false) end
+            for line in white:gmatch'[^\r\n]+' do
+                local opstr_towhite = line:match'[%w]+'
 
+                if opstr_towhite and opstr_towhite:len() > 0 then
+                    local whiteopnum = getopnum(opstr_towhite)
+                    add_whitelist(whiteopnum)
+                    assert(iswhitelisted(whiteopnum))
+                end
+            end
 
-			local function iswhitelisted(opnum)
-				local ret = opwhite[opnum]
-				if ret == nil then
-					error("opcode not found " .. opnum)
-				end
+            local function checker_function(func, max_opcodes)
+                max_opcodes = max_opcodes or math.huge
 
-				return ret
-			end
+                for i = 1, max_opcodes do
+                    local ret = getop(func, i)
 
-			local function add_whitelist(num)
-				if opwhite[num] == nil then
-					error "invalid opcode num"
-				end
+                    if not ret then
+                        return true
+                    end
 
-				opwhite[num] = true
-			end
+                    if not iswhitelisted(ret) then
+                        return false, "non-whitelisted: " .. opcodes[ret]
+                    end
+                end
 
-			for line in white:gmatch '[^\r\n]+' do
+                return false, "checked max_opcodes"
+            end
 
-				local opstr_towhite = line:match '[%w]+'
-
-				if opstr_towhite and opstr_towhite:len() > 0 then
-					local whiteopnum = getopnum(opstr_towhite)
-					add_whitelist(whiteopnum)
-					assert(iswhitelisted(whiteopnum))
-				end
-
-			end
-
-
-			local function checker_function(func,max_opcodes)
-				max_opcodes = max_opcodes or math.huge
-				for i = 1, max_opcodes do
-					local ret = getop(func, i)
-					if not ret then
-						return true
-					end
-
-					if not iswhitelisted(ret) then
-						--error("non-whitelisted: " .. )
-						return false,"non-whitelisted: "..opcodes[ret]
-					end
-
-				end
-				return false,"checked max_opcodes"
-			end
-
-			return checker_function
-		end
-
-	end
-
+            return checker_function
+        end
+    end
 end
-
 
 local whitelist = [[TNEW
 TDUP
@@ -146,39 +138,28 @@ CALL
 RET1
 
 UNM]]
-
 local is_func_ok = opcode_checker(whitelist)
-local luadata = {} local s = luadata -- self
+local luadata = {} -- self
+local s = luadata
 
 luadata.EscapeSequences = {
-	[("\a"):byte()] = [[\a]],
-	[("\b"):byte()] = [[\b]],
-	[("\f"):byte()] = [[\f]],
-	[("\t"):byte()] = [[\t]],
-	[("\r"):byte()] = [[\r]],
-	[("\v"):byte()] = [[\v]],
+    [("\a"):byte()] = [[\a]],
+    [("\b"):byte()] = [[\b]],
+    [("\f"):byte()] = [[\f]],
+    [("\t"):byte()] = [[\t]],
+    [("\r"):byte()] = [[\r]],
+    [("\v"):byte()] = [[\v]]
 }
 
 local tab = 0
 
 luadata.Types = {
-	["number"] = function(var)
-		return ("%s"):format(var)
-	end,
-	["string"] = function(var)
-		return ("%q"):format(var)
-	end,
-	["boolean"] = function(var)
-		return ("%s"):format(var and "true" or "false")
-	end,
-	["Vector"] = function(var)
-		return ("Vector(%s, %s, %s)"):format(var.x, var.y, var.z)
-	end,
-	["Angle"] = function(var)
-		return ("Angle(%s, %s, %s)"):format(var.p, var.y, var.r)
-	end,
-
---[[ 	-- comment these out if you don't want shit like this to be storeable
+    ["number"] = function(var) return ("%s"):format(var) end,
+    ["string"] = function(var) return ("%q"):format(var) end,
+    ["boolean"] = function(var) return ("%s"):format(var and "true" or "false") end,
+    ["Vector"] = function(var) return ("Vector(%s, %s, %s)"):format(var.x, var.y, var.z) end,
+    ["Angle"] = function(var) return ("Angle(%s, %s, %s)"):format(var.p, var.y, var.r) end,
+    --[[ 	-- comment these out if you don't want shit like this to be storeable
 	["Entity"] = function(var)
 		if var:IsPlayer() then
 			return ("player.GetByUniqueID(%q)"):format(var:UniqueID())
@@ -192,131 +173,129 @@ luadata.Types = {
 	["NULL"] = function(var)
 		return "NULL"
 	end, ]]
+    ["table"] = function(var)
+        if type(var.r) == "number" and type(var.g) == "number" and type(var.b) == "number" and type(var.a) == "number" then
+            return ("Color(%s, %s, %s, %s)"):format(var.r, var.g, var.b, var.a)
+        end
 
-	["table"] = function(var)
-		if
-			type(var.r) == "number" and
-			type(var.g) == "number" and
-			type(var.b) == "number" and
-			type(var.a) == "number"
-		then
-			return ("Color(%s, %s, %s, %s)"):format(var.r, var.g, var.b, var.a)
-		end
+        tab = tab + 1
+        local str = luadata.Encode(var, true)
+        tab = tab - 1
 
-		tab = tab + 1
-		local str = luadata.Encode(var, true)
-		tab = tab - 1
-		return str
-	end,
+        return str
+    end
 }
 
 function luadata.SetModifier(type, callback)
-	luadata.Types[type] = callback
+    luadata.Types[type] = callback
 end
 
 function luadata.Type(var)
-	local t
+    local t
 
-	if IsEntity and IsEntity(var) then
-		if var:IsValid() then
-			t = "Entity"
-		else
-			t = "NULL"
-		end
-	else
-		t = type(var)
-	end
+    if IsEntity and IsEntity(var) then
+        if var:IsValid() then
+            t = "Entity"
+        else
+            t = "NULL"
+        end
+    else
+        t = type(var)
+    end
 
-	if t == "table" then
-		if var.LuaDataType then
-			t = var.LuaDataType
-		end
-	end
+    if t == "table" then
+        if var.LuaDataType then
+            t = var.LuaDataType
+        end
+    end
 
-	return t
+    return t
 end
 
 function luadata.ToString(var)
-	local func = s.Types[s.Type(var)]
-	return func and func(var)
+    local func = s.Types[s.Type(var)]
+
+    return func and func(var)
 end
 
 function luadata.Encode(tbl, __brackets)
-	if luadata.Hushed then return end
+    if luadata.Hushed then
+        return
+    end
 
-	local str = __brackets and "{\n" or ""
+    local str = __brackets and "{\n" or ""
 
-	for key, value in pairs(tbl) do
-		value = s.ToString(value)
-		key = s.ToString(key)
+    for key, value in pairs(tbl) do
+        value = s.ToString(value)
+        key = s.ToString(key)
 
-		if key and value and key ~= "__index" then
-			str = str .. ("\t"):rep(tab) ..  ("[%s] = %s,\n"):format(key, value)
-		end
-	end
+        if key and value and key ~= "__index" then
+            str = str .. ("\t"):rep(tab) .. ("[%s] = %s,\n"):format(key, value)
+        end
+    end
 
-	str = str .. ("\t"):rep(tab-1) .. (__brackets and "}" or "")
+    str = str .. ("\t"):rep(tab - 1) .. (__brackets and "}" or "")
 
-	return str
+    return str
 end
 
 local env = {
-	Vector=Vector,
-	Angle=Angle,
-	Color=Color,
-	--Entity=Entity,
+    Vector = Vector,
+    Angle = Angle,
+    Color = Color
 }
 
+--Entity=Entity,
 -- TODO: Bytecode analysis for bad loop and string functions?
-function luadata.Decode(str,nojail)
-	local func = CompileString(string.format("return { %s }",str), "luadata_decode", false)
+function luadata.Decode(str, nojail)
+    local func = CompileString(string.format("return { %s }", str), "luadata_decode", false)
 
-	if type(func) == "string" then
-		ErrorNoHalt("Luadata decode syntax: "..tostring(func):gsub("^luadata_decode","")..'\n')
+    if type(func) == "string" then
+        ErrorNoHalt("Luadata decode syntax: " .. tostring(func):gsub("^luadata_decode", "") .. '\n')
 
-		return {},func
-	end
+        return {}, func
+    end
 
-	if not nojail then
-		setfenv(func,env)
-	elseif istable(nojail) then
-		setfenv(func,nojail)
-	elseif isfunction(nojail) then
-		nojail( func )
-	end
+    if not nojail then
+        setfenv(func, env)
+    elseif istable(nojail) then
+        setfenv(func, nojail)
+    elseif isfunction(nojail) then
+        nojail(func)
+    end
 
+    local ok, err = is_func_ok(func)
 
-	local ok,err = is_func_ok( func )
-	if not ok or err then
-		err = err or "invalid opcodes detected"
-		ErrorNoHalt("Luadata opcode: "..tostring(err):gsub("^luadata_decode","")..'\n')
+    if not ok or err then
+        err = err or "invalid opcodes detected"
+        ErrorNoHalt("Luadata opcode: " .. tostring(err):gsub("^luadata_decode", "") .. '\n')
 
-		return {},err
-	end
+        return {}, err
+    end
 
-	local ok, err = pcall(func)
+    local ok, err = pcall(func)
 
-	if not ok then
-		ErrorNoHalt("Luadata decode: "..tostring(err):gsub("^luadata_decode","")..'\n')
+    if not ok then
+        ErrorNoHalt("Luadata decode: " .. tostring(err):gsub("^luadata_decode", "") .. '\n')
 
-		return {},err
-	end
+        return {}, err
+    end
 
-	if isfunction(nojail) then
-		nojail( func, err )
-	end
+    if isfunction(nojail) then
+        nojail(func, err)
+    end
 
-	return err
+    return err
 end
 
-do -- file extension
-	function luadata.WriteFile(path, tbl)
-		file.Write(path, luadata.Encode(tbl))
-	end
+do
+    function luadata.WriteFile(path, tbl)
+        file.Write(path, luadata.Encode(tbl))
+    end
 
-	function luadata.ReadFile(path)
-		return luadata.Decode(file.Read(path) or "")
-	end
-end
+    function luadata.ReadFile(path)
+        return luadata.Decode(file.Read(path) or "")
+    end
+end -- file extension
 
 return luadata

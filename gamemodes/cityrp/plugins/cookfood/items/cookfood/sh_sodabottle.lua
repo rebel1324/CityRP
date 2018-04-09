@@ -1,4 +1,4 @@
-ITEM.name = "Soda Bottle"
+﻿ITEM.name = "Soda Bottle"
 ITEM.model = "models/props_junk/garbage_plasticbottle003a.mdl"
 ITEM.hungerAmount = 10
 ITEM.cookable = false

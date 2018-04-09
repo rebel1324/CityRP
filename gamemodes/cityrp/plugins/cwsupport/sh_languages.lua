@@ -1,11 +1,10 @@
-PLUGIN.englishTranslation = {
-	pistol = "Pistol",
-	ar2 = "Rifle",
-	smg1 = "Sub Machine Gun",
-	buckshot = "Shotgun",
-	sniperround = "Sniper Rifle",
-	["357"] = "Magnum",
-
+﻿PLUGIN.englishTranslation = {
+    pistol = "Pistol",
+    ar2 = "Rifle",
+    smg1 = "Sub Machine Gun",
+    buckshot = "Shotgun",
+    sniperround = "Sniper Rifle",
+    ["357"] = "Magnum",
     -- These are for item description translation.
     att_rdot = "Red Dot Sight",
     attRDotDesc = "A Small Sight that displays a red dot in the center",
@@ -27,11 +26,9 @@ PLUGIN.englishTranslation = {
     attBipodDesc = "A Bipod that assists your aim.",
     primary = "Primary Weapon",
     secondary = "Secondary Weapon",
-
     gunInfoDesc = "A Weapon that uses %s Ammunition",
     gunInfoStat = "Damage: %s\nWeapon Type: %s\nMagazine size: %s",
     gunInfoAttachments = "Current attachment: %s",
-    
     attDetached = "Attachment has been detached.",
     detTarget = "You need to choose attachment to detach.",
     cantAttached = "This attachment does not fit for this Weapon.",
@@ -39,7 +36,6 @@ PLUGIN.englishTranslation = {
     notCW = "This weapon cannot be modded.",
     notAttachment = "This is not valid attachment.",
     noWeapon = "Can't find the target.",
-
     cwReloading = "Reloading %s%%",
     cwMagKappa = "%s / %s",
     cwGrenades = "%sx Grenade",
@@ -47,36 +43,32 @@ PLUGIN.englishTranslation = {
     cwFilledM203 = "M203 Reloaded",
     cw40mm = "%sx Grenade",
     cwGrenType = "Type: %s",
-    cwUse = "[USE]", 
+    cwUse = "[USE]",
     cwStablize = "%s - Stabilize",
-
     cwAmmo_ar2 = "Rifle Ammo",
     cwAmmo_smg1 = "SMG Ammo",
     cwAmmo_pistol = "Pistol Ammo",
     cwAmmo_357 = "Magnum Ammo",
-	cwAmmo_sniperround = "Sniper Rifle Ammo",
-	cwAmmo_buckshot = "Buckshot Ammo",
+    cwAmmo_sniperround = "Sniper Rifle Ammo",
+    cwAmmo_buckshot = "Buckshot Ammo"
 }
 
 PLUGIN.koreanTranslation = {
-	["Pistol Ammo"] = "권총 탄약",
-	["Magnum Ammo"] = "매그넘 탄약",
-	["Sub Machine Gun Ammo"] = "기관권총 탄약",
-	["Rifle Ammo"] = "소총 탄약",
-	["Shotgun Shells"] = "산탄총 탄약",
-	["Sniper Rounds"] = "저격소총 탄약",
-
-	pistol = "권총",
-	ar2 = "소총",
-	smg1 = "기관권총",
-	buckshot = "산탄총",
-	sniperround = "저격소총",
-	["357"] = "매그넘",
-
-	gunInfoDesc = "%s 를 사용하는 총기",
-	gunInfoStat = "데미지: %s\n무기 종류: %s\n탄창 크기: %s발",
-	gunInfoAttachments = "현재 부착물:%s",
-
+    ["Pistol Ammo"] = "권총 탄약",
+    ["Magnum Ammo"] = "매그넘 탄약",
+    ["Sub Machine Gun Ammo"] = "기관권총 탄약",
+    ["Rifle Ammo"] = "소총 탄약",
+    ["Shotgun Shells"] = "산탄총 탄약",
+    ["Sniper Rounds"] = "저격소총 탄약",
+    pistol = "권총",
+    ar2 = "소총",
+    smg1 = "기관권총",
+    buckshot = "산탄총",
+    sniperround = "저격소총",
+    ["357"] = "매그넘",
+    gunInfoDesc = "%s 를 사용하는 총기",
+    gunInfoStat = "데미지: %s\n무기 종류: %s\n탄창 크기: %s발",
+    gunInfoAttachments = "현재 부착물:%s",
     -- These are for item name translation.
     ["Red Dot Sight"] = "레드 닷 조준기",
     ["Holographic Sight"] = "홀로그래픽 조준기",
@@ -87,7 +79,6 @@ PLUGIN.koreanTranslation = {
     ["Foregrip"] = "수직 손잡이",
     ["Laser Sight"] = "레이저 조준기",
     ["Bipod"] = "양각대",
-
     -- These are for item description translation.
     att_rdot = "레드 닷 조준기",
     attRDotDesc = "조준을 도와주는 레드닷 조준기.",
@@ -107,7 +98,6 @@ PLUGIN.koreanTranslation = {
     attLaserDesc = "조준하는 곳을 가리켜주는 레이저 조준기",
     att_bipod = "양각대",
     attBipodDesc = "사격시 반동을 줄여주는 양각대",
-    
     attDetached = "총기 부품을 떼냈습니다.",
     detTarget = "떼어낼 부품을 선택해 주세요.",
     cantAttached = "이 무기에는 해당 부품을 장착할 수 없습니다.",
@@ -115,7 +105,6 @@ PLUGIN.koreanTranslation = {
     notCW = "이 무기는 개조가능한 무기가 아닙니다.",
     notAttachment = "이건 올바른 총기 부품이 아닙니다.",
     noWeapon = "대상을 찾을수 없습니다.",
-
     cwReloading = "장전중 %s%%",
     cwMagKappa = "%s / %s",
     cwGrenades = "%sx 수류탄",
@@ -123,14 +112,12 @@ PLUGIN.koreanTranslation = {
     cwFilledM203 = "M203 장전 됨",
     cw40mm = "%sx 유탄",
     cwGrenType = "유탄종류: %s",
-    cwUse = "[사용 키]", 
+    cwUse = "[사용 키]",
     cwStablize = "%s - 안정화",
-
     cwAmmo_ar2 = "소총 탄",
     cwAmmo_smg1 = "SMG 탄",
     cwAmmo_pistol = "권총 탄",
     cwAmmo_357 = "매그넘 탄",
-	cwAmmo_sniperround = "저격소총 탄",
-	cwAmmo_buckshot = "산탄 쉘",
+    cwAmmo_sniperround = "저격소총 탄",
+    cwAmmo_buckshot = "산탄 쉘"
 }
-

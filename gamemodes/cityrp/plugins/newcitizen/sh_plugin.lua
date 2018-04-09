@@ -1,15 +1,17 @@
-PLUGIN.name = "Advanced Citizen Outfit"
+﻿PLUGIN.name = "Advanced Citizen Outfit"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin allows the server having good amount of customizable citizens."
 
-if SERVER then resource.AddWorkshop(320536858) end
+if SERVER then
+    resource.AddWorkshop(320536858)
+end
 
 nut.util.include("sh_citizenmodels.lua")
 nut.util.include("cl_vgui.lua")
 
 -- requires material preload to acquire submaterial change.
 if (CLIENT) then
-	--[[local time = os.time()
+    --[[local time = os.time()
 	-- preventing vast loading
 	for model, modelData in pairs(RESKINDATA) do
 		for k, v in ipairs(modelData.facemaps) do
@@ -22,217 +24,229 @@ if (CLIENT) then
 			surface.SetMaterial(Material(v))
 		end
 	end]]
+    function PLUGIN:OnEntityCreated(ragdoll)
+        if (ragdoll and ragdoll:IsValid() and ragdoll:GetClass() == "class C_HL2MPRagdoll") then
+            local client = ragdoll:GetRagdollOwner()
 
-	function PLUGIN:OnEntityCreated(ragdoll)
-		if (ragdoll and ragdoll:IsValid() and ragdoll:GetClass() == "class C_HL2MPRagdoll") then
-			local client = ragdoll:GetRagdollOwner()
-			if (client and client:IsValid()) then
-				self:CreateEntityRagdoll(client, ragdoll)
-			end
-		end
-	end
+            if (client and client:IsValid()) then
+                self:CreateEntityRagdoll(client, ragdoll)
+            end
+        end
+    end
 
-	-- currently only applies on local player.
-	-- should store cloth data on char or player.
-	function PLUGIN:CreateEntityRagdoll(client, ragdoll)
-		if (ragdoll and ragdoll:IsValid() and client:getChar()) then
-			local char = client:getChar()
+    -- currently only applies on local player.
+    -- should store cloth data on char or player.
+    function PLUGIN:CreateEntityRagdoll(client, ragdoll)
+        if (ragdoll and ragdoll:IsValid() and client:getChar()) then
+            local char = client:getChar()
 
-			if (char) then
-				local mdl = char:getModel()
-				local mon = OUTFIT_DATA[mdl:lower()]
-				if (!mon) then return end
-				
-				local outfitList = OUTFIT_REGISTERED[mon.uid]
-				for slot, value in pairs(char:getData("outfits", {})) do
-					local data = outfitList[slot] -- part
+            if (char) then
+                local mdl = char:getModel()
+                local mon = OUTFIT_DATA[mdl:lower()]
 
-					if (type(data.outfits) == "function") then
-						data.outfits = data.outfits(ragdoll)
-					end
-			 
-					if (data and data.outfits) then
-						local cnt = (table.Count(data.outfits))
-						value = value % cnt
-						value = (value == 0 and cnt or value)
+                if (not mon) then
+                    return
+                end
 
-						if (data.func) then
-							data.func(ragdoll, data.outfits[value], data)
-						end
-					end
-				end
-			end
-		end
-	end
+                local outfitList = OUTFIT_REGISTERED[mon.uid]
 
-	netstream.Hook("nutCloseOutfit", function(client)
-		if (nut.gui.outfit and nut.gui.outfit.remove) then
-			nut.gui.outfit:remove()
-		end
-	end)
+                for slot, value in pairs(char:getData("outfits", {})) do
+                    local data = outfitList[slot] -- part
+
+                    if (type(data.outfits) == "function") then
+                        data.outfits = data.outfits(ragdoll)
+                    end
+
+                    if (data and data.outfits) then
+                        local cnt = (table.Count(data.outfits))
+                        value = value % cnt
+                        value = (value == 0 and cnt or value)
+
+                        if (data.func) then
+                            data.func(ragdoll, data.outfits[value], data)
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    netstream.Hook("nutCloseOutfit", function(client)
+        if (nut.gui.outfit and nut.gui.outfit.remove) then
+            nut.gui.outfit:remove()
+        end
+    end)
+    -- part
 else
-	netstream.Hook("nutApplyOutfit", function(client, values)
-		local outfitEntity
-		for k, v in ipairs(ents.FindInSphere(client:GetPos(), 128)) do
-			if (v:GetClass() == "nut_outfit") then
-				outfitEntity = v
-				break
-			end
-		end
+    netstream.Hook("nutApplyOutfit", function(client, values)
+        local outfitEntity
 
-		if (!outfitEntity) then return end
+        for k, v in ipairs(ents.FindInSphere(client:GetPos(), 128)) do
+            if (v:GetClass() == "nut_outfit") then
+                outfitEntity = v
+                break
+            end
+        end
 
-		local char = client:getChar()
+        if (not outfitEntity) then
+            return
+        end
 
-		if (char) then
-			local mdl = char:getModel()
-			local outfitList = OUTFIT_REGISTERED[OUTFIT_DATA[mdl:lower()].uid]
+        local char = client:getChar()
 
-			if (!outfitList) then
-				return
-			end
+        if (char) then
+            local mdl = char:getModel()
+            local outfitList = OUTFIT_REGISTERED[OUTFIT_DATA[mdl:lower()].uid]
 
-			local price = 0 
+            if (not outfitList) then
+                return
+            end
 
-			local charOutfits = char:getData("outfits", {})
+            local price = 0
+            local charOutfits = char:getData("outfits", {})
 
-			for k, v in pairs(outfitList) do
-				local index = values[k]
-				local data = outfitList[k].outfits
-	
-				if (type(data) == "function") then
-					data = data(client)
-				end
-				
-				if (data) then
-					local info = data[index]
+            for k, v in pairs(outfitList) do
+                local index = values[k]
+                local data = outfitList[k].outfits
 
-					if (info) then
-						if ((charOutfits[k] or 1) != index) then
-							price = price + info.price or 0
-						end
-					end
-				end
-			end
+                if (type(data) == "function") then
+                    data = data(client)
+                end
 
-			if (char:hasMoney(price)) then
-				char:giveMoney(-price)
-			else
-				client:notifyLocalized("cantAfford")
+                if (data) then
+                    local info = data[index]
 
-				return 
-			end
+                    if (info) then
+                        if ((charOutfits[k] or 1) ~= index) then
+                            price = price + info.price or 0
+                        end
+                    end
+                end
+            end
 
-			char:setData("outfits", values)
-			charOutfits = char:getData("outfits", {})
+            if (char:hasMoney(price)) then
+                char:giveMoney(-price)
+            else
+                client:notifyLocalized("cantAfford")
 
-			for slot, value in pairs(charOutfits) do
-				local data = outfitList[slot] -- part
+                return
+            end
 
-				if (type(data.outfits) == "function") then
-					data.outfits = data.outfits(client)
-				end
-		 
-				if (data and data.outfits) then
-					local cnt = (table.Count(data.outfits))
-						value = value % cnt
-						value = (value == 0 and cnt or value)
+            char:setData("outfits", values)
+            charOutfits = char:getData("outfits", {})
 
-					if (data.func) then
-						data.func(client, data.outfits[value], data)
-					end
-				end
-			end
+            for slot, value in pairs(charOutfits) do
+                local data = outfitList[slot]
 
-			netstream.Start(client, "nutCloseOutfit")
-		end
-	end)
+                if (type(data.outfits) == "function") then
+                    data.outfits = data.outfits(client)
+                end
+
+                if (data and data.outfits) then
+                    local cnt = (table.Count(data.outfits))
+                    value = value % cnt
+                    value = (value == 0 and cnt or value)
+
+                    if (data.func) then
+                        data.func(client, data.outfits[value], data)
+                    end
+                end
+            end
+
+            netstream.Start(client, "nutCloseOutfit")
+        end
+    end)
 end
 
-
 function recoverCloth(client, target)
-	local char = client:getChar()
+    local char = client:getChar()
 
-	if (char) then
-		local mdl = char:getModel()
-		local adoring = OUTFIT_DATA[mdl:lower()]
-		if (!adoring) then return false end
-		local outfitList = OUTFIT_REGISTERED[adoring.uid or ""]
-		
-		for slot, value in pairs(char:getData("outfits", {})) do
-			local data = outfitList[slot] -- part
+    if (char) then
+        local mdl = char:getModel()
+        local adoring = OUTFIT_DATA[mdl:lower()]
 
-			if (!data) then break end
+        if (not adoring) then
+            return false
+        end
 
-			if (type(data.outfits) == "function") then
-				data.outfits = data.outfits((target or client))
-			end
-	 
-			if (data and data.outfits) then
-				local cnt = (table.Count(data.outfits))
-						value = value % cnt
-						value = (value == 0 and cnt or value)
+        local outfitList = OUTFIT_REGISTERED[adoring.uid or ""]
 
-				if (data.func) then
-					data.func((target or client), data.outfits[value], data)
-				end
-			end
-		end
-	end
+        for slot, value in pairs(char:getData("outfits", {})) do
+            local data = outfitList[slot] -- part
+
+            if (not data) then
+                break
+            end
+
+            if (type(data.outfits) == "function") then
+                data.outfits = data.outfits((target or client))
+            end
+
+            if (data and data.outfits) then
+                local cnt = (table.Count(data.outfits))
+                value = value % cnt
+                value = (value == 0 and cnt or value)
+
+                if (data.func) then
+                    data.func((target or client), data.outfits[value], data)
+                end
+            end
+        end
+    end
 end
 
 function PLUGIN:OnCharFallover(client, ragdoll, isFallen)
-	if (client and ragdoll and client:IsValid() and ragdoll:IsValid() and client:getChar() and isFallen) then
-		local char = client:getChar()
+    if (client and ragdoll and client:IsValid() and ragdoll:IsValid() and client:getChar() and isFallen) then
+        local char = client:getChar()
 
-		if (char) then
-			local mdl = char:getModel()
-			local outfitList = OUTFIT_REGISTERED[OUTFIT_DATA[mdl:lower()].uid]
-			for slot, value in pairs(char:getData("outfits", {})) do
-				local data = outfitList[slot] -- part
+        if (char) then
+            local mdl = char:getModel()
+            local outfitList = OUTFIT_REGISTERED[OUTFIT_DATA[mdl:lower()].uid]
 
-				if (type(data.outfits) == "function") then
-					data.outfits = data.outfits(ragdoll)
-				end
-				
-				if (data and data.outfits) then
-					local cnt = (table.Count(data.outfits))
-						value = value % cnt
-						value = (value == 0 and cnt or value)
+            for slot, value in pairs(char:getData("outfits", {})) do
+                local data = outfitList[slot] -- part
 
-					if (data.func) then
-						data.func(ragdoll, data.outfits[value], data)
-					end
-				end
-			end
-		end
-	end
+                if (type(data.outfits) == "function") then
+                    data.outfits = data.outfits(ragdoll)
+                end
+
+                if (data and data.outfits) then
+                    local cnt = (table.Count(data.outfits))
+                    value = value % cnt
+                    value = (value == 0 and cnt or value)
+
+                    if (data.func) then
+                        data.func(ragdoll, data.outfits[value], data)
+                    end
+                end
+            end
+        end
+    end
 end
 
 function PLUGIN:PostPlayerLoadout(client)
-	timer.Simple(.01, function() -- to prevent getmodel failing.
-		if (client:getChar()) then
-			recoverCloth(client)
-		end
-	end)
+    timer.Simple(.01, function()
+        if (client:getChar()) then
+            recoverCloth(client)
+        end
+    end) -- to prevent getmodel failing.
 end
 
 function PLUGIN:PlayerLoadedChar(client, netChar, prevChar)
-	if (prevChar) then
-		local b = client:GetBodyGroups()
-		
-		for k, v in pairs(b) do
-			local id, name, num = v.id, v.name, v.num
-			
-			client:SetBodygroup(num, 0)
-		end
-		
-		client:SetSubMaterial()
-	
-		timer.Simple(.01, function() -- to prevent getmodel failing.
-			if (client:getChar()) then
-				recoverCloth(client)
-			end
-		end)
-	end
+    if (prevChar) then
+        local b = client:GetBodyGroups()
+
+        for k, v in pairs(b) do
+            local id, name, num = v.id, v.name, v.num
+            client:SetBodygroup(num, 0)
+        end
+
+        client:SetSubMaterial()
+
+        timer.Simple(.01, function()
+            if (client:getChar()) then
+                recoverCloth(client)
+            end
+        end) -- to prevent getmodel failing.
+    end
 end

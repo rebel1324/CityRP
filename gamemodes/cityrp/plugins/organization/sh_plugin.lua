@@ -1,15 +1,16 @@
-PLUGIN.name = "Organization"
+﻿PLUGIN.name = "Organization"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Organization plugin."
-
 nut.org = nut.org or {}
 nut.org.loaded = nut.org.loaded or {}
-
 ORGANIZATION_ENABLED = true
 
-if (ORGANIZATION_ENABLED != true) then return end
+if (ORGANIZATION_ENABLED ~= true) then
+    return
+end
 
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
+<<<<<<< HEAD
 ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
 ORGANIZATION_INITIAL_MONEY = 5000
 ORGANIZATION_RANK_NAME = {
@@ -21,6 +22,8 @@ ORGANIZATION_RANK_NAME = {
     [ORGANIZATION_MEMBER] = "orgRankMember",
 }
 
+=======
+>>>>>>> style: Beautify the codebase
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
 nut.util.include("vgui/cl_orgmanager.lua")
@@ -34,14 +37,18 @@ if (SERVER) then
 		local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.insertTable({
             _name = ORGANIZATION_DEFUALT_NAME,
+<<<<<<< HEAD
             _lastModify = timeStamp,
             _timeCreated = timeStamp,
             _level = 1, 
             _money = ORGANIZATION_INITIAL_MONEY, 
+=======
+            _level = 1,
+>>>>>>> style: Beautify the codebase
             _experience = 0,
             _data = ponNull
-        }, function(succ, orgID) 
-            if (succ != false) then
+        }, function(succ, orgID)
+            if (succ ~= false) then
                 local org = nut.org.new()
                 org.id = orgID
                 nut.org.loaded[orgID] = org
@@ -55,6 +62,7 @@ if (SERVER) then
     end
 
     function nut.org.delete(id)
+<<<<<<< HEAD
         local org = nut.org.loaded[id]
         
         if (org) then
@@ -104,12 +112,17 @@ if (SERVER) then
                 callback()
             end
         end)
+=======
+        nut.org.loaded[id]:unsync()
+        nut.org.loaded[id] = nil
+        nut.db.query("DELETE FROM nut_organization WHERE _id IN (" .. id .. ")")
+>>>>>>> style: Beautify the codebase
     end
 
     function nut.org.load(id, callback)
         local org = nut.org.new()
 
-        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization WHERE _id IN ("..id..")", function(data)
+        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization WHERE _id IN (" .. id .. ")", function(data)
             if (data) then
                 for k, v in ipairs(data) do
                     local org = nut.org.new()
@@ -118,9 +131,9 @@ if (SERVER) then
                     org.level = tonumber(v._level)
                     org.experience = tonumber(v._experience)
                     org.data = pon.decode(v._data)
-
                     nut.org.loaded[org.id] = org
 
+<<<<<<< HEAD
                     nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
                         if (data) then
                             for k, v in ipairs(data) do
@@ -155,6 +168,9 @@ if (SERVER) then
                     nut.org.loaded[org.id] = org
 
                     nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
+=======
+                    nut.db.query("SELECT _orgID, _charID, _rank FROM nut_orgmembers WHERE _orgID IN (" .. id .. ")", function(data)
+>>>>>>> style: Beautify the codebase
                         if (data) then
                             for k, v in ipairs(data) do
                                 local rank = tonumber(v._rank)
@@ -173,6 +189,7 @@ if (SERVER) then
     end
 end
 
+<<<<<<< HEAD
 if (SERVER) then
     function PLUGIN:PlayerInitialSpawn(client)
         nut.org.syncAll(client)
@@ -192,6 +209,20 @@ if (SERVER) then
                         char:getData("organizationRank")
                     }
                 end
+=======
+-- load org information when character's organization is not loaded in the server's memory.
+function PLUGIN:CharacterLoaded(id)
+    local char = nut.char.loaded[id]
+
+    if (char) then
+        local orgID = char:getOrganization()
+
+        if (orgID and orgID > 0) then
+            if (not nut.org.loaded[orgID]) then
+                nut.org.load(orgID, function(org)
+                    org:sync()
+                end)
+>>>>>>> style: Beautify the codebase
             end
         end
         netstream.Start(client, "nutOrgCharSync", fookinData)
@@ -205,18 +236,34 @@ if (SERVER) then
         end)
     end
 
+<<<<<<< HEAD
     function PLUGIN:CanChangeOrganizationVariable(client, key, value)
         return true
     end
+=======
+    local fookinData = {}
+
+    for k, v in ipairs(player.GetAll()) do
+        if (v == client) then
+            continue
+        end
+
+        local char = v:getChar()
+>>>>>>> style: Beautify the codebase
 
     function PLUGIN:CanCreateOrganization(client)
         local char = client:getChar()
 
+<<<<<<< HEAD
         if (char) then
             if (char:getOrganizationInfo()) then
                 return false
             else
                 return true
+=======
+            if (char:getOrganization() ~= -1) then
+                fookinData[id] = {char:getData("organization"), char:getData("organizationRank")}
+>>>>>>> style: Beautify the codebase
             end
         end
 
@@ -230,6 +277,7 @@ if (SERVER) then
     function PLUGIN:PlayerCanJoinOrganization()
         return true
     end
+<<<<<<< HEAD
 end
 
 if (CLIENT) then
@@ -256,12 +304,36 @@ if (CLIENT) then
                     for k, v in pairs(data) do
                         org[k] = v
                     end
+=======
+
+    netstream.Start(client, "nutOrgCharSync", fookinData)
+end
+
+if (CLIENT) then
+    netstream.Hook("nutOrgCharSync", function(data)
+        for id, syncDat in pairs(data) do
+            local character = nut.char.loaded[id]
+
+            if (character) then
+                character.vars.data = character.vars.data or {}
+                character:getData()["organization"] = syncDat[1]
+                character:getData()["organizationRank"] = syncDat[2]
+            end
+        end
+    end)
+
+    --sync specific server organization data
+    netstream.Hook("nutOrgSync", function(id, data)
+        if (data) then
+            local org = nut.org.new()
+>>>>>>> style: Beautify the codebase
 
                     nut.org.loaded[id] = org
                 end
             end
         end)
 
+<<<<<<< HEAD
         --sync specific server organization data
         netstream.Hook("nutOrgSync", function(id, data)
             if (data) then
@@ -270,6 +342,35 @@ if (CLIENT) then
                 for k, v in pairs(data) do
                     org[k] = v
                 end
+=======
+            nut.org.loaded[id] = org
+        else
+            print("got org sync request but no data found")
+        end
+    end)
+
+    netstream.Hook("nutOrgRemove", function(id)
+        nut.org.loaded[id] = nil
+    end)
+
+    --sync 
+    netstream.Hook("nutOrgSyncValue", function(id, key, value)
+        if (nut.org.loaded[id]) then
+            nut.org.loaded[id][key] = value
+        end
+    end)
+
+    netstream.Hook("nutOrgSyncData", function(id, key, value)
+        print(id, key, value)
+
+        if (nut.org.loaded[id] and nut.org.loaded[id].data) then
+            nut.org.loaded[id].data[key] = value
+        end
+    end)
+
+    netstream.Hook("nutOrgSyncMember", function(id, rank, charID, isChange)
+        local org = nut.org.loaded[id]
+>>>>>>> style: Beautify the codebase
 
                 nut.org.loaded[id] = org
             else
@@ -336,6 +437,7 @@ else
             if (char) then
                 local org = nut.org.loaded[orgID]
 
+<<<<<<< HEAD
                 if (org) then
                     local bool, reason = char:canJoinOrganization()
 
@@ -424,7 +526,10 @@ else
             end
         end)
     end
+=======
+    netstream.Hook("nutOrgSyncOfflineMembers", function(id, data) end)
+else
+>>>>>>> style: Beautify the codebase
 end
-
 --TODO: on player change the name, update the organization db!
 --TODO: on player deletes the character, wipe out organization data!
