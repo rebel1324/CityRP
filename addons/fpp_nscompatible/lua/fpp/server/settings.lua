@@ -362,8 +362,9 @@ local function ShareProp(ply, cmd, args)
                 end
             end
         end
-    end -- This is for sharing prop per utility
+    end
 
+    -- This is for sharing prop per utility
     FPP.recalculateCanTouch(player.GetAll(), {ent})
 end
 
@@ -623,8 +624,9 @@ local function AddGroup(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = name, optional: 2 = allowdefault
+    end
 
+    -- Args: 1 = name, optional: 2 = allowdefault
     local name = string.lower(args[1])
     local allowdefault = tonumber(args[2]) or 1
 
@@ -658,8 +660,9 @@ local function RemoveGroup(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = name
+    end
 
+    -- Args: 1 = name
     local name = string.lower(args[1])
 
     if not FPP.Groups[name] then
@@ -694,8 +697,9 @@ local function GroupChangeAllowDefault(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = groupname, 2 = new value 1/0
+    end
 
+    -- Args: 1 = groupname, 2 = new value 1/0
     local name = string.lower(args[1])
     local newval = tonumber(args[2])
 
@@ -717,8 +721,9 @@ local function GroupAddTool(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = groupname, 2 = tool
+    end
 
+    -- Args: 1 = groupname, 2 = tool
     local name = args[1]
     local tool = string.lower(args[2])
 
@@ -748,8 +753,9 @@ local function GroupRemoveTool(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = groupname, 2 = tool
+    end
 
+    -- Args: 1 = groupname, 2 = tool
     local name = args[1]
     local tool = string.lower(args[2])
 
@@ -782,8 +788,9 @@ local function PlayerSetGroup(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end -- Args: 1 = player, 2 = group
+    end
 
+    -- Args: 1 = player, 2 = group
     local name = args[1]
     local group = string.lower(args[2])
 
@@ -1044,8 +1051,9 @@ local function SetToolRestrict(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end --FPP_restricttool <toolname> <type(admin/team)> <toggle(1/0)>
+    end
 
+    --FPP_restricttool <toolname> <type(admin/team)> <toggle(1/0)>
     local toolname = args[1]
     local RestrictWho = tonumber(args[2]) or args[2] -- "team" or "admin"
     local teamtoggle = tonumber(args[4]) --this argument only exists when restricting a tool for a team
@@ -1090,8 +1098,9 @@ local function RestrictToolPerson(ply, cmd, args)
         FPP.Notify(ply, "Invalid argument(s)", false)
 
         return
-    end --FPP_restricttoolperson <toolname> <userid> <disallow, allow, remove(0,1,2)>
+    end
 
+    --FPP_restricttoolperson <toolname> <userid> <disallow, allow, remove(0,1,2)>
     local toolname = args[1]
     local target = Player(tonumber(args[2]))
     local access = tonumber(args[3])

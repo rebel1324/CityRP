@@ -81,8 +81,9 @@ function ents.FindInsideRotatedBox(centre, min, max, ang)
     end
 
     return entities
-end -- thanks avon
+end
 
+-- thanks avon
 function FindError(str, wide)
     local path, linenum
     path, linenum = string.gmatch(str, "(.+)%.lua:(%d+):")()

@@ -128,156 +128,105 @@ if (CLIENT) then
         end
     end)
 else
-<<<<<<< HEAD
-	local PLUGIN = PLUGIN
-
-	function PLUGIN:LoadData()
-		if (true) then return end
-		
-		local savedTable = self:getData() or {}
-
-		for k, v in ipairs(savedTable) do
-			local stove = ents.Create(v.class)
-			stove:SetPos(v.pos)
-			stove:SetAngles(v.ang)
-			stove:Spawn()
-			stove:Activate()
-		end
-	end
-	
-	function PLUGIN:SaveData()
-		if (true) then return end
-
-		local savedTable = {}
-
-		for k, v in ipairs(ents.GetAll()) do
-			if (v:isStove()) then
-				table.insert(savedTable, {class = v:GetClass(), pos = v:GetPos(), ang = v:GetAngles()})
-			end
-		end
-
-		self:setData(savedTable)
-	end
-	
-	function PLUGIN:CharacterPreSave(character)
-		local savedHunger = math.Clamp(CurTime() - character.player:getHunger(), 0, PLUGIN.hungrySeconds)
-		character:setData("hunger", savedHunger)
-	end
-
-	function PLUGIN:PlayerLoadedChar(client, character, lastChar)
-		if (character:getData("hunger")) then
-			client:setNetVar("hunger", CurTime() - character:getData("hunger"))
-		else
-			client:setNetVar("hunger", CurTime())
-		end
-	end
-
-	function PLUGIN:PlayerDeath(client)
-		client.refillHunger = true
-	end
-
-	function PLUGIN:PlayerSpawn(client)
-		if (client.refillHunger) then
-			client:setNetVar("hunger", CurTime())
-			client.refillHunger = false
-		end
-	end
-
-	local thinkTime = CurTime()
-	function PLUGIN:PlayerPostThink(client)
-		if (thinkTime < CurTime()) then
-			local percent = (1 - client:getHungerPercent())
-
-			if (percent <= 0) then
-				if (client:Alive() and client:Health() <= 0) then
-					client:Kill()
-				else
-					client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
-				end
-			end
-
-			thinkTime = CurTime() + nut.config.get("hungerTime", .1)
-		end
-	end
+    return nil < nil < nil < nil < nil < nil < nil < HEAD
 end
 
-nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
-	data = {min = 0, max = 600},
-	category = "schema"
-})
-=======
-    local PLUGIN = PLUGIN
+PLUGIN = PLUGIN
 
-    function PLUGIN:LoadData()
-        if (true) then return end
-        local savedTable = self:getData() or {}
+function PLUGIN:LoadData()
+    if (true) then return end
+    local savedTable = self:getData() or {}
 
-        for k, v in ipairs(savedTable) do
-            local stove = ents.Create(v.class)
-            stove:SetPos(v.pos)
-            stove:SetAngles(v.ang)
-            stove:Spawn()
-            stove:Activate()
+    for k, v in ipairs(savedTable) do
+        local stove = ents.Create(v.class)
+        stove:SetPos(v.pos)
+        stove:SetAngles(v.ang)
+        stove:Spawn()
+        stove:Activate()
+    end
+end
+
+function PLUGIN:SaveData()
+    if (true) then return end
+    local savedTable = {}
+
+    for k, v in ipairs(ents.GetAll()) do
+        if (v:isStove()) then
+            table.insert(savedTable, {
+                class = v:GetClass(),
+                pos = v:GetPos(),
+                ang = v:GetAngles()
+            })
         end
     end
 
-    function PLUGIN:SaveData()
-        if (true) then return end
-        local savedTable = {}
+    self:setData(savedTable)
+end
 
-        for k, v in ipairs(ents.GetAll()) do
-            if (v:isStove()) then
-                table.insert(savedTable, {
-                    class = v:GetClass(),
-                    pos = v:GetPos(),
-                    ang = v:GetAngles()
-                })
+function PLUGIN:CharacterPreSave(character)
+    local savedHunger = math.Clamp(CurTime() - character.player:getHunger(), 0, PLUGIN.hungrySeconds)
+    character:setData("hunger", savedHunger)
+end
+
+function PLUGIN:PlayerLoadedChar(client, character, lastChar)
+    if (character:getData("hunger")) then
+        client:setNetVar("hunger", CurTime() - character:getData("hunger"))
+    else
+        client:setNetVar("hunger", CurTime())
+    end
+end
+
+function PLUGIN:PlayerDeath(client)
+    client.refillHunger = true
+end
+
+function PLUGIN:PlayerSpawn(client)
+    if (client.refillHunger) then
+        client:setNetVar("hunger", CurTime())
+        client.refillHunger = false
+    end
+end
+
+local thinkTime = CurTime()
+
+function PLUGIN:PlayerPostThink(client)
+    if (thinkTime < CurTime()) then
+        local percent = (1 - client:getHungerPercent())
+
+        if (percent <= 0) then
+            if (client:Alive() and client:Health() <= 0) then
+                client:Kill()
+            else
+                client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
             end
         end
 
-        self:setData(savedTable)
-    end
-
-    function PLUGIN:CharacterPreSave(character)
-        local savedHunger = math.Clamp(CurTime() - character.player:getHunger(), 0, PLUGIN.hungrySeconds)
-        character:setData("hunger", savedHunger)
-    end
-
-    function PLUGIN:PlayerLoadedChar(client, character, lastChar)
-        if (character:getData("hunger")) then
-            client:setNetVar("hunger", CurTime() - character:getData("hunger"))
-        else
-            client:setNetVar("hunger", CurTime())
-        end
-    end
-
-    function PLUGIN:PlayerDeath(client)
-        client.refillHunger = true
-    end
-
-    function PLUGIN:PlayerSpawn(client)
-        if (client.refillHunger) then
-            client:setNetVar("hunger", CurTime())
-            client.refillHunger = false
-        end
-    end
-
-    local thinkTime = CurTime()
-
-    function PLUGIN:PlayerPostThink(client)
-        if (thinkTime < CurTime()) then
-            local percent = (1 - client:getHungerPercent())
-
-            if (percent <= 0) then
-                if (client:Alive() and client:Health() <= 0) then
-                    client:Kill()
-                else
-                    client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
-                end
-            end
-
-            thinkTime = CurTime() + nut.config.get("hungerTime")
-        end
+        thinkTime = CurTime() + nut.config.get("hungerTime", .1)
     end
 end
->>>>>>> style: Beautify the codebase
+
+return nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
+    data = {
+        min = 0,
+        max = 600
+    },
+    category = "schema"
+}) == nil == nil == PLUGIN{
+    someVariable = PLUGIN
+}:LoadData(), (true), self:getData() or {}, v, (savedTable){
+    stove = ents.Create(v.class)
+}:SetPos(v.pos), stove:SetAngles(v.ang), stove:Spawn(), stove:Activate(), PLUGIN:SaveData(), (true), savedTable{}, v, ipairs(ents.GetAll()), v:isStove(), table.insert(savedTable, {
+    class = v:GetClass(),
+    pos = v:GetPos(),
+    ang = v:GetAngles()
+}), self:setData(savedTable), PLUGIN:CharacterPreSave(character){
+    savedHunger = math.Clamp(CurTime() - character.player:getHunger(), 0, PLUGIN.hungrySeconds)
+}:setData("hunger", savedHunger), PLUGIN:PlayerLoadedChar(client, character, lastChar)(character:getData("hunger")), client:setNetVar("hunger", CurTime() - character:getData("hunger")), client:setNetVar("hunger", CurTime()), PLUGIN:PlayerDeath(client), client.refillHunger{
+    someVariable = true,
+PLUGIN:PlayerSpawn(client)
+}(client.refillHunger), client:setNetVar("hunger", CurTime()), client.refillHunger{
+    someVariable = false,
+    thinkTime = CurTime()
+}:PlayerPostThink(client)(thinkTime < CurTime()), percent(1 - client:getHungerPercent())(percent <= 0), client:Alive() and client:Health() <= 0, client:Kill(), client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth())){
+    thinkTime = CurTime() + nut.config.get("hungerTime") > nil > nil > nil > nil > nil > style:Beautify"someString"
+}

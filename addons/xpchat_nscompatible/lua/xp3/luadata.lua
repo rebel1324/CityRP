@@ -296,6 +296,7 @@ do
     function luadata.ReadFile(path)
         return luadata.Decode(file.Read(path) or "")
     end
-end -- file extension
+end
 
+-- file extension
 return luadata

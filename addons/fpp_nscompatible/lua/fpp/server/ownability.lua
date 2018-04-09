@@ -56,8 +56,9 @@ end
 
 local constraints = {
     ["phys_spring"] = true
-} -- These little buggers think they're not constraints, but they are
+}
 
+-- These little buggers think they're not constraints, but they are
 local function isConstraint(ent)
     return ent:IsConstraint() or constraints[ent:GetClass()] or false
 end
@@ -68,8 +69,9 @@ Touch calculations
 local hardWhiteListed = {
     ["worldspawn"] = true, -- constraints with the world
     ["gmod_anchor"] = true -- used in slider constraints with world
-} -- things that mess up when not allowed
+}
 
+-- things that mess up when not allowed
 local function calculateCanTouchForType(ply, ent, touchType)
     if not IsValid(ent) then
         return false, 0
@@ -453,8 +455,9 @@ function FPP.RecalculateConstrainedEntities(players, entities)
         for _, ent in pairs(entities) do
             if discovered[ent] then
                 continue
-            end -- We've seen this ent in a graph
+            end
 
+            -- We've seen this ent in a graph
             ent.FPPCanTouch = ent.FPPCanTouch or {}
             ent.FPPCanTouch[ply] = ent.FPPCanTouch[ply] or 0
             local left, right = 1, 2

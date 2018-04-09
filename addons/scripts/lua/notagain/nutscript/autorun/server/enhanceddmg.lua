@@ -43,15 +43,17 @@ function Damage(ply, hitgroup, dmginfo)
 
         if (ConVarExists("sandboxteams_npcdamage") and ply:Team() ~= 1) then
             return
-        end --Pseudo support for my sandbox teams addon
+        end
 
+        --Pseudo support for my sandbox teams addon
         local dmgpos = dmginfo:GetDamagePosition()
         local PelvisIndx = ply:LookupBone("ValveBiped.Bip01_Pelvis")
 
         if (PelvisIndx == nil) then
             return dmginfo
-        end --Maybe Hitgroup still works, need testing
+        end
 
+        --Maybe Hitgroup still works, need testing
         local PelvisPos = ply:GetBonePosition(PelvisIndx)
         local NutsDistance = dmgpos:Distance(PelvisPos)
         local LHandIndex = ply:LookupBone("ValveBiped.Bip01_L_Hand")

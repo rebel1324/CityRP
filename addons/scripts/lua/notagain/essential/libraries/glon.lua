@@ -213,7 +213,8 @@ decode_types = {
                 stage = not stage
             end
         end
-    end, -- table
+    end,
+    -- table
     [3] = function(reader, rtabs)
         local t, i, c, pos = {}, 1, reader:Next()
         rtabs[#rtabs + 1] = t
@@ -230,17 +231,20 @@ decode_types = {
                 i = i + 1
             end
         end
-    end, -- array
+    end,
+    -- array
     [4] = function(reader)
         reader:Next()
 
         return false
-    end, -- false boolean
+    end,
+    -- false boolean
     [5] = function(reader)
         reader:Next()
 
         return true
-    end, -- true boolean
+    end,
+    -- true boolean
     [6] = function(reader)
         local s, c, pos, e = "", reader:Next()
 
@@ -267,7 +271,8 @@ decode_types = {
         end
 
         return n
-    end, -- number
+    end,
+    -- number
     [7] = function(reader)
         local s, c, pos, e = "", reader:Next()
 
@@ -295,7 +300,8 @@ decode_types = {
                 s = s .. c
             end
         end
-    end, -- string
+    end,
+    -- string
     [8] = function(reader)
         local x = decode_types[6](reader)
         reader:StepBack()
@@ -304,7 +310,8 @@ decode_types = {
         local z = decode_types[6](reader)
 
         return Vector(x, y, z)
-    end, -- Vector
+    end,
+    -- Vector
     [9] = function(reader)
         local p = decode_types[6](reader)
         reader:StepBack()
@@ -313,13 +320,15 @@ decode_types = {
         local r = decode_types[6](reader)
 
         return Angle(p, y, r)
-    end, -- Angle
+    end,
+    -- Angle
     [10] = function(reader) return Entity(decode_types[6](reader)) end, -- Entity
     [11] = function(reader)
         local num = decode_types[6](reader)
 
         return player.GetByID(num)
-    end, -- Player
+    end,
+    -- Player
     [12] = function(reader, rtabs)
         local t = decode_types[2](reader, rtabs)
         local d = EffectData()
@@ -329,7 +338,8 @@ decode_types = {
         end
 
         return d
-    end, -- CEffectData
+    end,
+    -- CEffectData
     [13] = function(reader) return GetConVar(decode_types[7](reader)) end, -- ConVar
     [14] = function(reader)
         local ent = Entity(decode_types[6](reader))
@@ -340,7 +350,8 @@ decode_types = {
         end
 
         return ent:GetPhysicsObjectNum(bone)
-    end, -- PhysicsObject
+    end,
+    -- PhysicsObject
     [15] = function(reader)
         local r = decode_types[6](reader)
         reader:StepBack()
@@ -351,17 +362,20 @@ decode_types = {
         local a = decode_types[6](reader)
 
         return Color(r, g, b, a)
-    end, -- Color
+    end,
+    -- Color
     [253] = function(reader)
         reader:Next()
 
         return -math.huge
-    end, -- -math.huge
+    end,
+    -- -math.huge
     [254] = function(reader)
         reader:Next()
 
         return math.huge
-    end, -- math.huge
+    end,
+    -- math.huge
     [255] = function(reader, rtabs) return rtabs[decode_types[6](reader) - 1] end -- Reference
 }
 

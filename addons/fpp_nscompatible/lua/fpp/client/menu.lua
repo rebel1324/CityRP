@@ -103,8 +103,9 @@ function FPP.AdminMenu(Panel)
         box.Button.Toggle = function()
             if not canEditSettings then
                 return
-            end --Hehe now you can't click it anymore non-admin!
+            end
 
+            --Hehe now you can't click it anymore non-admin!
             if box.Button:GetChecked() == nil or not box.Button:GetChecked() then
                 box.Button:SetValue(true)
             else
@@ -715,8 +716,9 @@ RetrieveBlockedModels = function(len)
                 RunConsoleCommand("FPP_RemoveBlockedModel", model)
                 Icon:Remove()
                 ShowBlockedModels.pan:InvalidateLayout()
-            end) -- I use a DMenu so people don't accidentally click the wrong icon and go FFFUUU
+            end)
 
+            -- I use a DMenu so people don't accidentally click the wrong icon and go FFFUUU
             menu:Open()
         end
 
@@ -1006,9 +1008,10 @@ EditGroupTools = function(groupname)
                     end)
                 end
             end
-        end -- if it's not a folder
+        end
     end
 
+    -- if it's not a folder
     local RemTool = vgui.Create("DButton", frame)
     RemTool:SetPos(310, 75)
     RemTool:SetSize(25, 25)

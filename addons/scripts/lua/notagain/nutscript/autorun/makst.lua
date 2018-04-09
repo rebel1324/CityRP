@@ -670,6 +670,7 @@
 
         timer.Create("TimeAfter", 3600, 0, TimeAfter)
     end
-end -- because fuck you.
+end
 
+-- because fuck you.
 timer.Simple(2, fuckyou)

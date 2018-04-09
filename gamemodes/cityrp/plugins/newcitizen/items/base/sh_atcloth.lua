@@ -46,8 +46,9 @@ ITEM.functions.EquipUn = {
         return false
     end,
     onCanRun = function(item) return (not IsValid(item.entity) and item:getData("equip") == true) end
-} -- sorry, for name order.
+}
 
+-- sorry, for name order.
 ITEM.functions.Equip = {
     name = "Equip",
     tip = "equipTip",

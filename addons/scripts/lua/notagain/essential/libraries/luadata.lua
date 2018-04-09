@@ -138,8 +138,9 @@ do
     function luadata.Hush(bool)
         luadata.Hushed = bool
     end
-end -- file extension
+end
 
+-- file extension
 do
     function luadata.AccessorFunc(tbl, func_name, var_name, nw, def)
         tbl["Set" .. func_name] = function(self, val)
@@ -200,13 +201,17 @@ do
 
         if SERVER then
             value = self:GetLuaDataOption("_nw" .. key)
-            if value then return value end
+
+            if value then
+                return value
+            end
         end
 
         value = self:GetNWString("ld_" .. key, false)
 
         return type(value) == "string" and glon.decode(value) or def
     end
-end -- option extension
+end
 
+-- option extension
 return luadata

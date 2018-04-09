@@ -229,7 +229,8 @@ function PLUGIN:PostPlayerLoadout(client)
         if (client:getChar()) then
             recoverCloth(client)
         end
-    end) -- to prevent getmodel failing.
+    end)
+    -- to prevent getmodel failing.
 end
 
 function PLUGIN:PlayerLoadedChar(client, netChar, prevChar)
@@ -247,6 +248,7 @@ function PLUGIN:PlayerLoadedChar(client, netChar, prevChar)
             if (client:getChar()) then
                 recoverCloth(client)
             end
-        end) -- to prevent getmodel failing.
+        end)
+        -- to prevent getmodel failing.
     end
 end

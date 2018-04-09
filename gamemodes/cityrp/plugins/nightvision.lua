@@ -128,7 +128,8 @@ if (CLIENT) then
                 for i2 = 1, 40 do
                     SetViewPort(rand(0, w / 4), i * 2, 1, 1)
                     Clear(0, 0, 0, rand(100, 150))
-                end -- 40 grains per every Y pixel
+                end
+                -- 40 grains per every Y pixel
             end
 
             End2D()
@@ -300,7 +301,8 @@ if (CLIENT) then
 
                         render.SetColorModulation(1, 1, 1)
                         render.SuppressEngineLighting(false)
-                    end -- since there is no proper way to check if the NPC is dead, we just check if the NPC has a nodraw effect on him
+                    end
+                    -- since there is no proper way to check if the NPC is dead, we just check if the NPC has a nodraw effect on him
                 elseif ent:GetClass() == "nut_item" then
                     render.SetColorModulation(0.02, 0.02, 0.02)
                     render.SuppressEngineLighting(true)
@@ -460,7 +462,8 @@ if (CLIENT) then
                         end
                     else
                         IsBrighter = false
-                    end -- If we're looking from darkness into somewhere bright
+                    end
+                    -- If we're looking from darkness into somewhere bright
                 end
             end
         end

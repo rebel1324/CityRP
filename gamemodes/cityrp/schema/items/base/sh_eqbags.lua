@@ -59,8 +59,9 @@ ITEM.functions.EquipUn = {
         return false
     end,
     onCanRun = function(item) return (not IsValid(item.entity) and item:getData("equip") == true) end
-} -- sorry, for name order.
+}
 
+-- sorry, for name order.
 -- On player eqipped the item, Gives a weapon to player and load the ammo data from the item.
 ITEM.functions.Equip = {
     name = "Equip",

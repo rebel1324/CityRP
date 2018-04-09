@@ -190,8 +190,9 @@ local function e2AntiMinge()
             for k, v in pairs(ConstrainedEnts) do
                 v:SetCollisionGroup(COLLISION_GROUP_WEAPON)
             end
-        end -- Includes original entity
+        end
 
+        -- Includes original entity
         return applyForce(self, args, ...)
     end
 end

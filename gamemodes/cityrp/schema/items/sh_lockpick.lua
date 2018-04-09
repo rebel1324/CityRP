@@ -81,15 +81,21 @@ ITEM.functions.usef = {
         return false
     end,
     onCanRun = function(item)
-        if (IsValid(item.entity)) then return false end
+        if (IsValid(item.entity)) then
+            return false
+        end
+
         local client = item.player
 
         if (CLIENT) then
             client = LocalPlayer()
         end
 
-        if (client:getNetVar("picking")) then return false end
+        if (client:getNetVar("picking")) then
+            return false
+        end
 
         return true
     end
-} -- sorry, for name order.
+}
+-- sorry, for name order.

@@ -12,8 +12,9 @@ end
 
 function FileName()
     return GetSource():GetFileFromFilename():Left(-1)
-end -- or Filename?
+end
 
+-- or Filename?
 function AddToResource()
     AddCSLuaFile(Path())
 end

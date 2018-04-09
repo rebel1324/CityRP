@@ -83,8 +83,9 @@ function ENT:Process(granted)
         if (IsValid(self)) then
             self:Reset()
         end
-    end) -- 0.25 after last timer
+    end)
 
+    -- 0.25 after last timer
     if (granted) then
         self:EmitSound("buttons/button9.wav")
         local storage = self:GetParent()

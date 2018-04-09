@@ -254,10 +254,9 @@ addmetatable(ents, {
 })
 
 addmetatable(player, {
-    __call = function(tbl, a) --if a and a~="" then
---    return pairs(player.FindByClass(a))
+    __call = function(tbl, a) --    return pairs(player.FindByClass(a))
 --else
-return pairs(player.GetAll()) end
+return pairs(player.GetAll()) end --if a and a~="" then
 })
 
 -- end

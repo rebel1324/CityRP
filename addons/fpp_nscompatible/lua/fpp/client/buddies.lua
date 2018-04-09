@@ -15,8 +15,9 @@ function FPP.LoadBuddies()
                 toolgun = v.toolgun,
                 playeruse = v.playeruse,
                 entitydamage = v.entitydamage
-            } --Put all the buddies in the table
+            }
 
+            --Put all the buddies in the table
             for num, ply in pairs(player.GetAll()) do
                 if ply:SteamID() == v.steamid then
                     -- update the name
@@ -24,7 +25,8 @@ function FPP.LoadBuddies()
                     FPP.Buddies[v.steamid].name = ply:Nick()
                     RunConsoleCommand("FPP_SetBuddy", ply:UserID(), v.physgun, v.gravgun, v.toolgun, v.playeruse, v.entitydamage)
                 end
-            end --If the buddies are in the server then add them serverside
+            end
+            --If the buddies are in the server then add them serverside
         end
     end
 end
@@ -52,8 +54,9 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
         toolgun = 0,
         playeruse = 0,
         entitydamage = 0
-    } -- Create if not there
+    }
 
+    -- Create if not there
     FPP.Buddies[SteamID][Type] = value
     local data = sql.Query("SELECT * FROM FPP_Buddies WHERE steamid = " .. sql.SQLStr(SteamID) .. ";")
 
@@ -71,7 +74,8 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
         if v:SteamID() == SteamID then
             RunConsoleCommand("FPP_SetBuddy", v:UserID(), FPP.Buddies[SteamID].physgun, FPP.Buddies[SteamID].gravgun, FPP.Buddies[SteamID].toolgun, FPP.Buddies[SteamID].playeruse, FPP.Buddies[SteamID].entitydamage)
             --Don't break because there can be people(bots actually) with the same steam ID
-        end -- If the person you're adding is in the server then add him serverside
+        end
+        -- If the person you're adding is in the server then add him serverside
     end
 
     local ShouldRemove = true -- Remove the buddy if he isn't buddy in anything anymore
@@ -92,7 +96,8 @@ function FPP.SaveBuddy(SteamID, Name, Type, value)
                 RunConsoleCommand("FPP_SetBuddy", v:UserID(), "0", "0", "0", "0", "0")
             end
         end
-    end -- If everything = 0 then he's not your friend anymore
+    end
+    -- If everything = 0 then he's not your friend anymore
 end
 
 function FPP.NewBuddy(um)

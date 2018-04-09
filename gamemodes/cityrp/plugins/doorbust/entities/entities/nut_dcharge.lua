@@ -70,7 +70,8 @@ if (SERVER) then
                         v:fadeDeactivate()
                     end
                 end)
-            end -- isFadingdoor
+            end
+            -- isFadingdoor
         end
 
         local e = EffectData()

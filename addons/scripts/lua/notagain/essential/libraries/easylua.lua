@@ -278,7 +278,8 @@ function easylua.FindEntity(str)
         end
 
         return found[math.Clamp(idx % #found, 1, #found)] or NULL
-    end -- class
+    end
+    -- class
 end
 
 function easylua.CreateEntity(class, callback)
@@ -458,7 +459,8 @@ do
             if var:IsValid() then
                 return var
             end
-        end -- uh oh
+        end
+        -- uh oh
 
         return nil
     end
@@ -468,8 +470,9 @@ do
     end
 
     easylua.EnvMeta = setmetatable({}, META)
-end -- env meta
+end
 
+-- env meta
 function easylua.RunLua(ply, code, env_name)
     local data = {
         error = false,
@@ -620,8 +623,9 @@ function easylua.EndEntity(spawn, reinit)
     if not ENT.Base then
         ENT.Base = "base_anim"
         ENT.Type = ENT.Type or "anim"
-    end -- there can be Base without Type but no Type without base without redefining every function so um
+    end
 
+    -- there can be Base without Type but no Type without base without redefining every function so um
     scripted_ents.Register(ENT, ENT.ClassName)
 
     for key, entity in pairs(ents.FindByClass(ENT.ClassName)) do
@@ -682,6 +686,7 @@ do
     -- props = CreateAllFunction(function(v) return util.IsValidPhysicsObject(vm) end)
     bots = CreateAllFunction(function(v) return v:IsPlayer() and v:IsBot() end)
     these = CreateAllFunction(function(v) return table.HasValue(constraint.GetAllConstrainedEntities(this), v) end)
-end -- all
+end
 
+-- all
 return easylua

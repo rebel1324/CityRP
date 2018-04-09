@@ -64,8 +64,9 @@ ITEM.functions.toggle = {
 
         return false
     end
-} -- sorry, for name order.
+}
 
+-- sorry, for name order.
 ITEM.functions.use = {
     name = "Freq",
     tip = "useTip",
@@ -75,4 +76,5 @@ ITEM.functions.use = {
 
         return false
     end
-} -- sorry, for name order.
+}
+-- sorry, for name order.

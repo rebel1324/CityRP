@@ -85,7 +85,8 @@ function FPP.entGetTouchReason(ent, touchType)
         return not isnumber(owner) and IsValid(owner) and owner:Nick() or "Unknown player"
     elseif reasonNr == 6 then
         return "Buddy (" .. (IsValid(owner) and owner:Nick() or "Unknown player") .. ")"
-    end -- convert owner to the actual player
+    end
+    -- convert owner to the actual player
 
     return reason
 end

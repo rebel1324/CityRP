@@ -319,8 +319,9 @@ local function CW20_HUD_REPLACEMENT()
                 local aiming = self.dt.State == CW_AIMING
                 bulletDisplayAlpha = aiming and 255 or self.HUD_3D2DAlpha
                 bulletDisplayOffset = aiming and -255 or 0
-            end -- if we have more than 1 firemode for the current weapon, we don't let the firemode display fade and instead reposition it a bit to let the player see what firemode he's using while aiming
+            end
 
+            -- if we have more than 1 firemode for the current weapon, we don't let the firemode display fade and instead reposition it a bit to let the player see what firemode he's using while aiming
             surface.SetTexture(bullet)
             surface.SetDrawColor(0, 0, 0, bulletDisplayAlpha)
 

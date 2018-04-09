@@ -49,8 +49,9 @@ ITEM.functions.use = {
             healPlayer(item, item.player, item.player, item.healAmount, item.healSeconds)
         end
     end
-} -- sorry, for name order.
+}
 
+-- sorry, for name order.
 -- On player uneqipped the item, Removes a weapon from the player and keep the ammo in the item.
 ITEM.functions.usef = {
     name = "Use Forward",
@@ -70,4 +71,5 @@ ITEM.functions.usef = {
         return false
     end,
     onCanRun = function(item) return (not IsValid(item.entity)) end
-} -- sorry, for name order.
+}
+-- sorry, for name order.

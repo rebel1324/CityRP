@@ -49,8 +49,9 @@ local function MergeInfo(data, state, noreplace, silent, ignorename)
     if data.UserID then
         data.userid = data.userid or data.UserID
         data.UserID = nil
-    end -- Garry somehow mangles AT LEAST this in gameevent.Listen
+    end
 
+    -- Garry somehow mangles AT LEAST this in gameevent.Listen
     local uid = data.userid
     assert(uid ~= nil)
     local info = eventcache[uid]

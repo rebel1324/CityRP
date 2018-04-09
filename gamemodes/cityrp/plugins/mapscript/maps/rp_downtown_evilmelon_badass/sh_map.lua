@@ -84,8 +84,9 @@ if (SERVER) then
 
         if (client.FAGGOT) then
             bool = client:GetPos():WithinAABox(minVector, maxVector)
-        end -- 김치새끼들은 하면 또해
+        end
 
+        -- 김치새끼들은 하면 또해
         if (bool) then
             local ocData = nut.class.list[tonumber(oldclass)]
             local ncData = nut.class.list[tonumber(class)]

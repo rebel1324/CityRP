@@ -62,224 +62,261 @@ function ENT:BuildMeshObj()
             u = 0,
             v = 0,
             normal = -up
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin - right * sizex - forward * sizey - up * sizez,
             u = upu,
             v = 0,
             normal = -up
-        }, -- --
+        },
+        -- --
         {
             pos = origin + right * sizex - forward * sizey - up * sizez,
             u = upu,
             v = upv,
             normal = -up
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin - right * sizex + forward * sizey - up * sizez,
             u = upu,
             v = upv,
             normal = -up
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin + right * sizex - forward * sizey - up * sizez,
             u = upu,
             v = 0,
             normal = -up
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin + right * sizex + forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = -up
-        }, -- ++
+        },
+        -- ++
         -- up
         {
             pos = origin - right * sizex + forward * sizey + up * sizez,
             u = 0,
             v = 0,
             normal = up
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin + right * sizex + forward * sizey + up * sizez,
             u = 0,
             v = upv,
             normal = up
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin + right * sizex - forward * sizey + up * sizez,
             u = upu,
             v = upv,
             normal = up
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin + right * sizex - forward * sizey + up * sizez,
             u = upu,
             v = upv,
             normal = up
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin - right * sizex - forward * sizey + up * sizez,
             u = upu,
             v = 0,
             normal = up
-        }, -- --
+        },
+        -- --
         {
             pos = origin - right * sizex + forward * sizey + up * sizez,
             u = 0,
             v = 0,
             normal = up
-        }, -- -+
+        },
+        -- -+
         -- forward
         {
             pos = origin + right * sizex + forward * sizey + up * sizez,
             u = fou,
             v = fov,
             normal = forward
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin - right * sizex + forward * sizey + up * sizez,
             u = 0,
             v = fov,
             normal = forward
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin - right * sizex + forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = forward
-        }, -- --
+        },
+        -- --
         {
             pos = origin - right * sizex + forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = forward
-        }, -- --
+        },
+        -- --
         {
             pos = origin + right * sizex + forward * sizey - up * sizez,
             u = fou,
             v = 0,
             normal = forward
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin + right * sizex + forward * sizey + up * sizez,
             u = fou,
             v = fov,
             normal = forward
-        }, -- ++
+        },
+        -- ++
         -- backward
         {
             pos = origin + right * sizex - forward * sizey + up * sizez,
             u = fou,
             v = fov,
             normal = -forward
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin - right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = -forward
-        }, -- --
+        },
+        -- --
         {
             pos = origin - right * sizex - forward * sizey + up * sizez,
             u = 0,
             v = fov,
             normal = -forward
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin - right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = -forward
-        }, -- --
+        },
+        -- --
         {
             pos = origin + right * sizex - forward * sizey + up * sizez,
             u = fou,
             v = fov,
             normal = -forward
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin + right * sizex - forward * sizey - up * sizez,
             u = fou,
             v = 0,
             normal = -forward
-        }, -- +-
+        },
+        -- +-
         -- left
         {
             pos = origin - right * sizex + forward * sizey + up * sizez,
             u = riu,
             v = riv,
             normal = -right
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin - right * sizex - forward * sizey + up * sizez,
             u = 0,
             v = riv,
             normal = -right
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin - right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = -right
-        }, -- --
+        },
+        -- --
         {
             pos = origin - right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = -right
-        }, -- --
+        },
+        -- --
         {
             pos = origin - right * sizex + forward * sizey - up * sizez,
             u = riu,
             v = 0,
             normal = -right
-        }, -- +-
+        },
+        -- +-
         {
             pos = origin - right * sizex + forward * sizey + up * sizez,
             u = riu,
             v = riv,
             normal = -right
-        }, -- ++
+        },
+        -- ++
         -- right
         {
             pos = origin + right * sizex + forward * sizey + up * sizez,
             u = riu,
             v = riv,
             normal = right
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin + right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = right
-        }, -- --
+        },
+        -- --
         {
             pos = origin + right * sizex - forward * sizey + up * sizez,
             u = 0,
             v = riv,
             normal = right
-        }, -- -+
+        },
+        -- -+
         {
             pos = origin + right * sizex - forward * sizey - up * sizez,
             u = 0,
             v = 0,
             normal = right
-        }, -- --
+        },
+        -- --
         {
             pos = origin + right * sizex + forward * sizey + up * sizez,
             u = riu,
             v = riv,
             normal = right
-        }, -- ++
+        },
+        -- ++
         {
             pos = origin + right * sizex + forward * sizey - up * sizez,
             u = riu,
             v = 0,
             normal = right
-        } -- +-
-    } -- A table of 3 vertices that form a triangle
+        }
+    }
 
+    -- +-
+    -- A table of 3 vertices that form a triangle
     self.meshobj:BuildFromTriangles(verts) -- Load the vertices into the IMesh object
 end
 

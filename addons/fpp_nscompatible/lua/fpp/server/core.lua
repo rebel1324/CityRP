@@ -259,8 +259,9 @@ function FPP.Protect.GravGunPickup(ply, ent)
 
     if not IsValid(ent) then
         return
-    end -- You don't want a cross when looking at the floor while holding right mouse
+    end
 
+    -- You don't want a cross when looking at the floor while holding right mouse
     if ent:IsPlayer() then
         return
     end
@@ -541,8 +542,9 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
         elseif FPP.RestrictedToolsPlayers[tool][SteamID] == true then
             ignoreGeneralRestrictTool = true
         end
-    end --Player specific
+    end
 
+    --Player specific
     if not ignoreGeneralRestrictTool then
         local Group = FPP.Groups[FPP.GroupMembers[SteamID]] or FPP.Groups[ply:GetUserGroup()] or FPP.Groups.default -- What group is the player in. If not in a special group, then he's in default group
         local CanGroup = true
@@ -550,8 +552,9 @@ function FPP.Protect.CanTool(ply, trace, tool, ENT)
         if Group and ((Group.allowdefault and table.HasValue(Group.tools, tool)) or (not Group.allowdefault and not table.HasValue(Group.tools, tool))) then
             -- If the tool is NOT on the WHITELIST
             CanGroup = false
-        end -- If the tool is on the BLACKLIST or
+        end
 
+        -- If the tool is on the BLACKLIST or
         if FPP.RestrictedTools[tool] then
             if tonumber(FPP.RestrictedTools[tool].admin) == 1 and not ply:IsAdmin() then
                 FPP.Notify(ply, "Toolgun restricted! Admin only!", false)
@@ -774,8 +777,9 @@ function FPP.PlayerDisconnect(ply)
     timer.Simple(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnectedtime, function()
         if not tobool(FPP.Settings.FPP_GLOBALSETTINGS1.cleanupdisconnected) then
             return
-        end -- Settings can change in time.
+        end
 
+        -- Settings can change in time.
         for k, v in pairs(player.GetAll()) do
             if v:SteamID() == SteamID then
                 return
@@ -831,8 +835,9 @@ function FPP.PlayerInitialSpawn(ply)
                 end
             end
         end
-    end -- Check if the player has rejoined within the auto remove time
+    end
 
+    -- Check if the player has rejoined within the auto remove time
     local plys = {}
 
     for k, v in pairs(player.GetAll()) do
@@ -849,7 +854,8 @@ function FPP.PlayerInitialSpawn(ply)
         end
 
         FPP.recalculateCanTouch({ply}, ents.GetAll())
-    end) -- wait until the player's usergroup is initialized
+    end)
+    -- wait until the player's usergroup is initialized
 end
 
 hook.Add("PlayerInitialSpawn", "FPP.PlayerInitialSpawn", FPP.PlayerInitialSpawn)

@@ -304,94 +304,67 @@ nut.config.add("jailTime", 200, "Amount of seconds.", nil, {
     category = "schema"
 })
 
-<<<<<<< HEAD
-=======
-nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
+return nil < nil < nil < nil < nil < nil < HEAD == nil == nut.config.add("hungerTime", 1, "The time of which is deducted from hunger when not eating.", nil, {
     data = {
         min = 0,
         max = 600
     },
     category = "schema"
-})
-
->>>>>>> style: Beautify the codebase
-nut.config.add("tazeTime", 5, "The ammount of time someone is tazed for.", nil, {
+}) > nil > nil > nil > nil > nil > style:Beautify(the, codebase).config.add("tazeTime", 5, "The ammount of time someone is tazed for.", nil, {
     data = {
         min = 0,
         max = 600
     },
     category = "schema"
-})
-
-nut.config.add("incomeRate", .1, "Percentage of income.", nil, {
+}), nut.config.add("incomeRate", .1, "Percentage of income.", nil, {
     data = {
         min = 0,
         max = 100
     },
     category = "schema"
-})
-
-nut.config.add("dpBank", 10, "Percentage of Money to lose in Death Penalty.", nil, {
+}), nut.config.add("dpBank", 10, "Percentage of Money to lose in Death Penalty.", nil, {
     data = {
         min = 0,
         max = 100
     },
     category = "schema"
-})
-
-nut.config.add("potPerLaw", 4, "Week Pot limit.", nil, {
+}), nut.config.add("potPerLaw", 4, "Week Pot limit.", nil, {
     data = {
         min = 0,
         max = 10
     },
     category = "schema"
-})
-
-nut.config.add("bankFee", 5, "The Bank Transfer Fee (x% of Transfer Money).", nil, {
+}), nut.config.add("bankFee", 5, "The Bank Transfer Fee (x% of Transfer Money).", nil, {
     data = {
         min = 0,
         max = 100
     },
     category = "schema"
-})
-
-nut.config.add("startMoney", 5000, "Start money for new character.", nil, {
+}), nut.config.add("startMoney", 5000, "Start money for new character.", nil, {
     data = {
         min = 0,
         max = 50000
     },
     category = "schema"
-})
-
-nut.config.add("isSerious", false, "Turn on/off the serious mod of this schema", nil, {
+}), nut.config.add("isSerious", false, "Turn on/off the serious mod of this schema", nil, {
     category = "schema"
-})
-
-nut.config.add("deathMoney", true, "Lose money on death.", nil, {
+}), nut.config.add("deathMoney", true, "Lose money on death.", nil, {
     category = "penalty"
-})
-
-nut.config.add("deathWeapon", true, "Lose weapon on death.", nil, {
+}), nut.config.add("deathWeapon", true, "Lose weapon on death.", nil, {
     category = "penalty"
-})
-
-nut.config.add("afkDemote", 240, "afk Demote.", nil, {
+}), nut.config.add("afkDemote", 240, "afk Demote.", nil, {
     data = {
         min = 0,
         max = 1000
     },
     category = "schema"
-})
-
-nut.config.add("doorTax", 100, "door tax.", nil, {
+}), nut.config.add("doorTax", 100, "door tax.", nil, {
     data = {
         min = 0,
         max = 1000
     },
     category = "schema"
-})
-
-local function pianoOnly(client)
+}), function(client)
     local char = client:getChar()
 
     if (char) then
@@ -405,9 +378,7 @@ local function pianoOnly(client)
     end
 
     return
-end
-
-local function djOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -421,9 +392,7 @@ local function djOnly(client)
     end
 
     return
-end
-
-local function cookOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -437,9 +406,7 @@ local function cookOnly(client)
     end
 
     return
-end
-
-local function dealerOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -453,9 +420,7 @@ local function dealerOnly(client)
     end
 
     return
-end
-
-local function mobOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -474,9 +439,7 @@ local function mobOnly(client)
     end
 
     return
-end
-
-local function notLaw(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -495,9 +458,7 @@ local function notLaw(client)
     end
 
     return
-end
-
-local function docOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -507,9 +468,7 @@ local function docOnly(client)
     end
 
     return
-end
-
-local function busiOnly(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -519,9 +478,7 @@ local function busiOnly(client)
     end
 
     return
-end
-
-local function onlyLaw(client)
+end, function(client)
     local char = client:getChar()
 
     if (char) then
@@ -540,27 +497,16 @@ local function onlyLaw(client)
     end
 
     return
-end
-
-local function all(client)
-    return true
-end
-
-function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyCondition)
-    local condt = buyCondition or defaultCond
-
-    nut.bent.list[entClass] = {
-        class = entClass,
-        name = entName,
-        model = entModel,
-        max = entMax,
-        price = entPrice,
-        condition = condt
-    }
-
-    return nut.bent.list[entClass]
-end
-
+end, function(client) return true end, nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyCondition){
+    condt = buyCondition or defaultCond
+}.bent.list[entClass], {
+    class = entClass,
+    name = entName,
+    model = entModel,
+    max = entMax,
+    price = entPrice,
+    condition = condt
+}, nut.bent.list[entClass], nut.tips{'The salary comes directly into the bank, so cash is required.', 'Inventory can also be opened directly with F3.', 'Stats can be raised by repeating certain actions', 'Sometimes it can be a positive effect just to give it to people around you. ', 'Punch dolls give "only when you hit with a punch" experience', 'When you read a book, you get a lot of experience at a time, but the price is very high.', 'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.'}, nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw), nut.bent.add("moneyprinter_samsung", "models/props_c17/consolebox01a.mdl", "printerNameSamsung", 2, 1000, notLaw), nut.bent.add("moneyprinter_agple", "models/props_c17/consolebox01a.mdl", "printerNameLG", 2, 1000, notLaw), nut.bent.add("moneyprinter_lg", "models/props_c17/consolebox01a.mdl", "printerNameApple", 2, 1000, notLaw), nut.bent.add("nut_vnd_food", "models/props_wasteland/kitchen_stove002a.mdl", "foodVendor", 1, 800, cookOnly), nut.bent.add("nut_vnd_soda", "models/rebel1324/sodavendor.mdl", "sodaVendor", 1, 1000, cookOnly), nut.bent.add("nut_vnd_covfefe", "models/props/commercial/coffeemachine01.mdl", "coffeeVendor", 1, 4500, cookOnly), nut.bent.add("nut_microwave", "models/props/cs_office/microwave.mdl", "microwave", 2, 400, cookOnly), nut.bent.add("nut_stove", "models/props_c17/furnitureStove001a.mdl", "stove", 1, 1500, cookOnly), nut.bent.add("nut_d_lamp", "models/gonzo/weedb/lamp2.mdl", "weedLampName", 4, 800, mobOnly), nut.bent.add("nut_d_pot", "models/gonzo/weedb/pot2.mdl", "weedPotName", 20, 1000, mobOnly), nut.bent.add("nut_attrib_gun", "models/props_c17/doll01.mdl", "gunBoosterName", 2, 3000, dealerOnly), nut.bent.add("instrument_drumpad", "models/metasync/gpad.mdl", "launchPad", 1, 1000, djOnly), nut.bent.add("nut_vnd_medical", "models/rebel1324/medicvendor.mdl", "medicalVendorName", 1, 1000, docOnly), nut.bent.add("synthesizer", "models/tnf/synths.mdl", "synthesizer", 1, 3000, pianoOnly), nut.bent.add("synthesizer_guitar", "models/tnf/synth.mdl", "synthesizerGuitar", 1, 3000, pianoOnly), nut.bent.add("synthesizer_piano", "models/tnf/synth.mdl", "synthesizerPiano", 1, 3000, pianoOnly), nut.bent.add("synthesizer_violin", "models/tnf/synth.mdl", "synthesizerViolin", 1, 3000, pianoOnly), nut.bent.add("jukebox", "models/fallout3/jukebox.mdl", "jukebox", 1, 1000, djOnly), nut.bent.add("nut_seller", "models/rebel1324/nmrih_cash_register.mdl", "checkoutName", 1, 2500, all), nut.bent.add("nut_craftingtable", "models/props_wasteland/controlroom_desk001b.mdl", "craftingTable", 1, 500, all), nut.bent.add("nut_loadingtable", "models/props_wasteland/controlroom_desk001b.mdl", "loadingTable", 1, 500, all), nut.bent.add("sent_bingle_simplenoti", "models/props/cs_assault/chaintrainstationsign.mdl", "signSmall", 2, 400, all), nut.bent.add("sent_bingle_simplenoti_orlong", "models/squad/sf_plates/sf_plate2x5.mdl", "signMedium", 2, 400, all), nut.bent.add("sent_bingle_simplenoti_mdbig", "models/hunter/plates/plate1x3.mdl", "singBig", 2, 400, all), nut.bent.add("nut_attrib_punch", "models/props_lab/huladoll.mdl", "strBoosterName", 2, 1000, all), nut.bent.add("rprotect_terminal", "models/props_phx/rt_screen.mdl", "survTerminal", 1, 2000, all), nut.bent.add("rprotect_scanner", "models/Items/battery.mdl", "survScanner", 4, 1500, all), nut.bent.add("rprotect_camera", "models/tools/camera/camera.mdl", "survCamera", 1, 2000, all), nut.bent.add("bm2_bitminer_1", "models/bitminers2/bitminer_1.mdl", "bitminer", 1, 5000, busiOnly), nut.bent.add("bm2_bitminer_2", "models/bitminers2/bitminer_2.mdl", "bitminer2", 1, 8000, busiOnly), nut.bent.add("bm2_bitminer_rack", "models/bitminers2/bitminer_rack.mdl", "bitminerRack", 1, 5000, busiOnly), nut.bent.add("bm2_bitminer_server", "models/bitminers2/bitminer_2.mdl", "bitminerServer", 8, 25000, busiOnly), nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bitminerExtend", 1, 3000, busiOnly), nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly), nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly), nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly), nut.tips{'Remember, your salary is automatically deposited into your bank account. Make sure to bring cash!', 'Did you know? The inventory can also be opened directly by pressing \'F3\'.', 'Reptitive actions will help train your skills.', 'Did you know? Punching-bag dolls will train your strength skill when hit.', 'Did you know? Reading books are great for boosting your stats!', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'Did you know? Shooting target dolls will train your firearms skill.', 'Certain traders will only sell things to you if you have the right job.', 'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Did you know? You can earn ssome extra money using money printers.', 'Police receive rewards for confiscating money printers.', 'Please separate in-character chat and out of character chat!', 'Please separate in-character chat and out of character chat!', 'Please check MOTD and IC / OOC before asking for help.', 'Please check MOTD and IC / OOC before asking for help.', 'Please check MOTD and IC / OOC before asking for help.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.'}
 --[[
 nut.tips = {
 	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
@@ -574,46 +520,9 @@ nut.tips = {
 }
 ]]
 --Translated By AngryBaldMan
-nut.tips = {'The salary comes directly into the bank, so cash is required.', 'Inventory can also be opened directly with F3.', 'Stats can be raised by repeating certain actions', 'Sometimes it can be a positive effect just to give it to people around you. ', 'Punch dolls give "only when you hit with a punch" experience', 'When you read a book, you get a lot of experience at a time, but the price is very high.', 'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.'}
 --'Most items can be used immediately by pressing Ctrl and clicking.',
-nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
-nut.bent.add("moneyprinter_samsung", "models/props_c17/consolebox01a.mdl", "printerNameSamsung", 2, 1000, notLaw)
-nut.bent.add("moneyprinter_agple", "models/props_c17/consolebox01a.mdl", "printerNameLG", 2, 1000, notLaw)
-nut.bent.add("moneyprinter_lg", "models/props_c17/consolebox01a.mdl", "printerNameApple", 2, 1000, notLaw)
-nut.bent.add("nut_vnd_food", "models/props_wasteland/kitchen_stove002a.mdl", "foodVendor", 1, 800, cookOnly)
-nut.bent.add("nut_vnd_soda", "models/rebel1324/sodavendor.mdl", "sodaVendor", 1, 1000, cookOnly)
-nut.bent.add("nut_vnd_covfefe", "models/props/commercial/coffeemachine01.mdl", "coffeeVendor", 1, 4500, cookOnly)
-nut.bent.add("nut_microwave", "models/props/cs_office/microwave.mdl", "microwave", 2, 400, cookOnly)
-nut.bent.add("nut_stove", "models/props_c17/furnitureStove001a.mdl", "stove", 1, 1500, cookOnly)
-nut.bent.add("nut_d_lamp", "models/gonzo/weedb/lamp2.mdl", "weedLampName", 4, 800, mobOnly)
-nut.bent.add("nut_d_pot", "models/gonzo/weedb/pot2.mdl", "weedPotName", 20, 1000, mobOnly)
-nut.bent.add("nut_attrib_gun", "models/props_c17/doll01.mdl", "gunBoosterName", 2, 3000, dealerOnly)
-nut.bent.add("instrument_drumpad", "models/metasync/gpad.mdl", "launchPad", 1, 1000, djOnly) -- Gonna be removed soon
-nut.bent.add("nut_vnd_medical", "models/rebel1324/medicvendor.mdl", "medicalVendorName", 1, 1000, docOnly)
-nut.bent.add("synthesizer", "models/tnf/synths.mdl", "synthesizer", 1, 3000, pianoOnly)
-nut.bent.add("synthesizer_guitar", "models/tnf/synth.mdl", "synthesizerGuitar", 1, 3000, pianoOnly)
-nut.bent.add("synthesizer_piano", "models/tnf/synth.mdl", "synthesizerPiano", 1, 3000, pianoOnly)
-nut.bent.add("synthesizer_violin", "models/tnf/synth.mdl", "synthesizerViolin", 1, 3000, pianoOnly)
-nut.bent.add("jukebox", "models/fallout3/jukebox.mdl", "jukebox", 1, 1000, djOnly)
-nut.bent.add("nut_seller", "models/rebel1324/nmrih_cash_register.mdl", "checkoutName", 1, 2500, all)
-nut.bent.add("nut_craftingtable", "models/props_wasteland/controlroom_desk001b.mdl", "craftingTable", 1, 500, all)
-nut.bent.add("nut_loadingtable", "models/props_wasteland/controlroom_desk001b.mdl", "loadingTable", 1, 500, all)
-nut.bent.add("sent_bingle_simplenoti", "models/props/cs_assault/chaintrainstationsign.mdl", "signSmall", 2, 400, all)
-nut.bent.add("sent_bingle_simplenoti_orlong", "models/squad/sf_plates/sf_plate2x5.mdl", "signMedium", 2, 400, all)
-nut.bent.add("sent_bingle_simplenoti_mdbig", "models/hunter/plates/plate1x3.mdl", "singBig", 2, 400, all)
-nut.bent.add("nut_attrib_punch", "models/props_lab/huladoll.mdl", "strBoosterName", 2, 1000, all)
-nut.bent.add("rprotect_terminal", "models/props_phx/rt_screen.mdl", "survTerminal", 1, 2000, all)
-nut.bent.add("rprotect_scanner", "models/Items/battery.mdl", "survScanner", 4, 1500, all)
-nut.bent.add("rprotect_camera", "models/tools/camera/camera.mdl", "survCamera", 1, 2000, all)
+-- Gonna be removed soon
 --nut.bent.add("nut_vnd_covfefe_refill", "models/props/interior/coffee_maker.mdl", "coffeeVendorRefill", 1, 6000, all)
-nut.bent.add("bm2_bitminer_1", "models/bitminers2/bitminer_1.mdl", "bitminer", 1, 5000, busiOnly)
-nut.bent.add("bm2_bitminer_2", "models/bitminers2/bitminer_2.mdl", "bitminer2", 1, 8000, busiOnly)
-nut.bent.add("bm2_bitminer_rack", "models/bitminers2/bitminer_rack.mdl", "bitminerRack", 1, 5000, busiOnly)
-nut.bent.add("bm2_bitminer_server", "models/bitminers2/bitminer_2.mdl", "bitminerServer", 8, 25000, busiOnly)
-nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bitminerExtend", 1, 3000, busiOnly)
-nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly)
-nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly)
-nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly)
 --[[
 -- need to get better shit.
 local bentstr = nut.bent.add("nut_storage", "models/rebel1324/footlocker.mdl", "5x3 아이템 상자", 2, 1000, all)
@@ -702,5 +611,4 @@ nut.tips = {
 }
 ]]
 -- Translation by Omar Saleh Assadi / AngryBaldMan
-nut.tips = {'Remember, your salary is automatically deposited into your bank account. Make sure to bring cash!', 'Did you know? The inventory can also be opened directly by pressing \'F3\'.', 'Reptitive actions will help train your skills.', 'Did you know? Punching-bag dolls will train your strength skill when hit.', 'Did you know? Reading books are great for boosting your stats!', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.', 'Did you know? Shooting target dolls will train your firearms skill.', 'Certain traders will only sell things to you if you have the right job.', 'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Bug reports are resolved much quicker if you attach an image or video.', 'Did you know? You can earn ssome extra money using money printers.', 'Police receive rewards for confiscating money printers.', 'Please separate in-character chat and out of character chat!', 'Please separate in-character chat and out of character chat!', 'Please check MOTD and IC / OOC before asking for help.', 'Please check MOTD and IC / OOC before asking for help.', 'Please check MOTD and IC / OOC before asking for help.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.', 'Having an issue? You can file a report with an administrator using the report command.'}
 --'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',

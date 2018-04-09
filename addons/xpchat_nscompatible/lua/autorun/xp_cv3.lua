@@ -142,8 +142,9 @@ do
             chathud:TagPanic()
         end
     end)
-end -- chathud
+end
 
+-- chathud
 chatbox = include"xp3/chatbox.lua"
 
 chatgui = setmetatable({}, {
@@ -196,8 +197,9 @@ do
 
         return true
     end)
-end -- chatbox
+end
 
+-- chatbox
 chat.old_text = chat.old_text or chat.AddText
 
 function chat.AddText(...)
@@ -227,8 +229,9 @@ hook.Add("ChatText", "xp.receive", function(idx, name, text, type)
 
     if type == "darkrp" then
         return
-    end -- Compat for some weird stuff with darkrp
+    end
 
+    -- Compat for some weird stuff with darkrp
     chatbox.ParseInto(chatbox.GetChatFeed(), green, text)
     chathud:AddText(green, text)
 end)

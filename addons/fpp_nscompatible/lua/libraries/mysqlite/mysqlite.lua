@@ -445,7 +445,8 @@ if necessary and connects then
                         if queuePos + 1 > #queue then
                             if onFinished then
                                 onFinished()
-                            end -- All queries have finished
+                            end
+                            -- All queries have finished
 
                             return
                         end
@@ -525,8 +526,9 @@ if necessary and connects then
 
                         if not res.data or #res.data == 0 then
                             res.data = nil
-                        end -- compatibility with other backends
+                        end
 
+                        -- compatibility with other backends
                         if queryValue and callback then
                             return callback(res.data and res.data[1] and table.GetFirstValue(res.data[1]) or nil)
                         end

@@ -261,8 +261,9 @@ do
 
         return ok, msg
     end
-end -- helpers/usage
+end
 
+-- helpers/usage
 local receive_types = {
     all = "*a",
     line = "*l"
@@ -614,8 +615,9 @@ do
             function CLIENT:GetTimeout()
                 return self.TimeoutLength or math.huge
             end
-        end -- timeout
+        end
 
+        -- timeout
         function CLIENT:Remove()
             if self.remove_me then
                 return
@@ -725,8 +727,9 @@ do
         end
 
         luasocket.ClientMeta = CLIENT
-    end -- client
+    end
 
+    -- client
     do
         local SERVER = {}
         SERVER.__index = SERVER
@@ -818,11 +821,16 @@ do
         end
 
         function SERVER:Think()
-            if not self.ready then return end
+            if not self.ready then
+                return
+            end
 
             if self.socket_type == "udp" then
                 local data, ip, port = self.socket:receivefrom()
-                if ip == "timeout" then return end
+
+                if ip == "timeout" then
+                    return
+                end
 
                 if not data then
                     self:DebugPrintf("errored: %s", ip)
@@ -932,9 +940,11 @@ do
         end
 
         luasocket.ServerMeta = SERVER
-    end -- server
-end -- tcp socket meta
+    end
+    -- server
+end
 
+-- tcp socket meta
 luasocket.Initialized()
 luasocket.Initialized = nil
 

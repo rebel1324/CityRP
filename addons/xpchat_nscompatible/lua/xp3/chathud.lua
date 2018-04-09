@@ -59,26 +59,30 @@ chathud.Tags = {
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- r
+            },
+            -- r
             [2] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- g
+            },
+            -- g
             [3] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- b
+            },
+            -- b
             [4] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 255
-            } -- a
+            }
         },
+        -- a
         TagStart = function(self, markup, buffer, args)
             self._fgColor = buffer.fgColor
         end,
@@ -97,26 +101,30 @@ chathud.Tags = {
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- r
+            },
+            -- r
             [2] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- g
+            },
+            -- g
             [3] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 255
-            }, -- b
+            },
+            -- b
             [4] = {
                 type = "number",
                 min = 0,
                 max = 255,
                 default = 0
-            } -- a
+            }
         },
+        -- a
         TagStart = function(self, markup, buffer, args)
             self._bgColor = buffer.bgColor
         end,
@@ -132,8 +140,9 @@ chathud.Tags = {
             [1] = {
                 type = "string",
                 default = "DermaDefault"
-            } -- fontname
+            }
         },
+        -- fontname
         TagStart = function(self, markup, buffer, args)
             self._font = buffer.font
         end,
@@ -149,20 +158,23 @@ chathud.Tags = {
             [1] = {
                 type = "number",
                 default = 0
-            }, --h
+            },
+            --h
             [2] = {
                 type = "number",
                 min = 0,
                 max = 1,
                 default = 1
-            }, --s
+            },
+            --s
             [3] = {
                 type = "number",
                 min = 0,
                 max = 1,
                 default = 1
-            } --v
+            }
         },
+        --v
         TagStart = function(self, markup, buffer, args)
             self._fgColor = buffer.fgColor
         end,
@@ -182,20 +194,23 @@ chathud.Tags = {
             [1] = {
                 type = "number",
                 default = 0
-            }, --h
+            },
+            --h
             [2] = {
                 type = "number",
                 min = 0,
                 max = 1,
                 default = 1
-            }, --s
+            },
+            --s
             [3] = {
                 type = "number",
                 min = 0,
                 max = 1,
                 default = 1
-            } --v
+            }
         },
+        --v
         TagStart = function(self, markup, buffer, args)
             self._bgColor = buffer.bgColor
         end,
@@ -211,12 +226,14 @@ chathud.Tags = {
             [1] = {
                 type = "number",
                 default = 0
-            }, -- x
+            },
+            -- x
             [2] = {
                 type = "number",
                 default = 0
-            } -- y
+            }
         },
+        -- y
         TagStart = function(self, markup, buffer, args)
             self.mtrx = Matrix()
         end,
@@ -233,8 +250,9 @@ chathud.Tags = {
             [1] = {
                 type = "number",
                 default = 0
-            } -- y
+            }
         },
+        -- y
         TagStart = function(self, markup, buffer, args)
             self.mtrx = Matrix()
         end,
@@ -252,12 +270,14 @@ chathud.Tags = {
             [1] = {
                 type = "number",
                 default = 1
-            }, -- x
+            },
+            -- x
             [2] = {
                 type = "number",
                 default = 1
-            } -- y
+            }
         },
+        -- y
         TagStart = function(self, markup, buffer, args)
             self.mtrx = Matrix()
         end,

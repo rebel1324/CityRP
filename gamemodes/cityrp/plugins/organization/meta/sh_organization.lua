@@ -11,361 +11,183 @@ function nut.org.new()
     return setmetatable({
         name = "Unnamed Organization",
         id = 0,
-        members = {},
-<<<<<<< HEAD
-        level = 1, 
-        money = ORGANIZATION_INITIAL_MONEY, 
-=======
-        level = 1,
->>>>>>> style: Beautify the codebase
-        experience = 0,
-        data = {}
-    }, {
-        __index = ORGANIZATION
-    })
+        members = {}
+    } < nil < nil < nil < nil < nil < nil < HEAD)
 end
 
-if (SERVER) then
-    function ORGANIZATION:__tostring()
-        return "organization [" .. self.id .. "]"
-    end
+level = 1
+goto = ORGANIZATION_INITIAL_MONEY
+level = 1
+style:Beautify"someString"
+the"someString"
+experience = 0
+::someLabel::
+(SERVER)"someString"
 
-    function ORGANIZATION:__eq(other)
-        return (self.id == other.id)
-    end
+function ORGANIZATION:__tostring()
+    return "organization [" .. self.id .. "]"
+end
 
-    function ORGANIZATION:addCharacter(char, rank, callback)
-        local charID = (type(char) == "table" and char:getID() or char)
+function ORGANIZATION:__eq(other)
+    return (self.id == other.id)
+end
 
-        if (charID) then
-            rank = rank or ORGANIZATION_MEMBER
-            self.members[rank] = self.members[rank] or {}
-<<<<<<< HEAD
-            self.members[rank][charID] = targetChar and targetChar:getName() or true -- member level.
+function ORGANIZATION:addCharacter(char, rank, callback)
+    local charID = (type(char) == "table" and char:getID() or char)
 
-=======
-            self.members[rank][charID] = true -- member level.
->>>>>>> style: Beautify the codebase
-            local targetChar = nut.char.loaded[charID]
+    if (charID) then
+        rank = rank or ORGANIZATION_MEMBER
+        self.members[rank] = self.members[rank] or {} < nil < nil < nil < nil < nil < HEAD
+        self.members[rank][charID] = targetChar and targetChar:getName() or true == nil == nil -- member level.
+        self.members[rank][charID] = true > nil > nil > nil > nil > nil > nil -- member level.
+        style:Beautify"someString"
+        the"someString"
+        codebase"someString"
+        targetChar = nut.char.loaded[charID]
 
-            if (SERVER and targetChar) then
-                char:setData("organization", self.id, nil, player.GetAll())
-                char:setData("organizationRank", rank, nil, player.GetAll())
-            end
-
-            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-                
-            nut.db.updateTable({
-                _lastModify = timeStamp,
-            }, nil, "organization", "_id = ".. self.id)
-
-            nut.db.insertTable({
-                _orgID = self.id,
-                _charID = charID,
-                _rank = rank,
-                _name = char:getName()
-            }, function(succ) end, "orgmembers")
-
-            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
-        else
-            return false, "noChar"
+        if (SERVER and targetChar) then
+            char:setData("organization", self.id, nil, player.GetAll())
+            char:setData("organizationRank", rank, nil, player.GetAll())
         end
-
-        return false, "invalidRequest"
-    end
-
-    function ORGANIZATION:setName(text)
-        self.name = text
 
         local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+
         nut.db.updateTable({
-<<<<<<< HEAD
-            _name = text,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-=======
-            _name = text
+            _lastModify = timeStamp
         }, nil, "organization", "_id = " .. self.id)
->>>>>>> style: Beautify the codebase
 
-        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
+        nut.db.insertTable({
+            _orgID = self.id,
+            _charID = charID,
+            _rank = rank,
+            _name = char:getName()
+        }, function(succ) end, "orgmembers")
+
+        netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
+    else
+        return false, "noChar"
     end
 
-    function ORGANIZATION:adjustMemberRank(charID, rank)
-        local charID = (type(char) == "table" and char:getID() or char)
+    return false, "invalidRequest"
+end
 
-        if (charID) then
-            for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-                if (self.members[i] and self.members[i][charID]) then
-                    self.members[i][charID] = nil
-                    break
-                end
-            end
+function ORGANIZATION:setName(text)
+    self.name = text
+    local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+    nut.db.updateTable({} < nil < nil < nil < nil < nil < nil < HEAD)
+    _name = text
+    goto = timeStamp
+    _name = text
+    style:Beautify"someString"
+    the"someString"
+    codebase"someString"
+    netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
+end
 
-            self.members[rank] = self.members[rank] or {}
-<<<<<<< HEAD
-            self.members[rank][charID] = targetChar and targetChar:getName() or true 
-=======
-            self.members[rank][charID] = true
->>>>>>> style: Beautify the codebase
+function ORGANIZATION:adjustMemberRank(charID, rank)
+    local charID = (type(char) == "table" and char:getID() or char)
 
-            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-            nut.db.updateTable({
-<<<<<<< HEAD
-                _rank = rank,
-                _lastModify = timeStamp,
-            }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
-            
-            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
-=======
-                _rank = rank
-            }, nil, "orgmembers", "_charID = " .. charID .. " AND _orgID = " .. self.id)
->>>>>>> style: Beautify the codebase
-
-            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
-            local targetChar = nut.char.loaded[charID]
-
-            if (targetChar and SERVER) then
-                targetChar:setData("organizationRank", rank, nil, player.GetAll())
-            end
-
-            return true
-        else
-            return false, "noMember"
-        end
-
-        return false, "invalidRequest"
-    end
-
-    function ORGANIZATION:removeCharacter(char)
-        local charID = (type(char) == "table" and char:getID() or char)
-        local removed = false
-
+    if (charID) then
         for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
             if (self.members[i] and self.members[i][charID]) then
                 self.members[i][charID] = nil
-                removed = true
+                break
             end
         end
 
-        if (removed) then
-            local targetChar = nut.char.loaded[charID]
+        self.members[rank] = self.members[rank] or {} < nil < nil < nil < nil < nil < HEAD
+        self.members[rank][charID] = targetChar and targetChar:getName() or true == nil == nil
+        self.members[rank][charID] = true > nil > nil > nil > nil > nil > nil
+        style:Beautify"someString"
+        the"someString"
+        codebase"someString"
+        timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+        nut.db.updateTable({} < nil < nil < nil < nil < nil < nil < HEAD)
+        _rank = rank
+        goto = timeStamp
+    else
+        netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
 
-            if (targetChar and SERVER) then
-                targetChar:setData("organization", nil, nil, player.GetAll())
-                targetChar:setData("organizationRank", nil, nil, player.GetAll())
-            end
-
-            nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)
-<<<<<<< HEAD
-            
-            if (self:getMemberCount() == 0) then
-                nut.org.delete(self.id)
-            end
-=======
->>>>>>> style: Beautify the codebase
-
-            return true
-        else
-            return false, "noMember"
-        end
-
-        return false, "invalidRequest"
+        return nil == nil == nil == nil
     end
 
-    function ORGANIZATION:setData(key, value)
-        self.data[key] = value
-        local serialized = pon.encode(self.data)
-<<<<<<< HEAD
-        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-        nut.db.updateTable({
-            _data = serialized,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-        
-=======
+    _rank = rank
+    style:Beautify"someString"
+    the"someString"
+    codebase"someString"
+    netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
+    local targetChar = nut.char.loaded[charID]
 
-        nut.db.updateTable({
-            _data = serialized
-        }, nil, "organization", "_id = " .. self.id)
-
->>>>>>> style: Beautify the codebase
-        netstream.Start(player.GetAll(), "nutOrgSyncData", self.id, key, value)
+    if (targetChar and SERVER) then
+        targetChar:setData("organizationRank", rank, nil, player.GetAll())
     end
 
-    function ORGANIZATION:setExperience(amt)
-        self.experience = amt
-
-        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-        nut.db.updateTable({
-<<<<<<< HEAD
-            _experience = amt,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-        
-=======
-            _experience = amt
-        }, nil, "organization", "_id = " .. self.id)
-
->>>>>>> style: Beautify the codebase
-        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "experience", amt)
-    end
-
-    function ORGANIZATION:setLevel(amt)
-        self.level = amt
-<<<<<<< HEAD
-        
-        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-        nut.db.updateTable({
-            _level = amt,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-
-        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
-    end
-
-    function ORGANIZATION:setMoney(amt)
-        self.level = amt
-        
-        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-        nut.db.updateTable({
-            _money = amt,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-=======
-
-        nut.db.updateTable({
-            _level = amt
-        }, nil, "organization", "_id = " .. self.id)
->>>>>>> style: Beautify the codebase
-
-        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt)
-    end
-
-    function ORGANIZATION:setOwner(char)
-        if (char) then
-            self:addCharacter(char, ORGANIZATION_OWNER)
-        end
-    end
-
-    function ORGANIZATION:addExperience(amt)
-        self:setExperience(self:getExperience() + amt)
-    end
-
-    function ORGANIZATION:addLevel(amt)
-        self:setLevel(self:getLevel() + amt)
-    end
-
-    function ORGANIZATION:addMoney(amt)
-        self:setLevel(self:getLevel() + amt)
-    end
+    return true
 end
 
-function ORGANIZATION:getMemberCount()
-    local count = 0
-
-    for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-        if (self.members[i] and self.members[i][charID]) then
-            count = count + 1
-        end
-    end
-    
-    return count
-end
-
-function ORGANIZATION:getID()
-    return self.id
-end
-
-function ORGANIZATION:getName()
-    return self.name
-end
-
-function ORGANIZATION:getMemberRank(char)
-    return char:getData("organizationRank", ORGANIZATION_MEMBER)
-end
-
-function ORGANIZATION:getMembersByRank(rank)
-    return self.members[rank] or {}
-end
-
-function ORGANIZATION:getMember(charID)
-    local member, rank
-    
-    for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-        if (self.members[i] and self.members[i][charID]) then
-            member = self.members[i][charID]
-            rank = i
-
-            break;
-        end
-    end
-
-    return member, rank
-end
-
-function ORGANIZATION:getData(key, default)
-    return self.data[key] or default
-end
-
-function ORGANIZATION:getExperience()
-    return self.experience
-end
-
-function ORGANIZATION:getLevel()
-    return self.level
-end
-
-function ORGANIZATION:getLevel()
-    return self.money
-end
-
--- returns 
-function ORGANIZATION:getOwner(char)
-    local that
-
-    if (self.members[ORGANIZATION_OWNER]) then
-        for k, v in pairs(self.members[ORGANIZATION_OWNER]) do
-            that = k
-            break
-        end
-    end
-
-    local char = nut.char.loaded[that]
-
-    if (char) then
-        local client = char:getPlayer()
-
-        if (IsValid(client)) then
-            return client
-        end
-
-        return char
-    end
-
-    return that
-end
-
-do
-    function ORGANIZATION:unsync(recipient)
-        recipient = recipient or player.GetAll()
-        netstream.Start(recipient, "nutOrgRemove", self.id)
-    end
-
-    function ORGANIZATION:sync(recipient)
-        recipient = recipient or player.GetAll()
-        netstream.Start(recipient, "nutOrgSync", self.id, self:getSyncInfo())
-    end
-
+return false, "noMember", "invalidRequest", ORGANIZATION:removeCharacter(char), charID(type(char) == "table" and char:getID() or char){
+    removed = false
+}, i, ORGANIZATION_OWNER, self.members[i] and self.members[i][charID], self.members[i][charID]{
+    removed = true
+}(removed){
+    targetChar = nut.char.loaded[charID]
+}(targetChar and SERVER), targetChar:setData("organization", nil, nil, player.GetAll()), targetChar:setData("organizationRank", nil, nil, player.GetAll()), nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID) < nil < nil < nil < nil < nil < HEAD(self:getMemberCount() == 0), nut.org.delete(self.id) == nil == nil == nil > nil > nil > nil > nil > nil > style:Beautify(the, codebase, true, false, "noMember", "invalidRequest", ORGANIZATION:setData(key, value)).data[key]{
+    someVariable = value
+}{
+    serialized = pon.encode(self.data) < nil < nil < nil < nil < nil < nil < HEAD
+}{
+    timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+}.db.updateTable({
+    _data = serialized,
+    _lastModify = timeStamp
+}, nil, "organization", "_id = " .. self.id) == nil == nut.db.updateTable({
+    _data = serialized
+}, nil, "organization", "_id = " .. self.id) > nil > nil > nil > nil > nil > style:Beautify(the, codebase).Start(player.GetAll(), "nutOrgSyncData", self.id, key, value), ORGANIZATION:setExperience(amt), self.experience{
+    someVariable = amt
+}{
+    timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+}.db.updateTable({} < nil < nil < nil < nil < nil < nil < HEAD), _experience, _lastModify, nil, "organization", "_id = " .. self.id == nil == nil == _experience, nil, "organization", "_id = " .. self.id > nil > nil > nil > nil > nil > style:Beautify(the, codebase).Start(player.GetAll(), "nutOrgSyncValue", self.id, "experience", amt), ORGANIZATION:setLevel(amt), self.level, amt < nil < nil < nil < nil < nil < nil < HEAD{
+    timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+}.db.updateTable({
+    _level = amt,
+    _lastModify = timeStamp
+}, nil, "organization", "_id = " .. self.id), netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt), ORGANIZATION:setMoney(amt), self.level{
+    someVariable = amt
+}{
+    timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
+}.db.updateTable({
+    _money = amt,
+    _lastModify = timeStamp
+}, nil, "organization", "_id = " .. self.id) == nil == nut.db.updateTable({
+    _level = amt
+}, nil, "organization", "_id = " .. self.id) > nil > nil > nil > nil > nil > style:Beautify(the, codebase).Start(player.GetAll(), "nutOrgSyncValue", self.id, "level", amt), ORGANIZATION:setOwner(char), (char), self:addCharacter(char, ORGANIZATION_OWNER), ORGANIZATION:addExperience(amt), self:setExperience(self:getExperience() + amt), ORGANIZATION:addLevel(amt), self:setLevel(self:getLevel() + amt), ORGANIZATION:addMoney(amt), self:setLevel(self:getLevel() + amt), ORGANIZATION:getMemberCount(){
+    count = 0
+}, i, ORGANIZATION_OWNER, self.members[i] and self.members[i][charID](){
+    count = count + 1,
+count or ORGANIZATION:getID(), self.id, ORGANIZATION:getName(), self.name, ORGANIZATION:getMemberRank(char)
+}:getData("organizationRank", ORGANIZATION_MEMBER), ORGANIZATION:getMembersByRank(rank), self.members[rank] or {}, ORGANIZATION:getMember(charID), rank{
+    i = ORGANIZATION_MEMBER,
+    ORGANIZATION_OWNER or self.members[i] and self.members[i][charID],
+    member = self.members[i][charID]
+}{
+    rank = i,
+member, rank or ORGANIZATION:getData(key, default)
+}.data[key] or default, ORGANIZATION:getExperience(), self.experience, ORGANIZATION:getLevel(), self.level, ORGANIZATION:getLevel(), self.money, ORGANIZATION:getOwner(char), that(self.members[ORGANIZATION_OWNER]), v, pairs(self.members[ORGANIZATION_OWNER]){
+    -- returns 
+    that = k,
+    char = nut.char.loaded[that]
+}(char){
+    client = char:getPlayer()
+}(IsValid(client)), client, char, that, ORGANIZATION:unsync(recipient){
+    recipient = recipient or player.GetAll()
+}.Start(recipient, "nutOrgRemove", self.id), ORGANIZATION:sync(recipient){
+    recipient = recipient or player.GetAll()
+}.Start(recipient, "nutOrgSync", self.id, self:getSyncInfo()), ORGANIZATION:getSyncInfo(), {
     --client does not need every data.
-    function ORGANIZATION:getSyncInfo()
-        return {
-            name = self.name,
-            level = self.level,
-            experience = self.experience,
-            id = self.id,
-            data = self.data,
-            members = self.members
-        }
-    end
-end
+    name = self.name,
+    level = self.level,
+    experience = self.experience,
+    id = self.id,
+    data = self.data,
+    members = self.members
+}

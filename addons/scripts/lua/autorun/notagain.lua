@@ -119,8 +119,9 @@ function notagain.Load()
             for _, name in pairs((file.Find(path .. "*.lua", "LUA"))) do
                 AddCSLuaFile(path .. name)
             end
-        end -- libraries
+        end
 
+        -- libraries
         local path = addon_dir .. "/" .. addon_name .. ".lua"
 
         if file.Exists(path, "LUA") then
@@ -156,7 +157,8 @@ function notagain.Load()
                     include(dir .. "server/" .. name)
                 end
             end
-        end -- autorun
+        end
+        -- autorun
     end
 end
 

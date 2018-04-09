@@ -58,7 +58,10 @@ ITEM.functions.use = {
         return false
     end,
     onCanRun = function(item)
-        if (IsValid(item.entity)) then return false end
+        if (IsValid(item.entity)) then
+            return false
+        end
+
         local client = item.player
 
         if (CLIENT) then
@@ -67,4 +70,5 @@ ITEM.functions.use = {
 
         return true
     end
-} -- sorry, for name order.
+}
+-- sorry, for name order.

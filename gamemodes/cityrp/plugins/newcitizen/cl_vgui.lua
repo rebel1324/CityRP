@@ -92,7 +92,8 @@ end
 function PANEL:setupTitle(ab)
     function self.title:Paint(w, h)
         nut.util.drawText(L"outfit", w / 2, h / 2, color_white, 1, 1, "nutOutfitFont")
-    end --(text, x, y, color, alignX, alignY, font, alpha)
+    end
+    --(text, x, y, color, alignX, alignY, font, alpha)
 end
 
 function PANEL:setupBottom(ab, ac)
@@ -144,7 +145,8 @@ function PANEL:setupContents(ab)
 
     function self.cost:Paint(w, h)
         nut.util.drawText(L("outfitCost", nut.currency.get(self.price)), w / 2, h / 2, color_white, 1, 1, "nutMediumFont")
-    end --(text, x, y, color, alignX, alignY, font, alpha)
+    end
+    --(text, x, y, color, alignX, alignY, font, alpha)
 end
 
 function PANEL:updateCost()

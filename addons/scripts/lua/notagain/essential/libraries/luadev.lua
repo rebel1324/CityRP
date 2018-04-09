@@ -28,8 +28,9 @@ do
     luadev.STAGE_COMPILED = 2
     luadev.STAGE_POST = 3
     luadev.STAGE_PREPROCESSING = 4
-end -- enums
+end
 
+-- enums
 do
     function luadev.MakeExtras(pl, extrat)
         if pl and isentity(pl) and pl:IsPlayer() then
@@ -137,8 +138,9 @@ do
 
         return IsValid(cl) and cl or nil
     end
-end -- helpers
+end
 
+-- helpers
 function luadev.Compress(data)
     return util.Compress(data)
 end
@@ -338,8 +340,9 @@ function luadev.RealFilePath(name)
     elseif name:find("^data/") then
         name = name:gsub("^data/", "")
         RelativePath = 'data/' .. name
-    end -- search cache
+    end
 
+    -- search cache
     if not file.Exists(RelativePath, searchpath) then
         return nil
     end
@@ -366,8 +369,9 @@ function luadev.AutoComplete(_, commandName, args)
     elseif name:find("^data/") then
         name = name:gsub("^data/", "")
         RelativePath = 'data/' .. name
-    end -- search cache
+    end
 
+    -- search cache
     local searchstr = RelativePath .. "*"
     local files, folders = file.Find(searchstr, searchpath or "MOD")
     files = files or {}

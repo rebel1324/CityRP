@@ -12,8 +12,9 @@ hook.Add("CanTool", "FPP_CL_CanTool", function(ply, trace, tool)
     if IsValid(trace.Entity) and not FPP.canTouchEnt(trace.Entity, "Toolgun") then
         return false
     end
-end) -- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
+end)
 
+-- Prevent client from SEEING his toolgun shoot while it doesn't shoot serverside.
 -- This looks weird, but whenever a client touches an ent he can't touch, without the code it'll look like he picked it up. WITH the code it really looks like he can't
 -- besides, when the client CAN pick up a prop, it also looks like he can.
 hook.Add("PhysgunPickup", "FPP_CL_PhysgunPickup", function(ply, ent)
@@ -62,8 +63,9 @@ function FPP.AddNotify(str, type)
 
     if not IsValid(LocalPlayer()) then
         return
-    end -- I honestly got this error
+    end
 
+    -- I honestly got this error
     LocalPlayer():EmitSound("npc/turret_floor/click1.wav", 10, 100)
 end
 
