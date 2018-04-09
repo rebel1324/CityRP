@@ -19,6 +19,30 @@ nut.util.include("vgui/cl_orgmanager.lua")
 nut.util.include("vgui/cl_orgjoiner.lua")
 nut.util.include("sv_database.lua")
 
+if (CLIENT) then
+    local myPanel
+    hook.Add("CreateMenuButtons", "nutEntities", function(tabs)
+        tabs["organization"] = function(panel)
+            if (hook.Run("BuildEntitiesMenu", panel) != false) then
+                local org = LocalPlayer():getChar():getOrganizationInfo()
+
+                myPanel = panel
+                if (org) then
+                    panel:Add("nutOrgManager")
+                else
+                    panel:Add("nutOrgJoiner")
+                end
+            end
+        end
+    end)
+
+    netstream.Hook("nutOrgJoined", function()
+        if (IsValid(myPanel)) then
+            myPanel:Add("nutOrgManager")
+        end
+    end)
+end
+
 if (SERVER) then
     function nut.org.create(callback)
         local ponNull = pon.encode({})
