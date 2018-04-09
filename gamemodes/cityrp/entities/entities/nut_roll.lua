@@ -1,26 +1,15 @@
-AddCSLuaFile()
-DEFINE_BASECLASS( "base_anim" )
+﻿AddCSLuaFile()
+DEFINE_BASECLASS("base_anim")
 
 do
-	REWARDMULTIPLY = {
-		0,
-		2,
-		3,
-		4,
-		8,
-		10,
-		15,
-		20,
-		40,
-	}
-	TRYMONEY = 100
+    REWARDMULTIPLY = {0, 2, 3, 4, 8, 10, 15, 20, 40}
+    TRYMONEY = 100
 
-	if (SERVER) then
-		GAMEDIFFICULTY = 25
-		CHEERUPRANK = 2
-		CHEERUPCHANCE = 0.10
-		
-		--[[local aaoa = {}
+    if (SERVER) then
+        GAMEDIFFICULTY = 25
+        CHEERUPRANK = 2
+        CHEERUPCHANCE = 0.10
+        --[[local aaoa = {}
 		local tries = 1000000
 		for i = 1, tries do
 			local random = math.Rand(0, 1)
@@ -43,236 +32,228 @@ do
 		print(cost, profit)
 		
 		PrintTable(aaoa)]]
-		
-	end
-	
+    end
 end
 
 ENT.PrintName = "Casino Slot Machine"
 ENT.Author = "Black Tea"
 ENT.Information = "An edible slotmachine"
 ENT.Category = "Nutscript - CityRP"
-
 ENT.Editable = false
 ENT.Spawnable = true
 ENT.AdminOnly = true
 
 function ENT:SetupDataTables()
-
 end
- 
-function ENT:SpawnFunction( ply, tr, ClassName )
-	if ( !tr.Hit ) then return end
 
-	local ent = ents.Create( ClassName )
-	ent:Spawn()
-	ent:Activate()
+function ENT:SpawnFunction(ply, tr, ClassName)
+    if (not tr.Hit) then
+        return
+    end
 
-	local ca, cb = ent:GetCollisionBounds()
-	ent:SetPos( tr.HitPos + cb )
+    local ent = ents.Create(ClassName)
+    ent:Spawn()
+    ent:Activate()
+    local ca, cb = ent:GetCollisionBounds()
+    ent:SetPos(tr.HitPos + cb)
 
-	return ent
+    return ent
 end
 
 function ENT:Initialize()
-	if (SERVER) then
-		self:SetModel("models/props/slotmachine/slotmachinefinal.mdl")
-		self:PhysicsInit(SOLID_VPHYSICS)
-		self:SetMoveType(MOVETYPE_VPHYSICS)
-		self:SetUseType(SIMPLE_USE)
-		self:SetGame(false)
-		self:SetResult(0)
+    if (SERVER) then
+        self:SetModel("models/props/slotmachine/slotmachinefinal.mdl")
+        self:PhysicsInit(SOLID_VPHYSICS)
+        self:SetMoveType(MOVETYPE_VPHYSICS)
+        self:SetUseType(SIMPLE_USE)
+        self:SetGame(false)
+        self:SetResult(0)
+        local physicsObject = self:GetPhysicsObject()
 
-		local physicsObject = self:GetPhysicsObject()
-
-		if (IsValid(physicsObject)) then
-			physicsObject:Wake()
-		end
-	end
+        if (IsValid(physicsObject)) then
+            physicsObject:Wake()
+        end
+    end
 end
 
 function ENT:CanBeActivated()
-	return (!self.activate)
+    return (not self.activate)
 end
 
 function ENT:Use(client, call)
-	if (client:IsPlayer() and self:CanBeActivated()) then
-		local char = client:getChar()
-		local cash = char:getMoney()
-		local amount = TRYMONEY - cash 
+    if (client:IsPlayer() and self:CanBeActivated()) then
+        local char = client:getChar()
+        local cash = char:getMoney()
+        local amount = TRYMONEY - cash
 
-		if (amount > 0) then
-			client:notifyLocalized("cantAfford")
+        if (amount > 0) then
+            client:notifyLocalized("cantAfford")
 
-			return false
-		end
+            return false
+        end
 
-		self:EmitSound("ambient/levels/labs/coinslot1.wav")
-		char:takeMoney(TRYMONEY)
-		if (SERVER) then
-			self:PlayGame(client)
-		end
-	end
+        self:EmitSound("ambient/levels/labs/coinslot1.wav")
+        char:takeMoney(TRYMONEY)
+
+        if (SERVER) then
+            self:PlayGame(client)
+        end
+    end
 end
-	
+
 if (SERVER) then
-	function ENT:PlayGame(client)
-		local random = math.Rand(0, 1)
-		local rewardIndex = math.floor((random^GAMEDIFFICULTY * #REWARDMULTIPLY)) + 1
+    function ENT:PlayGame(client)
+        local random = math.Rand(0, 1)
+        local rewardIndex = math.floor((random ^ GAMEDIFFICULTY * #REWARDMULTIPLY)) + 1
 
-		if (rewardIndex <= CHEERUPRANK and (math.Rand(0, 1) <= CHEERUPCHANCE)) then
-			rewardIndex = rewardIndex + 1
-		end
+        if (rewardIndex <= CHEERUPRANK and (math.Rand(0, 1) <= CHEERUPCHANCE)) then
+            rewardIndex = rewardIndex + 1
+        end
 
-		local broadBool = true
-		if (rewardIndex != 1) then
-			broadBool = false
-		end
+        local broadBool = true
 
-		self.activate = client
-		self:SetGame(true)
-		self:SetResult(rewardIndex)
+        if (rewardIndex ~= 1) then
+            broadBool = false
+        end
 
-		-- this will do the stuff.
-		timer.Create("slotGiveReward_fuckoff_" .. client:SteamID() .. self:EntIndex(), 2, 1, function()
-			if (self and self:IsValid()) then
-				self:SetGame(false)
+        self.activate = client
+        self:SetGame(true)
+        self:SetResult(rewardIndex)
 
-				self:GiveReward(client, rewardIndex)
-			end
-		end)
-	end
+        -- this will do the stuff.
+        timer.Create("slotGiveReward_fuckoff_" .. client:SteamID() .. self:EntIndex(), 2, 1, function()
+            if (self and self:IsValid()) then
+                self:SetGame(false)
+                self:GiveReward(client, rewardIndex)
+            end
+        end)
+    end
 
-	function ENT:GiveReward(client, rewardIndex)
-		local money = TRYMONEY * REWARDMULTIPLY[rewardIndex]
-		local char = client:getChar()
+    function ENT:GiveReward(client, rewardIndex)
+        local money = TRYMONEY * REWARDMULTIPLY[rewardIndex]
+        local char = client:getChar()
 
-		if (char and money > 0) then
-			client:notifyLocalized("moneyTaken", nut.currency.get(money))
-			char:giveMoney(money)
-		end
+        if (char and money > 0) then
+            client:notifyLocalized("moneyTaken", nut.currency.get(money))
+            char:giveMoney(money)
+        end
 
-		self.activate = nil
-	end
+        self.activate = nil
+    end
 else
-	ENT.modelData = {}
+    ENT.modelData = {}
+    local MODEL = {}
+    MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
+    MODEL.angle = Angle(0, 0, 0)
+    MODEL.position = Vector(-12, 1.5, -5)
+    MODEL.scale = Vector(1, 1, 1)
+    ENT.modelData["roll1"] = MODEL
+    local MODEL = {}
+    MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
+    MODEL.angle = Angle(0, 0, 0)
+    MODEL.position = Vector(-2.5, 1.5, -5)
+    MODEL.scale = Vector(1, 1, 1)
+    ENT.modelData["roll2"] = MODEL
+    local MODEL = {}
+    MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
+    MODEL.angle = Angle(0, 0, 0)
+    MODEL.position = Vector(6.5, 1.5, -5)
+    MODEL.scale = Vector(1, 1, 1)
+    ENT.modelData["roll3"] = MODEL
 
-	local MODEL = {}
-	MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
-	MODEL.angle = Angle(0, 0, 0)
-	MODEL.position = Vector(-12, 1.5, -5)
-	MODEL.scale = Vector(1, 1, 1)
-	ENT.modelData["roll1"] = MODEL
+    function ENT:Initialize()
+        self.models = {}
 
-	local MODEL = {}
-	MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
-	MODEL.angle = Angle(0, 0, 0)
-	MODEL.position = Vector(-2.5, 1.5, -5)
-	MODEL.scale = Vector(1, 1, 1)
-	ENT.modelData["roll2"] = MODEL
+        for k, v in pairs(self.modelData) do
+            self.models[k] = ClientsideModel(v.model, RENDERGROUP_BOTH)
+            self.models[k]:SetColor(v.color or color_white)
+            self.models[k]:SetNoDraw(true)
+            self.models[k]:SetSkin(1)
 
-	local MODEL = {}
-	MODEL.model = "models/props/slotmachine/spin_wheel.mdl"
-	MODEL.angle = Angle(0, 0, 0)
-	MODEL.position = Vector(6.5, 1.5, -5)
-	MODEL.scale = Vector(1, 1, 1)
-	ENT.modelData["roll3"] = MODEL
+            if (v.material) then
+                self.models[k]:SetMaterial(v.material)
+            end
+        end
+    end
 
-	function ENT:Initialize()
-		self.models = {}
-		
-		for k, v in pairs(self.modelData) do
-			self.models[k] = ClientsideModel(v.model, RENDERGROUP_BOTH )
-			self.models[k]:SetColor( v.color or color_white )
-			self.models[k]:SetNoDraw(true)
-			self.models[k]:SetSkin(1)
+    function ENT:OnRemove()
+        for k, v in pairs(self.models) do
+            if (v and v:IsValid()) then
+                v:Remove()
+            end
+        end
+    end
 
-			if (v.material) then
-				self.models[k]:SetMaterial( v.material )
-			end
-		end
-	end
+    function ENT:Draw()
+        local prevEntity
 
-	function ENT:OnRemove()
-		for k, v in pairs(self.models) do
-			if (v and v:IsValid()) then
-				v:Remove()
-			end
-		end
-	end
+        for uid, dat in pairs(self.modelData) do
+            local drawEntity = self.models[uid]
 
-	function ENT:Draw()
-		local prevEntity
-		for uid, dat in pairs(self.modelData) do
-			local drawEntity = self.models[uid]
+            if (drawEntity and drawEntity:IsValid()) then
+                local pos, ang = self:GetPos(), self:GetAngles()
+                local ang2 = ang
+                pos = pos + self:GetForward() * dat.position[1]
+                pos = pos + self:GetRight() * dat.position[2]
+                pos = pos + self:GetUp() * dat.position[3]
+                ang:RotateAroundAxis(self:GetForward(), dat.angle[1])
+                ang:RotateAroundAxis(self:GetRight(), dat.angle[2])
+                ang:RotateAroundAxis(self:GetUp(), dat.angle[3])
 
-			if (drawEntity and drawEntity:IsValid()) then
-				local pos, ang = self:GetPos(), self:GetAngles()
-				local ang2 = ang
+                if (dat.scale) then
+                    local matrix = Matrix()
+                    matrix:Scale((dat.scale or Vector(1, 1, 1)))
+                    drawEntity:EnableMatrix("RenderMultiply", matrix)
+                end
 
-				pos = pos + self:GetForward() * dat.position[1]
-				pos = pos + self:GetRight() * dat.position[2]
-				pos = pos + self:GetUp() * dat.position[3]
+                drawEntity:SetRenderOrigin(pos)
+                drawEntity:SetRenderAngles(ang2)
+                drawEntity:DrawModel()
 
-				ang:RotateAroundAxis(self:GetForward(), dat.angle[1])
-				ang:RotateAroundAxis(self:GetRight(), dat.angle[2])
-				ang:RotateAroundAxis(self:GetUp(), dat.angle[3])
+                if (self:GetGame()) then
+                    self.non = true
+                    drawEntity:SetSkin(0)
+                    drawEntity.number = math.random(1, 11)
 
-				if (dat.scale) then
-					local matrix = Matrix()
-					matrix:Scale((dat.scale or Vector( 1, 1, 1 )))
-					drawEntity:EnableMatrix("RenderMultiply", matrix)
-				end
+                    while (prevEntity and prevEntity.number == drawEntity.number) do
+                        drawEntity.number = math.random(1, 11)
+                    end
+                else
+                    local result = self:GetResult()
 
-				drawEntity:SetRenderOrigin( pos )
-				drawEntity:SetRenderAngles( ang2 )
-				drawEntity:DrawModel()
+                    if (self.non) then
+                        self:EmitSound("HL1/fvox/blip.wav")
+                        self.non = false
+                    end
 
-				if (self:GetGame()) then
-					self.non = true
-					drawEntity:SetSkin(0)
-					drawEntity.number = math.random(1, 11)
+                    if (result <= 1) then
+                        drawEntity:SetSkin(drawEntity.number or 1)
+                    else
+                        drawEntity:SetSkin(result)
+                    end
+                end
 
-					while (prevEntity and prevEntity.number == drawEntity.number) do
-						drawEntity.number = math.random(1, 11)
-					end
-				else					
-					local result = self:GetResult()
+                prevEntity = drawEntity
+            else
+                self.models[uid] = ClientsideModel(dat.model, RENDERGROUP_BOTH)
+                self.models[uid]:SetColor(dat.color or color_white)
+                self.models[uid]:SetNoDraw(true)
+                self.models[uid]:SetSkin(1)
 
-					if (self.non) then
-						self:EmitSound("HL1/fvox/blip.wav")
+                if (dat.material) then
+                    self.models[uid]:SetMaterial(dat.material)
+                end
+            end
+        end
 
-						self.non = false
-					end
+        self:DrawModel()
+    end
 
-					if (result <= 1) then
-						drawEntity:SetSkin(drawEntity.number or 1)
-					else
-						drawEntity:SetSkin(result)
-					end
-				end
-
-				prevEntity = drawEntity
-			else
-				self.models[uid] = ClientsideModel(dat.model, RENDERGROUP_BOTH )
-				self.models[uid]:SetColor( dat.color or color_white )
-				self.models[uid]:SetNoDraw(true)
-				self.models[uid]:SetSkin(1)
-
-				if (dat.material) then
-					self.models[uid]:SetMaterial( dat.material )
-				end
-			end
-		end
-
-		self:DrawModel()
-	end
-
-	function ENT:Think()
-	end
+    function ENT:Think()
+    end
 end
 
 function ENT:SetupDataTables()
-	self:NetworkVar("Bool", 1, "Game")
-	self:NetworkVar("Int", 2, "Result")
+    self:NetworkVar("Bool", 1, "Game")
+    self:NetworkVar("Int", 2, "Result")
 end

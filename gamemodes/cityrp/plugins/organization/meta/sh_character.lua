@@ -1,4 +1,4 @@
-local CHAR = FindMetaTable("Character")
+﻿local CHAR = FindMetaTable("Character")
 
 function CHAR:getOrganization()
     return self:getData("organization", -1)
@@ -19,10 +19,8 @@ function CHAR:canJoinOrganization(orgID)
         local client = self:getPlayer()
 
         if (client) then
-            if (self:getOrganizationInfo()) then
-                return false, "orgJoined"
-            end
-            
+            if (self:getOrganizationInfo()) then return false, "orgJoined" end
+
             return hook.Run("PlayerCanJoinOrganization", client, org)
         end
     end
@@ -30,8 +28,5 @@ end
 
 function CHAR:isLeader()
     local org = nut.org.get(self:getOrganization())
-
-    if (org) then
-        return (org.ownerID == self:getID())
-    end
+    if (org) then return (org.ownerID == self:getID()) end
 end

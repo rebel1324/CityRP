@@ -1,6 +1,5 @@
-FPP = FPP or {}
-
-FPP.entOwners       = FPP.entOwners or {}
+﻿FPP = FPP or {}
+FPP.entOwners = FPP.entOwners or {}
 FPP.entTouchability = FPP.entTouchability or {}
 FPP.entTouchReasons = FPP.entTouchReasons or {}
 
@@ -13,6 +12,7 @@ local touchTypes = {
 }
 
 local reasonSize = 4 -- bits
+
 local reasons = {
     [1] = "owner", -- you can't touch other people's props
     [2] = "world",
@@ -21,7 +21,7 @@ local reasons = {
     [5] = "constrained",
     [6] = "buddy",
     [7] = "shared",
-    [8] = "player", -- you can't pick up players
+    [8] = "player" -- you can't pick up players
 }
 
 local function receiveTouchData(len)
@@ -30,12 +30,12 @@ local function receiveTouchData(len)
         local ownerIndex = net.ReadUInt(32)
         local touchability = net.ReadUInt(5)
         local reason = net.ReadUInt(20)
-
         FPP.entOwners[entIndex] = ownerIndex
         FPP.entTouchability[entIndex] = touchability
         FPP.entTouchReasons[entIndex] = reason
     until net.ReadBit() == 1
 end
+
 net.Receive("FPP_TouchabilityData", receiveTouchData)
 
 function FPP.entGetOwner(ent)
@@ -47,13 +47,13 @@ end
 
 function FPP.canTouchEnt(ent, touchType)
     ent.FPPCanTouch = FPP.entTouchability[ent:EntIndex()]
+
     if not touchType or not ent.FPPCanTouch then
         return ent.FPPCanTouch
     end
 
     return bit.bor(ent.FPPCanTouch, touchTypes[touchType]) == ent.FPPCanTouch
 end
-
 
 local touchTypeMultiplier = {
     ["Physgun"] = 0,
@@ -78,15 +78,15 @@ function FPP.entGetTouchReason(ent, touchType)
     local touchTypeReason = bit.band(idx, touchTypeMask)
     -- Shift it back to the right
     local reasonNr = bit.rshift(touchTypeReason, reasonSize * touchTypeMultiplier[touchType])
-
     local reason = reasons[reasonNr]
     local owner = ent:CPPIGetOwner()
 
-    if reasonNr == 1 then -- convert owner to the actual player
+    if reasonNr == 1 then
         return not isnumber(owner) and IsValid(owner) and owner:Nick() or "Unknown player"
     elseif reasonNr == 6 then
         return "Buddy (" .. (IsValid(owner) and owner:Nick() or "Unknown player") .. ")"
     end
+    -- convert owner to the actual player
 
     return reason
 end
