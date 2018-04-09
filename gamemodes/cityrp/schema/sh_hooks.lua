@@ -196,6 +196,23 @@ function SCHEMA:InitializedSchema()
 	end
 end
 
+function SCHEMA:InitializedPlugins()
+	if (nut.xhair) then
+		nut.xhair.entIcon = table.Merge(nut.xhair.entIcon, {
+			nut_vnd_medical = "",
+			nut_m_recycler = "",
+			nut_stash = "",
+			nut_money = "",
+			nut_stove = "",
+			nut_vendor = "",
+			nut_craftingtable = "",
+		})
+		nut.xhair.entIgnore = table.Merge(nut.xhair.entIgnore, {
+			nut_atm = true,
+		})
+	end
+end
+
 function SCHEMA:PhysgunPickup(client, entity)
 	if (ALLOWED_ENTS[entity:GetClass()]) then
 		if (entity:CPPIGetOwner() == client) then
