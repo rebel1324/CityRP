@@ -22,7 +22,7 @@ nut.util.include("sv_database.lua")
 
 if (CLIENT) then
     local myPanel
-    hook.Add("CreateMenuButtons", "nutEntities", function(tabs)
+    hook.Add("CreateMenuButtons", "nutOrganization", function(tabs)
         tabs["organization"] = function(panel)
             if (hook.Run("BuildEntitiesMenu", panel) != false) then
                 local org = LocalPlayer():getChar():getOrganizationInfo()
