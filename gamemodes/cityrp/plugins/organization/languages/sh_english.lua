@@ -25,4 +25,8 @@ LANGUAGE = {
     memberInfo = "Members",
     perkInfo = "Perks",
     assetInfo = "Organization Assets",
+    orgCreateDesc = "Create Organization",
+    orgCreate = "Create",
+    orgExitDesc = "Exit from the Organization",
+    orgExit = "Exit",
 }

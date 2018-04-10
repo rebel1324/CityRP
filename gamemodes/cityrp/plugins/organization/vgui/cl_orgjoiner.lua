@@ -1,4 +1,5 @@
-
+    -- ORGANIZATION MANAGER
+    
     local WIDTH, HEIGHT = math.Clamp(ScrW() * .5, 400, 800), math.max(ScrW() * .3, 480)
     local PANEL = {}
         local no = function() end
@@ -38,7 +39,15 @@
             self:updateOrgs()
         end
 
+
         function PANEL:updateOrgs()
+            local create = self.content:Add("nutOrgConfig")
+            create:Dock(TOP)
+            create:setup(TYPE_BUTTON, L"orgCreateDesc", L"orgCreate", function()
+                self:Remove()
+                self:GetParent():Add("nutOrgLoading")
+            end)    
+
             for id, orgObj in pairs(nut.org.loaded) do
                 local org = self.content:Add("nutOrganization")
                 org:Dock(TOP)
@@ -89,6 +98,7 @@
             self.join.DoClick = function()
                 netstream.Start("nutOrgJoin", org.id)
                 parent:Remove()
+                parent:GetParent():Add("nutOrgLoading")
             end
         end
     vgui.Register("nutOrganization", PANEL, "DPanel")

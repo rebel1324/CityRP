@@ -6,9 +6,57 @@
 		extended = true,
 		weight = 500
     })
-    
+
+    local fsize = ScreenScale(150)
+    surface.CreateFont("nutSpinner", {
+        font = "nsicons",
+        extended = true,
+        size = fsize,
+        weight = 500
+    })
+
+
+    local TYPE_BUTTON = 0
+    local TYPE_NUMSLIDER = 1
+    local TYPE_TOGGLE = 2
+    local TYPE_TEXT = 3
+    local TYPE_NUMBER = 4
+
     local WIDTH, HEIGHT = math.max(ScrW() * .5, 500), math.max(ScrW() * .3, 480)
+    
+
     local PANEL = {}
+        function PANEL:Init()
+            if (IsValid(nut.gui.orgloading)) then
+                self:Remove()
+
+                return
+            end
+
+            nut.gui.orgloading = self
+
+            self:SetSize(self:GetParent():GetSize())
+        end
+
+        function PANEL:Paint(w, h)
+            local a, b = self:LocalToScreen(0, 0)
+
+            local mat = Matrix()
+            mat:Translate(Vector(w/2, h/2))
+            mat:Translate(Vector(a, b))
+            mat:Rotate( Angle( 0, math.floor((RealTime()*75)/8)*45, 0 ) )
+            mat:Translate(Vector(-a, -b))
+            mat:Translate(Vector(-fsize, -fsize)*.5)
+
+            nut.util.drawText(L"orgWaitSignal", w/2, h/3*1, nil, 1, 1, "nutBigFont")	
+
+            cam.PushModelMatrix( mat )
+                nut.util.drawText("", fsize*.5, fsize*.5, nil, 1, 1, "nutSpinner")	
+            cam.PopModelMatrix()
+        end
+    vgui.Register("nutOrgLoading", PANEL, "EditablePanel")
+
+    PANEL = {}
         local no = function() end
         
         local panelInfo = {
@@ -16,6 +64,7 @@
             "memberInfo",
             "perkInfo",
             "assetInfo",
+            "config",
         }
 
         local function nav(self)
@@ -176,6 +225,14 @@
                 -- perk management
             elseif (num == 4) then
                 -- asset management
+            elseif (num == 5) then
+                local quit = con:Add("nutOrgConfig")
+                quit:Dock(TOP)
+                quit:setup(TYPE_BUTTON, L"orgExitDesc", L"orgExit", function()
+                    self:Remove()
+                    self:GetParent():Add("nutOrgLoading")
+                    netstream.Start("nutOrgExit")
+                end)    
             end
         end
 
@@ -275,3 +332,39 @@
             self.targetID = targetID
         end
     vgui.Register("nutOrgMember", PANEL, "DPanel")
+
+    PANEL = {}
+        function PANEL:Init()
+            self:SetTall(40)
+        end
+
+        local col = Color(0, 0, 0, 150)
+        function PANEL:Paint(w, h)
+            surface.SetDrawColor(col)
+            surface.DrawRect(0, 0, w, h)
+        end
+
+        function PANEL:setup(...)
+            local args = {...}
+            local t = args[1]
+
+            if (t) then
+                if (t == TYPE_BUTTON) then
+                    local label = self:Add("DLabel")
+                    label:Dock(FILL)
+                    label:SetText(args[2])
+                    label:SetFont("nutMediumFont")
+                    label:DockMargin(10, 5, 10, 5)
+
+                    local btn = self:Add("DButton")
+                    btn:Dock(RIGHT)
+                    btn:SetText(args[3])
+                    btn:SetWide(100)
+                    btn:SetTextColor(color_white)
+                    btn:SetFont("nutSmallFont")
+                    btn:DockMargin(10, 5, 10, 5)
+                    btn.DoClick = args[4]
+                end
+            end
+        end
+    vgui.Register("nutOrgConfig", PANEL, "DPanel")

@@ -12,6 +12,8 @@ if (ORGANIZATION_ENABLED != true) then return end
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
 ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
 ORGANIZATION_INITIAL_MONEY = 5000
+ORGANIZATION_REMOVE_EMPTY_GROUP = true -- remove 0 member organization automatically.
+ORGANIZATION_ALLOW_PLAYERORGANIZATION = true -- well is the organization only for the fookign admins?
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
@@ -21,12 +23,13 @@ nut.util.include("sv_database.lua")
 
 if (CLIENT) then
     local myPanel
-    hook.Add("CreateMenuButtons", "nutOrganization", function(tabs)
+    hook.Add("CreateMenuButtons", "nutEntities", function(tabs)
         tabs["organization"] = function(panel)
-            if (hook.Run("BuildOrganizationMenu", panel) != false) then
+            if (hook.Run("BuildEntitiesMenu", panel) != false) then
                 local org = LocalPlayer():getChar():getOrganizationInfo()
 
                 myPanel = panel
+                
                 if (org) then
                     panel:Add("nutOrgManager")
                 else
@@ -35,10 +38,18 @@ if (CLIENT) then
             end
         end
     end)
-
+    
     netstream.Hook("nutOrgJoined", function()
         if (IsValid(myPanel)) then
+            nut.gui.orgloading:Remove()
             myPanel:Add("nutOrgManager")
+        end
+    end)
+
+    netstream.Hook("nutOrgExited", function()
+        if (IsValid(myPanel)) then
+            nut.gui.orgloading:Remove()
+            myPanel:Add("nutOrgJoiner")
         end
     end)
 end
@@ -375,6 +386,7 @@ else
 
                 if (org) then
                     org:removeCharacter(char)
+                    netstream.Start(client, "nutOrgExited")
                 else
                     client:notifyLocalized("invalidOrg")
                 end
@@ -406,7 +418,7 @@ else
                 local org = char:getOrganizationInfo()
 
                 if (org) then
-                    nut.org.delete(org:getID())
+                    --nut.org.delete(org:getID())
                 else
                     client:notifyLocalized("invalidOrg")
                 end

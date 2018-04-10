@@ -224,8 +224,9 @@ if (SERVER) then
 end
 
 function ORGANIZATION:getMemberCount()
-    local count = 0
+    local count = 1
 
+    PrintTable(self.members)
     for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
         if (self.members[i] and self.members[i][charID]) then
             count = count + 1
