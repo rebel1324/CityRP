@@ -157,7 +157,7 @@ PLUGIN.desc = "This plugin makes your flashlight feels like it's from L4D2"
 			client.flash:SetEnableShadows(false)
 			client.flash:Update()
 
-			if (SURPRESS_FROM_STENCIL) then return end
+			if (SUPPRESS_FROM_STENCIL) then return end
 			if (!client:GetNoDraw()) then
 				if (client:GetNWBool("customFlashlight") == true) then
 					if (LocalPlayer() == client and !client:ShouldDrawLocalPlayer()) then return end

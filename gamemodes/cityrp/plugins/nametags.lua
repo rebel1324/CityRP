@@ -182,7 +182,7 @@ end)
 
 local ntChar, ntClass, ntClassInfo, ntRagdoll
 hook.Add("DrawNameTag", "btNameTag", function(client)
-	if (SURPRESS_FROM_STENCIL) then return end
+	if (SUPPRESS_FROM_STENCIL) then return end
 	if (client:GetNoDraw() != true) then
 		ntPos = btNameTag:getHead(client)
 		ntX, ntY = 0, 0

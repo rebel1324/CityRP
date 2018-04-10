@@ -289,7 +289,7 @@ if (CLIENT) then
         
         FT = FrameTime()
         
-        SURPRESS_FROM_STENCIL = true
+        SUPPRESS_FROM_STENCIL = true
         for _, ent in pairs(ents.GetAll()) do
             if (IsValid(ent)) then
                 if ent.Type == "nextbot" or ent:IsNPC() or ent:IsPlayer() then
@@ -349,7 +349,7 @@ if (CLIENT) then
                 end
             end
         end
-        SURPRESS_FROM_STENCIL = nil
+        SUPPRESS_FROM_STENCIL = nil
         
         render.SuppressEngineLighting(false)
         
