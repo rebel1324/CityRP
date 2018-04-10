@@ -29,4 +29,7 @@ LANGUAGE = {
     orgCreate = "Create",
     orgExitDesc = "Exit from the Organization",
     orgExit = "Exit",
+    orgCreateInfo = "You can create your own organization in here",
+    orgTitle = "Organization Name", 
+    orgDesc = "Organization Description",
 }

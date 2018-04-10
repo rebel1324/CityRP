@@ -143,7 +143,7 @@ if (SERVER) then
 
             nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)
             
-            if (self:getMemberCount() == 0) then
+            if (ORGANIZATION_REMOVE_EMPTY_GROUP == true and self:getMemberCount() == 0) then
                 nut.org.delete(self.id)
             end
 
@@ -224,9 +224,8 @@ if (SERVER) then
 end
 
 function ORGANIZATION:getMemberCount()
-    local count = 1
-
-    PrintTable(self.members)
+    local count = 0
+    
     for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
         if (self.members[i] and self.members[i][charID]) then
             count = count + 1

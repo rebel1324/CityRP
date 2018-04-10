@@ -17,8 +17,7 @@ ORGANIZATION_ALLOW_PLAYERORGANIZATION = true -- well is the organization only fo
 
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
-nut.util.include("vgui/cl_orgmanager.lua")
-nut.util.include("vgui/cl_orgjoiner.lua")
+nut.util.include("vgui/cl_derma.lua")
 nut.util.include("sv_database.lua")
 
 if (CLIENT) then
@@ -344,7 +343,25 @@ if (CLIENT) then
 else
     -- ui networkings
     do
-        netstream.Hook("nutOrgCreate", function(client)
+        netstream.Hook("nutOrgCreate", function(client, data)
+            local name, desc = data.name, data.desc
+            if (!name) then
+                client:notifyLocalized("invalid", L"name")
+                return
+            elseif (!desc) then
+                client:notifyLocalized("invalid", L"desc")
+                return
+            end
+            
+            if (name and name:len() < 8) then
+                client:notifyLocalized("tooShortInput", L"name")
+                return
+            elseif (desc and desc:len() < 16) then
+                client:notifyLocalized("tooShortInput", L"desc")
+                return
+            end
+
+
             local char = client:getChar()
             
             if (char) then
@@ -352,6 +369,10 @@ else
 
                 nut.org.create(function(orgObject)
                     orgObject:setOwner(char)
+                    orgObject:setName(data.name)
+                    orgObject:setData("desc", data.desc)
+                    netstream.Start(client, "nutOrgJoined")
+
                     hook.Run("OnCreateOrganization", client, orgObject)
                 end)
             end
