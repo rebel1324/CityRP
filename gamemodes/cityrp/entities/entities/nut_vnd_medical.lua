@@ -12,6 +12,18 @@ ENT.item = "aidkit"
 ENT.model = "models/rebel1324/medicvendor.mdl"
 
 if (SERVER) then
+
+	function ENT:onDispenseItem(client)
+		local seq = self:LookupSequence("open")
+		self:ResetSequence(seq)
+	
+		timer.Simple(2, function()
+			if (self and IsValid(self)) then
+				local seq = self:LookupSequence("closed")
+				self:ResetSequence(seq)
+			end
+		end)
+	end
 else
 	local w, h = 920, 500
 
