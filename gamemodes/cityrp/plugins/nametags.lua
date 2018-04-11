@@ -233,9 +233,10 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 					end
 				end
 
+				local name = hook.Run("ShouldAllowScoreboardOverride", client, "name") and hook.Run("GetDisplayedName", client) or client:Nick()
 				if (ntClass or client:IsBot()) then
 					if (client:IsBot()) then
-						btNameTag:drawText(client:Name(), ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
+						btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
 						ntY = ntY - 80
 					else
 						ntClassInfo = nut.class.list[ntClass]
@@ -244,12 +245,12 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 							ntY = ntY - 75
 						end
 
-						btNameTag:drawText(client:Name(), ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
+						btNameTag:drawText(name, ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
 						ntY = ntY - 80
 					end
 				else
 					ntY = ntY - 25
-					btNameTag:drawText(client:Name(), ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
+					btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
 				end
 
 				for _, info in ipairs(btNameTag.info) do
