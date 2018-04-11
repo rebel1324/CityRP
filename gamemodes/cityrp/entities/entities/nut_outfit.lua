@@ -22,51 +22,74 @@ if (SERVER) then
 		end
 	end
 
-	function ENT:OnRemove()
-	end
-
-	local fuckoff = CurTime()
+	local chillman = CurTime()
 	function ENT:Use(client)
-		if (fuckoff and fuckoff > CurTime()) then return end
-		fuckoff = CurTime() + 1
+		if (chillman and chillman > CurTime()) then return end
+		chillman = CurTime() + 1
 		netstream.Start(client, "nutOutfitShow")
 	end
 else
 	netstream.Hook("nutOutfitShow", function()
 		vgui.Create("nutOutfit")
 	end)
+	
+	local w, h = 920, 500
 
-	WORLDEMITTER = WORLDEMITTER or ParticleEmitter(Vector(0, 0, 0))
+	function ENT:Initialize()
+		self:declarePanels()
 
-	local GLOW_MATERIAL = Material("sprites/glow04_noz.vmt")
-
-	function ENT:Draw()
-
-		if (!self.nextEmit or self.nextEmit < CurTime()) then
-			local pos = self:GetPos()
-			local new = GLOW_MATERIAL
-			for i = 1, 2 do
-				local vc1, vc2 = self:GetRenderBounds()
-				local randPos = Vector(math.random(vc1.x, vc2.x), math.random(vc1.y, vc2.y), math.random(vc1.z, vc2.z))
-				local smoke = WORLDEMITTER:Add( new, pos + randPos)
-				smoke:SetVelocity(randPos * math.random(2, 4))
-				smoke:SetDieTime(math.Rand(.2,.4))
-				smoke:SetStartAlpha(math.Rand(188,211))
-				smoke:SetEndAlpha(0)
-				smoke:SetStartSize(2)
-				smoke:SetEndSize(2)
-				smoke:SetRoll(math.Rand(180,480))
-				smoke:SetRollDelta(math.Rand(-3,3))
-				smoke:SetGravity( Vector( 0, 0, -200 ) )
-				smoke:SetAirResistance(500)
-			end
-			self.nextEmit = CurTime() + .05
-		end
-
-		self:DrawModel()
+		self.displayFraction = 0
+		self.curScale = 0
+		self.curHeight = 0
+		self.renderIdle = 0
+		self.stareDeploy = 0
 	end
 
+	-- universial
+	function ENT:Think()
+		self.pos = self:GetPos()
+		self.ang = self:GetAngles()
+
+		self:adjustPosition()
+
+		-- optimization process.
+		if (self.curScale < .15 or self.renderIdle < CurTime() or self:GetNoDraw() == true) then
+			nut.blur3d2d.pause(self:EntIndex())
+		else
+			nut.blur3d2d.resume(self:EntIndex())
+		end
+		
+		return true
+	end
+
+	-- ofc this should be done.
 	function ENT:OnRemove()
+		nut.blur3d2d.remove(self:EntIndex())
+	end
+	
+	surface.CreateFont("nutBlurSubText", {
+		font = "Bahnschrift",
+		size = 70,
+		extended = true,
+		weight = 500
+	})
+
+	function ENT:Draw()
+		local spd = FrameTime() * 0.5
+		local target
+
+		if (self.stareDeploy > CurTime()) then
+			self.displayFraction = math.Clamp(self.displayFraction + spd, 0, 1)
+			self.curScale = nut.ease.easeOutElastic(self.displayFraction, 1, 0, 1)
+		else
+			self.displayFraction = math.Clamp(self.displayFraction + -spd*5, 0, 1)
+			self.curScale = Lerp(FrameTime() * 15, self.curScale, 0)
+		end
+		
+		self:drawThink()
+
+		self:DrawModel()
+		self.renderIdle = CurTime() + .1
 	end
 
 	function ENT:onShouldDrawEntityInfo()
@@ -74,11 +97,68 @@ else
 	end
 
 	function ENT:onDrawEntityInfo(alpha)
-		local position = (self:LocalToWorld(self:OBBCenter()) + self:GetUp()*16):ToScreen()
-		local x, y = position.x, position.y
+		self.stareDeploy = CurTime() + FrameTime()*10
+	end
 
-		nut.util.drawText(L"outfitterName", x, y, ColorAlpha(nut.config.get("color"), alpha), 1, 1, nil, alpha * 0.65)
-		nut.util.drawText(L"outfitterDesc", x, y + 16, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
+	function ENT:emitGas()
+		local e = EffectData()
+		e:SetStart(self:GetPos() + self:OBBCenter())
+		e:SetScale(0.1)
+		util.Effect( "vendorGas", e )
+	end
 
+	-- customizable functions
+	function ENT:drawThink()
+		-- Draw Model.
+		local blurRender = nut.blur3d2d.get(self:EntIndex())
+		if (blurRender) then
+			blurRender.pos = self.pos
+			blurRender.ang = self.ang
+			blurRender.scale = (self.curScale) * .04
+		end
+	end
+
+	function ENT:declarePanels()
+		local itemTable = nut.item.list[self.item]
+		local name
+		if (itemTable) then
+			name = itemTable.name
+		end
+
+		nut.blur3d2d.add(self:EntIndex(), Vector(), Angle(), .15,
+		function(isOverlay) 
+			local text = L("outfit", name)
+			local text2 = L("outfitterDesc", name)
+
+			if (isOverlay) then
+				-- stencil overlay (something you want to draw)
+				local tx, ty = nut.util.drawText(text, 0, h*-.1, color_white, 1, 4, "nutBlurText", 100)
+				nut.util.drawText(text2, 0, h*.01, color_white, 1, 4, "nutBlurSubText", 100)
+				nut.util.drawText("", 0, h*.05, color_white, 1, 5, "nutBlurIcon", 100)
+			else
+				surface.SetFont("nutBlurSubText")
+				local sizex = surface.GetTextSize(text2)
+				-- stencil background (blur area)
+				local w = sizex + 200
+				local x, y = -w/2, -h/2
+				surface.SetDrawColor(0, 0, 0, 100)
+				surface.DrawRect(x, y, w, h)
+			end
+		end)
+	end
+
+	function ENT:adjustPosition()
+		-- make a copy of the angle.
+		local rotAng = self.ang*1
+
+		-- Shift the Rendering Position.
+		self.pos = self.pos + rotAng:Up() * 61
+		self.pos = self.pos + rotAng:Right() * 30
+		self.pos = self.pos + rotAng:Forward() * 0
+
+		-- Rotate the Rendering Angle.
+		self.ang = rotAng
+		self.ang:RotateAroundAxis(self:GetUp(), 0)
+		self.ang:RotateAroundAxis(self:GetForward(), 80)
 	end
 end

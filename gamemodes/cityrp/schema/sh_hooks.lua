@@ -206,6 +206,7 @@ function SCHEMA:InitializedPlugins()
 			nut_stove = "",
 			nut_vendor = "",
 			nut_craftingtable = "",
+			nut_outfit = "",
 		})
 		nut.xhair.entIgnore = table.Merge(nut.xhair.entIgnore, {
 			nut_atm = true,
