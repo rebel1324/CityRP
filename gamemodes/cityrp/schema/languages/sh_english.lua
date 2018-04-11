@@ -528,5 +528,6 @@ LANGUAGE = {
 	command = "CMD",
 	medVen = "You can buy medical supplies from this",
 
-	CitizenTip = "Citizen"
+	CitizenTip = "Citizen",
+	purchaseItem = "Purchase %s"
 }

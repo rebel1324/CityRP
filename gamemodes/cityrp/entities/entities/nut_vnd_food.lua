@@ -1,22 +1,23 @@
 AddCSLuaFile()
 
-ENT.Type = "anim"
+ENT.Base = "base_anim"
 ENT.PrintName = "Food Vendor"
 ENT.Author = "Black Tea"
 ENT.Category = "NutScript - CityRP"
 ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.vending = true
 ENT.item = "burger"
+ENT.model = "models/props_wasteland/kitchen_stove002a.mdl"
 
 if (SERVER) then
 	function ENT:Initialize()
-		self:SetModel("models/props_wasteland/kitchen_stove002a.mdl")
+		self:SetModel(self.model)
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
 		self:SetUseType(SIMPLE_USE)
 		
 		local item = nut.item.list[self.item]
-		self:setNetVar("price", math.Round(item.price * 2))
+		self:SetNW2Int("price", math.Round(item.price * 2))
 
 		self.health = 200
 
@@ -51,23 +52,50 @@ if (SERVER) then
 	function ENT:setHealth(amount)
 		self.health = amount
 	end
-	
-	function ENT:setInterval(amount)
-		self.interval = amount
-	end
 
 	function ENT:setPrice(price)
-		self:setNetVar("price", price)
+		self:SetNW2Int("price", price)
 	end
 
-	function ENT:GiveFood(client)
+	function ENT:Use(client)
+		if (client and client:IsValid()) then
+			if (self and self:IsValid()) then
+				local dist = client:GetPos():Distance(self:GetPos())
+
+				if (dist < 256) then
+					self:dispenseItem(client)
+				end
+			end
+		end
+	end
+
+	function ENT:onDispenseItem(client)
+		local e = EffectData()
+		e:SetStart(self:GetPos() + self:OBBCenter())
+		e:SetScale(0.1)
+		util.Effect( "vendorGas", e )
+
+		--[[
+			local seq = self:LookupSequence("open")
+			self:ResetSequence(seq)
+	
+			timer.Simple(2, function()
+				if (self and IsValid(self)) then
+					local seq = self:LookupSequence("closed")
+					self:ResetSequence(seq)
+				end
+			end)
+		]]--
+	end
+
+	function ENT:dispenseItem(client)
 		if (!self.nextAct or self.nextAct < CurTime()) then
 			self.nextAct = CurTime() + .5
 			
 			local char = client:getChar()
 
 			if (char) then
-				local price = self:getNetVar("price", 100)
+				local price = self:GetNW2Int("price", 100)
 
 				if (char:hasMoney(price)) then
 					local item = nut.item.list[self.item]
@@ -77,11 +105,6 @@ if (SERVER) then
 					end
 
 					local owner = self:getOwner()
-					local e = EffectData()
-					e:SetStart(self:GetPos() + self:OBBCenter())
-					e:SetScale(0.1)
-					util.Effect( "vendorGas", e )
-					
 					local ownerChar = owner:getChar()
 					local profit = price - item.price
 
@@ -94,27 +117,19 @@ if (SERVER) then
 					end
 
 					if (char:getInv():add(self.item)) then
+						self:onDispenseItem(client)
+
 						if (owner and owner:IsValid()) then
 							char:addReserve(profit)
 
-							local seq = self:LookupSequence("open")
-							self:ResetSequence(seq)
-
-							timer.Simple(2, function()
-								if (self and IsValid(self)) then
-									local seq = self:LookupSequence("closed")
-									self:ResetSequence(seq)
-								end
-							end)
-
 							if (profit < 0) then
-								owner:notifyLocalized("purchasedFoodNonProfit", nut.currency.get(profit))
+								owner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))
 							elseif (profit != 0) then
-								owner:notifyLocalized("purchasedFoodProfit", nut.currency.get(profit))
+								owner:notifyLocalized("purchasedItemProfit", nut.currency.get(profit))
 							end
 						end
 
-						client:notifyLocalized("purchasedFood")
+						client:notifyLocalized("purchasedItem")
 						char:giveMoney(-price)
 					else
 						client:notifyLocalized("noSpace")
@@ -125,134 +140,133 @@ if (SERVER) then
 			end
 		end
 	end
-
-	netstream.Hook("nutFoodVendor", function(client, target)
-		if (client and client:IsValid()) then
-			if (target and target:IsValid()) then
-				local dist = client:GetPos():Distance(target:GetPos())
-
-				if (dist < 256) then
-					target:GiveFood(client)
-				end
-			end
-		end
-	end)
 else
-	-- This fuction is 3D2D Rendering Code.
-	local gradient = nut.util.getMaterial("vgui/gradient-d")
-	local gradient2 = nut.util.getMaterial("vgui/gradient-u")
-
-	local function renderCode(self, ent, w, h)
-		local char = LocalPlayer():getChar()
-
-		if (char) then
-			local mx, my = self:mousePos()
-			local scale = 1 / self.scale
-			local bx, by, color, idxAlpha
-
-			draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
-			surface.SetDrawColor(33, 33, 33, 255)
-			surface.SetMaterial(gradient)
-			surface.DrawTexturedRect(0, 0, w, h)
-
-			local tx, ty = draw.SimpleText("8", "nutIconsBig", 3 * scale, 3 * scale, ColorAlpha(color_white, 255), 1, 1)
-			tx, ty = draw.SimpleText(char:getMoney(), "nutATMFont", tx + 3 * scale, 3 * scale, ColorAlpha(color_white, 255), 3, 1)
-
-			self.curSel = -1
-			surface.SetFont("nutATMFont")
-
-			local bp, bp2 = 5 * scale, 9 * scale
-			local sp, sp2 = 20 * scale, 10 * scale
-			local bool = self:cursorInBox(bp, bp2, sp, sp2)
-			self.goodtogo = bool
-
-			surface.SetDrawColor(46, 204, 113)
-			surface.DrawRect(bp, bp2, sp, sp2)
-			surface.SetDrawColor(0, 0, 0, 155)
-			surface.SetMaterial((self.IN_USE and bool) and gradient2 or gradient)
-			surface.DrawTexturedRect(bp, bp2, sp, sp2)
-			surface.SetDrawColor(39, 174, 113)
-			surface.DrawOutlinedRect(bp+2.5, bp2+2.5, sp-5, sp2-5)
-
-			nut.util.drawText(L"foodVendorButton", bp + sp/2, bp2 + sp2/2 - 10, color_white, 1, 1, "nutATMFont")
-			nut.util.drawText(nut.currency.get(self.ent:getNetVar("price", 100)), bp + sp/2, bp2 + sp2/2 + 15, color_white, 1, 1, "nutChatFont")
-
-			if (self.ent:getOwner()) then
-				local name = self.ent:getOwner():Name()
-				nut.util.drawText(L("foodVendorOwner", name), w/2, h - 20, color_white, 1, 1, "nutChatFont")
-			end
-		end
-	end
-
-	-- This function called when client clicked(Pressed USE, Primary/Secondary Attack).
-	local function onMouseClick(self, key)
-		if (self.goodtogo) then
-			netstream.Start("nutFoodVendor", self.ent)
-			self.ent:EmitSound("buttons/button14.wav", 70, 150)
-		end
-	end
+	local w, h = 920, 500
 
 	function ENT:Initialize()
-		-- Creates new Touchable Screen Object for this Entity.
-		self.screen = nut.screen.new(30, 25, .09)
+		self:declarePanels()
+
+		self.displayFraction = 0
+		self.curScale = 0
+		self.curHeight = 0
+		self.renderIdle = 0
+		self.stareDeploy = 0
+	end
+
+	-- universial
+	function ENT:Think()
+		self.pos = self:GetPos()
+		self.ang = self:GetAngles()
+
+		self:adjustPosition()
+
+		-- optimization process.
+		if (self.curScale < .15 or self.renderIdle < CurTime() or self:GetNoDraw() == true) then
+			nut.blur3d2d.pause(self:EntIndex())
+		else
+			nut.blur3d2d.resume(self:EntIndex())
+		end
 		
-		-- Initialize some variables for this Touchable Screen Object.
-		self.screen.noClipping = true
-		self.screen.fadeAlpha = 1
-		self.screen.idxAlpha = {}
+		return true
+	end
 
-		-- Make the local "renderCode" function as the Touchable Screen Object's 3D2D Screen Rendering function.
-		self.screen.renderCode = renderCode
-
-		-- Make the local "onMouseClick" function as the Touchable Screen Object's Input event.
-		self.screen.onMouseClick = onMouseClick
+	-- ofc this should be done.
+	function ENT:OnRemove()
+		nut.blur3d2d.remove(self:EntIndex())
 	end
 	
+	surface.CreateFont("nutBlurSubText", {
+		font = "Bahnschrift",
+		size = 70,
+		extended = true,
+		weight = 500
+	})
+
 	function ENT:Draw()
-		-- Draw Model.
+		local spd = FrameTime() * 0.5
+		local target
+
+		if (self.stareDeploy > CurTime()) then
+			self.displayFraction = math.Clamp(self.displayFraction + spd, 0, 1)
+			self.curScale = nut.ease.easeOutElastic(self.displayFraction, 1, 0, 1)
+		else
+			self.displayFraction = math.Clamp(self.displayFraction + -spd*5, 0, 1)
+			self.curScale = Lerp(FrameTime() * 15, self.curScale, 0)
+		end
+		
+		self:drawThink()
+
 		self:DrawModel()
+		self.renderIdle = CurTime() + .1
 	end
 
-	local pos, ang, renderAng
-	local mc = math.Clamp
-	function ENT:DrawTranslucent()
-		-- Render 3D2D Screen.
-		self.screen:render()
+	function ENT:onShouldDrawEntityInfo()
+		return true
 	end
 
-	function ENT:EmitGas()
+	function ENT:onDrawEntityInfo(alpha)
+		self.stareDeploy = CurTime() + FrameTime()*10
+	end
+
+	function ENT:emitGas()
 		local e = EffectData()
 		e:SetStart(self:GetPos() + self:OBBCenter())
 		e:SetScale(0.1)
 		util.Effect( "vendorGas", e )
 	end
 
-	function ENT:Think()
-		pos = self:GetPos()
-		ang = self:GetAngles()
+	-- customizable functions
+	function ENT:drawThink()
+		-- Draw Model.
+		local blurRender = nut.blur3d2d.get(self:EntIndex())
+		if (blurRender) then
+			blurRender.pos = self.pos
+			blurRender.ang = self.ang
+			blurRender.scale = (self.curScale) * .04
+		end
+	end
+
+	function ENT:declarePanels()
+		local itemTable = nut.item.list[self.item]
+		local name
+		if (itemTable) then
+			name = itemTable.name
+		end
+
+		nut.blur3d2d.add(self:EntIndex(), Vector(), Angle(), .15,
+		function(isOverlay) 
+			local text = L("purchaseItem", name)
+
+			if (isOverlay) then
+				-- stencil overlay (something you want to draw)
+				local tx, ty = nut.util.drawText(text, 0, h*-.1, color_white, 1, 4, "nutBlurText", 100)
+				nut.util.drawText(nut.currency.get(self:GetNW2Int("price")), 0, h*.01, color_white, 1, 4, "nutBlurSubText", 100)
+				nut.util.drawText("", 0, h*.05, color_white, 1, 5, "nutBlurIcon", 100)
+			else
+				surface.SetFont("nutBlurText")
+				local sizex = surface.GetTextSize(text)
+				-- stencil background (blur area)
+				local w = sizex + 200
+				local x, y = -w/2, -h/2
+				surface.SetDrawColor(0, 91, 0, 55)
+				surface.DrawRect(x, y, w, h)
+			end
+		end)
+	end
+
+	function ENT:adjustPosition()
+		-- make a copy of the angle.
+		local rotAng = self.ang*1
 
 		-- Shift the Rendering Position.
-		pos = pos + ang:Up() * 61
-		pos = pos + ang:Right() * 0
-		pos = pos + ang:Forward() * 17
+		self.pos = self.pos + rotAng:Up() * 61
+		self.pos = self.pos + rotAng:Right() * 0
+		self.pos = self.pos + rotAng:Forward() * 22
 
 		-- Rotate the Rendering Angle.
-		renderAng = Angle(ang[1], ang[2], ang[3])
-
-		-- Update the Rendering Position and angle of the Touchable Screen Object.
-		self.screen.pos = pos
-		self.screen.ang = renderAng
-		self.screen.ent = self
-
-		-- Default Think must be in this place to make Touchable Screen's Input works.
-		self.screen:think()
-
-		-- If The Screen has no Focus(If player is not touching it), Increase Idle Screen's Alpha.
-		if (self.screen.hasFocus) then
-			self.screen.fadeAlpha = mc(self.screen.fadeAlpha - FrameTime()*4, 0, 1)
-		else
-			self.screen.fadeAlpha = mc(self.screen.fadeAlpha + FrameTime()*2, 0, 1)
-		end
+		self.ang = rotAng
+		self.ang:RotateAroundAxis(self:GetUp(), 90)
+		self.ang:RotateAroundAxis(self:GetRight(), -80)
 	end
 end
 
