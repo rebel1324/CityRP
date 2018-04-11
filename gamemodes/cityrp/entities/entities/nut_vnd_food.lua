@@ -174,13 +174,30 @@ else
 	function ENT:OnRemove()
 		nut.blur3d2d.remove(self:EntIndex())
 	end
-	
-	surface.CreateFont("nutBlurSubText", {
-		font = "Bahnschrift",
-		size = 70,
-		extended = true,
-		weight = 500
-	})
+
+	hook.Add("LoadFonts", "nutNoticeFont", function(font, genericFont)
+		surface.CreateFont("nutBlurText", {
+			font = font,
+			size = 555,
+			extended = true,
+			weight = 500
+		})
+
+		surface.CreateFont("nutBlurIcon", {
+			font = "nsicons",
+			size = 555,
+			extended = true,
+			weight = 500
+		})
+
+		surface.CreateFont("nutBlurSubText", {
+			font = font,
+			size = 70,
+			extended = true,
+			weight = 500
+		})
+	end)
+
 
 	function ENT:Draw()
 		local spd = FrameTime() * 0.5

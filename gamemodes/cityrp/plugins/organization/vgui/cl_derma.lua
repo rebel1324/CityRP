@@ -13,18 +13,7 @@ local txtentry = function(self, w, h)
     self:SetFontInternal( self.m_FontName )
     derma.SkinHook( "Paint", "TextEntry", self, w, h )
 end
-surface.CreateFont("nutBlurText", {
-    font = "Bahnschrift",
-    size = 555,
-    extended = true,
-    weight = 500
-})
-surface.CreateFont("nutBlurIcon", {
-    font = "nsicons",
-    size = 555,
-    extended = true,
-    weight = 500
-})
+
 -- ORGANIZATION CREATOR
 
 local PANEL = {}
