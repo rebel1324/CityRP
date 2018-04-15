@@ -25,11 +25,9 @@ SWEP.Secondary.Ammo = ""
 SWEP.Spawnable = true
 SWEP.AdminOnly = true
 
-SWEP.ViewModel = Model("models/weapons/c_pistol.mdl")
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.ViewModel = Model("models/weapons/custom/taser.mdl")
+SWEP.WorldModel = "models/weapons/custom/w_taser.mdl"
 SWEP.IconLetter = ""
-
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.UseHands = true
 
 function SWEP:Initialize()
@@ -37,7 +35,6 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-	
 	self.Owner:LagCompensation(true)
 	local trace = self.Owner:GetEyeTrace()
 	self.Owner:LagCompensation(false)
@@ -99,5 +96,14 @@ function SWEP:SecondaryAttack()
 	self.Owner:notify("You have tased someone unconcious!")
 	trace.Entity:ConCommand( "say /fallover " .. nut.config.get("tazeTime") )
 	trace.Entity:notify("You have been tased unconcious!")
+	end
+end
+
+if (CLIENT) then
+	function SWEP:GetViewModelPosition( pos, ang )
+		local pos = pos*1
+		pos = pos + ang:Right() * -9
+		pos = pos + ang:Forward() * -5
+		return pos, ang
 	end
 end
