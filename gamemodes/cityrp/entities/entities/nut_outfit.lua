@@ -75,14 +75,14 @@ else
 	})
 
 	function ENT:Draw()
-		local spd = FrameTime() * 0.5
+		local spd = FrameTime()
 		local target
 
 		if (self.stareDeploy > CurTime()) then
-			self.displayFraction = math.Clamp(self.displayFraction + spd, 0, 1)
+			self.displayFraction = math.Approach(self.displayFraction, 1, spd*.5)
 			self.curScale = nut.ease.easeOutElastic(self.displayFraction, 1, 0, 1)
 		else
-			self.displayFraction = math.Clamp(self.displayFraction + -spd*5, 0, 1)
+			self.displayFraction = math.Approach(self.displayFraction, 0, spd * 5)
 			self.curScale = Lerp(FrameTime() * 15, self.curScale, 0)
 		end
 		
