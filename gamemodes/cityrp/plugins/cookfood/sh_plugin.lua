@@ -199,6 +199,7 @@ else
 				end
 			end
 
+            hook.Run("OnHungerTick", client, percent)
 			thinkTime = CurTime() + nut.config.get("hungerTime", .1)
 		end
 	end

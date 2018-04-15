@@ -66,6 +66,7 @@ ITEM.functions.use = {
 		local mul = COOKLEVEL[cooked][2]
 
 		item.player:addHunger(item.hungerAmount * mul) 
+        hook.Run("OnPlayerEatFood", item.player, item, amount)
 		
 		if (item.staminaAmount) then
 			local value = item.player:getLocalVar("stm", 0) + item.staminaAmount
