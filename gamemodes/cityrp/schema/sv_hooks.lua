@@ -281,6 +281,8 @@ function SCHEMA:PlayerSpawn(client)
 end
 
 function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
+	nut.map.sync(client)
+	
 	if (prevChar) then
 		hook.Run("PlayerHitCharacterDodge", client, netChar, prevChar)
 		hook.Run("ResetVariables", client, SIGNAL_CHAR)
@@ -451,37 +453,11 @@ function SCHEMA:PlayerInitialSpawn(client)
 	netstream.Start(client, "nutLawSync", SCHEMA.laws)
 end
 
-local dicks = {
-	["models/player/zelpa/female_01_extended.mdl"] = "models/btcitizen/female_01.mdl",
-	["models/player/zelpa/female_02_extended.mdl"] = "models/btcitizen/female_02.mdl",
-	["models/player/zelpa/female_03_extended.mdl"] = "models/btcitizen/female_03.mdl",
-	["models/player/zelpa/female_04_extended.mdl"] = "models/btcitizen/female_04.mdl",
-	["models/player/zelpa/female_06_extended.mdl"] = "models/btcitizen/female_06.mdl",
-	["models/player/zelpa/female_07_extended.mdl"] = "models/btcitizen/female_07.mdl",
-	["models/player/zelpa/male_01_extended.mdl"] = "models/btcitizen/male_01.mdl",
-	["models/player/zelpa/male_02_extended.mdl"] = "models/btcitizen/male_02.mdl",
-	["models/player/zelpa/male_03_extended.mdl"] = "models/btcitizen/male_03.mdl",
-	["models/player/zelpa/male_04_extended.mdl"] = "models/btcitizen/male_04.mdl",
-	["models/player/zelpa/male_05_extended.mdl"] = "models/btcitizen/male_05.mdl",
-	["models/player/zelpa/male_06_extended.mdl"] = "models/btcitizen/male_06.mdl",
-	["models/player/zelpa/male_07_extended.mdl"] = "models/btcitizen/male_07.mdl",
-	["models/player/zelpa/male_08_extended.mdl"] = "models/btcitizen/male_08.mdl",
-	["models/player/zelpa/male_09_extended.mdl"] = "models/btcitizen/male_09.mdl",
-	["models/player/zelpa/male_10_extended.mdl"] = "models/btcitizen/male_10.mdl",
-	["models/player/zelpa/male_11_extended.mdl"] = "models/btcitizen/male_11.mdl",
-}
-
 -- Give Class Loadout.
 function SCHEMA:PostPlayerLoadout(client, reload)
 	client:AllowFlashlight(true)
 	
 	local char = client:getChar()
-
-	-- kek
-	if (dicks[char:getModel()]) then
-		char:setModel(dicks[char:getModel()])
-		char:setData("outfits", {})
-	end
 
 	if (!nut.config.get("isSerious", false)) then
 		client:Give("weapon_physgun")
@@ -497,7 +473,6 @@ function SCHEMA:PostPlayerLoadout(client, reload)
 			if (classData.law) then
 				client:GiveAmmo(150, "pistol")
 				client:GiveAmmo(120, "ar2")
-				client:getNetVar("shieldBroken", nil)
 			end
 
 			local model = table.Random(classData.model or {})
