@@ -616,3 +616,9 @@ end
 local GM = GM or GAMEMODE
 function GM:DrawEntityInfo()
 end
+
+nut.map = nut.map or {}
+nut.map.ents = {}
+netstream.Hook("nutMapSync", function(data)
+	nut.map.ents = data
+end)

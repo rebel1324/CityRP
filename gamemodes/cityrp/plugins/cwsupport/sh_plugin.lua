@@ -490,29 +490,25 @@ function PLUGIN:InitializedPlugins()
 				velocity.z = velocity.z + math.Rand(-5, 5)
 				
 				time = time or 0.5
-				removetime = removetime or 5
+				removetime = 2
 				
 				local t = self._shellTable or CustomizableWeaponry.shells:getShell("mainshell") -- default to the 'mainshell' shell type if there is none defined
 
 				local ent = ClientsideModel(t.m, RENDERGROUP_BOTH) 
 				ent:SetPos(pos)
 				ent:PhysicsInitBox(shellMins, shellMaxs)
-				ent:SetAngles(ang + AngleRand())
+				ent:SetAngles(AngleRand())
 				ent:SetModelScale((self.ShellScale*.9 or .7), 0)
 				ent:SetMoveType(MOVETYPE_VPHYSICS) 
 				ent:SetSolid(SOLID_VPHYSICS) 
-				ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+                ent:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 				
 				local phys = ent:GetPhysicsObject()
 				phys:SetMaterial("gmod_silent")
-				phys:SetMass(10)
-				phys:SetVelocity(velocity)
-				
-				angleVel.x = math.random(-500, 500)
-				angleVel.y = math.random(-500, 500)
-				angleVel.z = math.random(-500, 500)
-				
-				phys:AddAngleVelocity(ang:Right() * 100 + angleVel + VectorRand()*50000)
+				phys:SetMass(100)
+				phys:SetVelocity(velocity*.75)
+                
+                phys:AddAngleVelocity(VectorRand()*5000)
 
 				timer.Simple(time, function()
 					if t.s and IsValid(ent) then

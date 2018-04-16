@@ -28,9 +28,9 @@ if (SERVER) then
 			physObj:EnableMotion(false)
 		end
 
-		if (IS_INTERNATIONAL) then
-			self:SetSkin(1)
-		end
+		self:SetSkin(1)
+
+		nut.map.add(self)
 	end
 else
 	local gradient = nut.util.getMaterial("vgui/gradient-d")

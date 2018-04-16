@@ -865,33 +865,6 @@ nut.command.add("broadcast", {
 	--alias = {"방송"}
 })
 
--- I'm giving you second chance.
-if (IS_INTERNATIONAL != true) then
-	local translate = "givemoney"
-	nut.command.list["돈주기"] = nut.command.list[translate]
-	nut.command.list["give"] = nut.command.list[translate]
-	translate = "dropmoney"
-	nut.command.list["돈버리기"] = nut.command.list[translate]
-	translate = "chardesc"
-	nut.command.list["타이틀"] = nut.command.list[translate]
-	translate = "roll"
-	nut.command.list["주사위"] = nut.command.list[translate]
-	translate = "pm"
-	nut.command.list["귓"] = nut.command.list[translate]
-	nut.command.list["귓속말"] = nut.command.list[translate]
-	translate = "reply"
-	nut.command.list["답"] = nut.command.list[translate]
-	nut.command.list["답장"] = nut.command.list[translate]
-	translate = "setvoicemail"
-	nut.command.list["메일"] = nut.command.list[translate]
-	nut.command.list["편지"] = nut.command.list[translate]
-	translate = "charsetmoney"
-	nut.command.list["돈설정"] = nut.command.list[translate]
-	translate = "fallover"
-	nut.command.list["기절"] = nut.command.list[translate]
-	nut.command.list["잠"] = nut.command.list[translate]
-end
-
 nut.chat.register("tc", {
 	format = "(TEAM) %s: %s",
 	onGetColor = function(speaker, text)
@@ -1130,11 +1103,3 @@ nut.command.add("sellall", {
 		end
 	end,
 })
-
-if (IS_INTERNATIONAL != true) then
-	local translate = "sellall"
-	nut.command.list["모두 팔기"] = nut.command.list[translate]
-
-	local translate = "savemap"
-	nut.command.list["맵저장"] = nut.command.list[translate]
-end

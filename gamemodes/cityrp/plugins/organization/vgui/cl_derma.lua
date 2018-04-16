@@ -1,3 +1,20 @@
+
+-- ORGANIZATION MANAGER
+surface.CreateFont("nutOrgIcons", {
+	font = "nsicons",
+	size = 20,
+	extended = true,
+	weight = 500
+})
+
+local fsize = ScreenScale(150)
+surface.CreateFont("nutSpinner", {
+    font = "nsicons",
+    extended = true,
+    size = fsize,
+    weight = 500
+})
+
 local gradient2 = nut.util.getMaterial("vgui/gradient-u")
 
 local no = function() end
@@ -119,22 +136,6 @@ local PANEL = {}
         end
     end
 vgui.Register("nutOrgCreate", PANEL, "EditablePanel")
-
--- ORGANIZATION MANAGER
-surface.CreateFont("nutOrgIcons", {
-	font = "nsicons",
-	size = 20,
-	extended = true,
-	weight = 500
-})
-
-local fsize = ScreenScale(150)
-surface.CreateFont("nutSpinner", {
-    font = "nsicons",
-    extended = true,
-    size = fsize,
-    weight = 500
-})
 
 local TYPE_BUTTON = 0
 local TYPE_NUMSLIDER = 1

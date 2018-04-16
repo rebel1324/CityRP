@@ -33,6 +33,8 @@ if (SERVER) then
 			physObj:EnableMotion(false)
 			physObj:Sleep()
 		end
+		
+		nut.map.add(self)
 	end
 
 	function ENT:OnRemove()
