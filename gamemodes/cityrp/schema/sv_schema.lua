@@ -178,12 +178,25 @@ netstream.Hook("nutBingle", function(client, entity, mod, value)
 end)
 
 
-function saveall()
-	for k, v in ipairs(player.GetAll()) do
-		local char = v:getChar()
-		
-		if (char) then
-			char:save()
+nut.map = nut.map or {}
+nut.map.ents = {}
+
+function nut.map.sync(client)
+	netstream.Start(client, "nutMapSync", nut.map.ents)
+end
+
+function nut.map.add(entity)
+	nut.map.ents[entity:EntIndex()] = entity
+end
+
+function nut.map.remove(entity)
+	nut.map.ents[entity:EntIndex()] = nil
+end
+
+function nut.map.removeInvalid()
+	for k, v in pairs(nut.map.ents) do
+		if (!IsValid(v)) then
+			nut.map.ents[k] = nil
 		end
 	end
 end
