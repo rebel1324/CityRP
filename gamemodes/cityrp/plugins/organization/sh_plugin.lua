@@ -1,20 +1,15 @@
-PLUGIN.name = "Organization"
+﻿PLUGIN.name = "Organization"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Organization plugin."
-
 nut.org = nut.org or {}
 nut.org.loaded = nut.org.loaded or {}
-
 ORGANIZATION_ENABLED = true
-
-if (ORGANIZATION_ENABLED != true) then return end
-
+if (ORGANIZATION_ENABLED ~= true) then return end
 ORGANIZATION_DEFUALT_NAME = "Unnamed Organization"
-ORGANIZATION_AUTO_DELETE_TIME = 60*60*24*5 -- 5 days of inactivity will get your organization deleted.
+ORGANIZATION_AUTO_DELETE_TIME = 60 * 60 * 24 * 5 -- 5 days of inactivity will get your organization deleted.
 ORGANIZATION_INITIAL_MONEY = 5000
 ORGANIZATION_REMOVE_EMPTY_GROUP = true -- remove 0 member organization automatically.
 ORGANIZATION_ALLOW_PLAYERORGANIZATION = true -- well is the organization only for the fookign admins?
-
 nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
 nut.util.include("vgui/cl_derma.lua")
@@ -22,13 +17,13 @@ nut.util.include("sv_database.lua")
 
 if (CLIENT) then
     local myPanel
+
     hook.Add("CreateMenuButtons", "nutOrganization", function(tabs)
         tabs["organization"] = function(panel)
-            if (hook.Run("BuildEntitiesMenu", panel) != false) then
+            if (hook.Run("BuildEntitiesMenu", panel) ~= false) then
                 local org = LocalPlayer():getChar():getOrganizationInfo()
-
                 myPanel = panel
-                
+
                 if (org) then
                     panel:Add("nutOrgManager")
                 else
@@ -37,7 +32,7 @@ if (CLIENT) then
             end
         end
     end)
-    
+
     netstream.Hook("nutOrgJoined", function()
         if (IsValid(myPanel)) then
             nut.gui.orgloading:Remove()
@@ -56,18 +51,18 @@ end
 if (SERVER) then
     function nut.org.create(callback)
         local ponNull = pon.encode({})
+        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
 
-		local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
         nut.db.insertTable({
             _name = ORGANIZATION_DEFUALT_NAME,
             _lastModify = timeStamp,
             _timeCreated = timeStamp,
-            _level = 1, 
-            _money = ORGANIZATION_INITIAL_MONEY, 
+            _level = 1,
+            _money = ORGANIZATION_INITIAL_MONEY,
             _experience = 0,
             _data = ponNull
-        }, function(succ, orgID) 
-            if (succ != false) then
+        }, function(succ, orgID)
+            if (succ ~= false) then
                 local org = nut.org.new()
                 org.id = orgID
                 nut.org.loaded[orgID] = org
@@ -82,7 +77,7 @@ if (SERVER) then
 
     function nut.org.delete(id)
         local org = nut.org.loaded[id]
-        
+
         if (org) then
             local affectedPlayers
 
@@ -95,18 +90,15 @@ if (SERVER) then
                     if (charOrg == id) then
                         targetChar:setData("organization", nil, nil, player.GetAll())
                         targetChar:setData("organizationRank", nil, nil, player.GetAll())
-
                         table.insert(affectedPlayers, v)
                     end
                 end
             end
 
             hook.Run("OnOranizationDeleted", org, affectedPlayers)
-
             org:unsync()
-
             nut.org.loaded[id] = nil
-            nut.db.query("DELETE FROM nut_organization WHERE _id IN ("..org.id..")")
+            nut.db.query("DELETE FROM nut_organization WHERE _id IN (" .. org.id .. ")")
 
             return true
         else
@@ -116,16 +108,18 @@ if (SERVER) then
 
     function nut.org.syncAll(recipient)
         local orgData = {}
+
         for k, v in pairs(nut.org.loaded) do
             orgData[k] = v:getSyncInfo()
         end
+
         netstream.Start(recipient, "nutOrgSyncAll", orgData)
     end
 
     function nut.org.purge(callback)
         local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time() - ORGANIZATION_AUTO_DELETE_TIME)
-        
-        nut.db.query("DELETE FROM nut_organization WHERE _lastModify <= '".. timeStamp .."'", function(data, data2)
+
+        nut.db.query("DELETE FROM nut_organization WHERE _lastModify <= '" .. timeStamp .. "'", function(data, data2)
             if (callback) then
                 callback()
             end
@@ -135,7 +129,7 @@ if (SERVER) then
     function nut.org.load(id, callback)
         local org = nut.org.new()
 
-        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization WHERE _id IN ("..id..")", function(data)
+        nut.db.query("SELECT _id, _name, _level, _experience, _data FROM nut_organization WHERE _id IN (" .. id .. ")", function(data)
             if (data) then
                 for k, v in ipairs(data) do
                     local org = nut.org.new()
@@ -144,10 +138,9 @@ if (SERVER) then
                     org.level = tonumber(v._level)
                     org.experience = tonumber(v._experience)
                     org.data = pon.decode(v._data)
-
                     nut.org.loaded[org.id] = org
 
-                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
+                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN (" .. org.id .. ")", function(data)
                         if (data) then
                             for k, v in ipairs(data) do
                                 local rank = tonumber(v._rank)
@@ -164,7 +157,7 @@ if (SERVER) then
             end
         end)
     end
-    
+
     function nut.org.loadAll(callback)
         local org = nut.org.new()
 
@@ -177,10 +170,9 @@ if (SERVER) then
                     org.level = tonumber(v._level)
                     org.experience = tonumber(v._experience)
                     org.data = pon.decode(v._data)
-
                     nut.org.loaded[org.id] = org
 
-                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN ("..org.id..")", function(data)
+                    nut.db.query("SELECT _orgID, _charID, _rank, _name FROM nut_orgmembers WHERE _orgID IN (" .. org.id .. ")", function(data)
                         if (data) then
                             for k, v in ipairs(data) do
                                 local rank = tonumber(v._rank)
@@ -202,24 +194,21 @@ end
 if (SERVER) then
     function PLUGIN:PlayerInitialSpawn(client)
         nut.org.syncAll(client)
-
         local fookinData = {}
+
         for k, v in ipairs(player.GetAll()) do
             if (v == client) then continue end
-            
             local char = v:getChar()
 
             if (char) then
                 local id = char:getID()
 
-                if (char:getOrganization() != -1) then
-                    fookinData[id] = {
-                        char:getData("organization"),
-                        char:getData("organizationRank")
-                    }
+                if (char:getOrganization() ~= -1) then
+                    fookinData[id] = {char:getData("organization"), char:getData("organizationRank")}
                 end
             end
         end
+
         netstream.Start(client, "nutOrgCharSync", fookinData)
     end
 
@@ -250,7 +239,6 @@ if (SERVER) then
     end
 
     function PLUGIN:OnCreateOrganization(client, organization)
-
     end
 
     function PLUGIN:PlayerCanJoinOrganization()
@@ -264,15 +252,15 @@ if (CLIENT) then
         netstream.Hook("nutOrgCharSync", function(data)
             for id, syncDat in pairs(data) do
                 local character = nut.char.loaded[id]
-                
+
                 if (character) then
                     character.vars.data = character.vars.data or {}
-
                     character:getData()["organization"] = syncDat[1]
                     character:getData()["organizationRank"] = syncDat[2]
                 end
             end
         end)
+
         --sync specific server organization data
         netstream.Hook("nutOrgSyncAll", function(orgsData)
             if (orgsData) then
@@ -306,6 +294,7 @@ if (CLIENT) then
         netstream.Hook("nutOrgRemove", function(id)
             nut.org.loaded[id] = nil
         end)
+
         --sync 
         netstream.Hook("nutOrgSyncValue", function(id, key, value)
             if (nut.org.loaded[id]) then
@@ -315,11 +304,12 @@ if (CLIENT) then
 
         netstream.Hook("nutOrgSyncData", function(id, key, value)
             print(id, key, value)
+
             if (nut.org.loaded[id] and nut.org.loaded[id].data) then
                 nut.org.loaded[id].data[key] = value
             end
         end)
-        
+
         netstream.Hook("nutOrgSyncMember", function(id, rank, charID, isChange)
             local org = nut.org.loaded[id]
 
@@ -334,7 +324,6 @@ if (CLIENT) then
                 end
 
                 local char = nut.char.loaded[charID]
-
                 org.members[rank] = org.members[rank] or {}
                 org.members[rank][charID] = char and char:getName() or true
             end
@@ -345,25 +334,29 @@ else
     do
         netstream.Hook("nutOrgCreate", function(client, data)
             local name, desc = data.name, data.desc
-            if (!name) then
+
+            if (not name) then
                 client:notifyLocalized("invalid", L"name")
+
                 return
-            elseif (!desc) then
+            elseif (not desc) then
                 client:notifyLocalized("invalid", L"desc")
+
                 return
             end
-            
+
             if (name and name:len() < 8) then
                 client:notifyLocalized("tooShortInput", L"name")
+
                 return
             elseif (desc and desc:len() < 16) then
                 client:notifyLocalized("tooShortInput", L"desc")
+
                 return
             end
 
-
             local char = client:getChar()
-            
+
             if (char) then
                 if (hook.Run("CanCreateOrganization", client) == false) then return end
 
@@ -372,7 +365,6 @@ else
                     orgObject:setName(data.name)
                     orgObject:setData("desc", data.desc)
                     netstream.Start(client, "nutOrgJoined")
-
                     hook.Run("OnCreateOrganization", client, orgObject)
                 end)
             end
@@ -380,14 +372,14 @@ else
 
         netstream.Hook("nutOrgJoin", function(client, orgID)
             local char = client:getChar()
-            
+
             if (char) then
                 local org = nut.org.loaded[orgID]
 
                 if (org) then
                     local bool, reason = char:canJoinOrganization()
 
-                    if (bool != false) then
+                    if (bool ~= false) then
                         org:addCharacter(char, ORGANIZATION_MEMBER)
                         netstream.Start(client, "nutOrgJoined")
                     else
@@ -401,7 +393,7 @@ else
 
         netstream.Hook("nutOrgExit", function(client)
             local char = client:getChar()
-            
+
             if (char) then
                 local org = char:getOrganizationInfo()
 
@@ -416,7 +408,7 @@ else
 
         netstream.Hook("nutOrgDelete", function(client)
             local char = client:getChar()
-            
+
             if (char) then
                 local org = char:getOrganizationInfo()
 
@@ -428,13 +420,11 @@ else
             end
         end)
 
-        netstream.Hook("nutOrgKick", function(client, target)
-            
-        end)
+        netstream.Hook("nutOrgKick", function(client, target) end)
 
         netstream.Hook("nutOrgAssign", function(client, target, rank)
             local char = client:getChar()
-            
+
             if (char) then
                 local org = char:getOrganizationInfo()
 
@@ -446,13 +436,11 @@ else
             end
         end)
 
-        netstream.Hook("nutOrgChangeOwner", function(client, target)
-        
-        end)
+        netstream.Hook("nutOrgChangeOwner", function(client, target) end)
 
         netstream.Hook("nutOrgChangeValue", function(client, key, value)
             local char = client:getChar()
-            
+
             if (char) then
                 local org = char:getOrganizationInfo()
 
@@ -475,6 +463,5 @@ else
         end)
     end
 end
-
 --TODO: on player change the name, update the organization db!
 --TODO: on player deletes the character, wipe out organization data!

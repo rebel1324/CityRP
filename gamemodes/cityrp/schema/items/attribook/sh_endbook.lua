@@ -1,4 +1,4 @@
-ITEM.name = "Spongebob the Bulletsponge"
+﻿ITEM.name = "Spongebob the Bulletsponge"
 ITEM.bookDesc = "endBookDesc"
 ITEM.model = "models/props_lab/binderblue.mdl"
 ITEM.attribute = "end"

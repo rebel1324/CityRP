@@ -1,22 +1,21 @@
-do
-	if (SERVER) then
-		netstream.Hook("feedbackScreen", function(client)
-			client:ConCommand("say 공지를 읽었습니다!")
-		end)
-	else
-		local scrSize = 10
-		SCREEN_1 = SCREEN_1 or LuaScreen()
-		SCREEN_1.pos = Vector(-100.778526 -220, 450.310120, 8350.406250 + 20)
-		SCREEN_1.ang = Angle(0, 0, 0)
-		SCREEN_1.noClipping = false
-		SCREEN_1.w = 16*scrSize
-		SCREEN_1.h = 9*scrSize
-		SCREEN_1.scale = .17
+﻿do
+    if (SERVER) then
+        netstream.Hook("feedbackScreen", function(client)
+            client:ConCommand("say 공지를 읽었습니다!")
+        end)
+    else
+        local scrSize = 10
+        SCREEN_1 = SCREEN_1 or LuaScreen()
+        SCREEN_1.pos = Vector(-100.778526 - 220, 450.310120, 8350.406250 + 20)
+        SCREEN_1.ang = Angle(0, 0, 0)
+        SCREEN_1.noClipping = false
+        SCREEN_1.w = 16 * scrSize
+        SCREEN_1.h = 9 * scrSize
+        SCREEN_1.scale = .17
 
-		-- Create Text Markup Object.
-		timer.Simple(1, function()
-			MRKPOBJ = nut.markup.parse(
-[[
+        -- Create Text Markup Object.
+        timer.Simple(1, function()
+            MRKPOBJ = nut.markup.parse([[
 <font=nutBigFont><color=200, 200, 80>행복한 라크 RP서버에 오신걸 환영합니다.</font>
 <font=nutMediumFont>REALKALLOS / BLACK TEA 가 운영하는 서버입니다</color>
 
@@ -36,43 +35,44 @@ F1를 눌러서 RP 메뉴를 열 수 있습니다. '직업'란에서 당신의 �
 F1의 인벤토리에는 많은 유용한 아이템을 넣어서 RP에 필요한 일을 진행 할 수 있습니다. 
 새롭고 강력한 아이템을 만들기 위해서는 설계도가 필요한데, 설계도는 랜덤한 찬스로 얻을 수 있습니다.
 <color=80, 255, 80>Cheers for very good schema of NutScript 1.1.</color>
-]]
-			, SCREEN_1:getWide() - 20)
-		end)
+]], SCREEN_1:getWide() - 20)
+        end)
 
-		local scrollAmount
-		local scrollPos = 0
-		local scrollTargetPos
-		SCREEN_1.renderCode = function(scr, ent, wide, tall)
-			draw.RoundedBox(0, 0, 0, wide, tall, Color(0, 0, 0, 150))
+        local scrollAmount
+        local scrollPos = 0
+        local scrollTargetPos
 
-			scrollAmount = math.max(MRKPOBJ:getHeight() - tall + 20, 0)
+        SCREEN_1.renderCode = function(scr, ent, wide, tall)
+            draw.RoundedBox(0, 0, 0, wide, tall, Color(0, 0, 0, 150))
+            scrollAmount = math.max(MRKPOBJ:getHeight() - tall + 20, 0)
 
-			if (scr.hasFocus) then
-				local mx, my = scr:mousePos()
-				local prec = my/tall
-				scrollTargetPos = (prec) * -scrollAmount
-			else
-				scrollTargetPos = (math.Clamp(((RealTime() / tall*10) % 1.7) - .2, 0, 1) * -scrollAmount)
-			end
+            if (scr.hasFocus) then
+                local mx, my = scr:mousePos()
+                local prec = my / tall
+                scrollTargetPos = (prec) * -scrollAmount
+            else
+                scrollTargetPos = (math.Clamp(((RealTime() / tall * 10) % 1.7) - .2, 0, 1) * -scrollAmount)
+            end
 
-			scrollPos = Lerp(FrameTime()*7, scrollPos, scrollTargetPos)
-			if (MRKPOBJ) then
-				MRKPOBJ:draw(15, scrollPos + 10, 3, 2)
-			end
-		end
-		SCREEN_1.onMouseClick = function(self, key)
-			if (key) then
-				netstream.Start("feedbackScreen")
-			end
-		end
+            scrollPos = Lerp(FrameTime() * 7, scrollPos, scrollTargetPos)
 
-		hook.Add("Think", "aaoa", function()
-			SCREEN_1:think()
-		end)
-		
-		hook.Add("PostDrawTranslucentRenderables", "aaoa", function()
-			SCREEN_1:render()
-		end)
-	end
+            if (MRKPOBJ) then
+                MRKPOBJ:draw(15, scrollPos + 10, 3, 2)
+            end
+        end
+
+        SCREEN_1.onMouseClick = function(self, key)
+            if (key) then
+                netstream.Start("feedbackScreen")
+            end
+        end
+
+        hook.Add("Think", "aaoa", function()
+            SCREEN_1:think()
+        end)
+
+        hook.Add("PostDrawTranslucentRenderables", "aaoa", function()
+            SCREEN_1:render()
+        end)
+    end
 end

@@ -1,4 +1,4 @@
-ITEM.name = "Nights of Knights"
+﻿ITEM.name = "Nights of Knights"
 ITEM.bookDesc = "meleeBookDesc"
 ITEM.model = "models/props_lab/binderredlabel.mdl"
 ITEM.attribute = "meleeskill"

@@ -1,202 +1,195 @@
-if (!FPP_MySQLConfig) then
-	Msg"what"
+﻿if (not FPP_MySQLConfig) then
+    Msg"what"
 end
 
 nut.vote.list = nut.vote.list or {}
 nut.vote.incr = nut.vote.incr or 0
 
 function nut.vote.start(title, recipient, callback)
-	local id = nut.vote.incr
-	nut.vote.list[id] = {
-		players = {},
-		callback = callback,
-	}
+    local id = nut.vote.incr
 
-	for k, v in ipairs(recipient) do
-		nut.vote.list[id].players[v:UniqueID()] = -1
-	end
+    nut.vote.list[id] = {
+        players = {},
+        callback = callback
+    }
 
-	timer.Create("nutVote_"..id, 10, 1, function()
-		nut.vote.list[id].callback(nut.vote.list[id])
-	end)
+    for k, v in ipairs(recipient) do
+        nut.vote.list[id].players[v:UniqueID()] = -1
+    end
 
-	netstream.Start(recipient, "voteRequired", id, title)
+    timer.Create("nutVote_" .. id, 10, 1, function()
+        nut.vote.list[id].callback(nut.vote.list[id])
+    end)
 
-	nut.vote.incr = id + 1
+    netstream.Start(recipient, "voteRequired", id, title)
+    nut.vote.incr = id + 1
 end
 
 netstream.Hook("nutVote", function(client, id, response)
-	if (nut.vote.list[id]) then
-		nut.vote.list[id].players[client:UniqueID()] = tonumber(response)
-	end
+    if (nut.vote.list[id]) then
+        nut.vote.list[id].players[client:UniqueID()] = tonumber(response)
+    end
 
-	local votedPlayers = nut.vote.list[id].players
-	local unVoted = 0
+    local votedPlayers = nut.vote.list[id].players
+    local unVoted = 0
 
-	for k, v in pairs(votedPlayers) do
-		if (v == -1) then
-			unVoted = unVoted + 1
-		end
-	end
+    for k, v in pairs(votedPlayers) do
+        if (v == -1) then
+            unVoted = unVoted + 1
+        end
+    end
 
-	if (unVoted == 0) then
-		nut.vote.list[id].callback(nut.vote.list[id])
-		timer.Remove("nutVote_"..id)
-	end
+    if (unVoted == 0) then
+        nut.vote.list[id].callback(nut.vote.list[id])
+        timer.Remove("nutVote_" .. id)
+    end
 end)
 
 function nut.vote.simple(title, newCallback)
-	nut.vote.start(title, player.GetAll(), function(vote)
-		local poll = vote.players
-		local min = #poll / 2
-		local agree, disagree, surrender = 0, 0, 0
+    nut.vote.start(title, player.GetAll(), function(vote)
+        local poll = vote.players
+        local min = #poll / 2
+        local agree, disagree, surrender = 0, 0, 0
 
-		for k, v in pairs(poll) do
-			if (v == 1) then
-				agree = agree + 1
-			elseif (v == 0) then
-				disagree = disagree + 1
-			elseif (v == -1) then
-				surrender = surrender + 1
-			end
-		end
+        for k, v in pairs(poll) do
+            if (v == 1) then
+                agree = agree + 1
+            elseif (v == 0) then
+                disagree = disagree + 1
+            elseif (v == -1) then
+                surrender = surrender + 1
+            end
+        end
 
-		newCallback(poll, agree, disagree, surrender)
-	end)
+        newCallback(poll, agree, disagree, surrender)
+    end)
 end
 
 netstream.Hook("nutHitmanAccept", function(hitman, response)
-	local char = hitman:getChar()
-	if (!char) then return end
+    local char = hitman:getChar()
+    if (not char) then return end
+    local class = char:getClass()
+    if (class ~= CLASS_HITMAN) then return end
 
-	local class = char:getClass()
-	if (class != CLASS_HITMAN) then return end
+    if (response == 1) then
+        local info = hitman.voteInfo
+        local cost = nut.config.get("hitCost", 250)
 
-	if (response == 1) then
-		local info = hitman.voteInfo
-		local cost = nut.config.get("hitCost", 250)
+        if (info) then
+            hitman.onHitVote = false
+            hitman:setHitTarget(info.target, info.client, info.reason)
+            info.client:getChar():giveMoney(-cost)
+        end
 
-		if (info) then
-			hitman.onHitVote = false
-			hitman:setHitTarget(info.target, info.client, info.reason)
-			info.client:getChar():giveMoney(-cost)
-		end
-		
-		hitman.voteInfo = nil
-	end
+        hitman.voteInfo = nil
+    end
 end)
 
 function SCHEMA:UpdateWeedVendors()
-	for k, v in ipairs(ents.GetAll()) do
-		if (v:GetClass() == "nut_vendor") then
-			v.scale = math.min(v.scale + 0.4, WEEDTABLE.max)
-		end
-	end
+    for k, v in ipairs(ents.GetAll()) do
+        if (v:GetClass() == "nut_vendor") then
+            v.scale = math.min(v.scale + 0.4, WEEDTABLE.max)
+        end
+    end
 end
+
 timer.Create("nutVendorWeedSell", nut.config.get("vendorWeedInterval", 3600), 0, SCHEMA.UpdateWeedVendors)
 
 function SCHEMA:OnCharTradeVendor(client, entity, uniqueID, isSellingToVendor)
-	if (isSellingToVendor) then
-		nut.log.add(client, "sell", uniqueID)
-	else
-		nut.log.add(client, "buy", uniqueID)
-	end
+    if (isSellingToVendor) then
+        nut.log.add(client, "sell", uniqueID)
+    else
+        nut.log.add(client, "buy", uniqueID)
+    end
 
-	if (isSellingToVendor) then
-		if (entity:getNetVar("name") == "Narcotic") then
-			if (entity.items and entity.items["raweed"]) then
-				entity.scale = math.max(entity.scale - 0.03, WEEDTABLE.min)
-
-				netstream.Start(client, "nutUpdateWeed", entity, entity.scale)
-			end
-		end
-	end
+    if (isSellingToVendor) then
+        if (entity:getNetVar("name") == "Narcotic") then
+            if (entity.items and entity.items["raweed"]) then
+                entity.scale = math.max(entity.scale - 0.03, WEEDTABLE.min)
+                netstream.Start(client, "nutUpdateWeed", entity, entity.scale)
+            end
+        end
+    end
 end
 
 function SCHEMA:UpdateVendors()
-	for k, v in ipairs(ents.GetAll()) do
-		if (v:IsPlayer()) then
-			v:notifyLocalized("vendorUpdated")
-		end
+    for k, v in ipairs(ents.GetAll()) do
+        if (v:IsPlayer()) then
+            v:notifyLocalized("vendorUpdated")
+        end
 
-		if (v:GetClass() == "nut_vendor") then
+        if (v:GetClass() == "nut_vendor") then
+            if (v:getNetVar("name") == "Black Market Dealer") then
+                v.currentStock = v.currentStock or 0
+                v.currentStock = (v.currentStock + 1) % #WEAPON_STOCKS
+                local data = WEAPON_STOCKS[v.currentStock + 1] or WEAPON_STOCKS[1]
 
-			if (v:getNetVar("name") == "Black Market Dealer") then
-				v.currentStock = v.currentStock or 0
-				v.currentStock = (v.currentStock + 1) % #WEAPON_STOCKS
+                if (data) then
+                    v:setNetVar("desc", data.desc)
+                    v.items = {}
 
-				local data = WEAPON_STOCKS[v.currentStock + 1] or WEAPON_STOCKS[1]
-
-				if (data) then
-					v:setNetVar("desc", data.desc)
-					v.items = {}
-
-					for itemID, stockData in pairs(data.stocks) do
-						v.items[itemID] = v.items[itemID] or {}
-
-						v.items[itemID][VENDOR_MODE] = VENDOR_SELLONLY
-						v.items[itemID][VENDOR_PRICE] = stockData.price
-						v.items[itemID][VENDOR_MAXSTOCK] = stockData.amount
-						v.items[itemID][VENDOR_STOCK] = stockData.amount
-					end
-				end
-			end
-		end
-	end
+                    for itemID, stockData in pairs(data.stocks) do
+                        v.items[itemID] = v.items[itemID] or {}
+                        v.items[itemID][VENDOR_MODE] = VENDOR_SELLONLY
+                        v.items[itemID][VENDOR_PRICE] = stockData.price
+                        v.items[itemID][VENDOR_MAXSTOCK] = stockData.amount
+                        v.items[itemID][VENDOR_STOCK] = stockData.amount
+                    end
+                end
+            end
+        end
+    end
 end
+
 timer.Create("nutVendorSell", nut.config.get("vendorInterval", 3600), 0, SCHEMA.UpdateVendors)
 
 local whitelist = {
-	["Text"] = true,
-	["Font"] = true,
-	["Type"] = true,
-	["FontSize"] = true,
-	["OutSize"] = true,
-	["AnimSpeed"] = true,
-	["Neon"] = true,
-	["ColorBack"] = true,
-	["ColorText"] = true,
-	["ColorOut"] = true,
+    ["Text"] = true,
+    ["Font"] = true,
+    ["Type"] = true,
+    ["FontSize"] = true,
+    ["OutSize"] = true,
+    ["AnimSpeed"] = true,
+    ["Neon"] = true,
+    ["ColorBack"] = true,
+    ["ColorText"] = true,
+    ["ColorOut"] = true
 }
-	
+
 netstream.Hook("nutBingle", function(client, entity, mod, value)
-	if (IsValid(entity) and whitelist[mod]) then
-		if (entity:CPPIGetOwner() != client and !client:IsAdmin()) then
-			return true
-		end
+    if (IsValid(entity) and whitelist[mod]) then
+        if (entity:CPPIGetOwner() ~= client and not client:IsAdmin()) then return true end
+        local func = entity["Set" .. mod]
 
-		local func = entity["Set" .. mod]
+        if (value and type(value) == "table") then
+            value = Vector(value.r, value.g, value.b)
+        end
 
-		if (value and type(value) == "table") then
-			value = Vector(value.r, value.g, value.b)
-		end
-
-		if (func) then	
-			func(entity, value)
-		end
-	end
+        if (func) then
+            func(entity, value)
+        end
+    end
 end)
-
 
 nut.map = nut.map or {}
 nut.map.ents = {}
 
 function nut.map.sync(client)
-	netstream.Start(client, "nutMapSync", nut.map.ents)
+    netstream.Start(client, "nutMapSync", nut.map.ents)
 end
 
 function nut.map.add(entity)
-	nut.map.ents[entity:EntIndex()] = entity
+    nut.map.ents[entity:EntIndex()] = entity
 end
 
 function nut.map.remove(entity)
-	nut.map.ents[entity:EntIndex()] = nil
+    nut.map.ents[entity:EntIndex()] = nil
 end
 
 function nut.map.removeInvalid()
-	for k, v in pairs(nut.map.ents) do
-		if (!IsValid(v)) then
-			nut.map.ents[k] = nil
-		end
-	end
+    for k, v in pairs(nut.map.ents) do
+        if (not IsValid(v)) then
+            nut.map.ents[k] = nil
+        end
+    end
 end

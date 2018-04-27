@@ -1,4 +1,4 @@
-ITEM.name = "Donut"
+﻿ITEM.name = "Donut"
 ITEM.model = "models/noesis/donut.mdl"
 ITEM.hungerAmount = 60
 ITEM.foodDesc = "doughNutDesc"

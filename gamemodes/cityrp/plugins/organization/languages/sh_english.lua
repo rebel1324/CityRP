@@ -1,4 +1,4 @@
-LANGUAGE = {
+﻿LANGUAGE = {
     organization = "Organization",
     orgLevel = "Organization Level",
     orgMoney = "Organization Fund",
@@ -30,6 +30,6 @@ LANGUAGE = {
     orgExitDesc = "Exit from the Organization",
     orgExit = "Exit",
     orgCreateInfo = "You can create your own organization in here",
-    orgTitle = "Organization Name", 
-    orgDesc = "Organization Description",
+    orgTitle = "Organization Name",
+    orgDesc = "Organization Description"
 }

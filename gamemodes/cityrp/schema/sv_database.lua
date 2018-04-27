@@ -1,1 +1,1 @@
-GM = GM or GAMEMODE
+﻿GM = GM or GAMEMODE
