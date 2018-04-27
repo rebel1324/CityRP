@@ -1,4 +1,4 @@
-ITEM.name = "Chinese Takeout"
+﻿ITEM.name = "Chinese Takeout"
 ITEM.model = "models/props_junk/garbage_takeoutcarton001a.mdl"
 ITEM.hungerAmount = 30
 ITEM.foodDesc = "chineseDesc"

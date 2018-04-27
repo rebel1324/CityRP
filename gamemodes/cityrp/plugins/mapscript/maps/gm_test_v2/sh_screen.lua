@@ -1,25 +1,23 @@
--- EXAMPLE MAP ADDRESS
+﻿-- EXAMPLE MAP ADDRESS
 -- http://www.mediafire.com/download/g3tdrirnczg2t1n/gm_test_v2.bsp
-
 do
-	if (SERVER) then
-		netstream.Hook("feedbackScreen", function(client)
-			client:ConCommand("say I read this!")
-		end)
-	else
-		local scrSize = 5
-		SCREEN_1 = SCREEN_1 or LuaScreen()
-		SCREEN_1.pos = Vector(623.968750, -176.183197, 335.747162)
-		SCREEN_1.ang = Angle(180, 0, 180)
-		SCREEN_1.noClipping = false
-		SCREEN_1.w = 16*scrSize
-		SCREEN_1.h = 9*scrSize
-		SCREEN_1.scale = .17
+    if (SERVER) then
+        netstream.Hook("feedbackScreen", function(client)
+            client:ConCommand("say I read this!")
+        end)
+    else
+        local scrSize = 5
+        SCREEN_1 = SCREEN_1 or LuaScreen()
+        SCREEN_1.pos = Vector(623.968750, -176.183197, 335.747162)
+        SCREEN_1.ang = Angle(180, 0, 180)
+        SCREEN_1.noClipping = false
+        SCREEN_1.w = 16 * scrSize
+        SCREEN_1.h = 9 * scrSize
+        SCREEN_1.scale = .17
 
-		-- Create Text Markup Object.
-		timer.Simple(1, function()
-			MRKPOBJ = nut.markup.parse(
-[[
+        -- Create Text Markup Object.
+        timer.Simple(1, function()
+            MRKPOBJ = nut.markup.parse([[
 <font=nutBigFont><color=200, 200, 80>THIS SCREEN IS EXAMPLE WORLD SCREEN</font>
 <font=nutMediumFont>This screen example created by the Black Tea za rebel1324</color>
 
@@ -42,43 +40,44 @@ I didn't made some kind of scroller but hey, it works :DD
 
 So, I gotta get back to my army. Good luck, fellas.
 <color=80, 255, 80>Cheers for very good schema of NutScript 1.1.</color>
-]]
-			, SCREEN_1:getWide() - 20)
-		end)
+]], SCREEN_1:getWide() - 20)
+        end)
 
-		local scrollAmount
-		local scrollPos = 0
-		local scrollTargetPos
-		SCREEN_1.renderCode = function(scr, ent, wide, tall)
-			draw.RoundedBox(0, 0, 0, wide, tall, Color(0, 0, 0, 150))
+        local scrollAmount
+        local scrollPos = 0
+        local scrollTargetPos
 
-			scrollAmount = math.max(MRKPOBJ:getHeight() - tall + 20, 0)
+        SCREEN_1.renderCode = function(scr, ent, wide, tall)
+            draw.RoundedBox(0, 0, 0, wide, tall, Color(0, 0, 0, 150))
+            scrollAmount = math.max(MRKPOBJ:getHeight() - tall + 20, 0)
 
-			if (scr.hasFocus) then
-				local mx, my = scr:mousePos()
-				local prec = my/tall
-				scrollTargetPos = (prec) * -scrollAmount
-			else
-				scrollTargetPos = (math.Clamp(((RealTime() / tall*10) % 1.7) - .2, 0, 1) * -scrollAmount)
-			end
+            if (scr.hasFocus) then
+                local mx, my = scr:mousePos()
+                local prec = my / tall
+                scrollTargetPos = (prec) * -scrollAmount
+            else
+                scrollTargetPos = (math.Clamp(((RealTime() / tall * 10) % 1.7) - .2, 0, 1) * -scrollAmount)
+            end
 
-			scrollPos = Lerp(FrameTime()*7, scrollPos, scrollTargetPos)
-			if (MRKPOBJ) then
-				MRKPOBJ:draw(15, scrollPos + 10, 3, 2)
-			end
-		end
-		SCREEN_1.onMouseClick = function(self, key)
-			if (key) then
-				netstream.Start("feedbackScreen")
-			end
-		end
+            scrollPos = Lerp(FrameTime() * 7, scrollPos, scrollTargetPos)
 
-		hook.Add("Think", "aaoa", function()
-			SCREEN_1:think()
-		end)
-		
-		hook.Add("PostDrawTranslucentRenderables", "aaoa", function()
-			SCREEN_1:render()
-		end)
-	end
+            if (MRKPOBJ) then
+                MRKPOBJ:draw(15, scrollPos + 10, 3, 2)
+            end
+        end
+
+        SCREEN_1.onMouseClick = function(self, key)
+            if (key) then
+                netstream.Start("feedbackScreen")
+            end
+        end
+
+        hook.Add("Think", "aaoa", function()
+            SCREEN_1:think()
+        end)
+
+        hook.Add("PostDrawTranslucentRenderables", "aaoa", function()
+            SCREEN_1:render()
+        end)
+    end
 end

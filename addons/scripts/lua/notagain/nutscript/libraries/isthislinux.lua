@@ -1,2 +1,2 @@
-WINDOWS = system.IsWindows()
+﻿WINDOWS = system.IsWindows()
 LINUX = system.IsLinux()

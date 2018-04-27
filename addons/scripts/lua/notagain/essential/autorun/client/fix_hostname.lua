@@ -1,3 +1,3 @@
-function GetHostName()
-	return GetGlobalString("ServerName")
+﻿function GetHostName()
+    return GetGlobalString("ServerName")
 end

@@ -1,4 +1,4 @@
-ITEM.name = "The Secret of Alpha Male"
+﻿ITEM.name = "The Secret of Alpha Male"
 ITEM.bookDesc = "strBookDesc"
 ITEM.model = "models/props_lab/binderblue.mdl"
 ITEM.attribute = "str"
