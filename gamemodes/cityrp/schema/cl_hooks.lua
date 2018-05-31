@@ -80,7 +80,6 @@ end--]]
 
 -- This hook loads the fonts
 function SCHEMA:LoadFonts(font)
-	font = "Consolas"
 	surface.CreateFont("nutATMTitleFont", {
 		font = font,
 		extended = true,

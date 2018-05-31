@@ -1,4 +1,0 @@
---[[
-Tomas
---]]
-include("shared.lua")

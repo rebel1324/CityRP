@@ -286,11 +286,21 @@ if (CLIENT) then
 
 			if (CURRENT_SCREEN_MODULE) then
 				if (use or fire) then
-					if (CURRENT_SCREEN_MODULE.onMouseClick) then
-						CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+					if (CURRENT_SCREEN_MODULE.doorRender) then
+						if (DOORSOMETHING) then
+							if (CURRENT_SCREEN_MODULE.onMouseClick) then
+								CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+							end
+								
+							return true
+						end
+					else
+						if (CURRENT_SCREEN_MODULE.onMouseClick) then
+							CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+						end
+							
+						return true
 					end
-						
-					return true
 				end
 			end
 		end

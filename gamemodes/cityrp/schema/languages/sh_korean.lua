@@ -638,4 +638,7 @@ LANGUAGE = {
 	entATM = "ATM",
 	entStash = "보관함",
 	entOutfitter = "외형 변경",
+	
+	moneyPrinterInfo = "현재 돈: %s (뜨거움: %s)",
+	moneyPrinterHelp = "전면 패널에서 업그레이드가 가능합니다.",
 }

@@ -376,6 +376,7 @@ if (CLIENT) then
 		for k, v in pairs(paintedEntitiesCache) do
 			if (IsValid(k)) then
 				if (k:isDoor()) then
+					LUASCREEN.doorRender = true
 					LUASCREEN:render()
 					LUASCREEN:think()
 					

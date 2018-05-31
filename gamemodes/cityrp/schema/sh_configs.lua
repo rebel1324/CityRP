@@ -479,9 +479,13 @@ nut.tips = {
 
 nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
 
-nut.bent.add("moneyprinter_samsung", "models/props_c17/consolebox01a.mdl", "printerNameSamsung", 2, 1000, notLaw)
-nut.bent.add("moneyprinter_agple", "models/props_c17/consolebox01a.mdl", "printerNameLG", 2, 1000, notLaw)
-nut.bent.add("moneyprinter_lg", "models/props_c17/consolebox01a.mdl", "printerNameApple", 2, 1000, notLaw)
+nut.bent.add("printer_tier1", "models/rebel1324/mprint.mdl", "printerNameTier1", 2, 20000, notLaw)
+nut.bent.add("printer_tier2", "models/rebel1324/mprint.mdl", "printerNameTier2", 2, 30000, notLaw)
+nut.bent.add("printer_tier3", "models/rebel1324/mprint.mdl", "printerNameTier3", 2, 50000, notLaw)
+nut.bent.add("printer_tier4", "models/rebel1324/mprint.mdl", "printerNameTier4", 2, 70000, notLaw)
+nut.bent.add("printer_tier5", "models/rebel1324/mprint.mdl", "printerNameTier5", 2, 85000, notLaw)
+nut.bent.add("printer_tier6", "models/rebel1324/mprint.mdl", "printerNameTier6", 2, 100000, notLaw)
+nut.bent.add("printer_tier7", "models/rebel1324/mprint.mdl", "printerNameTier7", 2, 130000, notLaw)
 
 nut.bent.add("nut_vnd_food", "models/props_wasteland/kitchen_stove002a.mdl", "foodVendor", 1, 800, cookOnly)
 nut.bent.add("nut_vnd_soda", "models/rebel1324/sodavendor.mdl", "sodaVendor", 1, 1000, cookOnly)
