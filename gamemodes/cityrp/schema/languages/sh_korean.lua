@@ -570,13 +570,10 @@ LANGUAGE = {
     no = "아니오",
     yes = "예",
     lock = "잠금",
-
-    Communication = "연락 수단",
-
-
 	on = "켜짐",
 	off = "꺼짐",
-	
+
+    Communication = "연락 수단",
 	
     ["Gun Dealer"] = "총상인",
     ["Businessman"] = "사업가",
@@ -636,5 +633,9 @@ LANGUAGE = {
     Attach = "부품 장착",
     Detach = "부품 떼기",
     primary = "주무기",
-    secondary = "보조무기",
+	secondary = "보조무기",
+	
+	entATM = "ATM",
+	entStash = "보관함",
+	entOutfitter = "외형 변경",
 }

@@ -28,78 +28,82 @@ LuaScreen = nut.screen.new
 
 -- The code below is Touchable Screen Metatable function.
 local _R = debug.getregistry()
-
 local SCREEN = _R.TouchScreen or {}
-SCREEN.__index = SCREEN
-SCREEN.w = 100
-SCREEN.h = 100
-SCREEN.pos = Vector(0, 0, 0)
-SCREEN.ang = Angle(0, 0, 0)
-SCREEN.scale = 1
-SCREEN.filter = true
-SCREEN.screenName = "Default"
+do
+	SCREEN.__index = SCREEN
+	SCREEN.w = 100
+	SCREEN.h = 100
+	SCREEN.pos = Vector(0, 0, 0)
+	SCREEN.ang = Angle(0, 0, 0)
+	SCREEN.scale = 1
+	SCREEN.filter = true
+	SCREEN.screenName = "Default"
 
--- This function allows you to print this Object with proper name.
-function SCREEN:__tostring()
-	return "[SCREEN OBJECT]"
-end
-
--- This RayQuadIntersect gets the Point Position (x and y, range: 0 - 1) of the Plane that you're looking. 
-local vec = Vector(0,0,0)
-local function rayQuadIntersect(vOrigin, vDirection, vPlane, vX, vY)
-        local vp = vDirection:Cross(vY)
-
-        local d = vX:DotProduct(vp)
-
-        if (d <= 0.0) then return end
-
-        local vt = vOrigin - vPlane
-        local u = vt:DotProduct(vp)
-        if (u < 0.0 or u > d) then return end
-
-        local v = vDirection:DotProduct(vt:Cross(vX))
-        if (v < 0.0 or v > d) then return end
-
-        return u / d,v / d
-end
-SCREEN.rayQuadIntersect = rayQuadIntersect
-
--- This function checks If the player can't see the 3D2D Screen.
-function SCREEN:isBehind(client)
-	if ((client:EyePos() - self.pos):DotProduct(self.ang:Forward()) < 0) then
-		return true
-	end
-end
-
--- This function checks If the player can access to Touch Panel.
-function SCREEN:isAccessible(client)
-	local w, h, pos, ang = self.w, self.h, self.pos, self.ang
-	client = client or LocalPlayer()
-	
-	-- Check if the player is too faraway from the screen.
-	if (pos:Distance(client:EyePos()) > (w/2 + 64)) then
-		return
+	-- This function allows you to print this Object with proper name.
+	function SCREEN:__tostring()
+		return "[SCREEN OBJECT]"
 	end
 
-	-- Check the player can see the front of the panel.
-	if ((client:EyePos() - pos):DotProduct(ang:Forward()) < 0) then
-		return
+	-- This RayQuadIntersect gets the Point Position (x and y, range: 0 - 1) of the Plane that you're looking. 
+	local vec = Vector(0,0,0)
+	local function rayQuadIntersect(vOrigin, vDirection, vPlane, vX, vY)
+			local vp = vDirection:Cross(vY)
+
+			local d = vX:DotProduct(vp)
+
+			if (d <= 0.0) then return end
+
+			local vt = vOrigin - vPlane
+			local u = vt:DotProduct(vp)
+			if (u < 0.0 or u > d) then return end
+
+			local v = vDirection:DotProduct(vt:Cross(vX))
+			if (v < 0.0 or v > d) then return end
+
+			return u / d,v / d
+	end
+	SCREEN.rayQuadIntersect = rayQuadIntersect
+
+	-- This function checks If the player can't see the 3D2D Screen.
+	function SCREEN:isBehind(client)
+		if ((client:EyePos() - self.pos):DotProduct(self.ang:Forward()) < 0) then
+			return true
+		end
 	end
 
-	-- Declare the plane.
-	local plane = pos
-	+ ang:Up() * h/2
-	+ ang:Right() * (-w/2)
+	-- This function checks If the player can access to Touch Panel.
+	function SCREEN:isAccessible(client)
+		local w, h, pos, ang = self.w, self.h, self.pos, self.ang
+		client = client or LocalPlayer()
+		
+		-- Check if the player is too faraway from the screen.
+		if (pos:Distance(client:EyePos()) > (w/2 + 64)) then
+			return
+		end
 
-	local x = ang:Right() * w
-	local y = ang:Up() * -h
+		-- Check the player can see the front of the panel.
+		if ((client:EyePos() - pos):DotProduct(ang:Forward()) < 0) then
+			return
+		end
 
-	local aimVector = (vgui.CursorVisible() and gui.ScreenToVector(gui.MousePos())) or client:GetAimVector()
+		-- Declare the plane.
+		local plane = pos
+		+ ang:Up() * h/2
+		+ ang:Right() * (-w/2)
 
-	return rayQuadIntersect(VIEWOVRD or client:GetShootPos(), aimVector, plane, x, y)
+		local x = ang:Right() * w
+		local y = ang:Up() * -h
+
+		local aimVector = (vgui.CursorVisible() and gui.ScreenToVector(gui.MousePos())) or client:GetAimVector()
+
+		return rayQuadIntersect(VIEWOVRD or client:GetShootPos(), aimVector, plane, x, y)
+	end
 end
+_R.TouchScreen = SCREEN
 
 if (CLIENT) then
+	CURRENT_SCREEN_MODULE = nil
+
 	SCREEN.mx = -1
 	SCREEN.my = -1
 
@@ -195,7 +199,12 @@ if (CLIENT) then
 		local client = LocalPlayer()
 		local mx, my = self:isAccessible()
 		-- If the screen can calculate the Position of the cursor.
-		if mx then
+		if (mx) then
+			if (!CURRENT_SCREEN_MODULE) then
+				CURRENT_SCREEN_MODULE = self
+				hook.Run("OnPlayerFocusTouch", CURRENT_SCREEN_MODULE, true)
+			end
+
 			-- If the screen can calculate, The screen has the focus.
 			self.mx, self.my = mx, my
 			self.hasFocus = true
@@ -236,6 +245,11 @@ if (CLIENT) then
 				end
 			end
 		else
+			if (CURRENT_SCREEN_MODULE and CURRENT_SCREEN_MODULE == self) then
+				hook.Run("OnPlayerFocusTouch", CURRENT_SCREEN_MODULE, false)
+				CURRENT_SCREEN_MODULE = nil
+			end
+
 			-- If the screen can't calculate, The screen does not have focus.
 			self.hasFocus = nil
 
@@ -250,4 +264,35 @@ if (CLIENT) then
 	end
 end
 
-_R.TouchScreen = SCREEN
+if (CLIENT) then
+	nut.screen.IsValid = function() return true end
+
+	local hey = false
+	hook.Add("OnPlayerFocusTouch", nut.screen, function(scrMeta, screen, focus)
+		if (screen.notTouch) then return end
+
+		hey = focus
+	end)
+
+	hook.Add("ShouldDrawCrosshair", nut.screen, function(scrMeta, screen, focus)
+		if (hey) then
+			return !hey
+		end
+	end)
+
+	hook.Add("PlayerBindPress", nut.screen, function(scrMeta, client, bind, pressed)
+		if (pressed and bind) then
+			local use, fire = bind:find("use"), bind:find("attack")
+
+			if (CURRENT_SCREEN_MODULE) then
+				if (use or fire) then
+					if (CURRENT_SCREEN_MODULE.onMouseClick) then
+						CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+					end
+						
+					return true
+				end
+			end
+		end
+	end)
+end

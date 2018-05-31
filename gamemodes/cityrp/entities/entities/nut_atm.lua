@@ -379,6 +379,14 @@ else
 	function ENT:Initialize()
 		self:InitScreen()
 		self:InitKeypad()
+
+		hook.Add("GetMapEntities", self, function(entity, dataList)
+			table.insert(dataList, {
+				pos = entity:GetPos(),
+				id = "atm",
+				entity = entity
+			})
+		end)
 	end
 
 	local gap = 4

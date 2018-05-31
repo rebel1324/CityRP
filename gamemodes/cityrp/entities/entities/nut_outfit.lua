@@ -43,6 +43,14 @@ else
 		self.curHeight = 0
 		self.renderIdle = 0
 		self.stareDeploy = 0
+
+		hook.Add("GetMapEntities", self, function(entity, dataList)
+			table.insert(dataList, {
+				pos = entity:GetPos(),
+				id = "outfitter",
+				entity = entity
+			})
+		end)
 	end
 
 	-- universial

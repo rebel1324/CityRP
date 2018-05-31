@@ -7,7 +7,7 @@ include("shared.lua")
 
 function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
-	self:SetModel("models/custom/rprinter.mdl")
+	self:SetModel("models/rebel1324/mprint.mdl")
 
 	self.ModelColor = Color(255, 255, 255, 255)
 

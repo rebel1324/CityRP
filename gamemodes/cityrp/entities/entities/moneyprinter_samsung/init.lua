@@ -7,18 +7,20 @@ include("shared.lua")
 
 function ENT:Initialize()
 	self:SetUseType(SIMPLE_USE)
-	self:SetModel("models/custom/rprinter.mdl")
+	self:SetModel("models/rebel1324/mprint.mdl")
 
-	self.ModelColor = Color(47, 56, 90, 255)
+	self.ModelSkin = 1
 
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
-	self:SetColor(self.ModelColor)
+	self:SetSkin(self.ModelSkin)
+
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
 	phys:Wake()
 	self.Working = true
+
 
 	self.MaxMoney = 1500
 	self.CrclCfg.PlusMoney = 50
@@ -174,8 +176,6 @@ function ENT:Work()
 end
 
 function ENT:Use(ply)
-	if (self:getNetVar("locked")) then return end
-
 	if(ply:IsPlayer())then
 		self.Working = true
 		local char = ply:getChar()
@@ -195,14 +195,12 @@ function ENT:Use(ply)
 				effectdata:SetNormal(self:GetForward())
 				effectdata:SetScale(1)
 				util.Effect("btMoneySplat", effectdata)
-				self:ResetSequence("withdraw")
 			end)
 		end
     end
 end
 
 netstream.Hook("printerUpgrade", function(client, upgNum, entity)
-	if (entity:getNetVar("locked")) then return end
 	if (IsValid(entity) and IsValid(client)) then
 		local dist = entity:GetPos():Distance(client:GetPos())
 		if (dist > 256) then return end

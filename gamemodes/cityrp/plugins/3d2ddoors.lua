@@ -258,18 +258,7 @@ if (CLIENT) then
 	end
 
 	local meta = FindMetaTable("Entity")
-
-	function PLUGIN:PlayerBindPress(client, bind, pressed)
-		if (DOORSOMETHING) then
-			if (bind:find("use") or bind:find("attack")) then
-				if (LUASCREEN.onMouseClick) then
-					LUASCREEN.onMouseClick(IN_USE)
-				end
-				return true
-			end
-		end
-	end
-
+	
 	function PLUGIN:DrawEntityInfo(entity, alpha)
 		if (entity:isDoor()) then
 			local a, b = entity:GetCollisionBounds()

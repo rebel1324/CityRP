@@ -1,5 +1,5 @@
 ENT.Type = "anim"
-ENT.Base = "base_gmodentity"
+ENT.Base = "moneyprinter_samsung"
 ENT.PrintName = "Money Printer"
 ENT.Author = "Tomas"
 ENT.Spawnable = false

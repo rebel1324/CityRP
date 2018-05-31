@@ -153,6 +153,14 @@ else
 				self.models[k]:SetMaterial( v.material )
 			end
 		end
+
+		hook.Add("GetMapEntities", self, function(entity, dataList)
+			table.insert(dataList, {
+				pos = entity:GetPos(),
+				id = "board",
+				entity = entity
+			})
+		end)
 	end
 
 	function ENT:OnRemove()

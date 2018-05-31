@@ -9,7 +9,6 @@ ENT.Spawnable = false
 ENT.AdminSpawnable = false
 ENT.SeizeReward = 450
 ENT.lockable = true
-ENT.AutomaticFrameAdvance = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar("Int", 0, "NextPrint")

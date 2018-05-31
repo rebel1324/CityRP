@@ -38,6 +38,16 @@ if (SERVER) then
 		requestStash(activator)
 	end
 else
+	function ENT:Initialize()
+		hook.Add("GetMapEntities", self, function(entity, dataList)
+			table.insert(dataList, {
+				pos = entity:GetPos(),
+				id = "stash",
+				entity = entity
+			})
+		end)
+	end
+
 	function ENT:Draw()
 		self:DrawModel()
 	end
