@@ -194,4 +194,5 @@ function ENT:onDrawEntityInfo(alpha)
 	nut.util.drawText(L(self.PrintName), x, y, ColorAlpha(nut.config.get("color"), alpha), 1, 1, nil, alpha * 0.65)
 	nut.util.drawText(L("moneyPrinterInfo", nut.currency.get(self:GetMoney()), heat), x, y + 16, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
 	nut.util.drawText(L("moneyPrinterHelp"), x, y + 32, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
+	nut.util.drawText(L("moneyPrinterHelp2"), x, y + 48, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
 end

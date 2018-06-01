@@ -23,11 +23,12 @@ function ENT:Initialize()
 	self:SetEnabled(true)
 
 	self:UpdateCoolerTimer()
+	self:UpdatePrintTimer()
 end
 
 function ENT:UpdateCoolerTimer()
-	local timerName = self.EntIndex() .. "_cool"
-	timer.Create(timerName, self.setting.spec.coolTime * .1, 0, function()
+	local timerName = self:EntIndex() .. "_cool"
+	timer.Create(timerName, self.setting.spec.coolTime * 1, 0, function()
 		if (!IsValid(self) or self:GetNoDraw(true)) then
 			timer.Destroy(timerName)
 			return
@@ -41,14 +42,14 @@ function ENT:UpdateCoolerTimer()
 end
 
 function ENT:UpdatePrintTimer(destroy)
-	local timerName = self.EntIndex() .. "_print"
+	local timerName = self:EntIndex() .. "_print"
 
 	if (destroy) then
 		timer.Destroy(timerName)
 		return
 	end
 	
-	timer.Create(timerName, self:CalcSpeed() * .1, 0, function()
+	timer.Create(timerName, self:CalcSpeed() * 1, 0, function()
 		if (!IsValid(self) or self:GetNoDraw(true)) then
 			timer.Destroy(timerName)
 			return

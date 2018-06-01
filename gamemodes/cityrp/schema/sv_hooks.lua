@@ -451,6 +451,10 @@ end
 
 function SCHEMA:PlayerInitialSpawn(client)
 	netstream.Start(client, "nutLawSync", SCHEMA.laws)
+	-- TODO: International Toggle Options
+	if (true) then
+		client:ConCommand("nut_language korean")
+	end
 end
 
 -- Give Class Loadout.
@@ -597,6 +601,7 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			arrested:SetPos( Vector( 2924.674316, -3200.367920, -119.968750 ) )
 			arrested:setAction("Releasing", nut.config.get("jailTime"))
 			arrested:StripWeapons()
+			
             timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
                 arrested:Spawn()
 				arrested:notify("You have been released from prison")

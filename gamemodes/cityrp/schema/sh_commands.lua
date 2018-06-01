@@ -145,21 +145,20 @@ nut.command.add("refund", {
 })
 
 nut.command.add("stuck", {
-	syntax = "<string name>",
 	onRun = function(client, arguments)
 		if (client:isWanted() or client:isArrested()) then
 			return
 		end
 
 		if (client.nextStuck and client.nextStuck > CurTime()) then
-			client:ChatPrint(L("tryLater", math.Round(client.nextStuck - CurTime())))
+			client:notifyLocalized("tryLater", math.Round(client.nextStuck - CurTime()))
 			return
 		end
 
 		client.nextStuck = CurTime() + 300
 		client:Spawn()
 	end,
-	--alias = {"자살", "끼임", "꼈음"}
+	alias = {"자살", "끼임", "꼈음", "끼임탈출"}
 })
 
 nut.command.add("search", {

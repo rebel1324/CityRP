@@ -641,4 +641,14 @@ LANGUAGE = {
 	
 	moneyPrinterInfo = "현재 돈: %s (뜨거움: %s)",
 	moneyPrinterHelp = "전면 패널에서 업그레이드가 가능합니다.",
+	upgradePrinter = "프린터 업그레이드",
+	upgradePrinterTouch = "여기서 업그레이드",
+	
+	printerNameTier1 = "브론즈 프린터",
+	printerNameTier2 = "실버 프린터",
+	printerNameTier3 = "골드 프린터",
+	printerNameTier4 = "플래티넘프린터",
+	printerNameTier5 = "다이아몬드 프린터",
+	printerNameTier6 = "마스터 프린터",
+	printerNameTier7 = "챌린저 프린터",
 }

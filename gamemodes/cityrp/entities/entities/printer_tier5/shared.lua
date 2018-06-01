@@ -1,7 +1,7 @@
 AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "printer_base"
-ENT.PrintName = "Money Printer"
+ENT.PrintName = "printerNameTier5"
 ENT.setting = {
 	upgrade = {
 		price = {

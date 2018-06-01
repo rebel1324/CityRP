@@ -13,7 +13,7 @@ ENT.printerUpgrades = {
 	power = "PowerLevel",
 	stability = "StabilityLevel",
 	cooler = "CoolerLevel",
-	speed = "SpeedLevel",
+	--speed = "SpeedLevel",
 }
 -- TODO: Language
 ENT.upgradeText = {
@@ -76,7 +76,7 @@ function ENT:SetupDataTables()
 				return
 			end
 
-			entity:UpdatePrintTimer(true)
+			entity:UpdatePrintTimer()
 		end)
 
 		self:NetworkVarNotify("Enabled", function(entity, name, old, new)

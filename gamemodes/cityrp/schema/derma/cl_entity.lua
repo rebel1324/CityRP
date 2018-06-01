@@ -88,7 +88,7 @@ PANEL = {}
     function PANEL:loadEntities()
         self.list:Clear()
         
-        for k, v in pairs(nut.bent.list) do
+        for k, v in SortedPairs(nut.bent.list) do
             if (v.condition(LocalPlayer())) then
                 local panel = vgui.Create("nutEntitiesPanel", self.list)
                 panel:setEntity(v)
