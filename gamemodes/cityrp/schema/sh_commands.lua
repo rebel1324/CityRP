@@ -23,7 +23,7 @@ nut.command.add("gunlicense", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	--alias = {"건라", "건라이센스"}
+	alias = {"건라", "건라이센스"}
 })
 
 nut.command.add("revokegunlicense", {
@@ -50,7 +50,7 @@ nut.command.add("revokegunlicense", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	--alias = {"건라뺏기", "건라취소"}
+	alias = {"건라뺏기", "건라취소"}
 })
 
 nut.command.add("drop", {
@@ -73,8 +73,6 @@ nut.command.add("drop", {
 							v.player = client
 
 							if (dropFunc.onCanRun and dropFunc.onCanRun(v) == false) then
-								--v.player = nil
-
 								continue
 							end
 					
@@ -103,7 +101,7 @@ nut.command.add("drop", {
 			end
 		end
 	end,
-	--alias = {"드랍", "버리기"}
+	alias = {"드랍", "버리기"}
 })
 
 nut.command.add("lockdown", {
@@ -125,7 +123,7 @@ nut.command.add("lockdown", {
 			SCHEMA.nextLockdown = CurTime() + 120
 		end
 	end,
-	--alias = {"계엄령"}
+	alias = {"계엄령"}
 })
 
 nut.command.add("refund", {
@@ -141,22 +139,37 @@ nut.command.add("refund", {
 			hook.Run("OnPlayerRefundEntity", client, entity)
 		end
 	end,
-	--alias = {"환불"}
+	alias = {"환불"}
 })
 
+UNSTUCK_DELAY = 15
+UNSTUCK_PENALTY = 20
+UNSTUCK_COOLDOWN = 1500
 nut.command.add("stuck", {
 	onRun = function(client, arguments)
-		if (client:isWanted() or client:isArrested()) then
+		if (client:isWanted() or client:isArrested() or IsValid(client.nutRagdoll)) then
 			return
 		end
-
+		
 		if (client.nextStuck and client.nextStuck > CurTime()) then
 			client:notifyLocalized("tryLater", math.Round(client.nextStuck - CurTime()))
 			return
 		end
+		
+		local timerName = client:SteamID() .. "_unstuckTimer"
+		client:notifyLocalized("unstuckOngoing", UNSTUCK_DELAY)
 
-		client.nextStuck = CurTime() + 300
-		client:Spawn()
+		hook.Add("PlayerHurt", timerName, function()
+			timer.Destroy(timerName)
+			hook.Remove("PlayerHurt", timerName)
+			client:notifyLocalized("unstuckInturrupted", UNSTUCK_PENALTY)
+			client.nextStuck = CurTime() + UNSTUCK_PENALTY
+		end)
+
+		timer.Create(timerName, UNSTUCK_DELAY, 1, function()
+			client.nextStuck = CurTime() + UNSTUCK_COOLDOWN
+			client:Spawn()
+		end)
 	end,
 	alias = {"자살", "끼임", "꼈음", "끼임탈출"}
 })
@@ -185,7 +198,7 @@ nut.command.add("search", {
 			client:notifyLocalized("notLaw")
 		end
 	end,
-	--alias = {"수색"}
+	alias = {"수색"}
 })
 
 nut.command.add("lawboard", {
@@ -201,8 +214,9 @@ nut.command.add("lawboard", {
 			return false
 		end
 			
-		for k, v in ipairs(ents.FindByClass("nut_lawboard")) do
-			v:Remove()
+		
+		if (IsValid(client.lawboard)) then
+			client.lawboard:Remove()
 		end
 		
 		traceData = {}
@@ -211,16 +225,47 @@ nut.command.add("lawboard", {
 		traceData.filter = client
 		trace = util.TraceLine(traceData)
 		
+
 		local entity = ents.Create("nut_lawboard")
 		entity:SetPos(trace.HitPos)
 		entity:SetAngles(trace.HitNormal:Angle())
 		entity:Spawn()
 		entity:Activate()
 		entity:CPPISetOwner(client)
+		entity:CallOnRemove("_imagroot", function(entity)
+			if (IsValid(client)) then
+				client.lawboard = nil
+			end
+		end)
+
+		client.lawboard = entity
 		
 		client:notifyLocalized("spawnedLawboard")
 	end,
-	--alias = {"법판"}
+	alias = {"법판"}
+})
+
+nut.command.add("lawboardremove", {
+	syntax = "<string name>",
+	onRun = function(client, arguments)
+		local char = client:getChar()
+		local class = char:getClass()
+		local classData = nut.class.list[class]
+				
+		if (class != CLASS_MAYOR) then
+			client:notifyLocalized("noPerm")
+					
+			return false
+		end
+			
+		
+		if (IsValid(client.lawboard)) then
+			client.lawboard:Remove()
+		end
+		
+		client:notifyLocalized("removedLawboard")
+	end,
+	alias = {"법판"}
 })
 
 nut.command.add("bankdeposit", {
@@ -254,7 +299,7 @@ nut.command.add("bankdeposit", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	--alias = {"입금"}
+	alias = {"입금"}
 })
 
 nut.command.add("bankwithdraw", {
@@ -289,7 +334,7 @@ nut.command.add("bankwithdraw", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	--alias = {"출금"}
+	alias = {"출금"}
 })
 
 nut.command.add("banktransfer", {
@@ -330,37 +375,7 @@ nut.command.add("banktransfer", {
 			client:notify(L("tooFar", client))
 		end
 	end,
-	--alias = {"송금"}
-})
-
-nut.command.add("banklongtransfer", {
-	syntax = "<amount>",
-	onRun = function(client, arguments)
-		local atmEntity
-		for k, v in ipairs(ents.FindInSphere(client:GetPos(), 128)) do
-			if (v:isBank()) then
-				atmEntity = v
-				break
-			end
-		end
-
-		if (IsValid(atmEntity) and hook.Run("CanUseBank", client, atmEntity)) then
-			local amount = table.concat(arguments, "")
-			local char = client:getChar()
-			amount = math.Round(tonumber(amount))
-
-			if (amount and isnumber(amount) and amount > 0 and char) then
-				if (char:hasReserve(amount)) then
-					-- Fee 10%
-				end
-			else
-				client:notify(L("provideValidNumber", client))
-			end
-		else
-			client:notify(L("tooFar", client))
-		end
-	end,
-	--alias = {"장거리송금"}
+	alias = {"송금"}
 })
 
 nut.command.add("setprice", {
@@ -452,7 +467,7 @@ nut.command.add("buyentity", {
 
 		end
 	end,
-	--alias = {"구매"}
+	alias = {"구매"}
 })
 
 nut.command.add("beclass", {
@@ -514,7 +529,7 @@ nut.command.add("beclass", {
 			client:notifyLocalized("illegalAccess")
 		end
 	end,
-	--alias = {"직업", "job"}
+	alias = {"직업", "job"}
 })
 
 nut.command.add("demote", {
@@ -599,7 +614,7 @@ nut.command.add("jailpos", {
 			return L("prisonAdded", client, name)
 		end
 	end,
-	--alias = {"감옥추가"}
+	alias = {"감옥추가"}
 })
 
 nut.command.add("setjailpos", {
@@ -618,7 +633,7 @@ nut.command.add("setjailpos", {
 			return L("prisonReset", client, name)
 		end
 	end,
-	--alias = {"감옥설정"}
+	alias = {"감옥설정"}
 })
 
 
@@ -665,7 +680,7 @@ nut.command.add("crappos", {
 			return L("crapAdded", client, name)
 		end
 	end,
-	--alias = {}
+	alias = {}
 })
 
 nut.command.add("setcrappos", {
@@ -681,7 +696,7 @@ nut.command.add("setcrappos", {
 			return L("crapReset", client, name)
 		end
 	end,
-	--alias = {}
+	alias = {}
 })
 
 nut.command.add("hit", {
@@ -766,7 +781,7 @@ nut.command.add("hit", {
 			end
 		end
 	end,
-	--alias = {"의뢰"}
+	alias = {"의뢰"}
 })
 
 
@@ -791,14 +806,14 @@ nut.command.add("removelaw", {
 			if (index <= 10) then
 				SCHEMA.laws[index] = ""
 
-				netstream.Start(player.GetAll(), "nutLawSync", SCHEMA.laws)
+				netstream.Start(player.GetAll(), "nutLawSync", SCHEMA.laws, index, "")
 				client:notifyLocalized("lawChanged")
 			else
 				client:notifyLocalized("indexInvalid")
 			end
 		end
 	end,
-	--alias = {"법삭제"}
+	alias = {"법삭제"}
 })
 
 nut.command.add("addlaw", {
@@ -822,7 +837,8 @@ nut.command.add("addlaw", {
 			if (index <= 10) then
 				SCHEMA.laws[index] = message
 
-				netstream.Start(player.GetAll(), "nutLawSync", SCHEMA.laws)
+				hook.Run("OnLawChanged", index, message)
+				netstream.Start(player.GetAll(), "nutLawSync", SCHEMA.laws, index, message)
 				client:notifyLocalized("lawChanged")
 				
 				nut.log.add(client, "rule", message)
@@ -831,7 +847,7 @@ nut.command.add("addlaw", {
 			end
 		end
 	end,
-	--alias = {"법추가"}
+	alias = {"법추가"}
 })
 
 
@@ -861,7 +877,7 @@ nut.command.add("broadcast", {
 			v:BroadcastMSG(message, 60)
 		end
 	end,
-	--alias = {"방송"}
+	alias = {"방송"}
 })
 
 nut.chat.register("tc", {
@@ -892,7 +908,7 @@ nut.chat.register("tc", {
 
 		return false
 	end,
-	--prefix = {"/t", "/팀", "/g"}
+	prefix = {"/t", "/팀", "/g"}
 })
 
 -- Advert Chat Type
@@ -905,7 +921,7 @@ nut.chat.register("advert", {
 	onChatAdd = function(speaker, text)
 		chat.AddText(Color(180, 255, 10), L"advert", nut.config.get("chatColor"), speaker:Name()..": "..text)
 	end,
-	--prefix = {"/ad", "/광고"}
+	prefix = {"/ad", "/광고"}
 })
 
 -- Advert Chat Type
@@ -964,7 +980,7 @@ nut.command.add("unwanted", {
 			target:wanted(false, message, client)
 		end
 	end,
-	--alias = {"수배해제", "현상수배해제"}
+	alias = {"수배해제", "현상수배해제"}
 })
 
 nut.command.add("wanted", {
@@ -998,7 +1014,7 @@ nut.command.add("wanted", {
 			end
 		end
 	end,
-	--alias = {"수배", "현상수배"}
+	alias = {"수배", "현상수배"}
 })
 
 nut.command.add("searchwarrant", {
@@ -1028,7 +1044,7 @@ nut.command.add("searchwarrant", {
 				return
 			end
 
-			netstream.Start(player.GetAll(), "nutSearchText", target, message)
+			netstream.Start(player.GetAll(), "nutSearchText", true, client, target, message)
 			target:setNetVar("searchWarrant", true)
 
 			local id = target:getChar():getID()
@@ -1041,7 +1057,43 @@ nut.command.add("searchwarrant", {
 			end)
 		end
 	end,
-	--alias = {"수색영장"}
+	alias = {"수색영장"}
+})
+
+nut.command.add("stopwarrant", {
+	syntax = "<string name>",
+	onRun = function(client, arguments)
+		local target = nut.command.findPlayer(client, arguments[1])
+		local char = client:getChar()
+
+		if (char and !client:IsAdmin()) then
+			local class = char:getClass()
+			local classData = nut.class.list[class]
+
+			if (!classData.law) then
+				client:notifyLocalized("noPerm")
+
+				return
+			end
+		end
+
+		if (IsValid(target) and target:getChar()) then
+			if (!target:Alive()) then return false, "notAlive" end
+
+			if (target:getNetVar("searchWarrant", false) != true) then
+				client:notifyLocalized("notOnSearch")
+
+				return
+			end
+
+			netstream.Start(player.GetAll(), "nutSearchText", false, client, target)
+			target:setNetVar("searchWarrant", nil)
+
+			local id = target:getChar():getID()
+			timer.Destroy(target:getChar():getID() .. "_chewAss")
+		end
+	end,
+	alias = {"수색영장"}
 })
 
 nut.command.add("password", {
@@ -1076,7 +1128,7 @@ nut.command.add("password", {
 			end
 		end
 	end,
-	--alias = {"비번", "비밀번호"}
+	alias = {"비번", "비밀번호"}
 })
 
 -- kek
@@ -1101,4 +1153,22 @@ nut.command.add("sellall", {
 			client:notifyLocalized("sellAll")
 		end
 	end,
+})
+
+nut.chat.register("report", {
+	format = "(어드민) %s: %s",
+	onGetColor = function(speaker, text)
+		local color = nut.chat.classes.ic.onGetColor(speaker, text)
+		-- Make the yell chat slightly brighter than IC chat.
+		return Color(231, 76, 60)
+	end,
+	onCanHear = function(speaker, listener)
+		if (speaker == listener) then return true end
+		
+		if (listener:IsAdmin()) then
+			return true
+		end
+		return false
+	end,
+	prefix = {"@", "/어드민"}
 })
