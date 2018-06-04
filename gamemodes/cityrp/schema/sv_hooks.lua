@@ -233,7 +233,7 @@ function SCHEMA:CanPlayerInteractItem(client, action, item)
 		itemTable = nut.item.instances[item]
 	end
 
-	if (itemTable.team) then
+	if (itemTable and itemTable.team) then
 		local class = char:getClass()
 		local classData = nut.class.list[class]
 
@@ -287,6 +287,7 @@ function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
 		hook.Run("PlayerHitCharacterDodge", client, netChar, prevChar)
 		hook.Run("ResetVariables", client, SIGNAL_CHAR)
 
+		-- TODO: reduce iteration count
 		for k, v in ipairs(ents.GetAll()) do
 			if (v:GetPersistent()) then continue end
 			if (v:GetNWBool("fuckoff")) then continue end
@@ -420,7 +421,14 @@ function SCHEMA:OnCharCreated(client, char)
 			end
 		end
 
-		char:giveMoney(nut.config.get("startMoney", 0))
+		char:setMoney(50000)
+
+		local charCount = table.Count(client.nutCharList)
+
+		if (charCount > 1) then
+			char:setMoney(0)
+			client:notifyLocalized("noExploitPlease")
+		end
 	end
 end
 
@@ -543,9 +551,16 @@ function SCHEMA:CanBuyEntity(client, char, classname, entTable)
 		end
 
 		local cnt = 0 
+		local printers = {}
+		-- TODO: reduce iteration count
 		for k, v in ipairs(ents.GetAll()) do
-			if (v:CPPIGetOwner() == client and entTable.class == v:GetClass()) then
-				cnt = cnt + 1
+			if (v:CPPIGetOwner() == client) then
+				if (entTable.class == v:GetClass()) then
+					cnt = cnt + 1
+				end
+				if (v:GetClass():find("printer_")) then
+					table.insert(printers, v)
+				end
 			end
 		end
 
@@ -558,6 +573,11 @@ function SCHEMA:CanBuyEntity(client, char, classname, entTable)
 
 			return false
 		end
+		
+		if (classname:find("printer_") and table.Count(printers) >= 3) then
+			client:notifyLocalized("maxReached")
+			return false
+		end
 	end
 end
 
@@ -568,10 +588,13 @@ function SCHEMA:PlayerConnect(name)
 end
 
 function SCHEMA:PlayerDisconnected(client)
+	hook.Run("PlayerCountChanged")
+
 	if (IsValid(client.nutRagdoll)) then
 		client.nutRagdoll:Remove()
 	end
 
+	-- TODO: reduce iteration count
 	for k, v in ipairs(ents.GetAll()) do
 		if (v:GetPersistent()) then continue end
 		if (v:GetNWBool("fuckoff")) then continue end
@@ -693,6 +716,7 @@ function SCHEMA:OnPlayerJoinClass(client, class, oldclass, silent)
 		end
 	end
 
+	-- TODO: reduce iteration count
 	for k, v in ipairs(ents.GetAll()) do
 		local entClass = v:GetClass()
 		local bent = nut.bent.list[entClass]
@@ -781,6 +805,7 @@ local saveEnts = {
 	["nut_roll"] = true,
 	["nut_helloboard"] = true,
 	["nut_rotlight"] = true,
+	["nut_checker"] = true,
 }
 function SCHEMA:SaveData()
 	self:saveJail()
@@ -1038,6 +1063,17 @@ function SCHEMA:OnPlayerStunstickEntity(client, entity, weapon)
 			end
 		end
 	end
+end
+
+NUT_ITEM_REMOVE_INTERVAL = 300
+function SCHEMA:OnItemSpawned(entity)
+	timer.Simple(NUT_ITEM_REMOVE_INTERVAL, function()
+		if (IsValid(entity)) then
+			if (entity:getNetVar("sellPrice", 0) <= 0) then
+				entity:Remove()
+			end
+		end
+	end)
 end
 
 function SCHEMA:CanPlayerAccessDoor(client, door, access)
@@ -1419,9 +1455,11 @@ end
 -- remove all items
 function SCHEMA:ShutDown()
 	-- save DB space, mate.
-	for k, v in ipairs(ents.GetAll()) do
-		if (v:GetClass() == "nut_item") then
-			v:Remove()
-		end
+	for k, v in ipairs(ents.FindByClass("nut_item")) do
+		v:Remove()
 	end
+end
+
+function SCHEMA:PlayerAuthed()
+	hook.Run("PlayerCountChanged")
 end
