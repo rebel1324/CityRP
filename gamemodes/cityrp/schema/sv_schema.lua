@@ -87,7 +87,7 @@ netstream.Hook("nutHitmanAccept", function(hitman, response)
 end)
 
 function SCHEMA:UpdateWeedVendors()
-	for k, v in ipairs(ents.GetAll()) do
+	for k, v in ipairs(NUT_VENDORS) do
 		if (v:GetClass() == "nut_vendor") then
 			v.scale = math.min(v.scale + 0.4, WEEDTABLE.max)
 		end
@@ -114,13 +114,8 @@ function SCHEMA:OnCharTradeVendor(client, entity, uniqueID, isSellingToVendor)
 end
 
 function SCHEMA:UpdateVendors()
-	for k, v in ipairs(ents.GetAll()) do
-		if (v:IsPlayer()) then
-			v:notifyLocalized("vendorUpdated")
-		end
-
+	for k, v in ipairs(NUT_VENDORS) do
 		if (v:GetClass() == "nut_vendor") then
-
 			if (v:getNetVar("name") == "Black Market Dealer") then
 				v.currentStock = v.currentStock or 0
 				v.currentStock = (v.currentStock + 1) % #WEAPON_STOCKS
