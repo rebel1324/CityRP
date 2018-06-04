@@ -107,9 +107,13 @@ DROPITEM = {
 
 -- ILLEGAL_ENTITY
 ILLEGAL_ENTITY = {
-	["moneyprinter_samsung"] = 0.8,
-	["moneyprinter_agple"] = 0.8,
-	["moneyprinter_lg"] = 0.8,
+	["printer_tier1"] = 0.8,
+	["printer_tier2"] = 0.8,
+	["printer_tier3"] = 0.8,
+	["printer_tier4"] = 0.8,
+	["printer_tier5"] = 0.8,
+	["printer_tier6"] = 0.8,
+	["printer_tier7"] = 0.8,
 	["nut_d_lamp"] = 0.8,
 	["nut_d_pot"] = 0.8,
 }
@@ -450,42 +454,15 @@ function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyConditio
 	return nut.bent.list[entClass]
 end
 
---[[
-nut.tips = {
-	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
-	'월급은 바로 은행으로 들어오기 때문에 현금화가 필요합니다.',
-	'인벤토리는 F3으로도 바로 열 수 있습니다.',
-	'스탯은 특정행동을 반복하는 것으로도 올릴 수 있습니다. ',
-	'가끔은 주변사람들에게 베풀어주는 것 만으로도 긍정적인 효과를 얻을 수 있습니다. ',
-	'펀치 인형은 "주먹으로 때릴 경우에만" 숙련 경험치를 줍니다.',
-	'책을 읽으면 한번에 많은 양의 숙련 경험치를 얻지만, 가격이 매우 높습니다.',
-	'C메뉴를 통해서 이 팁을 끌 수 있습니다. 옵션은 화면의 오른쪽 위 구석에 위치하고 있습니다.',
-}
-]]
+--nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
 
---Translated By AngryBaldMan
-nut.tips = {
-	--'Most items can be used immediately by pressing Ctrl and clicking.',
-	'The salary comes directly into the bank, so cash is required.',
-	'Inventory can also be opened directly with F3.',
-	'Stats can be raised by repeating certain actions',
-	'Sometimes it can be a positive effect just to give it to people around you. ',
-	'Punch dolls give "only when you hit with a punch" experience',
-	'When you read a book, you get a lot of experience at a time, but the price is very high.',
-	'You can turn off this tip through the C menu. The option is located in the upper right corner of the screen.',
-}
-
-
-
-nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
-
-nut.bent.add("printer_tier1", "models/rebel1324/mprint.mdl", "printerNameTier1", 2, 20000, notLaw)
-nut.bent.add("printer_tier2", "models/rebel1324/mprint.mdl", "printerNameTier2", 2, 30000, notLaw)
-nut.bent.add("printer_tier3", "models/rebel1324/mprint.mdl", "printerNameTier3", 2, 50000, notLaw)
-nut.bent.add("printer_tier4", "models/rebel1324/mprint.mdl", "printerNameTier4", 2, 70000, notLaw)
-nut.bent.add("printer_tier5", "models/rebel1324/mprint.mdl", "printerNameTier5", 2, 85000, notLaw)
-nut.bent.add("printer_tier6", "models/rebel1324/mprint.mdl", "printerNameTier6", 2, 100000, notLaw)
-nut.bent.add("printer_tier7", "models/rebel1324/mprint.mdl", "printerNameTier7", 2, 130000, notLaw)
+nut.bent.add("printer_tier1", "models/rebel1324/mprint.mdl", "printerNameTier1", 1, 20000, notLaw)
+nut.bent.add("printer_tier2", "models/rebel1324/mprint.mdl", "printerNameTier2", 1, 30000, notLaw)
+nut.bent.add("printer_tier3", "models/rebel1324/mprint.mdl", "printerNameTier3", 1, 50000, notLaw)
+nut.bent.add("printer_tier4", "models/rebel1324/mprint.mdl", "printerNameTier4", 1, 70000, notLaw)
+nut.bent.add("printer_tier5", "models/rebel1324/mprint.mdl", "printerNameTier5", 1, 85000, notLaw)
+nut.bent.add("printer_tier6", "models/rebel1324/mprint.mdl", "printerNameTier6", 1, 100000, notLaw)
+nut.bent.add("printer_tier7", "models/rebel1324/mprint.mdl", "printerNameTier7", 1, 130000, notLaw)
 
 nut.bent.add("nut_vnd_food", "models/props_wasteland/kitchen_stove002a.mdl", "foodVendor", 1, 800, cookOnly)
 nut.bent.add("nut_vnd_soda", "models/rebel1324/sodavendor.mdl", "sodaVendor", 1, 1000, cookOnly)
@@ -588,31 +565,36 @@ end
 --]]
 
 -- Translation by Omar Saleh Assadi / AngryBaldMan
-nut.tips = {
-	--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
-	'Remember, your salary is automatically deposited into your bank account. Make sure to bring cash!',
-	'Did you know? The inventory can also be opened directly by pressing \'F3\'.',
-	'Reptitive actions will help train your skills.',
-	'Did you know? Punching-bag dolls will train your strength skill when hit.',
-	'Did you know? Reading books are great for boosting your stats!',
-	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
-	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
-	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
-	'Did you know? Shooting target dolls will train your firearms skill.',
-	'Certain traders will only sell things to you if you have the right job.',
-	'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.',
-	'Bug reports are resolved much quicker if you attach an image or video.',
-	'Bug reports are resolved much quicker if you attach an image or video.',
-	'Bug reports are resolved much quicker if you attach an image or video.',
-	'Did you know? You can earn ssome extra money using money printers.',
-	'Police receive rewards for confiscating money printers.',
-	'Please separate in-character chat and out of character chat!',
-	'Please separate in-character chat and out of character chat!',
-	'Please check MOTD and IC / OOC before asking for help.',
-	'Please check MOTD and IC / OOC before asking for help.',
-	'Please check MOTD and IC / OOC before asking for help.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-}
+--[[
+	nut.tips = {
+		--'대부분의 아이템은 Ctrl을 누르고 클릭하면 바로 사용할 수 있습니다.',
+		'Remember, your salary is automatically deposited into your bank account. Make sure to bring cash!',
+		'Did you know? The inventory can also be opened directly by pressing \'F3\'.',
+		'Reptitive actions will help train your skills.',
+		'Did you know? Punching-bag dolls will train your strength skill when hit.',
+		'Did you know? Reading books are great for boosting your stats!',
+		'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
+		'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
+		'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
+		'Did you know? Shooting target dolls will train your firearms skill.',
+		'Certain traders will only sell things to you if you have the right job.',
+		'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.',
+		'Bug reports are resolved much quicker if you attach an image or video.',
+		'Bug reports are resolved much quicker if you attach an image or video.',
+		'Bug reports are resolved much quicker if you attach an image or video.',
+		'Did you know? You can earn ssome extra money using money printers.',
+		'Police receive rewards for confiscating money printers.',
+		'Please separate in-character chat and out of character chat!',
+		'Please separate in-character chat and out of character chat!',
+		'Please check MOTD and IC / OOC before asking for help.',
+		'Please check MOTD and IC / OOC before asking for help.',
+		'Please check MOTD and IC / OOC before asking for help.',
+		'Having an issue? You can file a report with an administrator using the report command.',
+		'Having an issue? You can file a report with an administrator using the report command.',
+		'Having an issue? You can file a report with an administrator using the report command.',
+		'Having an issue? You can file a report with an administrator using the report command.',
+	}
+]]--
+
+nut.tips = {"지속적으로 서버 정보를 받고싶다면 가입하세요:  https://steamcommunity.com/groups/lolsdarkrpserver"}
+
