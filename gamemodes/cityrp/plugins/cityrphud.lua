@@ -4,7 +4,7 @@ PLUGIN.desc = "This plugin adds good HUD."
 
 if (SERVER) then return end
 
-NUT_CVAR_HUDTYPE = CreateClientConVar("nut_hudtype", 1, true)
+NUT_CVAR_HUDTYPE = CreateClientConVar("nut_hudtype", 0, true)
 TYPE_LEGACY_LACRP = 0
 TYPE_LATEST_CITYRP = 1
 
@@ -39,18 +39,20 @@ function PLUGIN:LoadFonts(font, genericFont)
 		extended = true,	
 		shadow = true,
 	})
-	surface.CreateFont("s_aadablur", {
-		font = "fontello",
+	surface.CreateFont("nutHUDCircleIconBlur", {
+		font = "nsicons",
 		size 		= ScreenScale(10),
 		blursize = 2,
 		scanlines = 1,
+		extended = true,
 		antialias = true
 	})
-	surface.CreateFont("s_aada", {
-		font = "fontello",
+	surface.CreateFont("nutHUDCircleIcon", {
+		font = "nsicons",
 		size 		= ScreenScale(10),
 		blursize = 0,
 		scanlines = 1,
+		extended = true,
 		antialias = true
 	})
 	surface.CreateFont("nutSmallFont2", {
@@ -313,10 +315,10 @@ function PLUGIN:HUDPaint()
 			surface.SetDrawColor(energyColor)
 			drawPercCircle(cx, cy, engSize, energy / energyMax, col)
 
-			local text = "j"
+			local text = ""
 			local tx,ty = cx, cy 
-			nut.util.drawText(text, tx, ty, energy2Color, 1, 1, "s_aadablur")
-			nut.util.drawText(text, tx, ty, txtcol, 1, 1, "s_aada")
+			nut.util.drawText(text, tx, ty, energy2Color, 1, 1, "nutHUDCircleIconBlur")
+			nut.util.drawText(text, tx, ty, txtcol, 1, 1, "nutHUDCircleIcon")
 		end
 		
 		cx = cx + Size*1.1
@@ -327,10 +329,10 @@ function PLUGIN:HUDPaint()
 			drawCircle( cx,cy, engSize)
 			drawPercCircle(cx, cy, engSize, stamina / staminaMax, staminaBgColor)
 			
-			local text = "@"
+			local text = ""
 			local tx,ty = cx +1, cy+1
-			nut.util.drawText(text, tx, ty, stamina2Color, 1, 1, "s_aadablur")
-			nut.util.drawText(text, tx, ty, txtcol, 1, 1, "s_aada")
+			nut.util.drawText(text, tx, ty, stamina2Color, 1, 1, "nutHUDCircleIconBlur")
+			nut.util.drawText(text, tx, ty, txtcol, 1, 1, "nutHUDCircleIcon")
 		end
 
 		local class = char:getClass()
@@ -345,22 +347,22 @@ function PLUGIN:HUDPaint()
 		local text = ""
 
 		if (LocalPlayer():isArrested()) then
-			text = text .. "% "
+			text = text .. " "
 		end
 
 		if (LocalPlayer():isWanted()) then
-			text = text .. "R "
+			text = text .. " "
 		end
 
 		if (LocalPlayer():getNetVar("searchWarrant")) then
-			text = text .. "0 "
+			text = text .. " "
 		end
 
 		if (LocalPlayer():getNetVar("license") ) then
-			text = text .. "e "
+			text = text .. " "
 		end
 
-		local tx, ty = nut.util.drawText(text, SW/2, SH - 50, color_white, 1, 1, "nutIconsBig")
+		local tx, ty = nut.util.drawText(text, SW/2, SH - 50, color_white, 1, 1, "nutIconsBigNew")
 	elseif (NUT_CVAR_HUDTYPE:GetInt() == TYPE_LATEST_CITYRP) then
 		local localPlayer = LocalPlayer()
 		local client = localPlayer
