@@ -73,6 +73,14 @@ else
 		self.lifetime = CurTime() + self.configLifetime
 		self.beep = 255
 
+		hook.Add("GetMapEntities", self, function(entity, dataList)
+			table.insert(dataList, {
+				pos = entity:GetPos(),
+				id = "beacon",
+				entity = entity
+			})
+		end)
+
 		GLOBAL_BEACONS[self:EntIndex()] = self
 	end
 
