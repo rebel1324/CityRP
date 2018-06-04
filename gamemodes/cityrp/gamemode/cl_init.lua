@@ -13,7 +13,20 @@ local whiteList = {
 	balloon = true,
 	camera = true,
 	button = true,
+	remover = true,
+	keypad_willox = true,
+	material = true,
+	camera = true,
 }
+
+
+hook.Add("CanTool", "asfasfsaf", function(client, trace, mode, ENT)
+    if (whiteList[mode]) then
+        return true 
+    end
+
+    return client:IsSuperAdmin()
+end)
 
 if (CLIENT) then
     local function eliminateCunts()
