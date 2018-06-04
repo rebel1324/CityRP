@@ -114,15 +114,21 @@ function PLUGIN:OnPlayerInteractItem(client, action, item, result)
 		
 		if (char) then
 			local price, owner = entity:getNetVar("sellPrice"), entity:getNetVar("sellOwner")
+			
 			if (price and owner) then
 				if (owner == client) then return end
-				char:takeMoney(price)
-				if (IsValid(owner)) then
-					local ownerChar = owner:getChar()
-					if (ownerChar) then
-						ownerChar:giveMoney(price)
-						client:notifyLocalized("cashierPurchased", nut.currency.get(price))
-						owner:notifyLocalized("cashierSold", nut.currency.get(price))
+				
+				if (result != false) then
+					char:takeMoney(price)
+					
+					if (IsValid(owner)) then
+						local ownerChar = owner:getChar()
+
+						if (ownerChar) then
+							ownerChar:giveMoney(price)
+							client:notifyLocalized("cashierPurchased", nut.currency.get(price))
+							owner:notifyLocalized("cashierSold", nut.currency.get(price))
+						end
 					end
 				end
 			end
@@ -132,16 +138,19 @@ end
 
 function PLUGIN:OnCreateItemInteractionMenu(panel, menu, itemTable)
 	local inventory = panel:GetParent()
+	local client = LocalPlayer()
 	-- lol, kanbare clientss!
 	local nearCashier, entity
-	for k, v in ipairs(ents.FindInSphere(EyePos(), 512)) do
-		if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == LocalPlayer()) then
+	for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
+		print(v:GetClass(), v:CPPIGetOwner() == client)
+		if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
 			nearCashier = true
 			entity = v
 			break
 		end
 	end
 	
+	print(nearCashier)
 	if (nearCashier) then
 		menu:AddOption(L("priceSet"), function()
 			local itemID = itemTable:getID()
