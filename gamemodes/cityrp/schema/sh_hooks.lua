@@ -192,6 +192,30 @@ function SCHEMA:InitializedSchema()
 	end
 end
 
+local shipmentInfo = {
+	["cw_ak74"] = {"AK-47", 10, 75000},
+	["cw_ar15"] = {"AR-15", 10, 72500},
+	["cw_fiveseven"] = {"FV Five seveN", 10, 48000},
+	["cw_scarh"] = {"FN SCAR-H", 10, 76500},
+	["cw_g3a3"] = {"G3A3", 10, 82000},
+	["cw_g36c"] = {"H&K G36C", 10, 75000},
+	["cw_ump45"] = {"H&K UMP 45", 10, 60000},
+	["cw_deagle"] = {"IMI Desert Eagle", 10, 53000},
+	["cw_l115"] = {"L115", 10, 130000},
+	["cw_l85a2"] = {"L85A2", 10, 76500},
+	["cw_m14"] = {"M14 EBR2", 10, 81000},
+	["cw_m3super90"] = {"M3 super 90", 10, 60000},
+	["cw_mac11"] = {"MAC-11", 10, 62000},
+	["cw_mr96"] = {"MR96", 10, 52000},
+	["cw_p99"] = {"P99", 10, 42000},
+	
+	["teargas"] = {"최루탄", 5, 10000},	
+	["flare_g"] = {"초록 신호탄", 5, 10000},	
+	["flare_b"] = {"파란 신호탄", 5, 10000},	
+	["flare"] = {"빨간 신호탄", 5, 10000},	
+}
+
+
 function SCHEMA:InitializedPlugins()
 	if (nut.xhair) then
 		nut.xhair.entIcon = table.Merge(nut.xhair.entIcon, {
@@ -207,6 +231,15 @@ function SCHEMA:InitializedPlugins()
 		nut.xhair.entIgnore = table.Merge(nut.xhair.entIgnore, {
 			nut_atm = true,
 		})
+	end
+	
+	for id, data in pairs(shipmentInfo) do
+		local ITEM = nut.item.register(id .. "_shipment", "base_shipment", nil, nil, true)
+			ITEM.name = data[1] .. " 한 박스"
+			ITEM.itemID = id
+			ITEM.maxQuantity = data[2]
+			ITEM.price = data[3]
+		ITEM = nil
 	end
 end
 
@@ -339,3 +372,28 @@ function SCHEMA:Move(client, movedata)
         end
     end
 end
+
+local function updateLaw()
+	local classes = nut.class.list
+	local players = #player.GetAll()
+	local mul = math.max(1, players/20)
+
+	for k, v in ipairs(classes) do
+		if (v.law and k != CLASS_MAYOR and k != CLASS_POLICELEADER) then
+			v.oldLimit = v.oldLimit or v.limit
+			v.limit = v.oldLimit * mul
+		end
+	end
+end
+if (SERVER) then
+	function SCHEMA:PlayerCountChanged()
+		updateLaw()
+
+		netstream.Start(player.GetAll(), "updateLawPlease")
+	end
+else
+	netstream.Hook("updateLawPlease", function()
+		updateLaw()
+	end)
+end
+
