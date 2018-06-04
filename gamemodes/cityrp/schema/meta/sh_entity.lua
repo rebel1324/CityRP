@@ -53,6 +53,7 @@ if (SERVER) then
 						self.ignoreUse = false
 						self.nutIsMuted = false
 
+						-- TODO: reduce iteration count
 						for k, v in ipairs(ents.GetAll()) do
 							if (v:GetParent() == self) then
 								v:SetNotSolid(false)
@@ -78,10 +79,11 @@ if (SERVER) then
 				self:DeleteOnRemove(dummy)
 			self.nutIsMuted = true
 			
-				for k, v in ipairs(self:GetBodyGroups()) do
-					dummy:SetBodygroup(v.id, self:GetBodygroup(v.id))
-				end
+			for k, v in ipairs(self:GetBodyGroups()) do
+				dummy:SetBodygroup(v.id, self:GetBodygroup(v.id))
+			end
 
+			-- TODO: reduce iteration count
 			for k, v in ipairs(ents.GetAll()) do
 				if (v:GetParent() == self) then
 					v:SetNotSolid(true)
