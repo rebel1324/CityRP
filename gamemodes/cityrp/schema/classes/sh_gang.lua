@@ -8,7 +8,7 @@ CLASS.business = {
 CLASS.weapons = {
 	"nut_unarrest",
 }
-CLASS.limit = 6
+CLASS.limit = 7
 CLASS.team = 2
 CLASS.color = Color(39, 82, 50)
 CLASS.model = {

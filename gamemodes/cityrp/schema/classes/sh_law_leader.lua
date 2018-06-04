@@ -4,17 +4,15 @@ CLASS.salary = 230
 CLASS.law = true
 CLASS.weapons = {
 	"cw_m1911",
+	"cw_mp5",
 	"nut_stunstick",
 	"nut_arrestbaton",
 	"keypad_cracker",
 }
 CLASS.business = {
 	["doorcharge"] = 1,
-	["teargas"] = 1,
+	["teargas_shipment"] = .9,	
 	["tie"] = 1,
-	
---	["bg_wf_p226_silencer"] = 1,
---	["bg_wf_p226_rds"] = 1,
 }
 CLASS.limit = 1
 CLASS.team = 1

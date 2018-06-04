@@ -11,7 +11,7 @@ CLASS.weapons = {
 }
 CLASS.business = {
 	["doorcharge"] = 1,
-	["teargas"] = 1,
+	["teargas_shipment"] = .9,	
 	["tie"] = 1,
 	
 --	["bg_wf_p226_silencer"] = 1,

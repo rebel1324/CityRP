@@ -11,13 +11,10 @@ CLASS.weapons = {
 }
 CLASS.business = {
 	["doorcharge"] = 1,
-	["teargas"] = 1,
+	["teargas_shipment"] = .9,	
 	["tie"] = 1,
-	
---	["bg_wf_p226_silencer"] = 1,
-	--["bg_wf_p226_rds"] = 1,
 }
-CLASS.limit = 6
+CLASS.limit = 10
 CLASS.team = 1
 CLASS.color = Color(25, 25, 170)
 CLASS.model = {
