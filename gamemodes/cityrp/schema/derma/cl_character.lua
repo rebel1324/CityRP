@@ -102,18 +102,18 @@ local PANEL = {}
 			nut.gui.loading:Remove()
 		end
 
-		-- if (!nut.localData.intro) then
-		if (!nut.gui.charLoaded) then
-			timer.Simple(0.1, function()
-				vgui.Create("nutIntro", self)
-			end)
-			nut.gui.charLoaded = true
+		if (!nut.localData.intro) then
+			if (!nut.gui.charLoaded) then
+				timer.Simple(0.1, function()
+					vgui.Create("nutIntro", self)
+				end)
+				nut.gui.charLoaded = true
+			else
+				self:playMusic()
+			end
 		else
 			self:playMusic()
 		end
-		-- else
-		-- 	self:playMusic()
-		-- end
 
 		if (IsValid(nut.gui.char) or (LocalPlayer().getChar and LocalPlayer():getChar())) then
 			nut.gui.char:Remove()
