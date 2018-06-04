@@ -270,6 +270,7 @@ if (CLIENT) then
 	local hey = false
 	hook.Add("OnPlayerFocusTouch", nut.screen, function(scrMeta, screen, focus)
 		if (screen.notTouch) then return end
+		if (screen.doorRender) then return end
 
 		hey = focus
 	end)
@@ -289,14 +290,14 @@ if (CLIENT) then
 					if (CURRENT_SCREEN_MODULE.doorRender) then
 						if (DOORSOMETHING) then
 							if (CURRENT_SCREEN_MODULE.onMouseClick) then
-								CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+								CURRENT_SCREEN_MODULE:onMouseClick(IN_USE)
 							end
 								
 							return true
 						end
 					else
 						if (CURRENT_SCREEN_MODULE.onMouseClick) then
-							CURRENT_SCREEN_MODULE.onMouseClick(IN_USE)
+							CURRENT_SCREEN_MODULE:onMouseClick(IN_USE)
 						end
 							
 						return true
