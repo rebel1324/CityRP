@@ -45,7 +45,7 @@ if (SERVER) then
 		self.trigger:Remove()
 	end
 
-	function ENT:Popup(ent)
+	function ENT:Popup(ent, sus)
 		self:SetDTBool(0, true)
 		self.loopSound:Play()
 

@@ -22,6 +22,9 @@ if (SERVER) then
 		["nut_unarrest"] = true,
 		["nut_keys"] = true,
 		["weapon_healer"] = true,
+		["nut_stunbaton"] = true,
+		["weapon_detector"] = true,
+		["keypad_cracker"] = true,
 	}
 	function ENT:StartTouch(client)
 		if (IsValid(client) and client != self and client != self:GetParent() and client:IsPlayer()) then
@@ -40,7 +43,7 @@ if (SERVER) then
 
 			for k, v in pairs(weapons) do
 				if (!defualtWeapons[v:GetClass()]) then
-					self:GetParent():Popup(client)
+					self:GetParent():Popup(client, v)
 					illegal = true
 					return
 				end
@@ -48,7 +51,7 @@ if (SERVER) then
 			
 			for k, v in pairs(char:getInv():getItems()) do
 				if (v.isWeapon) then
-					self:GetParent():Popup(client)
+					self:GetParent():Popup(client, v)
 					illegal = true
 					return
 				end

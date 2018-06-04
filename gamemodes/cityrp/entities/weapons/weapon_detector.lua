@@ -192,10 +192,9 @@ if (CLIENT) then
 		end
 
 		local drawEnts = {}
-		for k, v in ipairs(ents.GetAll()) do
-			local dist = v:GetPos():Distance(LocalPlayer():GetPos())
-
-			if (dist < scanDist and ILLEGAL_ENTITY and ILLEGAL_ENTITY[v:GetClass()]) then
+		for k, v in ipairs(ents.FindInSphere(self:GetPos(), scanDist)) do
+			if (ILLEGAL_ENTITY and ILLEGAL_ENTITY[v:GetClass()]) then
+				local dist = v:GetPos():Distance(LocalPlayer():GetPos())
 				table.insert(drawEnts, {v, dist})
 			end
 		end

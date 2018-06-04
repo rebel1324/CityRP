@@ -96,12 +96,13 @@ function SWEP:PrimaryAttack()
 		if (IsValid(entity) and entity:IsPlayer()) then
 			--entity:arrest(true, self.Owner)
 			if entity:getNetVar("Handcuffed") == true then
-			entity:setNetVar("Handcuffed", false)
-			entity:arrest(true)
-           else
-           self.Owner:notify("They must be handcuffed!")
-           end
-	
+				entity:setNetVar("Handcuffed", false)
+				entity:arrest(true)
+		   	else
+
+				-- TODO: Locale
+           		self.Owner:notify("수갑을 먼저 채워야 합니다!")
+        	end
 		end
 	end
 end

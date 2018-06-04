@@ -197,6 +197,11 @@ else
 						)
 					, "nutSubNATMFont", p1 - b1/2 + scale * 0.5, p2-2, color_white, 3, 1)
 				end
+		
+			if (self.hasFocus) then
+				surface.SetDrawColor(255, 255, 255)
+				surface.DrawRect(mx, my, 5, 5)
+			end
 		end
 	end
 
@@ -268,6 +273,11 @@ else
 				surface.SetDrawColor(39, 174, 113)
 				surface.DrawOutlinedRect(kx+1, ky+1, kkw-2, kkh-2)
 				draw.SimpleText(L(btnCalls[i+1]), "nutSubNATMFont", kx+kkw/2, ky+kkh/2-2, color_white, 1, 1)
+			end
+			
+			if (self.hasFocus) then
+				surface.SetDrawColor(255, 255, 255)
+				surface.DrawRect(mx, my, 5, 5)
 			end
 		end
 	end
@@ -431,10 +441,12 @@ else
 
 	function ENT:Think()
 		if (self.screen) then
+		self.screen.renderCode = renderCode
 			self.screen:think()
 		end
 
 		if (self.touch) then
+		self.touch.renderCode = renderCode2
 			self.touch:think()
 		end
 	end

@@ -270,8 +270,9 @@ else
 				name = itemTable.name,
 				getDesc = itemTable.getDesc,
 				entity = v,
-				price = v:getNetVar("price"),
+				price = v:getNetVar("sellPrice"),
 			}
+			item = table.Merge(item, itemTable)
 
 			if (item) then
 				table.insert(newItems, item)
