@@ -62,21 +62,13 @@ hook.Add("BuildHelpMenu", "nutBasicHelp", function(tabs)
 	end
 end)
 
---[[This hook adds up some new stuffs in F1 Menu.
 function SCHEMA:BuildHelpMenu(tabs)
-	tabs["homepage"] = "http://183.106.89.97:8002/indexutil.html"
-	tabs["motd"] = "http://183.106.89.97:8002/motd.html"
-	tabs["updated"] = "http://183.106.89.97:8002/update.html"
-	tabs["mod"] = function(node)
-		local body = ""
-
-		for title, text in SortedPairs(self.helps) do
-			body = body.."<h1>"..title.."</h1><b>"..text.."</b><br /><br />"
-		end
-
-		return body
+	tabs["changelog"] = function(node)
+		return [[
+			<iframe src="https://pastebin.com/embed_iframe/nNTrwEF6" style="border:none;width:100%; height:100%"></iframe>
+		]]
 	end
-end--]]
+end
 
 -- This hook loads the fonts
 function SCHEMA:LoadFonts(font)
@@ -362,9 +354,13 @@ netstream.Hook("nutHitText", function(a, b, c)
 	CHAT_CLASS = nil
 end)
 
-netstream.Hook("nutSearchText", function(a, b, c)
+netstream.Hook("nutSearchText", function(bool, a, b, c)
 	CHAT_CLASS = {font = "nutJailBig"}
-		chat.AddText(color_white, L("warrantNofity", a:Name(), b))
+		if (bool) then
+			chat.AddText(color_white, L("warrantNofity", a:Name(), b:Name(), c))
+		else
+			chat.AddText(color_white, L("warrantLiftNofity", a:Name(), b:Name()))
+		end
 	CHAT_CLASS = nil
 end)
 
@@ -469,9 +465,6 @@ end
 
 -- This is for chatbox
 function SCHEMA:OnChatReceived(client, chatType, text, anonymous)
-	if (!client:IsAdmin()) then
-		return "<noparse>" .. text .. "</noparse>"
-	end
 end
 
 function SCHEMA:ShouldDrawEntityInfo(entity)
@@ -512,8 +505,12 @@ netstream.Hook("nutUpdateWeed", function(entity, scale)
 	end
 end)
 
-netstream.Hook("nutLawSync", function(data)
+netstream.Hook("nutLawSync", function(data, index, message)
 	SCHEMA.laws = data
+
+	if (index and message) then
+		hook.Run("OnLawChanged", index, message)
+	end
 end)
 
 function SCHEMA:CanPlayerViewInventory()
@@ -621,3 +618,88 @@ nut.map.ents = {}
 netstream.Hook("nutMapSync", function(data)
 	nut.map.ents = data
 end)
+
+function SCHEMA:ShowPlayerOptions(client, options)
+	if (client:IsAdmin()) then
+		options["bring"] = {"icon16/user.png", function()
+			RunConsoleCommand("say", "!bring " .. client:Name())
+		end}
+		options["goto"] = {"icon16/user.png", function()
+			RunConsoleCommand("say", "!goto " .. client:Name())
+		end}
+		options["tp"] = {"icon16/user.png", function()
+			RunConsoleCommand("say", "!tp " .. client:Name())
+		end}
+	end
+end
+
+if (CLIENT) then
+	local HELP_DEFAULT
+
+	hook.Add("CreateMenuButtons", "nutHelpMenu", function(tabs)		
+
+		tabs["help"] = function(panel)
+			local html
+			local header = [[<html>
+				<head>
+					<style>
+						@import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+						#parent {
+							padding: 5% 0;
+						}
+
+						#child {
+							padding: 10% 0;
+						}
+
+						body {
+							color: #FAFAFA;
+							font-family: 'Jeju Gothic', serif;
+							-webkit-font-smoothing: antialiased;
+						}
+
+						h2 {
+							margin: 0;
+						}
+					</style>
+			</head>
+			<body>
+			]]
+
+			local tree = panel:Add("DTree")
+			tree:SetPadding(5)
+			tree:Dock(LEFT)
+			tree:SetWide(180)
+			tree:DockMargin(0, 0, 15, 0)
+			tree.OnNodeSelected = function(this, node)
+				if (node.onGetHTML) then
+					local source = node:onGetHTML()
+
+					if (source:sub(1, 4) == "http") then
+						html:OpenURL(source)
+					else
+						html:SetHTML(header..node:onGetHTML().."</body></html>")
+					end
+				end
+			end
+
+			html = panel:Add("DHTML")
+			html:Dock(FILL)
+			html:OpenURL("https://steamcommunity.com/groups/lolsdarkrpserver/discussions/0/1488866180606338456/")
+
+			local tabs = {}
+			hook.Run("BuildHelpMenu", tabs)
+
+			for k, v in SortedPairs(tabs) do
+				if (type(v) != "function") then
+					local source = v
+
+					v = function() return tostring(source) end
+				end
+
+				tree:AddNode(L(k)).onGetHTML = v or function() return "" end
+			end
+		end
+	end)
+end
