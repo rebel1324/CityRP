@@ -207,21 +207,17 @@ nut.chat.register("radio", {
 		local listenerEnts = ents.FindInSphere(listener:GetPos(), speakRange)
 		local listenerInv = listener:getChar():getInv()
 		local freq
-
 		if (!CURFREQ or CURFREQ == "") then
 			return false
 		end
-
 		if (dist <= speakRange) then
 			return true
 		end
-
 		if (listenerInv) then
 			for k, v in pairs(listenerInv:getItems()) do
 				if (freq) then
 					break
 				end
-
 				for id, far in pairs(find) do
 					if (v.uniqueID == id and v:getData("power", false) == true) then
 						if (CURFREQ == v:getData("freq", "000.0")) then
@@ -229,27 +225,22 @@ nut.chat.register("radio", {
 							
 							return true
 						end
-
 						break
 					end
 				end
 			end
 		end
-
 		if (!freq) then
 			for k, v in ipairs(listenerEnts) do
 				if (freq) then
 					break
 				end
-
 				if (v:GetClass() == "nut_item") then
 					local itemTable = v:getItemTable()
-
 					for id, far in pairs(find) do
 						if (far and itemTable.uniqueID == id and v:getData("power", false) == true) then
 							if (CURFREQ == v:getData("freq", "000.0")) then
 								endChatter(listener)
-
 								return true
 							end
 						end
@@ -257,59 +248,51 @@ nut.chat.register("radio", {
 				end
 			end
 		end
-
 		return false
 	end,
 	onCanSay = function(speaker, text)
+		if (!IsValid(speaker)) then return false end
 		local schar = speaker:getChar()
 		local speakRange = nut.config.get("chatRange", 280)
 		local speakEnts = ents.FindInSphere(speaker:GetPos(), speakRange)
 		local speakerInv = schar:getInv()
 		local freq
-
 		if (speakerInv) then
 			for k, v in pairs(speakerInv:getItems()) do
 				if (freq) then
 					break
 				end
-
 				for id, far in pairs(find) do
 					if (v.uniqueID == id and v:getData("power", false) == true) then
 						freq = v:getData("freq", "000.0")
-
 						break
 					end
 				end
 			end
 		end
-
 		if (!freq) then
 			for k, v in ipairs(speakEnts) do
 				if (freq) then
 					break
 				end
-
 				if (v:GetClass() == "nut_item") then
 					local itemTable = v:getItemTable()
-
 					for id, far in pairs(find) do
 						if (far and itemTable.uniqueID == id and v:getData("power", false) == true) then
 							freq = v:getData("freq", "000.0")
-
 							break
 						end
 					end
 				end
 			end
 		end
-
 		if (freq) then
 			CURFREQ = freq
 			speaker:EmitSound("npc/metropolice/vo/on"..math.random(1, 2)..".wav", math.random(50, 60), math.random(80, 120))
 		else
-			speaker:notify(L"radioNoRadioComm")
+			speaker:notifyLocalized("radioNoRadioComm")
 			return false
 		end
 	end,
-	prefix = {"/r", "/radio"},
+	prefix = {"/r", "/radio", "/라디오"},
 })
