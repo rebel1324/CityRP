@@ -41,7 +41,7 @@ PLUGIN.changeAmmo = {
 
 local AMMO_BOX = "models/Items/BoxSRounds.mdl"
 local AMMO_CASE = "models/Items/357ammo.mdl"
-local AMMO_FLARE = "models/Items/BoxFlares.mdl"
+local AMMO_FLARE = "models/rebel1324/sniperrounds.mdl"
 local AMMO_BIGBOX = "models/Items/BoxMRounds.mdl"
 local AMMO_BUCKSHOT = "models/Items/BoxBuckshot.mdl"
 local AMMO_GREN = "models/Items/AR2_Grenade.mdl"
