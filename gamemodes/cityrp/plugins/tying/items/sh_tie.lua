@@ -17,6 +17,11 @@ ITEM.functions.Use = {
 
 		if (hook.Run("CanPlayerUseTie", client) == false) then return false end
 
+		-- get the effin shits
+		if (target:GetClass() == "prop_ragdoll" and IsValid(target:getNetVar("player"))) then
+			target = target:getNetVar("player")
+		end
+
 		if (IsValid(target) and target:IsPlayer() and target:getChar() and !target:getNetVar("tying") and !target:getNetVar("restricted")) then
 			item.beingUsed = true
 
