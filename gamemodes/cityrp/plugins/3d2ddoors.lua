@@ -85,7 +85,7 @@ if (CLIENT) then
 	local gradient2 = nut.util.getMaterial("vgui/gradient-r")
 	local commands = {}
 	commands.buy = {
-		icon = "S",
+		icon = "",
 		canDraw = function(entity)
 			local owner = entity.GetDTEntity(entity, 0)
 			
@@ -96,7 +96,7 @@ if (CLIENT) then
 		end
 	}
 	commands.sell = {
-		icon = "G",
+		icon = "",
 		canDraw = function(entity)
 			local owner = entity.GetDTEntity(entity, 0)
 			
@@ -108,7 +108,7 @@ if (CLIENT) then
 		end
 	}
 	commands.reg = {
-		icon = "W",
+		icon = "",
 		canDraw = function(entity)
 			local owner = entity.GetDTEntity(entity, 0)
 			
@@ -120,7 +120,7 @@ if (CLIENT) then
 		end
 	}
 	commands.lock = {
-		icon = "P",
+		icon = "",
 		canDraw = function(entity)
 			local owner = entity.GetDTEntity(entity, 0)
 			
@@ -132,7 +132,7 @@ if (CLIENT) then
 		end
 	}
 	commands.unlock = {
-		icon = "Q",
+		icon = "",
 		canDraw = function(entity)
 			local owner = entity.GetDTEntity(entity, 0)
 			
@@ -237,7 +237,7 @@ if (CLIENT) then
 
 				surface.SetDrawColor(0, 0, 0, alpha * (v.active and 1 or 0.7))
 				surface.DrawRect(dx, dy, sqsize, sqsize)
-				drawText(v.icon, dx + sqsize/2, dy + sqsize/2 - 1, colorAlpha(color_white, alpha), 1, 1, "nutIconsSmall")
+				drawText(v.icon, dx + sqsize/2, dy + sqsize/2 - 1, colorAlpha(color_white, alpha), 1, 1, "nutIconsSmallNew")
 
 				aa = aa + margin + sqsize
 			end
