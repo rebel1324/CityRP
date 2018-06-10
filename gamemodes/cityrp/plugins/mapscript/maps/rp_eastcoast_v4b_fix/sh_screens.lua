@@ -27,6 +27,8 @@ do
 			class = {
 				prop_physics_multiplayer = true,
 				func_physbox_multiplayer = true,
+				keyframe_rope = true,
+				move_rope = true,
 			}
 		}
 		function PLUGIN:InitPostEntity()
@@ -42,6 +44,16 @@ do
 				if (isBanned) then
 					v:Remove()
 				end
+			end
+		end
+
+		local min = Vector(-4032.490234, 2360.863037, -62.760902)
+		local max = Vector(-3194.483887, 3242.707275, 243.360474)
+		function PLUGIN:PlayerShouldTakeDamage(client, damage)
+			local pos = client:GetPos()
+
+			if (pos:WithinAABox(min, max)) then
+				return false
 			end
 		end
 	end

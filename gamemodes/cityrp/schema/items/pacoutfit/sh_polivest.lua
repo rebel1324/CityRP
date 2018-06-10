@@ -4,7 +4,7 @@ ITEM.model = "models/rebel1324/b_balivest.mdl"
 ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "vest"
-ITEM.price = 750
+ITEM.price = 5000
 ITEM.exRender = true
 ITEM.iconCam = {
 	pos = Vector(734.41784667969, 618.29461669922, 484.25646972656),
@@ -12,6 +12,7 @@ ITEM.iconCam = {
 	fov = 1.4901393229734,
 }
 ITEM.team = {1}
+ITEM.removeOnDeath = true
 
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.pacData = {

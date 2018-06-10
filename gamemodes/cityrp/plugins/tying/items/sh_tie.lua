@@ -18,36 +18,38 @@ ITEM.functions.Use = {
 		if (hook.Run("CanPlayerUseTie", client) == false) then return false end
 
 		-- get the effin shits
-		if (target:GetClass() == "prop_ragdoll" and IsValid(target:getNetVar("player"))) then
-			target = target:getNetVar("player")
-		end
+		if (IsValid(target)) then
+			if (target:GetClass() == "prop_ragdoll" and IsValid(target:getNetVar("player"))) then
+				target = target:getNetVar("player")
+			end
 
-		if (IsValid(target) and target:IsPlayer() and target:getChar() and !target:getNetVar("tying") and !target:getNetVar("restricted")) then
-			item.beingUsed = true
+			if (target:IsPlayer() and target:getChar() and !target:getNetVar("tying") and !target:getNetVar("restricted")) then
+				item.beingUsed = true
 
-			client:EmitSound("physics/plastic/plastic_barrel_strain"..math.random(1, 3)..".wav")
-			client:setAction("@tying", 5)
-			client:doStaredAction(target, function()
-				item:remove()
+				client:EmitSound("physics/plastic/plastic_barrel_strain"..math.random(1, 3)..".wav")
+				client:setAction("@tying", 5)
+				client:doStaredAction(target, function()
+					item:remove()
 
-				target:setRestricted(true)
-				target:setNetVar("tying")
+					target:setRestricted(true)
+					target:setNetVar("tying")
 
-				client:EmitSound("npc/barnacle/neck_snap1.wav", 100, 140)
-			end, 5, function()
-				client:setAction()
+					client:EmitSound("npc/barnacle/neck_snap1.wav", 100, 140)
+				end, 5, function()
+					client:setAction()
 
-				target:setAction()
-				target:setNetVar("tying")
+					target:setAction()
+					target:setNetVar("tying")
 
-				item.beingUsed = false
-			end)
+					item.beingUsed = false
+				end)
 
-			target:setNetVar("tying", true)
-			target:setAction("@beingTied", 5)
-			target:setNetVar("Handcuffed", true)
-		else
-			item.player:notifyLocalized("plyNotValid")
+				target:setNetVar("tying", true)
+				target:setAction("@beingTied", 5)
+				target:setNetVar("Handcuffed", true)
+			else
+				item.player:notifyLocalized("plyNotValid")
+			end
 		end
 
 		return false

@@ -166,6 +166,7 @@ end
 concommand.Add("ico", dev.iconFrame)
 
 nut.command.add("giveitemmenu", {
+	superAdminOnly = true,
 	onRun = function(client, arguments)
 		netstream.Start(client, "nutItemMenu")
 	end

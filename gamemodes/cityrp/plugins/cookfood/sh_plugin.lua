@@ -173,6 +173,25 @@ else
 		else
 			client:setNetVar("hunger", CurTime())
 		end
+		
+		local timerName = client:SteamID() .. "_HUNGER_TIMER"
+		timer.Create(timerName, 2, 0, function() 
+			if (IsValid(client)) then
+				local percent = (1 - client:getHungerPercent())
+
+				if (percent <= 0) then
+					if (client:Alive() and client:Health() <= 0) then
+						client:Kill()
+					else
+						client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
+					end
+				end
+
+				hook.Run("OnHungerTick", client, percent)
+			else
+				timer.Remove(timerName)
+			end
+		end)
 	end
 
 	function PLUGIN:PlayerDeath(client)
@@ -183,24 +202,6 @@ else
 		if (client.refillHunger) then
 			client:setNetVar("hunger", CurTime())
 			client.refillHunger = false
-		end
-	end
-
-	local thinkTime = CurTime()
-	function PLUGIN:PlayerPostThink(client)
-		if (thinkTime < CurTime()) then
-			local percent = (1 - client:getHungerPercent())
-
-			if (percent <= 0) then
-				if (client:Alive() and client:Health() <= 0) then
-					client:Kill()
-				else
-					client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
-				end
-			end
-
-            hook.Run("OnHungerTick", client, percent)
-			thinkTime = CurTime() + nut.config.get("hungerTime", .1)
 		end
 	end
 end

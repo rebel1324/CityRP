@@ -312,7 +312,7 @@ PANEL = {}
                         local member = con:Add("nutOrgMember")
                         member:Dock(TOP)
                         local myID = LocalPlayer():getChar():getID()
-                        member:setInfo(myID, charID, dec, name)
+                        member:setInfo(myID, charID, dec, tostring(name))
                     end
                 end
             end
@@ -397,12 +397,12 @@ PANEL = {}
         self.setrank:SetFont("nutSmallFont")
         self.setrank:DockMargin(5, 5, 5, 5)
         self.setrank:SetText(L"orgSetRank")
-        self.rank = self:Add("DLabel")
-        self.rank:Dock(RIGHT)
-        self.rank:SetWide(200)
-        self.rank:SetFont("nutMediumFont")
-        self.rank:SetContentAlignment(6)
-        self.rank:DockMargin(10, 0, 10, 0)
+        self.rankText = self:Add("DLabel")
+        self.rankText:Dock(RIGHT)
+        self.rankText:SetWide(200)
+        self.rankText:SetFont("nutMediumFont")
+        self.rankText:SetContentAlignment(6)
+        self.rankText:DockMargin(10, 0, 10, 0)
     end
 
     local col = Color(0, 0, 0, 150)
@@ -412,7 +412,7 @@ PANEL = {}
     end
 
     function PANEL:setInfo(charID, targetID, rank, name)
-        self.rank:SetText(L(ORGANIZATION_RANK_NAME[rank]))
+        self.rankText:SetText(L(ORGANIZATION_RANK_NAME[rank]))
         self.name:SetText(name)
         self.charID = charID
         self.rank = rank

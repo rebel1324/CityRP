@@ -419,8 +419,9 @@ function PLUGIN:InitializedPlugins()
 
 							if (IsValid(weapon)) then
 								timer.Simple(0, function()
-									client:SelectWeapon(weapon:GetClass())
-									--client:SetActiveWeapon(weapon)
+									if (isvector(client) and IsValid(weapon)) then
+										client:SelectWeapon(weapon:GetClass())
+									end
 								end)
 								client.carryWeapons[item.weaponCategory] = weapon
 								client:EmitSound("items/ammo_pickup.wav", 80)
@@ -770,6 +771,7 @@ else
 		end
 	end
 
+	itemRTTextrue = itemRTTextrue or {}
 	function itemRTTextrue.loadItemTex(entity, itemTable, exIcon, type)
 		if (exIcon) then
 			local oldRT = render.GetRenderTarget()

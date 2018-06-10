@@ -686,7 +686,7 @@ OUTFIT_REGISTERED = {
 				local mdl = entity:GetModel()
 				local woo = OUTFIT_DATA[mdl:lower()]
 
-				if (outfit and woo.facemap) then
+				if (woo and outfit and woo.facemap) then
 					local find = woo.facemap
 					
 					local matIndex

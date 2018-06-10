@@ -93,8 +93,8 @@ if (SERVER) then
                     local charOrg = char:getOrganization()
 
                     if (charOrg == id) then
-                        targetChar:setData("organization", nil, nil, player.GetAll())
-                        targetChar:setData("organizationRank", nil, nil, player.GetAll())
+                        char:setData("organization", nil, nil, player.GetAll())
+                        char:setData("organizationRank", nil, nil, player.GetAll())
 
                         table.insert(affectedPlayers, v)
                     end

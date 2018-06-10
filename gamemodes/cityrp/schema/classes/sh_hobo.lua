@@ -8,8 +8,16 @@ CLASS.limit = 4
 CLASS.model = {
 	"models/jessev92/player/l4d/m9-hunter.mdl"
 }
+CLASS.weapons = {
+	"wowozela",
+}
 
 function CLASS:onLeave(client)
 	client:setNetVar("garbage", 0)
+end
+function CLASS:onSet(client)
+	for k, v in ipairs(self.weapons) do
+		client:Give(v)
+	end
 end
 CLASS_HOBO = CLASS.index

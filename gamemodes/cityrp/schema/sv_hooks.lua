@@ -116,7 +116,7 @@ function SCHEMA:BuildingTaxPayload()
 						for entity, _ in pairs(v.properties) do
 							entity:removeDoorAccessData()
 						end
-						client.properties = {}
+						v.properties = {}
 
 						v:notifyLocalized("doorCharged")
 					else
@@ -217,6 +217,8 @@ function SCHEMA:CanPlayerInteractItem(client, action, item)
 	end
 
 	local char = client:getChar()
+
+	if (IsValid(client.nutRagdoll)) then return false end
 
 	if (client:isArrested()) then return false end
 
@@ -348,58 +350,68 @@ local function item2world(inv, item, pos)
 	return ent
 end
 
--- This hook enforces death penalty for dead players.
-function SCHEMA:PlayerDeath(client, inflicter, attacker)
-	local char = client:getChar()
-	
-	if (char) then
-		local class = char:getClass()
-		local classData = nut.class.list[class] or nut.class.list[1]
-		local job = classData.name
-		local law = classData.law
-		
-		hook.Run("ResetVariables", client, SIGNAL_DEATH)
+		-- This hook enforces death penalty for dead players.
+		function SCHEMA:PlayerDeath(client, inflicter, attacker)
+			local char = client:getChar()
+			
+			if (char) then
+				local class = char:getClass()
+				local classData = nut.class.list[class] or nut.class.list[1]
+				local job = classData.name
+				local law = classData.law
+				
+				hook.Run("ResetVariables", client, SIGNAL_DEATH)
 
-		-- money penalty
-		if (nut.config.get("deathMoney", true) and !law ) then
-			client.deadChar = char:getID()
-			char.lostMoney = math.Round(char:getMoney() * (nut.config.get("dpBank", 10) / 100))
-			if ( char.lostMoney > 10 ) then
-				char:giveMoney(-char.lostMoney)
-				else
-			end
-		end
+				-- money penalty
+				if (nut.config.get("deathMoney", true) and !law ) then
+					client.deadChar = char:getID()
+					char.lostMoney = math.Round(char:getMoney() * (nut.config.get("dpBank", 10) / 100))
+					if ( char.lostMoney > 10 ) then
+						char:giveMoney(-char.lostMoney)
+						else
+					end
+				end
 
-		hook.Run("PlayerHitDeath", client, inflicter, attacker)
+				hook.Run("PlayerHitDeath", client, inflicter, attacker)
 
-		-- weapon penalty
-		local inv = char:getInv()
-		local items = inv:getItems()
+				-- weapon penalty
+				local inv = char:getInv()
+				local items = inv:getItems()
 
-		for k, v in pairs(items) do
-			inv = nut.item.inventories[v.invID]
+				for k, v in pairs(items) do
+					inv = nut.item.inventories[v.invID]
 
-			if (DROPITEM[v.uniqueID]) then
-				local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
+					if (v.removeOnDeath) then
+						if (v.outfitCategory) then
+							if (v:getData("equip", false)) then
+								v:remove()
+							end
+						else
+							v:remove()
+						end
+					end
 
-				hook.Run("OnPlayerDropItem", client, v, ent)
-			end
-
-			if (v.isWeapon) then
-				if (v:getData("equip")) then
-					v:setData("ammo", nil)
-					v:setData("equip", nil)
-
-					if (nut.config.get("deathWeapon", false)) then
+					if (v.dropOnDeath) then
 						local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
 
-						hook.Run("OnPlayerDropWeapon", client, v, ent)
+						hook.Run("OnPlayerDropItem", client, v, ent)
+					end
+
+					if (v.isWeapon) then
+						if (v:getData("equip")) then
+							v:setData("ammo", nil)
+							v:setData("equip", nil)
+
+							if (nut.config.get("deathWeapon", false)) then
+								local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
+
+								hook.Run("OnPlayerDropWeapon", client, v, ent)
+							end
+						end
 					end
 				end
 			end
 		end
-	end
-end
 
 -- Don't let them spray thier fucking spray without spraycan
 function SCHEMA:PlayerSpray(client)
@@ -492,6 +504,12 @@ function SCHEMA:PostPlayerLoadout(client, reload)
 			if (model) then
 				client:SetModel(model)
 			end
+		end
+	end
+
+	if (client:isArrested()) then
+		if (self.prisonPositions and #self.prisonPositions > 0) then
+			client:SetPos(table.Random(self.prisonPositions))
 		end
 	end
 end
@@ -621,14 +639,18 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			nut.log.add(arrested, "arrested")
 			arrested:notify("You have been arrested for " .. nut.config.get("jailTime") ..  " seconds." )
 			arrested:Spawn()
-			arrested:SetPos( Vector( 2924.674316, -3200.367920, -119.968750 ) )
+			if (self.prisonPositions and #self.prisonPositions > 0) then
+				arrested:SetPos(table.Random(self.prisonPositions))
+			end
 			arrested:setAction("Releasing", nut.config.get("jailTime"))
 			arrested:StripWeapons()
 			
-            timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
-                arrested:Spawn()
-				arrested:notify("You have been released from prison")
-				arrested:arrest(false)
+			timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
+				if (IsValid(arrested)) then
+					arrested:Spawn()
+					arrested:notify("You have been released from prison")
+					arrested:arrest(false)
+				end
             end)
 		end
 	else
@@ -706,7 +728,7 @@ function SCHEMA:OnPlayerJoinClass(client, class, oldclass, silent)
 	local infoa = nut.class.list[tonumber(oldclass)]
 	nut.log.add(client, "job", info, infoa)
 	
-	client.nextBe = CurTime() + 10
+	client.nextBe = CurTime() + NUT_JOB_DELAY
 
 	if (!silent) then
 		for k, v in ipairs(player.GetAll()) do

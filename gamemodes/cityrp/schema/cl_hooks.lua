@@ -340,10 +340,12 @@ surface.CreateFont("nutWantedBig", {
 
 netstream.Hook("nutWantedText", function(bool, a, b, c)
 	CHAT_CLASS = {font = "nutWantedBig"}
-		if (bool) then
+		if (bool and b and c) then
 			chat.AddText(Color(200, 10, 10), L("wantedNotify", b:Name(), c))
 		else
-			chat.AddText(Color(200, 10, 10), L("unwantedNotify", b:Name()))
+			if (b) then
+				chat.AddText(Color(200, 10, 10), L("unwantedNotify", b:Name()))
+			end
 		end
 	CHAT_CLASS = nil
 end)
@@ -356,10 +358,11 @@ end)
 
 netstream.Hook("nutSearchText", function(bool, a, b, c)
 	CHAT_CLASS = {font = "nutJailBig"}
+		local name = (IsValid(a) and a.Name and a:Name()) or ""
 		if (bool) then
-			chat.AddText(color_white, L("warrantNofity", a:Name(), b:Name(), c))
+			chat.AddText(color_white, L("warrantNofity", name, b:Name(), c))
 		else
-			chat.AddText(color_white, L("warrantLiftNofity", a:Name(), b:Name()))
+			chat.AddText(color_white, L("warrantLiftNofity", name, b:Name()))
 		end
 	CHAT_CLASS = nil
 end)
@@ -433,30 +436,14 @@ end
 list.Set("DesktopWindows", "PlayerEditor", {})
 
 local function addInfoText(text2)
-	local template1 = "<font=ChatFont>%s</font>"
+	local template1 = "%s"
 	
 	chat.AddText(Format(template1, text2))
 end
 
-NUT_CVAR_TIPS = CreateClientConVar("nut_tips", 1, true, true)
-
 timer.Create("nutTips", 200, 0 ,function()
-	if (!NUT_CVAR_TIPS:GetBool()) then return end
-
 	addInfoText(table.Random(nut.tips))
 end)
-
-function SCHEMA:SetupQuickMenu(menu)
-	 local button = menu:addCheck(L"toggleTips", function(panel, state)
-	 	if (state) then
-	 		RunConsoleCommand("nut_tips", "1")
-	 	else
-	 		RunConsoleCommand("nut_tips", "0")
-	 	end
-	 end, NUT_CVAR_TIPS:GetBool())
-
-	 menu:addSpacer()
-end
 
 local ShowCursor
 local function CanDisplayCursor()
@@ -620,7 +607,7 @@ netstream.Hook("nutMapSync", function(data)
 end)
 
 function SCHEMA:ShowPlayerOptions(client, options)
-	if (client:IsAdmin()) then
+	if (LocalPlayer():IsAdmin()) then
 		options["bring"] = {"icon16/user.png", function()
 			RunConsoleCommand("say", "!bring " .. client:Name())
 		end}

@@ -168,7 +168,8 @@ function ITEM:onCanBeTransfered(oldInventory, newInventory)
 	local index = self:getData("id")
 
 	if (newInventory) then
-		if (newInventory.vars and newInventory.vars.isBag) then
+		local invType = newInventory.vars and newInventory.vars.invType and nut.item.inventoryTypes[newInventory.vars.invType]
+		if (invType) then
 			return false
 		end
 
@@ -178,14 +179,28 @@ function ITEM:onCanBeTransfered(oldInventory, newInventory)
 			return false
 		end
 
-		for k, v in pairs(self:getInv():getItems()) do
-			if (v:getData("id") == index2) then
-				return false
+		local inv = self:getInv()
+
+		if (inv) then
+			for k, v in pairs(inv:getItems()) do
+				if (v:getData("id") == index2) then
+					return false
+				end
 			end
-		end
+		else
+			if (CLIENT) then
+				netstream.Start("logErrorInput", tostring(inv))
+			end
+		end	
 	end
 	
-	return !newInventory or newInventory:getID() != oldInventory:getID() or newInventory.vars.isBag
+	return !newInventory or newInventory:getID() != oldInventory:getID()
+end
+
+if (SERVER) then
+	netstream.Start("logErrorInput", function(client, text)
+		file.Append("TITS.txt", string.format( "[%s]: %s\n",client:Name(), text))
+	end)
 end
 
 -- Called after the item is registered into the item tables.

@@ -4,13 +4,16 @@ ITEM.model = "models/modified/backpack_2.mdl"
 ITEM.invWidth = 4
 ITEM.invHeight = 4
 ITEM.outfitCategory = "back"
-ITEM.price = 100000
+ITEM.price = 90000
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
+ITEM.exRender = true
 ITEM.iconCam = {
-	ang	= Angle(12.172930717468, 319.24600219727, 0),
-	fov	= 1.6931144824502,
-	pos	= Vector(-977.61212158203, 834.09033203125, 269.92984008789)
+	pos = Vector(715.57751464844, 604.79113769531, 470.69500732422),
+	ang = Angle(24.117046356201, -139.79110717773, 0),
+	entAng = Angle(0, -48.649551391602, 17.080837249756),
+	fov = 2.1228075255791,
 }
+
 ITEM.pacData = {
     [1] = {
         ["children"] = {

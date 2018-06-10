@@ -1,16 +1,19 @@
 ITEM.name = "Medium Bag"
 ITEM.desc = "civBagDesc"
-ITEM.model = "models/modified/backpack_1.mdl"
+ITEM.model = "models/rebel1324/b_gtabag1.mdl"
 ITEM.invWidth = 3
 ITEM.invHeight = 4
 ITEM.outfitCategory = "back"
-ITEM.price = 80000
+ITEM.price = 70000
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
+ITEM.exRender = true
 ITEM.iconCam = {
-	ang	= Angle(9.6204557418823, 333.65219116211, 0),
-	fov	= 1.2651762196055,
-	pos	= Vector(-1014.6419067383, 499.74407958984, 192.10636901855)
+	pos = Vector(715.57751464844, 602.69744873047, 499.56411743164),
+	ang = Angle(25.32452583313, -139.89186096191, 0),
+	entAng = Angle(0, -48.649551391602, 17.080837249756),
+	fov = 1.4519209818837,
 }
+
 ITEM.pacData = {
     [1] = {
         ["children"] = {

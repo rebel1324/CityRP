@@ -183,6 +183,7 @@ end)
 local ntChar, ntClass, ntClassInfo, ntRagdoll
 hook.Add("DrawNameTag", "btNameTag", function(client)
 	if (SUPPRESS_FROM_STENCIL) then return end
+
 	if (client:GetNoDraw() != true) then
 		ntPos = btNameTag:getHead(client)
 		ntX, ntY = 0, 0
@@ -199,7 +200,7 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 		ntDist = math.Clamp(ntView:Distance(ntPos) / ntMax, 0.25, 1)
 
 		if (ntDist >= 1) then return end
-
+		
 		if (IsValid(client.objCache)) then
 			ntRagdoll = client
 			client = client.objCache

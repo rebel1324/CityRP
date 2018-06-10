@@ -249,7 +249,7 @@ else
 		function PANEL:update()
 			for k, v in ipairs(self.itemPanels) do
 				local itemTable = v.itemTable
-				v.name:SetText(L(itemTable.name) .. " ( " .. nut.currency.get(itemTable.entity:getNetVar("sellPrice")) .. ")")
+				v.name:SetText(L(itemTable.name) .. " ( " .. nut.currency.get(itemTable.entity:getNetVar("sellPrice") or "-1") .. ")")
 			end
 		end
 

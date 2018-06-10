@@ -1,20 +1,20 @@
 CLASS.name = "Police"
 CLASS.faction = FACTION_CITIZEN
 CLASS.salary = 250
-CLASS.vote = true
 CLASS.law = true
 CLASS.weapons = {
-	"cw_m1911",
+	"cw_p99",
 	"nut_stunstick",
 	"nut_arrestbaton",
 	"keypad_cracker",
+	"nut_handcuffs",
 }
 CLASS.business = {
 	["doorcharge"] = 1,
-	["teargas_shipment"] = .9,	
-	["tie"] = 1,
+	["teargas_shipment"] = 1,	
+	["polivest"] = 1,
 }
-CLASS.limit = 10
+CLASS.limit = 8
 CLASS.team = 1
 CLASS.color = Color(25, 25, 170)
 CLASS.model = {

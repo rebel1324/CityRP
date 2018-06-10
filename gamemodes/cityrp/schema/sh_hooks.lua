@@ -46,6 +46,7 @@ function SCHEMA:ShouldWeaponBeRaised()
 end
 
 -- lol test
+local GUNSKILL_MAX = 60
 function SCHEMA:GetSchemaCWDamage(weapon, client)
 	local attrib = 0
 
@@ -54,7 +55,7 @@ function SCHEMA:GetSchemaCWDamage(weapon, client)
 	end
 
 	local maximum = 0.5
-	return 0.4 + math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 0.4 + math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:GetSchemaCWReloadSpeed(weapon, client)
@@ -65,7 +66,7 @@ function SCHEMA:GetSchemaCWReloadSpeed(weapon, client)
 	end
 
 	local maximum = 1
-	return 1 + math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 1 + math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:GetSchemaCWRecoil(weapon, client)
@@ -76,7 +77,7 @@ function SCHEMA:GetSchemaCWRecoil(weapon, client)
 	end
 
 	local maximum = 1.5
-	return 2 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 2 - math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:GetSchemaCWHipSpread(weapon, client)
@@ -87,7 +88,7 @@ function SCHEMA:GetSchemaCWHipSpread(weapon, client)
 	end
 
 	local maximum = 1.5
-	return 2 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 2 - math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:GetSchemaCWAimSpread(weapon, client)
@@ -98,7 +99,7 @@ function SCHEMA:GetSchemaCWAimSpread(weapon, client)
 	end
 
 	local maximum = 1.5
-	return 2 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 2 - math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:GetSchemaCWFirerate(weapon, client)
@@ -109,7 +110,7 @@ function SCHEMA:GetSchemaCWFirerate(weapon, client)
 	end
 
 	local maximum = .6
-	return 1.3 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 1.3 - math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:PlayerGetMeleeDamage(client, damage)
@@ -120,7 +121,7 @@ function SCHEMA:PlayerGetMeleeDamage(client, damage)
 	end
 
 	local maximum = 1.5
-	return damage + damage * math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return damage + damage * math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:PlayerGetMeleeDelay(client, delay)
@@ -131,7 +132,7 @@ function SCHEMA:PlayerGetMeleeDelay(client, delay)
 	end
 
 	local maximum = 0.8
-	return delay * 1.5 - delay * math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return delay * 1.5 - delay * math.Clamp(attrib / GUNSKILL_MAX * maximum, 0, maximum)
 end
 
 function SCHEMA:PlayerDoMelee(client, hit)
@@ -376,12 +377,12 @@ end
 local function updateLaw()
 	local classes = nut.class.list
 	local players = #player.GetAll()
-	local mul = math.max(1, players/20)
+	local mul = math.max(1, players/30)
 
 	for k, v in ipairs(classes) do
 		if (v.law and k != CLASS_MAYOR and k != CLASS_POLICELEADER) then
 			v.oldLimit = v.oldLimit or v.limit
-			v.limit = v.oldLimit * mul
+			v.limit = math.floor(v.oldLimit * mul)
 		end
 	end
 end
@@ -397,3 +398,8 @@ else
 	end)
 end
 
+function SCHEMA:CanPlayerSitAnywhere(client)
+	if (client:isArrested()) then
+		return false
+	end
+end

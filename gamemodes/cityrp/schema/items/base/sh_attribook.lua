@@ -39,6 +39,12 @@ ITEM.functions.use = {
 			if (attrib and nut.attribs.list[attrib]) then
 				local char = item.player:getChar()
 
+				if (item.maxAttribute and char:getAttrib(attrib) > item.maxAttribute) then
+					client:notifyLocalized("bookLimitReached")
+					
+					return false
+				end
+
 				char:updateAttrib(attrib, item.attributeAmount)
 				return true
 			end

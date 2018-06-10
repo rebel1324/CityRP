@@ -3,6 +3,51 @@ PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin makes your flashlight feels like it's from L4D2"
 
 
+NUT_CVAR_FLASHLIGHT_EFFECT = CreateClientConVar("nut_flash_effects", 0, true, true)
+NUT_CVAR_FLASHLIGHT_OTHER = CreateClientConVar("nut_flash_other", 1, true, true)
+
+local langkey = "english"
+do
+	local langTable = {
+		toggleFlashEffects = "Toggle Flashlight Effects",
+		toggleFlashStuffs = "Toggle Other Person's Flashlight",
+	}
+
+	table.Merge(nut.lang.stored[langkey], langTable)
+end
+
+local langkey = "korean"
+do
+	local langTable = {
+		toggleFlashEffects = "손전등 이펙트 켜기",
+		toggleFlashStuffs = "다른 사람 손전등 보기",
+	}
+
+	table.Merge(nut.lang.stored[langkey], langTable)
+end
+
+if (CLIENT) then
+	function PLUGIN:SetupQuickMenu(menu)
+		 local button = menu:addCheck(L"toggleFlashEffects", function(panel, state)
+		 	if (state) then
+		 		RunConsoleCommand("nut_flash_effects", "1")
+		 	else
+		 		RunConsoleCommand("nut_flash_effects", "0")
+		 	end
+		 end, NUT_CVAR_FLASHLIGHT_EFFECT:GetBool())
+
+		 local button = menu:addCheck(L"toggleFlashStuffs", function(panel, state)
+		 	if (state) then
+		 		RunConsoleCommand("nut_flash_other", "1")
+		 	else
+		 		RunConsoleCommand("nut_flash_other", "0")
+		 	end
+		 end, NUT_CVAR_FLASHLIGHT_OTHER:GetBool())
+
+		 menu:addSpacer()
+	end
+end
+
 	local badWeapons = {
 		tfa_csgo_mp5 = function(ang) return ang:Forward():Angle() end,
 		tfa_csgo_revolver = function(ang) return ang:Forward():Angle() end
@@ -158,7 +203,7 @@ PLUGIN.desc = "This plugin makes your flashlight feels like it's from L4D2"
 			client.flash:Update()
 
 			if (SUPPRESS_FROM_STENCIL) then return end
-			if (!client:GetNoDraw()) then
+			if (!client:GetNoDraw() and NUT_CVAR_FLASHLIGHT_EFFECT:GetBool() != false) then
 				if (client:GetNWBool("customFlashlight") == true) then
 					if (LocalPlayer() == client and !client:ShouldDrawLocalPlayer()) then return end
 					

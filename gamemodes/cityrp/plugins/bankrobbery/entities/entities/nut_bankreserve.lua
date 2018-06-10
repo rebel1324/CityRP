@@ -8,7 +8,7 @@ ENT.Spawnable = true
 ENT.AdminOnly = false
 ENT.RenderGroup = RENDERGROUP_BOTH
 ENT.isFire = true
-ENT.maxSteal = 20
+ENT.maxSteal = 10
 ENT.useCooldown = 1.6
 
 if (SERVER) then

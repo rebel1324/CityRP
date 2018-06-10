@@ -4,7 +4,7 @@ ITEM.model = "models/rebel1324/b_olive.mdl"
 ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "vest"
-ITEM.price = 150
+ITEM.price = 3500
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.iconCam = {
 	ang	= Angle(19.873210906982, 130.2998046875, 0),

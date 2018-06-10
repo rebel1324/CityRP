@@ -5,6 +5,7 @@ ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "vest"
 ITEM.price = 150
+ITEM.removeOnDeath = true
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.iconCam = {
 	ang	= Angle(5.6796727180481, 58.452518463135, 0),

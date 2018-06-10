@@ -1,4 +1,6 @@
 WEAPON_REQSKILLS = {}
+NUT_VOTE_TIME = 15
+NUT_JOB_DELAY = 200
 
 -- 아이템 스킬 필요도 초기화 함수
 local function addRequire(itemID, reqAttribs)
@@ -32,60 +34,71 @@ nut.config.language = "english"
 ]]
 
 
--- ALLOWED_ENTS
--- Entities Listed below can be touch and tooled.
-ALLOWED_ENTS = {
-    ["prop_physics"] = true,
-    ["nut_item"] = true,
-    ["nut_d_lamp"] = true,
-    ["nut_punchbag"] = true,
-    ["nut_d_pot"] = true,
-    ["nut_shootbag"] = true,
-    ["nut_craftingtable"] = true,
-    ["nut_microwave"] = true,
-    ["nut_foodvendor"] = true,
-    ["nut_drinkvendor"] = true,
-    ["nut_helloboard"] = true,
-    ["rprotect_terminal"] = true,
-    ["rprotect_scanner"] = true,
-    ["rprotect_camera"] = true,
-    ["nut_checker"] = true,
-    ["sent_bingle_simplenoti"] = true,
-    ["sent_bingle_simplenoti_mdbig"] = true,
-    ["sent_bingle_simplenoti_orlong"] = true,
-    ["keypad"] = true,
-    ["nut_lawboard"] = true,
-    ["gmod_lamp"] = true,
-    ["gmod_light"] = true,
-    ["sammyservers_textscreen"] = true,
-    ["nut_stove"] = true,
-    ["nut_storage"] = true,
-    ["jukebox"] = true,
-    ["instrument_drumpad"] = true,
-    ["synthesizer"] = true,
-    ["synthesizer_guitar"] = true,
-    ["synthesizer_piano"] = true,
-    ["synthesizer_violin"] = true,
-    ["nut_emergency"] = true,
 
-	["nut_vnd_soda"] = true,
-	["nut_vnd_snack"] = true,
-	["nut_vnd_popcorn"] = true,
-	["nut_vnd_food"] = true,
-	["nut_vnd_covfefe"] = true,
-	["nut_vnd_covfefe_refill"] = true,
-	["nut_seller"] = true,
+	-- ALLOWED_ENTS
+	-- Entities Listed below can be touch and tooled.
+	ALLOWED_ENTS = {
+		["prop_physics"] = true,
+		["nut_item"] = true,
+		["nut_d_lamp"] = true,
+		["nut_punchbag"] = true,
+		["nut_d_pot"] = true,
+		["nut_shootbag"] = true,
+		["nut_craftingtable"] = true,
+		["nut_microwave"] = true,
+		["nut_foodvendor"] = true,
+		["nut_drinkvendor"] = true,
+		["nut_helloboard"] = true,
+		["rprotect_terminal"] = true,
+		["rprotect_scanner"] = true,
+		["rprotect_camera"] = true,
+		["nut_checker"] = true,
+		["sent_bingle_simplenoti"] = true,
+		["sent_bingle_simplenoti_mdbig"] = true,
+		["sent_bingle_simplenoti_orlong"] = true,
+		["keypad"] = true,
+		["nut_lawboard"] = true,
+		["elevator"] = true,
+		["gmod_lamp"] = true,
+		["gmod_light"] = true,
+		["gmod_button"] = true,
+		["sammyservers_textscreen"] = true,
+		["nut_stove"] = true,
+		["nut_storage"] = true,
+		["jukebox"] = true,
+		["instrument_drumpad"] = true,
+		["synthesizer"] = true,
+		["synthesizer_guitar"] = true,
+		["synthesizer_piano"] = true,
+		["synthesizer_violin"] = true,
+		["nut_emergency"] = true,
 
-	--------BITMINER 2
-	["bm2_bitminer_1"] = true,
-	["bm2_bitminer_2"] = true,
-	["bm2_bitminer_rack"] = true,
-	["bm2_bitminer_server"] = true,
-	["bm2_extention_lead"] = true,
-	["bm2_fuel"] = true,
-	["bm2_generator"] = true,
-	["bm2_power_lead"] = true,
-}
+		["nut_vnd_soda"] = true,
+		["nut_vnd_snack"] = true,
+		["nut_vnd_popcorn"] = true,
+		["nut_vnd_food"] = true,
+		["nut_vnd_covfefe"] = true,
+		["nut_vnd_covfefe_refill"] = true,
+		["nut_seller"] = true,
+
+		["frame_flag"] = true,
+		["frame_rect_big"] = true,
+		["frame_rect"] = true,
+		["frame_hort"] = true,
+		["nut_mapbeacon"] = true,
+
+		["nut_vnd_medical"] = true,
+
+		--------BITMINER 2
+		["bm2_bitminer_1"] = true,
+		["bm2_bitminer_2"] = true,
+		["bm2_bitminer_rack"] = true,
+		["bm2_bitminer_server"] = true,
+		["bm2_extention_lead"] = true,
+		["bm2_fuel"] = true,
+		["bm2_generator"] = true,
+		["bm2_power_lead"] = true,
+	}
 
 -- DEFAULT_PURCHASE
 -- Default Purchasable list.
@@ -454,8 +467,6 @@ function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyConditio
 	return nut.bent.list[entClass]
 end
 
---nut.bent.add("nut_checker", "models/props_wasteland/interior_fence002e.mdl", "weaponChecker", 2, 1000, onlyLaw)
-
 nut.bent.add("printer_tier1", "models/rebel1324/mprint.mdl", "printerNameTier1", 1, 20000, notLaw)
 nut.bent.add("printer_tier2", "models/rebel1324/mprint.mdl", "printerNameTier2", 1, 30000, notLaw)
 nut.bent.add("printer_tier3", "models/rebel1324/mprint.mdl", "printerNameTier3", 1, 50000, notLaw)
@@ -498,16 +509,26 @@ nut.bent.add("nut_attrib_punch", "models/props_lab/huladoll.mdl", "strBoosterNam
 nut.bent.add("rprotect_terminal", "models/props_phx/rt_screen.mdl", "survTerminal", 1, 2000, all)
 nut.bent.add("rprotect_scanner", "models/Items/battery.mdl", "survScanner", 4, 1500, all)
 nut.bent.add("rprotect_camera", "models/tools/camera/camera.mdl", "survCamera", 1, 2000, all)
---nut.bent.add("nut_vnd_covfefe_refill", "models/props/interior/coffee_maker.mdl", "coffeeVendorRefill", 1, 6000, all)
 
-nut.bent.add("bm2_bitminer_1", "models/bitminers2/bitminer_1.mdl", "bitminer", 1, 5000, busiOnly)
-nut.bent.add("bm2_bitminer_2", "models/bitminers2/bitminer_2.mdl", "bitminer2", 1, 8000, busiOnly)
-nut.bent.add("bm2_bitminer_rack", "models/bitminers2/bitminer_rack.mdl", "bitminerRack", 1, 5000, busiOnly)
-nut.bent.add("bm2_bitminer_server", "models/bitminers2/bitminer_2.mdl", "bitminerServer", 8, 25000, busiOnly)
-nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bitminerExtend", 1, 3000, busiOnly)
-nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly)
-nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly)
-nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly)
+nut.bent.add("nut_mapbeacon", "models/props_combine/combine_mine01.mdl", "mapBeacon", 1, 2000, all)
+
+nut.bent.add("frame_flag", "models/rebel1324/z018.mdl", "frameFlag", 1, 6500, all)
+nut.bent.add("frame_rect_big", "models/rebel1324/painting_hexed_rect_big.mdl", "frameRectBig", 1, 4000, all)
+nut.bent.add("frame_rect", "models/rebel1324/painting_hexed_rect.mdl", "frameRect", 1, 2000, all)
+nut.bent.add("frame_hort", "models/rebel1324/painting_hexed.mdl", "frameHort", 1, 2000, all)
+
+-- BITCOIN MINERS
+--[[
+	nut.bent.add("bm2_bitminer_1", "models/bitminers2/bitminer_1.mdl", "bitminer", 1, 5000, busiOnly)
+	nut.bent.add("bm2_bitminer_2", "models/bitminers2/bitminer_2.mdl", "bitminer2", 1, 8000, busiOnly)
+	nut.bent.add("bm2_bitminer_rack", "models/bitminers2/bitminer_rack.mdl", "bitminerRack", 1, 5000, busiOnly)
+	nut.bent.add("bm2_bitminer_server", "models/bitminers2/bitminer_2.mdl", "bitminerServer", 8, 25000, busiOnly)
+	nut.bent.add("bm2_extention_lead", "models/bitminers2/bitminer_plug_3.mdl", "bitminerExtend", 1, 3000, busiOnly)
+	nut.bent.add("bm2_fuel", "models/props_junk/gascan001a.mdl", "bitminerFuel", 1, 2500, busiOnly)
+	nut.bent.add("bm2_generator", "models/bitminers2/generator.mdl", "bitminerGenerator", 1, 4000, busiOnly)
+	nut.bent.add("bm2_power_lead", "models/bitminers2/bitminer_plug_2.mdl", "bitminerPlug", 3, 3500, busiOnly)
+]]
+
 --[[
 -- need to get better shit.
 local bentstr = nut.bent.add("nut_storage", "models/rebel1324/footlocker.mdl", "5x3 아이템 상자", 2, 1000, all)
@@ -596,5 +617,9 @@ end
 	}
 ]]--
 
-nut.tips = {"지속적으로 서버 정보를 받고싶다면 가입하세요:  https://steamcommunity.com/groups/lolsdarkrpserver"}
-
+nut.tips = {
+	"지속적으로 서버 정보를 받고싶다면 가입하세요:  https://steamcommunity.com/groups/lolsdarkrpserver",
+	"어드민이 없을때에는 커뮤니티에 남겨주세요: https://steamcommunity.com/groups/lolsdarkrpserver",
+	"어드민이 있을때에는 !신고 또는 !report로 신고가 가능합니다.",
+	"어드민 호출은 @ [할말] 로 호출이 가능합니다.",
+}

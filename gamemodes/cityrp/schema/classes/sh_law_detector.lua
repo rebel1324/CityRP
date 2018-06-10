@@ -3,19 +3,17 @@ CLASS.faction = FACTION_CITIZEN
 CLASS.salary = 220
 CLASS.law = true
 CLASS.weapons = {
-	"cw_m1911",
+	"cw_p99",
 	"nut_stunstick",
 	"nut_arrestbaton",
 	"weapon_detector",
 	"keypad_cracker",
+	"nut_handcuffs",
 }
 CLASS.business = {
 	["doorcharge"] = 1,
-	["teargas_shipment"] = .9,	
-	["tie"] = 1,
-	
---	["bg_wf_p226_silencer"] = 1,
---	["bg_wf_p226_rds"] = 1,
+	["teargas_shipment"] = 1,	
+	["polivest"] = 1,
 }
 
 CLASS.limit = 3

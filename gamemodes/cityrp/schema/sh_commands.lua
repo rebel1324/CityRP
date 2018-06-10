@@ -5,7 +5,7 @@ nut.command.add("gunlicense", {
 		local class = char:getClass()
 		local classData = nut.class.list[class]
 
-		if (classData.law) then
+		if (class == CLASS_MAYOR or class == CLASS_POLICELEADER) then
 			traceData = {}
 			traceData.start = client:GetShootPos()
 			traceData.endpos = traceData.start + client:GetAimVector() * 256
@@ -32,7 +32,7 @@ nut.command.add("revokegunlicense", {
 		local class = char:getClass()
 		local classData = nut.class.list[class]
 
-		if (classData.law) then
+		if (class == CLASS_MAYOR or class == CLASS_POLICELEADER) then
 			traceData = {}
 			traceData.start = client:GetShootPos()
 			traceData.endpos = traceData.start + client:GetAimVector() * 256
@@ -543,6 +543,12 @@ nut.command.add("demote", {
 			return
 		end
 
+		if (target.nextDemote and target.nextDemote > CurTime()) then
+			client:notifyLocalized("demoteWait", math.ceil(target.nextDemote - CurTime()))
+
+			return
+		end
+
 		if (IsValid(client) and char) then
 			if (reason:len() < 4) then
 				client:notifyLocalized("tooShort")
@@ -568,22 +574,25 @@ nut.command.add("demote", {
 
 				target.onDemote = true
 
+				target.nextDemote = CurTime() + 120
 				nut.vote.simple(textWant, function(p, ye, no, su)
-					target.onDemote = false
+					if (IsValid(target) and targetChar) then
+						target.onDemote = false
 
-					if (targetClass == targetChar:getClass()) then
-						local minimum = table.Count(p) * (nut.config.get("voteDemote", 25) / 100)
+						if (targetClass == targetChar:getClass()) then
+							local minimum = table.Count(p) * (nut.config.get("voteDemote", 25) / 100)
 
-						if (ye >= minimum) then
-							local lol = nut.class.list[CLASS_CIVILIAN]
+							if (ye >= minimum) then
+								local lol = nut.class.list[CLASS_CIVILIAN]
 
-							targetChar:joinClass(CLASS_CIVILIAN)
-							
-							hook.Run("OnPlayerDemoted", target, targetClass, targetClassData)
-							return
-						else
-							for k, v in ipairs(player.GetAll()) do
-								v:notifyLocalized("failedDemote", target:Name(), targetClassData.name)
+								targetChar:joinClass(CLASS_CIVILIAN)
+								
+								hook.Run("OnPlayerDemoted", target, targetClass, targetClassData)
+								return
+							else
+								for k, v in ipairs(player.GetAll()) do
+									v:notifyLocalized("failedDemote", target:Name(), targetClassData.name)
+								end
 							end
 						end
 					end
@@ -595,7 +604,7 @@ nut.command.add("demote", {
 			client:notifyLocalized("illegalAccess")
 		end
 	end,
-	alias = {"탄핵", "getout"}
+	alias = {"탄핵", "getout", "강등"}
 })
 
 nut.command.add("jailpos", {
@@ -880,50 +889,6 @@ nut.command.add("broadcast", {
 	alias = {"방송"}
 })
 
-nut.chat.register("tc", {
-	format = "(TEAM) %s: %s",
-	onGetColor = function(speaker, text)
-		local color = nut.chat.classes.ic.onGetColor(speaker, text)
-
-		-- Make the yell chat slightly brighter than IC chat.
-		return Color(color.r + 35, color.g + 35, color.b + 35)
-	end,
-	onCanHear = function(speaker, listener)
-		if (speaker == listener) then return true end
-		
-		local char, char2 = speaker:getChar(), listener:getChar()
-
-		if (char and char2) then
-			local class, class2 = char:getClass(), char2:getClass()
-			local classDat, classDat2 = nut.class.list[class], nut.class.list[class2]
-
-			if (IsValid(classDat) and IsValid(classDat2)) then
-				if (classDat.team and classDat2.team) then
-					if (classDat.team == classDat2.team) then
-						return true
-					end
-				end
-			end
-		end	
-
-		return false
-	end,
-	prefix = {"/t", "/팀", "/g"}
-})
-
--- Advert Chat Type
-nut.chat.register("advert", {
-	onCanSay =  function(speaker, text)
-		local char = speaker:getChar()
-		return (char:hasMoney(10) and char:takeMoney(10))
-	end,
-	onCanHear = 1000000,
-	onChatAdd = function(speaker, text)
-		chat.AddText(Color(180, 255, 10), L"advert", nut.config.get("chatColor"), speaker:Name()..": "..text)
-	end,
-	prefix = {"/ad", "/광고"}
-})
-
 -- Advert Chat Type
 nut.chat.register("cr", {
 	onCanSay =  function(speaker, text)
@@ -1155,20 +1120,104 @@ nut.command.add("sellall", {
 	end,
 })
 
-nut.chat.register("report", {
-	format = "(어드민) %s: %s",
-	onGetColor = function(speaker, text)
-		local color = nut.chat.classes.ic.onGetColor(speaker, text)
-		-- Make the yell chat slightly brighter than IC chat.
-		return Color(231, 76, 60)
-	end,
-	onCanHear = function(speaker, listener)
-		if (speaker == listener) then return true end
-		
-		if (listener:IsAdmin()) then
-			return true
-		end
-		return false
-	end,
-	prefix = {"@", "/어드민"}
-})
+hook.Add("InitializedSchema", "addMoreShit", function()
+	timer.Simple(0, function()
+		nut.chat.register("ooc", {
+			onCanSay =  function(speaker, text)
+			end,
+			onChatAdd = function(speaker, text)
+				local icon = "icon16/user.png"
+				local char = speaker:getChar()
+				
+				if (char) then
+					local class = char:getClass()
+					local classTable = nut.class.list[class]
+					local color = classTable.color
+					
+					if (speaker:IsAdmin()) then
+						if (speaker:IsSuperAdmin()) then
+							if (speaker:SteamID() == "STEAM_0:0:19814083") then
+								chat.AddText(Color(50, 255, 50), "[개발자] ", Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
+							else
+								chat.AddText(Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
+							end
+						else
+							chat.AddText(Color(255, 50, 50), "[어드민]", Color(255, 50, 50), " [OOC] ", color, speaker:Name(), color_white, ": "..text)
+						end
+					else
+						chat.AddText(Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
+					end
+				end
+			end,
+			prefix = {"//", "/ooc"},
+			noSpaceAfter = true,
+			filter = "ooc"
+		})
+				
+		nut.chat.register("ic", {
+			onGetColor = function() return color_white end,
+			onCanHear = nut.config.get("chatRange", 280),
+			onChatAdd = function(speaker, text)
+				local icon = "icon16/user.png"
+				local char = speaker:getChar()
+				
+				if (char) then
+					local class = char:getClass()
+					local classTable = nut.class.list[class]
+					local color = classTable.color
+					chat.AddText(color, speaker:Name(), color_white, ": "..text)
+				end
+			end,
+		})
+	
+		nut.chat.register("tc", {
+			onGetColor = function() return color_white end,
+			onCanHear = function(speaker, listener)
+				if (speaker == listener) then return true end
+				
+				local char, char2 = speaker:getChar(), listener:getChar()
+	
+				if (char and char2) then
+					local class, class2 = char:getClass(), char2:getClass()
+					local classDat, classDat2 = nut.class.list[class], nut.class.list[class2]
+	
+					if (IsValid(classDat) and IsValid(classDat2)) then
+						if (classDat.team and classDat2.team) then
+							if (classDat.team == classDat2.team) then
+								return true
+							end
+						end
+					end
+				end	
+	
+				return false
+			end,
+			onChatAdd = function(speaker, text)
+				local icon = "icon16/user.png"
+				local char = speaker:getChar()
+				
+				if (char) then
+					local class = char:getClass()
+					local classTable = nut.class.list[class]
+					local color = classTable.color
+	
+					chat.AddText(Color(255, 50, 50), "[팀]", color, speaker:Name(), color_white, ": "..text)
+				end
+			end,
+			prefix = {"/t", "/팀", "/g"}
+		})
+	
+		-- Advert Chat Type
+		nut.chat.register("advert", {
+			onCanSay =  function(speaker, text)
+				local char = speaker:getChar()
+				return (char:hasMoney(10) and char:takeMoney(10))
+			end,
+			onCanHear = 1000000,
+			onChatAdd = function(speaker, text)
+				chat.AddText(Color(180, 255, 10), L"advert", nut.config.get("chatColor"), speaker:Name()..": "..text)
+			end,
+			prefix = {"/advert", "/ad", "/광고"}
+		})
+	end)
+end)

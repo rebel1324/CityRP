@@ -152,7 +152,7 @@ LANGUAGE = {
     poliVestDescEntity = "총알을 막을수 있도록 설계된 조끼입니다.",
     scarfDesc = "별 다른 기능은 없는 멋진 스카프입니다.",
     ["Advanced Ballistic Vest"] = "방탄 조끼",
-    advBalivestDesc = "총알을 막을수 있도록 설계된 조끼입니다.\n의상 타입: 조끼류\n데미지 감소율: <color=39, 174, 96>40%%</color>",
+    advBalivestDesc = "총알을 막을수 있도록 설계된 조끼입니다.\n의상 타입: 조끼류\n데미지 감소율: <color=39, 174, 96>33.33%%</color>",
     advBalivestDescEntity = "총알을 막을수 있도록 설계된 조끼입니다.",
     ["Perfected Weed"] = "순도높은 대마",
     weedDesc = "한번 빨아들이면 정신을 차릴 수 없는 대마입니다.",
@@ -704,4 +704,5 @@ LANGUAGE = {
     gobackWanted = "수배해제",
     gobackWarrant = "수색해제",
     selectTarget = "대상 선택",
+    ["Appearance Dealer"] = "외형 상인",
 }

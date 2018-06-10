@@ -147,9 +147,9 @@ if (SERVER) then
 		self:EmitSound("ambient/explosions/explode_1.wav", 120, 200)
 		self:Ignite(3)
 		util.Effect("Explosion", effectData, true, true)
-		util.BlastDamage( self, self or self, self:GetPos() + Vector( 0, 0, 1 ), 256, 120 )
+		--util.BlastDamage( self, self or self, self:GetPos() + Vector( 0, 0, 1 ), 256, 120 )
 
-		timer.Simple(60, function()
+		timer.Simple(15, function()
 			if (self and self:IsValid()) then
 				self:Remove()
 			end

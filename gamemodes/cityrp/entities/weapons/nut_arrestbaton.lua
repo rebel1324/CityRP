@@ -94,15 +94,8 @@ function SWEP:PrimaryAttack()
 		local entity = trace.Entity
 
 		if (IsValid(entity) and entity:IsPlayer()) then
-			--entity:arrest(true, self.Owner)
-			if entity:getNetVar("Handcuffed") == true then
-				entity:setNetVar("Handcuffed", false)
-				entity:arrest(true)
-		   	else
-
-				-- TODO: Locale
-           		self.Owner:notify("수갑을 먼저 채워야 합니다!")
-        	end
+			entity:setNetVar("Handcuffed", false)
+			entity:arrest(true)
 		end
 	end
 end

@@ -25,7 +25,7 @@ if (SERVER) then
 
 	function ENT:OnTakeDamage(dmginfo)
 		local damage = dmginfo:GetDamage()
-		self:setHealth(self.health - damage)
+		self:setHealth(self.health - (damage == 0 and 5 or damage))
 
 		if (self.health < 0) then
 			self.onbreak = true
@@ -38,8 +38,15 @@ if (SERVER) then
 			local weapon = attacker:GetActiveWeapon()
 
 			if (weapon and weapon:IsValid() and weapon.recalculateStats) then
-				if (attacker:getChar():getAttrib("gunskill") < 15) then
+				if (attacker:getChar():getAttrib("gunskill") < 10) then
 					attacker:getChar():updateAttrib("gunskill", 0.001)
+				elseif (attacker:getChar():getAttrib("gunskill") < 20) then
+					attacker:getChar():updateAttrib("gunskill", 0.00015)
+				elseif (attacker:getChar():getAttrib("gunskill") >= 20) then
+					if (!attacker.nextNotifyMeCunt or attacker.nextNotifyMeCunt < CurTime()) then
+						attacker:notifyLocalized("hitLimitReached")
+						attacker.nextNotifyMeCunt = CurTime() + 1
+					end
 				end
 			end
 		end

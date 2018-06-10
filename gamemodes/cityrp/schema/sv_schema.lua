@@ -16,7 +16,7 @@ function nut.vote.start(title, recipient, callback)
 		nut.vote.list[id].players[v:UniqueID()] = -1
 	end
 
-	timer.Create("nutVote_"..id, 10, 1, function()
+	timer.Create("nutVote_"..id, NUT_VOTE_TIME, 1, function()
 		nut.vote.list[id].callback(nut.vote.list[id])
 	end)
 

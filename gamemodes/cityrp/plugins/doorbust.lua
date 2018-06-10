@@ -112,8 +112,11 @@ function nutDoorBust:Damage(entity, damage)
 							local curDamage = damage:GetDamage()
 							curDamage = hook.Run("GetDoorDamage", entity, damage, curDamage) or curDamage
 
-							local wep = inflictor:GetActiveWeapon()
-							if (curDamage < 15 and !(IsValid(wep) and wep.ShotgunReload)) then return end
+							if (IsValid(inflictor) and inflictor:IsPlayer()) then
+								local wep = inflictor.GetActiveWeapon and inflictor:GetActiveWeapon()
+								
+								if (curDamage < 15 and !(IsValid(wep) and wep.ShotgunReload)) then return end
+							end
 
 							entity.doorHealth = entity.doorHealth or nutDoorBust.doorHealth
 							if (entity.blasted) then

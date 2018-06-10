@@ -28,5 +28,13 @@ SWEP.Primary.Automatic     = true
 SWEP.Primary.Ammo          = "none"
 SWEP.HoldType = "melee2"
 
+SWEP.exRender = true
+SWEP.iconCam = {
+	pos = Vector(628.04815673828, 526.86694335938, 382.22674560547),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(0, 0, 26.137578964233),
+	fov = 2.2207795088748,
+}
+
 util.PrecacheModel( SWEP.ViewModel )
 util.PrecacheModel( SWEP.WorldModel )

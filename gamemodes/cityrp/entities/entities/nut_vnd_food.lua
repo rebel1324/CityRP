@@ -120,7 +120,7 @@ if (SERVER) then
 						self:onDispenseItem(client)
 
 						if (owner and owner:IsValid()) then
-							char:addReserve(profit)
+							ownerChar:giveMoney(profit)
 
 							if (profit < 0) then
 								owner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))

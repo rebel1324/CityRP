@@ -7,7 +7,7 @@ function PANEL:Init()
 	local ww, wh = self:GetSize()
 	self:SetPos(sw/2 - ww/2, sh - wh - 100)
 	self:SetTitle("Vote (F2 to activate)")
-	local seconds = 10
+	local seconds = NUT_VOTE_TIME
 	self.setTime = CurTime() + seconds
 	self.id = 0
 

@@ -5,7 +5,7 @@ function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.m
 ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "hat"
-ITEM.price = 150
+ITEM.price = 95000
 ITEM.pacData = {
 	[1] = {
 		["children"] = {

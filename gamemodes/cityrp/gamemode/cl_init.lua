@@ -17,6 +17,9 @@ local whiteList = {
 	keypad_willox = true,
 	material = true,
 	camera = true,
+	cameras = true,
+	elevator = true,
+	elevators = true,
 }
 
 

@@ -6,6 +6,7 @@ ITEM.height = 1
 ITEM.outfitCategory = "vest"
 ITEM.price = 1500
 ITEM.exRender = true
+ITEM.removeOnDeath = true
 ITEM.iconCam = {
 	pos = Vector(734.41784667969, 618.29461669922, 484.25646972656),
 	ang = Angle(24.324199676514, 220, 0),

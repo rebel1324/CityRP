@@ -38,7 +38,9 @@ if (SERVER) then
 			local weapon = attacker:GetActiveWeapon()
 
 			if (weapon and weapon:IsValid() and weapon:GetClass() == "nut_hands") then
-				attacker:getChar():updateAttrib("str", 0.005)
+				if (attacker:getChar():getAttrib("str") < 10) then
+					attacker:getChar():updateAttrib("str", 0.005)
+				end
 			end
 		end
 

@@ -1,17 +1,24 @@
 ITEM.name = "Night Vision"
 ITEM.desc = "nvgogDesc"
 ITEM.model = "models/warz/civinvg.mdl"
-ITEM.price = 500
+ITEM.price = 220000
 ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "hat"
-ITEM.price = 200
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.iconCam = {
 	ang	= Angle(0.57857143878937, 107.16369628906, 0),
 	fov	= 3.5281736417478,
 	pos	= Vector(54.262397766113, -179.24220275879, 70.199066162109)
 }
+ITEM.exRender = true
+ITEM.iconCam = {
+	pos = Vector(164.20527648926, 134.68658447266, 97.334564208984),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(0, 0, 0),
+	fov = 3.8761498463283,
+}
+
 
 ITEM.pacData = {
 	[1] = {

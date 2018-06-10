@@ -29,9 +29,7 @@ SWEP.Category              = "CS:GO Knives"
 
 SWEP.Spawnable             = false
 SWEP.AdminSpawnable        = false
-
---SWEP.ViewModel           = "models/weapons/v_csgo_default.mdl"
---SWEP.WorldModel          = "models/weapons/W_csgo_default.mdl"
+SWEP.IsMelee = true
 
 SWEP.DrawWeaponInfoBox     = false
 

@@ -14,6 +14,14 @@ if (CLIENT) then
 	function ENT:Draw()
 		self:DrawModel()
 	end
+	
+	netstream.Hook("nutBankAlarm", function()
+		surface.PlaySound("npc/overwatch/radiovoice/completesentencingatwill.wav")
+
+		timer.Simple(5, function()
+			surface.PlaySound("npc/overwatch/radiovoice/restrictedincursioninprogress.wav")
+		end)
+	end)
 else
 	function ENT:SpawnFunction(client, trace, class)
 		local entity = ents.Create(class)
@@ -25,6 +33,8 @@ else
 		return entity
 	end
 
+	local snd = "ambient/alarms/combine_bank_alarm_loop1.wav"
+	ROT_LIGHTS = ROT_LIGHTS or {}
 	function ENT:Initialize()
 		self:SetModel("models/props_c17/light_cagelight01_off.mdl")
 		self:SetSolid(SOLID_VPHYSICS)
@@ -49,6 +59,10 @@ else
 		self.Spotlight2:SetLocalAngles(Angle(180, 0, 0))
 		self.Spotlight2:Spawn()
 		self.Spotlight2:Activate()
+
+		self.loopSound = CreateSound(self, "ambient/alarms/combine_bank_alarm_loop1.wav")
+
+		ROT_LIGHTS[self:EntIndex()] = self
 	end
 
 	function ENT:OnRemove()
@@ -62,7 +76,55 @@ else
 				spotend:Remove()
 			end
 		end
+			
+		self.loopSound:Stop()
+		ROT_LIGHTS[self:EntIndex()] = nil
 	end
+
+	local globalTimerName = "stopUsingFacts"
+	local onHeistGoing = false
+	hook.Add("OnBankRobberyCompletelyFailed", "alarmGo", function()
+		for k, v in pairs(ROT_LIGHTS) do
+			v:SetEnabled(false)
+		end
+
+		onHeistGoing = nil
+	end)
+	
+	hook.Add("OnPlayerStealMoney", "alarmGo", function()
+		local time = nut.config.get("raidTimer", 100)
+		
+		for k, v in pairs(ROT_LIGHTS) do
+			v:SetEnabled(true)
+		end
+
+		if (!onHeistGoing) then
+			local laws = {}
+			for k, v in ipairs(player.GetAll()) do
+				local char = v:getChar()
+
+				if (char) then
+					local class = char:getClass()
+					local classData = nut.class.list[class]
+
+					if (classData and classData.law) then
+						table.insert(laws, v)
+					end
+				end
+			end
+			netstream.Start(laws, "nutBankAlarm")
+		end
+
+		onHeistGoing = true
+
+		timer.Create(globalTimerName, time, 1, function()
+			for k, v in pairs(ROT_LIGHTS) do
+				v:SetEnabled(false)
+			end
+
+			onHeistGoing = false
+		end)
+	end)
 
 	function ENT:Think()
 		if self:GetEnabled() then
@@ -86,7 +148,7 @@ function ENT:SetupDataTables()
 			if old == new then
 				return
 			end
-
+			
 			if new then
 				ent.Spotlight1:Fire("LightOn", "", 0)
 				ent.Spotlight2:Fire("LightOn", "", 0)

@@ -9,6 +9,7 @@ ENT.Category = "NutScript - CityRP"
 ENT.RenderGroup 		= RENDERGROUP_BOTH
 ENT.defaultPrice = 250
 ENT.model = "models/props/commercial/coffeemachine01.mdl"
+ENT.item = "coffee"
 
 if (CLIENT) then
 	local EFFECT = {}
@@ -91,7 +92,7 @@ else
 
 		nut.blur3d2d.add(self:EntIndex(), Vector(), Angle(), .15,
 		function(isOverlay) 
-			local text = L("purchaseItem", name)
+			local text = L("purchaseItem", L(name))
 
 			if (isOverlay) then
 				-- stencil overlay (something you want to draw)

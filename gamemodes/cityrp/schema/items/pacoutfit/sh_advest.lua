@@ -5,6 +5,7 @@ ITEM.height = 1
 ITEM.desc = "ashole"
 ITEM.outfitCategory = "vest"
 ITEM.price = 3500
+ITEM.removeOnDeath = true
 
 function ITEM:getDesc()	
 	if (self.entity and IsValid(self.entity)) then

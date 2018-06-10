@@ -139,10 +139,10 @@ end
 function PLUGIN:OnCreateItemInteractionMenu(panel, menu, itemTable)
 	local inventory = panel:GetParent()
 	local client = LocalPlayer()
+	
 	-- lol, kanbare clientss!
 	local nearCashier, entity
 	for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
-		print(v:GetClass(), v:CPPIGetOwner() == client)
 		if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
 			nearCashier = true
 			entity = v
@@ -150,7 +150,6 @@ function PLUGIN:OnCreateItemInteractionMenu(panel, menu, itemTable)
 		end
 	end
 	
-	print(nearCashier)
 	if (nearCashier) then
 		menu:AddOption(L("priceSet"), function()
 			local itemID = itemTable:getID()

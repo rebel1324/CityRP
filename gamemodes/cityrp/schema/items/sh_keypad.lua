@@ -23,6 +23,7 @@ ITEM.functions.use = { -- sorry, for name order.
 
 					local spawnPosition = trace.HitPos + trace.HitNormal * 16
 					local ent = ents.Create("nut_sec_keypad")
+					if (!IsValid(ent)) then return false end
 					local angles = trace.HitNormal:Angle()
 					local axis = Angle(angles[1], angles[2], angles[3])
 					angles:RotateAroundAxis(axis:Right(), 0)

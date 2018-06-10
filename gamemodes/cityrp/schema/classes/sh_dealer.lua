@@ -4,9 +4,6 @@ CLASS.salary = 210
 CLASS.limit = 2
 CLASS.color = Color(160, 100, 30)
 CLASS.business = {
-	-- Storages
-	["bagsmall"] = 1,	
-
 	-- Communication
 	["radio"] = 1,	
 	["pager"] = 1,	

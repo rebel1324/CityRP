@@ -23,6 +23,7 @@ if (SERVER) then
 		["nut_keys"] = true,
 		["weapon_healer"] = true,
 		["nut_stunbaton"] = true,
+		["wowozela"] = true,
 		["weapon_detector"] = true,
 		["keypad_cracker"] = true,
 	}
@@ -42,7 +43,8 @@ if (SERVER) then
 			local illegal = false
 
 			for k, v in pairs(weapons) do
-				if (!defualtWeapons[v:GetClass()]) then
+				-- exclude default weapon and melee weapons.
+				if (!defualtWeapons[v:GetClass()] and !v.IsMelee) then
 					self:GetParent():Popup(client, v)
 					illegal = true
 					return
@@ -50,7 +52,7 @@ if (SERVER) then
 			end
 			
 			for k, v in pairs(char:getInv():getItems()) do
-				if (v.isWeapon) then
+				if (v.isWeapon and !v.weaponCategory == "melee") then
 					self:GetParent():Popup(client, v)
 					illegal = true
 					return

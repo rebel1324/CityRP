@@ -21,8 +21,8 @@ CLASS.business = {
 	["flare_shipment"] = 1,	
 
 	-- Misc
-	["spraycan"] = 1,
-	["tie"] = 1,
+	["vision_a"] = 1,
+	["vision_b"] = 1,
 
 	-- Outfits
 	["balivest"] = 1,

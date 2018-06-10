@@ -55,7 +55,7 @@ function PLAYER:isProtected()
 			for k, v in pairs(inv) do
 				if (v:getData("equip")) then
 					if (v.uniqueID == "advest") then
-						return 0.35, "advest"
+						return 0.25, "advest"
 					end
 
 					if (v.uniqueID == "balivest") then
@@ -63,7 +63,7 @@ function PLAYER:isProtected()
 					end
 
 					if (v.uniqueID == "polivest") then
-						return 0.25, "polivest"
+						return 0.33, "polivest"
 					end
 				end
 			end
@@ -285,4 +285,9 @@ end
 function PLAYER:isHitman()
     local char = self:getChar()
     return (char and char:getClass() == CLASS_HITMAN)
+end
+
+
+function PLAYER:setRagdolled(state, time, getUpGrace)
+	print("ragdoll is depreciated in CityRP due to stability.")
 end

@@ -153,6 +153,10 @@ else
 			if (classData.law) then
 				return false, "lawClass"
 			end
+
+			if (class != CLASS_THIEF and !classData.team) then
+				return false, "notCriminal"
+			end
 		else
 			return false, "what the fuck"
 		end
@@ -298,6 +302,18 @@ if (SERVER) then
 	function PLAYER:resetStealing()
 		self:setStolenMoney(0)
 		self:destoryTimer()
+
+		local done = true
+		for k, v in ipairs(player.GetAll()) do
+			if (self:getStolenMoney() > 0) then
+				done = false
+				break
+			end
+		end
+
+		if (done) then
+			hook.Run("OnBankRobberyCompletelyFailed")
+		end
 	end	
 
 	function PLAYER:doneStealing()

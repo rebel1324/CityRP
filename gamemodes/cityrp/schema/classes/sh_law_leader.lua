@@ -2,17 +2,19 @@ CLASS.name = "Police Chief"
 CLASS.faction = FACTION_CITIZEN
 CLASS.salary = 230
 CLASS.law = true
+CLASS.vote = true
 CLASS.weapons = {
-	"cw_m1911",
+	"cw_p99",
 	"cw_mp5",
 	"nut_stunstick",
 	"nut_arrestbaton",
+	"nut_handcuffs",
 	"keypad_cracker",
 }
 CLASS.business = {
 	["doorcharge"] = 1,
 	["teargas_shipment"] = .9,	
-	["tie"] = 1,
+	["polivest"] = 1,
 }
 CLASS.limit = 1
 CLASS.team = 1
