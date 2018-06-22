@@ -1013,11 +1013,13 @@ nut.command.add("searchwarrant", {
 			target:setNetVar("searchWarrant", true)
 
 			local id = target:getChar():getID()
-			timer.Create(target:getChar():getID() .. "_chewAss", 300, 1, function()
-				local char2 = target:getChar()
-				
-				if (char2:getID() == id) then
-					target:setNetVar("searchWarrant", false)
+			timer.Create(id .. "_chewAss", 300, 1, function()
+				if (IsValid(target)) then
+					local char2 = target:getChar()
+					
+					if (char2:getID() == id) then
+						target:setNetVar("searchWarrant", false)
+					end
 				end
 			end)
 		end
@@ -1055,10 +1057,10 @@ nut.command.add("stopwarrant", {
 			target:setNetVar("searchWarrant", nil)
 
 			local id = target:getChar():getID()
-			timer.Destroy(target:getChar():getID() .. "_chewAss")
+			timer.Destroy(id .. "_chewAss")
 		end
 	end,
-	alias = {"수색영장"}
+	alias = {"수색영장해제"}
 })
 
 nut.command.add("password", {
@@ -1122,6 +1124,17 @@ nut.command.add("sellall", {
 
 hook.Add("InitializedSchema", "addMoreShit", function()
 	timer.Simple(0, function()
+		nut.chat.register("looc", {
+			onCanSay =  function(speaker, text)
+				return false
+			end,
+			onChatAdd = function(speaker, text)
+			end,
+			prefix = {"]]", "/looc"},
+			noSpaceAfter = true,
+			filter = "ooc"
+		})
+
 		nut.chat.register("ooc", {
 			onCanSay =  function(speaker, text)
 			end,
@@ -1173,15 +1186,13 @@ hook.Add("InitializedSchema", "addMoreShit", function()
 		nut.chat.register("tc", {
 			onGetColor = function() return color_white end,
 			onCanHear = function(speaker, listener)
-				if (speaker == listener) then return true end
-				
 				local char, char2 = speaker:getChar(), listener:getChar()
 	
 				if (char and char2) then
 					local class, class2 = char:getClass(), char2:getClass()
 					local classDat, classDat2 = nut.class.list[class], nut.class.list[class2]
-	
-					if (IsValid(classDat) and IsValid(classDat2)) then
+
+					if (classDat and classDat2) then
 						if (classDat.team and classDat2.team) then
 							if (classDat.team == classDat2.team) then
 								return true

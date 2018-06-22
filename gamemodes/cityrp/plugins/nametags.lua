@@ -1,3 +1,4 @@
+local PLUGIN = {}
 PLUGIN.name = "3D2D Nametag"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin displays 3D2D Player information on the top of the head of the player."
@@ -172,18 +173,8 @@ function btNameTag:drawText(text, x, y, tCol, a)
 	draw.SimpleText(text, btNameTag.font[1 + 2*(a or 0)], x - 1, y - 1, tCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
-hook.Add("PostPlayerDraw", "btNameTag", function(client)
-	hook.Run("DrawNameTag", client)
-end)
-
-hook.Add("DrawPlayerRagdoll", "btNameTag", function(client)
-	hook.Run("DrawNameTag", client)
-end)
-
 local ntChar, ntClass, ntClassInfo, ntRagdoll
-hook.Add("DrawNameTag", "btNameTag", function(client)
-	if (SUPPRESS_FROM_STENCIL) then return end
-
+hook.Add("PostPlayerDraw", "btNameTag", function(client)
 	if (client:GetNoDraw() != true) then
 		ntPos = btNameTag:getHead(client)
 		ntX, ntY = 0, 0
@@ -200,16 +191,6 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 		ntDist = math.Clamp(ntView:Distance(ntPos) / ntMax, 0.25, 1)
 
 		if (ntDist >= 1) then return end
-		
-		if (IsValid(client.objCache)) then
-			ntRagdoll = client
-			client = client.objCache
-		else
-			if (!client:IsPlayer()) then
-				return
-			end
-		end
-		
 		ntChar = client:getChar()
 		if (ntChar or client:IsBot()) then
 			cam.Start3D2D(ntPos, ntAng, ntScale)
@@ -267,6 +248,10 @@ hook.Add("DrawNameTag", "btNameTag", function(client)
 		ntChar = nil
 		ntClass = nil
 		ntClassInfo = nil
-		ntRagdoll = nil
+		ntRagdoll = nil		
 	end
 end)
+
+hook.Add("DrawPlayerRagdoll", "btNameTag", function(client)
+end)
+

@@ -2,8 +2,7 @@ CLASS.name = "Gangster"
 CLASS.faction = FACTION_CITIZEN
 CLASS.salary = 180
 CLASS.business = {
-	["sh_b_acide"] = 1,
-	
+	--["sh_b_acide"] = 1,
 }
 CLASS.weapons = {
 	"nut_unarrest",

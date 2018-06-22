@@ -19,7 +19,7 @@ do
 		]]
 		local mapInfo = {
 			id = {
-
+				[2048] = true
 			},
 			model = {
 				["models/props_junk/bicycle01a.mdl"] = true
@@ -27,8 +27,12 @@ do
 			class = {
 				prop_physics_multiplayer = true,
 				func_physbox_multiplayer = true,
+				func_physbox_multiplayer = true,
 				keyframe_rope = true,
 				move_rope = true,
+			},
+			name = {
+				--club_spotlight_branch = true
 			}
 		}
 		function PLUGIN:InitPostEntity()
@@ -38,8 +42,9 @@ do
 				local idList = mapInfo.id
 				local mdlList = mapInfo.model
 				local classList = mapInfo.class
+				local nameList = mapInfo.name
 				local mdl = v:GetModel() or ""
-				local isBanned = idList[v:MapCreationID()] or mdlList[mdl:lower()] or classList[v:GetClass()]
+				local isBanned = idList[v:MapCreationID()] or mdlList[mdl:lower()] or classList[v:GetClass()] or nameList[v:GetName()]
 
 				if (isBanned) then
 					v:Remove()

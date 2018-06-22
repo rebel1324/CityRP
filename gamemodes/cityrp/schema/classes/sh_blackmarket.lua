@@ -15,7 +15,6 @@ CLASS.business = {
 	["sradio"] = 1,	
 
 	-- Grenades
-	["teargas_shipment"] = 1,	
 	["flare_g_shipment"] = 1,	
 	["flare_b_shipment"] = 1,	
 	["flare_shipment"] = 1,	

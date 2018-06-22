@@ -18,4 +18,4 @@ CLASS.business = {
 function CLASS:OnSet(client)
 end
 
-CLASS_DEALER = CLASS.index
+CLASS_COSMETIC_DEALER = CLASS.index

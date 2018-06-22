@@ -3,7 +3,6 @@ DeriveGamemode("nutscript")
 local whiteList = {
 	constraintinfo = true,
 	material = true,
-	weld = true,
 	nocollide = true,
 	colour = true,
 	measuringstick = true,
@@ -16,8 +15,6 @@ local whiteList = {
 	remover = true,
 	keypad_willox = true,
 	material = true,
-	camera = true,
-	cameras = true,
 	elevator = true,
 	elevators = true,
 }

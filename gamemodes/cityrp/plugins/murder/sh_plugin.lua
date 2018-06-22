@@ -28,11 +28,24 @@ function PLUGIN:PlayerDeath(victim, inflictor, attacker)
         return
     end
 
-
     local ent = ents.Create("nut_evidence")
     ent.victim = victim
     ent.attacker = attacker
     ent.inflictor = inflictor
     ent:SetPos(victim:GetPos())
     ent:Spawn()
+end
+
+function PLUGIN:OnPlayerReportItem(item, reporter, attacker)
+    if (IsValid(attacker)) then
+        attacker:wanted(true, "사설 탐정의 고발!", attacker)
+    end
+
+    if (IsValid(reporter)) then
+        local char = reporter:getChar()
+
+        if (char) then
+            char:giveMoney(1500)
+        end
+    end
 end

@@ -339,7 +339,7 @@ local function djOnly(client)
 	if (char) then
 		local class = char:getClass()
 
-		if (class != CLASS_DJ) then return end
+		if (class != CLASS_DEEJAY) then return end
 
 		return true
 	end
@@ -482,11 +482,11 @@ nut.bent.add("nut_vnd_covfefe", "models/props/commercial/coffeemachine01.mdl", "
 nut.bent.add("nut_microwave", "models/props/cs_office/microwave.mdl", "microwave", 2, 400, cookOnly)
 nut.bent.add("nut_stove", "models/props_c17/furnitureStove001a.mdl", "stove", 1, 1500, cookOnly)
 
-nut.bent.add("nut_d_lamp", "models/gonzo/weedb/lamp2.mdl", "weedLampName", 4, 800, mobOnly)
-nut.bent.add("nut_d_pot", "models/gonzo/weedb/pot2.mdl", "weedPotName", 20, 1000, mobOnly)
+-- weed is removed temporaly
+--nut.bent.add("nut_d_lamp", "models/gonzo/weedb/lamp2.mdl", "weedLampName", 4, 800, mobOnly)
+--nut.bent.add("nut_d_pot", "models/gonzo/weedb/pot2.mdl", "weedPotName", 20, 1000, mobOnly)
 nut.bent.add("nut_attrib_gun", "models/props_c17/doll01.mdl", "gunBoosterName", 2, 3000, dealerOnly)
 
-nut.bent.add("instrument_drumpad", "models/metasync/gpad.mdl", "launchPad", 1, 1000, djOnly) -- Gonna be removed soon
 nut.bent.add("nut_vnd_medical", "models/rebel1324/medicvendor.mdl", "medicalVendorName", 1, 1000, docOnly)
 
 nut.bent.add("synthesizer", "models/tnf/synths.mdl", "synthesizer", 1, 3000, pianoOnly)
@@ -494,7 +494,7 @@ nut.bent.add("synthesizer_guitar", "models/tnf/synth.mdl", "synthesizerGuitar", 
 nut.bent.add("synthesizer_piano", "models/tnf/synth.mdl", "synthesizerPiano", 1, 3000, pianoOnly)
 nut.bent.add("synthesizer_violin", "models/tnf/synth.mdl", "synthesizerViolin", 1, 3000, pianoOnly)
 
-nut.bent.add("jukebox", "models/fallout3/jukebox.mdl", "jukebox", 1, 1000, djOnly)
+nut.bent.add("jukebox", "models/props_lab/citizenradio.mdl", "jukebox", 1, 10000, djOnly)
 
 nut.bent.add("nut_seller", "models/rebel1324/nmrih_cash_register.mdl", "checkoutName", 1, 2500, all)
 

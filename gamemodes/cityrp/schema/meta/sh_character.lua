@@ -38,6 +38,10 @@ function CHAR:joinClass(class)
 			return
 		end
 
+		if (!nut.class.canBe(client, class)) then
+			return false
+		end
+
 		client.onVote = true
 		
 		local textWant = L("jobVoteContext", client, client:Name(), L(classData.name, client))

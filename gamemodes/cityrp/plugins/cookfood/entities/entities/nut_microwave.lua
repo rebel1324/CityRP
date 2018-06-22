@@ -19,6 +19,7 @@ if (SERVER) then
 		self:SetUseType(SIMPLE_USE)
 		self.loopsound = CreateSound(self, "plats/elevator_move_loop1.wav")
 		self.receivers = {}
+		self.stoveItems = {}
 		local physicsObject = self:GetPhysicsObject()
 
 		if (IsValid(physicsObject)) then
@@ -26,15 +27,29 @@ if (SERVER) then
 		end
 
 		nut.item.newInv(0, self.invType, function(inventory)
+			local entity = self
 			self:setInventory(inventory)
 			inventory.noBags = true
 
 			function inventory:onCanTransfer(client, oldX, oldY, x, y, newInvID)
 				return hook.Run("StorageCanTransfer", inventory, client, oldX, oldY, x, y, newInvID)
 			end
+
+			local myID = inventory:getID()
+			hook.Add("OnItemTransfered", entity, function(self, item, nextInv, prevInv)
+				if (nextInv:getID() == myID or prevInv:getID() == myID) then
+					entity:updateContents()
+				end
+			end)
 		end)
 	end
 
+	function ENT:updateContents()
+		local items = self:getInv():getItems(true)
+
+		self.stoveItems = items
+	end
+	
 	function ENT:setInventory(inventory)
 		if (inventory) then
 			self:setNetVar("id", inventory:getID())
@@ -167,7 +182,7 @@ if (SERVER) then
 		end
 
 		if (self:getNetVar("active")) then
-			local items = self:getInv():getItems(true)
+			local items = self.stoveItems
 
 			for k, v in pairs(items) do
 				v:setData("heat", v:getData("heat", 0) + 1)

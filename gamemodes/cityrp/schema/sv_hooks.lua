@@ -179,35 +179,7 @@ function SCHEMA:BankIncomePayload()
 end
 
 function SCHEMA:CrapPayload()
-	local max = nut.config.get("garbageCount", 25)
-	local why = SCHEMA.crapPositions or {}
-	local cnt = table.Count(why)
-	local rndIdx = {}
-	local fts = ents.FindByClass("nut_grabage")
-
-	if (#fts > 25) then
-		return
-	end
-
-	while (table.Count(rndIdx) < math.min(cnt, max)) do
-		local rdix = math.random(1, cnt)
-
-		if (!table.HasValue(rndIdx, rdix)) then
-			table.insert(rndIdx, rdix)
-		end
-	end
-
-	for k, v in ipairs(rndIdx) do
-		local pos = why[v]
-		if (#fts > nut.config.get("garbageMax", 25)) then
-			return
-		end
-
-		local c = ents.Create("nut_grabage")
-		c:SetPos(pos + Vector(0, 0, 5))
-		c:Spawn()
-		c:Activate()
-	end
+	-- removing whiles to not crash the server.
 end
 
 -- This hook restricts oneself from using a weapon that configured by the sh_config.lua file.
@@ -300,10 +272,13 @@ function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
 		end
 
 		client:notifyLocalized("cleanupChar")
+	else
+		local char = client:getChar()
+		client:arrest(false)
 	end
 
-	local char = client:getChar()
 
+	local char = client:getChar()
 	if (char) then
 		if (char:getArrest()) then
 			return
@@ -820,6 +795,7 @@ end
 
 -- Save Data.
 local saveEnts = {
+	["frame_billboard"] = true,
 	["nut_atm"] = true,
 	["nut_outfit"] = true,
 	["nut_m_recycler"] = true,
@@ -828,6 +804,11 @@ local saveEnts = {
 	["nut_helloboard"] = true,
 	["nut_rotlight"] = true,
 	["nut_checker"] = true,
+	["nut_rock_model_01"] = true,
+	["nut_rock_model_02"] = true,
+	["nut_rock_model_03"] = true,
+	["ssm_base_new"] = true,
+	["sent_locker"] = true,
 }
 function SCHEMA:SaveData()
 	self:saveJail()
@@ -837,6 +818,17 @@ function SCHEMA:SaveData()
 
 	for k, v in ipairs(ents.GetAll()) do
 		local class = v:GetClass():lower()
+
+		if (class == "frame_billboard") then
+			table.insert(savedEntities, {
+				class = class, 
+				pos = v:GetPos(),
+				ang = v:GetAngles(),
+				url = v:GetURL(),
+			})
+			
+			continue
+		end
 
 		if (class:find("bingle") and v:GetNWBool("fuckoff")) then
 			table.insert(savedEntities, {
@@ -892,6 +884,10 @@ function SCHEMA:LoadData()
 		if (IsValid(phys)) then
 			phys:Wake()
 			phys:EnableMotion()
+		end
+
+		if (v.class == "frame_billboard") then
+			ent:SetURL(v.url)
 		end
 
 		if (ent.isNotiboard) then

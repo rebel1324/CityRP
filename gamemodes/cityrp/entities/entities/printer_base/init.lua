@@ -93,7 +93,12 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Think()
-	if not IsValid(self:Getowning_ent()) then
+	local phys = self:GetPhysicsObject()
+	if (IsValid(phys)) then
+		phys:EnableMotion(true)
+	end
+
+ 	if not IsValid(self:Getowning_ent()) then
 		self:Destruct()
 		self:Remove()
 	end
