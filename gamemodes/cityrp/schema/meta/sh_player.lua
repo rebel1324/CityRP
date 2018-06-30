@@ -45,6 +45,11 @@ function PLAYER:arrest(doArrest, arrester, seconds)
 	end
 end
 
+local vestClass = {
+    polivest = .4,
+    advest = .25,
+    balivest = .2
+}
 function PLAYER:isProtected()
 	local char = self:getChar()
 
@@ -53,18 +58,12 @@ function PLAYER:isProtected()
 
 		if (inv) then
 			for k, v in pairs(inv) do
-				if (v:getData("equip")) then
-					if (v.uniqueID == "advest") then
-						return 0.25, "advest"
-					end
-
-					if (v.uniqueID == "balivest") then
-						return 0.2, "balivest"
-					end
-
-					if (v.uniqueID == "polivest") then
-						return 0.33, "polivest"
-					end
+                if (v:getData("equip")) then
+                    local uid = v.uniqueID
+                    
+                    if (vestClass[uid]) then
+                        return vestClass[uid], vestClass
+                    end
 				end
 			end
 

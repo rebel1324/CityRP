@@ -30,6 +30,20 @@ ITEM.functions.usef = { -- sorry, for name order.
 		local trace = client:GetEyeTraceNoCursor() -- We don't need cursors.
 		local target = trace.Entity
 
+		if (client) then
+			local char = client:getChar()
+
+			if (char) then
+				local class = char:getClass()
+
+				if (class != CLASS_THIEF) then
+					client:notifyLocalized("onlyThief")
+
+					return false
+				end
+			end
+		end
+
 		if (target and target:IsValid() and target:isDoor()) then
 			if (target:isLocked()) then
 				client:setNetVar("picking", true)

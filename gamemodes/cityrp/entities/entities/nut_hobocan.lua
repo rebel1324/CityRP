@@ -7,11 +7,16 @@ ENT.Category = "NutScript - CityRP"
 ENT.Spawnable = true
 ENT.AdminOnly = false
 ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.donateAmount = 1000
 --models/props/cs_assault/dollar
+
+function ENT:SetupDataTables()
+	self:NetworkVar("Float", 0, "Money")
+end
 
 if (SERVER) then
 	function ENT:Initialize()
-		self:SetModel("models/props_junk/MetalBucket01a.mdl")
+		self:SetModel("models/props_junk/MetalBucket02a.mdl")
 		self:PhysicsInit(SOLID_VPHYSICS)
 		self:SetMoveType(MOVETYPE_VPHYSICS)
 		self.health = 100
@@ -32,6 +37,42 @@ if (SERVER) then
 		end
 	end
 
+	function ENT:Use(client)
+		local owner = self:CPPIGetOwner()
+
+		if (IsValid(owner)) then
+			if (client == owner) then
+				if (client.nextDonation and client.nextDonation > CurTime()) then return end
+
+				local char = owner:getChar()
+
+				if (char) then
+					char:giveMoney(self:GetMoney())
+					client:notifyLocalized("moneyTaken", nut.currency.get(self:GetMoney()))
+					self:SetMoney(0)
+
+					self:EmitSound("suitchargeok1.wav")
+
+					client.nextDonation = CurTime() + 1
+				end
+			else
+				if (client.nextDonation and client.nextDonation > CurTime()) then return end
+
+				local char = client:getChar()
+
+				if (char and char:hasMoney(self.donateAmount)) then
+					client:notifyLocalized("donatedHobo", nut.currency.get(self.donateAmount))
+
+					char:giveMoney(-self.donateAmount)
+					self:SetMoney(self:GetMoney() + self.donateAmount)
+					self:EmitSound("ambient/levels/labs/coinslot1.wav")
+
+					client.nextDonation = CurTime() + .25
+				end
+			end
+		end
+	end
+
 	function ENT:OnRemove()
 	end
 
@@ -45,8 +86,8 @@ else
 		if (!self.nextEmit or self.nextEmit < CurTime()) then
 			local pos = self:GetPos()
 			local new = nut.util.getMaterial("icon16/money.png")
-			local smoke = WORLDEMITTER:Add( new, pos + self:GetUp()*6 + VectorRand()*4)
-			smoke:SetVelocity(VectorRand() * math.random(30, 20) + self:GetUp()*100)
+			local smoke = WORLDEMITTER:Add( new, pos + self:GetUp()*6 + VectorRand()*8)
+			smoke:SetVelocity(self:GetUp()*20)
 			smoke:SetDieTime(math.Rand(.2,.4))
 			smoke:SetStartAlpha(math.Rand(188,211))
 			smoke:SetEndAlpha(0)
@@ -75,11 +116,6 @@ else
 			return true
 		end
 
-		-- 도둑을 위한 자리.
-		if (false) then
-			return true
-		end
-
 		return false
 	end
 
@@ -90,7 +126,7 @@ else
 		nut.util.drawText(L"hoboCanName", x, y, ColorAlpha(nut.config.get("color"), alpha), 1, 1, nil, alpha * 0.65)
 		nut.util.drawText(L"hoboCanDesc", x, y + 16, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
 		if (self:canSeeContent(LocalPlayer())) then
-			local money = 0
+			local money = self:GetMoney()
 
 			nut.util.drawText(L("hoboCanOwner", nut.currency.get(money)), x, y + 32, ColorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
 		end

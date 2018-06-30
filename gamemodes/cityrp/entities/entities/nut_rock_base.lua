@@ -29,6 +29,111 @@ if (SERVER) then
 			physObj:EnableMotion(false)
 		end
 	end
+
+	do
+	REWARDWEIGHT = {
+		mineral_rock = 80,
+		mineral_copper = 45,
+		mineral_iron = 30,
+		mineral_silver = 10,
+		mineral_gold = 5,
+		mineral_platinum = 1,
+		mineral_diamond = .03,
+    }
+
+    local sum = 0
+		for k, v in pairs(REWARDWEIGHT) do
+			sum = sum + v
+		end
+
+		for k, v in pairs(REWARDWEIGHT) do
+			REWARDWEIGHT[k] = v/sum
+		end
+
+		local first = 0
+		REWARDRANGE = {}
+		for k, v in pairs(REWARDWEIGHT) do
+			REWARDRANGE[k] = {}
+			REWARDRANGE[k].a = first
+			REWARDRANGE[k].b = first + v
+
+			first = first + v
+		end
+	--[[
+		if (SERVER) then
+			local aaoa = {}
+			local tries = 10000
+			
+			for i = 1, tries do
+				local lmao = getChance()
+				if (lmao) then
+					aaoa[lmao] = aaoa[lmao] or 0
+					aaoa[lmao] = aaoa[lmao] + 1
+				end
+			end
+		end
+	]]
+	end
+
+
+	local function getChance()
+		local random = math.Rand(0, 1)
+			
+		for k, v in pairs(REWARDRANGE) do
+			if (v.a < random and v.b >= random) then
+				return k
+			end
+		end
+	end
+
+	function ENT:OnTakeDamage(damageinfo)
+		local weapon = damageinfo:GetInflictor()
+		local client = damageinfo:GetAttacker()
+		if (IsValid(client) and client:IsPlayer()) then
+			local char = client:getChar()
+
+			if (char) then
+				local class = char:getClass()
+
+				if (class) then
+					if (class != CLASS_MINER) then
+						return
+					end
+				end
+			end
+
+
+			if (IsValid(weapon)) then
+				local class = weapon:GetClass()
+
+				if (class:find("pickaxe")) then
+					client.hit = client.hit or 0
+					client.hit = client.hit + 1
+
+					if (client.hit >= 2) then
+						local itemClass = getChance()
+						local char = client:getChar()
+
+						if (char) then
+							local inv = char:getInv()
+
+							if (inv) then
+								local item, reason = inv:add(itemClass)
+
+								if (item) then
+									client:notifyLocalized("minedSomething", itemClass)
+								else
+									client:notifyLocalized(reason)
+								end
+							end
+						end
+
+						client.hit = 0
+					end
+				end
+			end
+		end
+	end
 else
 	function ENT:Draw()
 		self:DrawModel()

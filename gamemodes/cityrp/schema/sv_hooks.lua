@@ -170,6 +170,7 @@ function SCHEMA:BankIncomePayload()
 				end
 
 				local profit = math.Round(char:getReserve() * (math.abs(nut.config.get("incomeRate", 1) / 100)))
+				profit = math.min(profit, 100000)
 
 				char.player:notify(L("reserveIncome", v, nut.currency.get(profit)))
 				char:addReserve(profit)
@@ -325,68 +326,60 @@ local function item2world(inv, item, pos)
 	return ent
 end
 
-		-- This hook enforces death penalty for dead players.
-		function SCHEMA:PlayerDeath(client, inflicter, attacker)
-			local char = client:getChar()
-			
-			if (char) then
-				local class = char:getClass()
-				local classData = nut.class.list[class] or nut.class.list[1]
-				local job = classData.name
-				local law = classData.law
-				
-				hook.Run("ResetVariables", client, SIGNAL_DEATH)
+function SCHEMA:PlayerDeath(client, inflicter, attacker)
+	local char = client:getChar()
+	
+	if (char) then
+		local class = char:getClass()
+		local classData = nut.class.list[class] or nut.class.list[1]
+		local job = classData.name
+		local law = classData.law
+		
+		hook.Run("ResetVariables", client, SIGNAL_DEATH)
 
-				-- money penalty
-				if (nut.config.get("deathMoney", true) and !law ) then
-					client.deadChar = char:getID()
-					char.lostMoney = math.Round(char:getMoney() * (nut.config.get("dpBank", 10) / 100))
-					if ( char.lostMoney > 10 ) then
-						char:giveMoney(-char.lostMoney)
-						else
+		-- money penalty
+		if (nut.config.get("deathMoney", true) and !law ) then
+			client.deadChar = char:getID()
+			char.lostMoney = math.Round(char:getMoney() * (nut.config.get("dpBank", 10) / 100))
+			if ( char.lostMoney > 10 ) then
+				char:giveMoney(-char.lostMoney)
+				else
+			end
+		end
+
+		hook.Run("PlayerHitDeath", client, inflicter, attacker)
+
+		-- weapon penalty
+		local inv = char:getInv()
+		local items = inv:getItems()
+
+		for k, v in pairs(items) do
+			inv = nut.item.inventories[v.invID]
+
+			if (v.removeOnDeath) then
+				if (v.outfitCategory) then
+					if (v:getData("equip", false)) then
+						v:remove()
 					end
+				else
+					v:remove()
 				end
+			end
 
-				hook.Run("PlayerHitDeath", client, inflicter, attacker)
+			if (v.dropOnDeath) then
+				local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
 
-				-- weapon penalty
-				local inv = char:getInv()
-				local items = inv:getItems()
+				hook.Run("OnPlayerDropItem", client, v, ent)
+			end
 
-				for k, v in pairs(items) do
-					inv = nut.item.inventories[v.invID]
-
-					if (v.removeOnDeath) then
-						if (v.outfitCategory) then
-							if (v:getData("equip", false)) then
-								v:remove()
-							end
-						else
-							v:remove()
-						end
-					end
-
-					if (v.dropOnDeath) then
-						local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
-
-						hook.Run("OnPlayerDropItem", client, v, ent)
-					end
-
-					if (v.isWeapon) then
-						if (v:getData("equip")) then
-							v:setData("ammo", nil)
-							v:setData("equip", nil)
-
-							if (nut.config.get("deathWeapon", false)) then
-								local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
-
-								hook.Run("OnPlayerDropWeapon", client, v, ent)
-							end
-						end
-					end
+			if (v.isWeapon) then
+				if (v:getData("equip")) then
+					v:remove()
 				end
 			end
 		end
+	end
+end
 
 -- Don't let them spray thier fucking spray without spraycan
 function SCHEMA:PlayerSpray(client)
@@ -606,24 +599,31 @@ end
 
 function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 	if (isArrest) then
-		if (IsValid(arrester)) then
-			nut.log.add(arrester, "arrest")
-			arrester:notify("You have arrested " .. entity:Nick() .. " for " .. nut.config.get("jailTime") ..  " seconds." )
+		if (IsValid(arrested) and IsValid(arrester)) then
+			for k, v in ipairs(player.GetAll()) do
+				v:ChatPrint(arrested:Name() .. "님이 " .. arrester:Name() .. "님에게 체포되었습니다.")
+			end
+
+			nut.log.add(arrester, "arrest", arrested)
 		end
+
+		if (IsValid(arrester)) then
+			arrester:notify(arrested:Nick() .. " 님을 " .. nut.config.get("jailTime") ..  " 초 동안 체포하였습니다." )
+		end
+
 		if (IsValid(arrested)) then
-			nut.log.add(arrested, "arrested")
-			arrested:notify("You have been arrested for " .. nut.config.get("jailTime") ..  " seconds." )
+			arrested:notify("당신은 체포되었습니다. 수감시간: " .. nut.config.get("jailTime") ..  " 초." )
 			arrested:Spawn()
 			if (self.prisonPositions and #self.prisonPositions > 0) then
 				arrested:SetPos(table.Random(self.prisonPositions))
 			end
-			arrested:setAction("Releasing", nut.config.get("jailTime"))
+			arrested:setAction("감옥 타이머", nut.config.get("jailTime"))
 			arrested:StripWeapons()
 			
 			timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
 				if (IsValid(arrested)) then
 					arrested:Spawn()
-					arrested:notify("You have been released from prison")
+					arrested:notify("감옥에서 석방되었습니다.")
 					arrested:arrest(false)
 				end
             end)

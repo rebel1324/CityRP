@@ -95,7 +95,7 @@ function SWEP:PrimaryAttack()
 
 		if (IsValid(entity) and entity:IsPlayer()) then
 			entity:setNetVar("Handcuffed", false)
-			entity:arrest(true)
+			entity:arrest(true, self.Owner)
 		end
 	end
 end

@@ -1,9 +1,9 @@
-ITEM.name = "Gold"
-ITEM.desc = "goldDesc"
-ITEM.mineralLevel = 50
+ITEM.name = "Diamond"
+ITEM.desc = "diamondDesc"
+ITEM.mineralLevel = 80
 ITEM.isStackable = true
 ITEM.maxQuantity = 100
-ITEM.price = 800 * ITEM.maxQuantity
+ITEM.price = 15000 * ITEM.maxQuantity
 ITEM.model = "models/props_debris/concrete_chunk03a.mdl"
 ITEM.exRender = true
 ITEM.iconCam = {
@@ -12,7 +12,7 @@ ITEM.iconCam = {
 	entAng = Angle(24.31579208374, 25.148393630981, 18.206037521362),
 	fov = 4.674599566873,
 	outline = true,
-	outlineColor = Color(252, 255, 95)
+	outlineColor = Color(255, 95, 95)
 }
 
 

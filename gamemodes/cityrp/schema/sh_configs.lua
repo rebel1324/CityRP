@@ -319,6 +319,7 @@ nut.config.add("doorTax", 100, "door tax.", nil, {
 	category = "schema"
 })
 
+-- yeah yeah i'm going to make this short, okay?
 local function pianoOnly(client)
 	local char = client:getChar()
 
@@ -422,6 +423,18 @@ local function docOnly(client)
 	return
 end
 
+local function hoboOnly(client)
+	local char = client:getChar()
+
+	if (char) then
+		local class = char:getClass()
+
+		return class == CLASS_HOBO
+	end
+
+	return
+end
+
 local function busiOnly(client)
 	local char = client:getChar()
 
@@ -485,6 +498,9 @@ nut.bent.add("nut_stove", "models/props_c17/furnitureStove001a.mdl", "stove", 1,
 -- weed is removed temporaly
 --nut.bent.add("nut_d_lamp", "models/gonzo/weedb/lamp2.mdl", "weedLampName", 4, 800, mobOnly)
 --nut.bent.add("nut_d_pot", "models/gonzo/weedb/pot2.mdl", "weedPotName", 20, 1000, mobOnly)
+
+nut.bent.add("nut_hobocan", "models/props_junk/MetalBucket02a.mdl", "hoboCanName", 2, 3000, hoboOnly)
+
 nut.bent.add("nut_attrib_gun", "models/props_c17/doll01.mdl", "gunBoosterName", 2, 3000, dealerOnly)
 
 nut.bent.add("nut_vnd_medical", "models/rebel1324/medicvendor.mdl", "medicalVendorName", 1, 1000, docOnly)

@@ -85,18 +85,11 @@ if (SERVER) then
 			return
 		end
 
-
 		if (self:getNetVar("active")) then
 			local items = self.stoveItems
 
 			for k, v in pairs(items) do
 				v:setData("heat", v:getData("heat", 0) + 1)
-
-				if (v.ammo) then
-					if (v:getData("heat") > 3) then
-						self:explode()
-					end
-				end
 
 				if (v.isFood and v.cookable) then
 					local heat = v:getData("heat")
@@ -108,6 +101,7 @@ if (SERVER) then
 							if (cookLevel != range[3]) then
 								v:setData("cooked", range[3])
 							end
+							
 							overheat = false
 
 							break

@@ -704,5 +704,13 @@ LANGUAGE = {
     gobackWanted = "수배해제",
     gobackWarrant = "수색해제",
     selectTarget = "대상 선택",
-    ["Appearance Dealer"] = "외형 상인",
+	["Appearance Dealer"] = "외형 상인",
+	
+	hoboCanName = "구걸 통",
+	hoboCanDesc = "사용 키를 누르면 1000원을 기부할 수 있습니다.",
+	hoboCanOwner = "현재 %s원이 쌓였습니다.",
+	donatedHobo = "구걸통에 %s원을 기부하였습니다.",
+	onlyThief = "도둑만이 사용가능합니다."
+	
+	
 }
