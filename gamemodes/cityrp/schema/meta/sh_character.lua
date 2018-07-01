@@ -32,6 +32,12 @@ function CHAR:joinClass(class)
 	local classData = nut.class.list[class]
 
 	if (classData.vote and oldclassData.team != classData.team) then
+		if (client.nextVote < CurTime()) then
+			client:notifyLocalized("voteWait", math.Round(client.nextVote - CurTime()) )
+
+			return
+		end
+
 		if (client.onVote) then
 			client:notifyLocalized("alreadyClassVote")
 
@@ -43,7 +49,8 @@ function CHAR:joinClass(class)
 		end
 
 		client.onVote = true
-		
+		client.nextVote = CurTime() + 200
+
 		local textWant = L("jobVoteContext", client, client:Name(), L(classData.name, client))
 
 		nut.vote.simple(textWant, function(p, ye, no, su)
