@@ -134,7 +134,7 @@ function ITEM:onSendData()
 			local owner = self.player:getChar():getID()
 
 			nut.item.restoreInv(self:getData("id"), self.invWidth, self.invHeight, function(inventory)
-				inventory.vars.isBag = self.uniqueID
+				inventory.vars.invType = self.uniqueID
 				inventory:setOwner(owner, true)
 			end)
 		end
@@ -143,7 +143,7 @@ function ITEM:onSendData()
 		local client = self.player
 
 		nut.item.newInv(self.player:getChar():getID(), self.uniqueID, function(inventory)
-			inventory.vars.isBag = self.uniqueID
+			inventory.vars.invType = self.uniqueID
 			self:setData("id", inventory:getID())
 		end)
 	end
@@ -232,7 +232,7 @@ function ITEM:removePart(client)
 	end
 end
 
-ITEM:hook("drop", function(item)
+ITEM.postHooks.drop = function(item, result)
 	-- to be sure.
 	if (SERVER) then
 		if (item:getData("equip")) then
@@ -243,4 +243,4 @@ ITEM:hook("drop", function(item)
 
 		nut.db.query("UPDATE nut_inventories SET _charID = 0 WHERE _invID = "..index)
 	end
-end)
+end
