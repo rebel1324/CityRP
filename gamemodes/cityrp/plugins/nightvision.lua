@@ -381,12 +381,11 @@ if (CLIENT) then
         ply = LocalPlayer()
 
         if ply:Alive() then
-            EP, EA = ply:EyePos(), ply:EyeAngles():Forward()
-            CT = CurTime()
-            
-            clr = Length((render.ComputeLighting(EP, Vec001) - render.ComputeDynamicLighting(EP, Vec001))) * 33
-            
             if NV_Status then	
+                EP, EA = ply:EyePos(), ply:EyeAngles():Forward()
+                CT = CurTime()
+                
+                clr = Length((render.ComputeLighting(EP, Vec001) - render.ComputeDynamicLighting(EP, Vec001))) * 33
                 Brightness = GetConVarNumber("nv_illum_bright")
                 IlluminationArea = GetConVarNumber("nv_illum_area")
                 ISIBSensitivity = GetConVarNumber("nv_isib_sensitivity")		
