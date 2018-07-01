@@ -423,13 +423,12 @@ end
 
 if (SERVER) then
 	function PLUGIN:TFA_FinalInitAttachments(weapon)
-		timer.Simple(.05, function()
+		timer.Simple(.07, function()
 			if (IsValid(weapon)) then
 				local attachments = TFA_ATTACHMENT_QUEUE[weapon:EntIndex()]
 				
 				if (attachments) then
 					for slot, attData in pairs(attachments) do
-						print(attData[2], attData[3])
 						weapon:SetTFAAttachment(attData[2], attData[3], true, true)
 					end
 
