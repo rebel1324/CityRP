@@ -13,7 +13,8 @@ attItems.att_rdot = {
         "cw2_md_aimpoint",
         "cw2_md_microt1",
         "cw2_md_rmr",
-    }
+    },
+    icon = Material("atts/microt1"),
 }
 
 attItems.att_holo = {
@@ -24,7 +25,8 @@ attItems.att_holo = {
         "cw2_md_kobra",
         "cw2_md_microt1",
         "cw2_md_eotech",
-    }
+    },
+    icon = Material("atts/eotech553"),
 }
 
 attItems.att_scope4 = {
@@ -34,7 +36,8 @@ attItems.att_scope4 = {
     attSearch = {
         "cw2_md_acog",
         "cw2_md_schmidt_shortdot",
-    }
+    },
+    icon = Material("atts/acog"),
 }
 
 attItems.att_scope8 = {
@@ -44,7 +47,8 @@ attItems.att_scope8 = {
     attSearch = {
         "cw2_md_pso1",
         "cw2_g3_scope",
-    }
+    },
+    icon = Material("atts/sg1scope"),
 }
 
 attItems.att_muzsup = {
@@ -54,6 +58,7 @@ attItems.att_muzsup = {
     attSearch = {
         "cw2_silencer",
     },
+    icon = Material("atts/suppressor"),
 }
 attItems.att_exmag = {
     name = "Extended Mag",
@@ -65,7 +70,8 @@ attItems.att_exmag = {
         "cw2_makarov_extmag",
         "cw2_mp5_30rndmag",
         "cw2_vss_20rnd",
-    }
+    },
+    icon = Material("atts/ar1560rndmag"),
 }
 attItems.att_foregrip = {
     name = "Foregrip",
@@ -73,7 +79,8 @@ attItems.att_foregrip = {
     slot = ATTACHMENT_GRIP,
     attSearch = {
         "cw2_foregrip",
-    }
+    },
+    icon = Material("atts/foregrip"),
 }
 attItems.att_laser = {
     name = "Laser Sight",
@@ -81,7 +88,8 @@ attItems.att_laser = {
     slot = ATTACHMENT_LASER,
     attSearch = {
         "cw2_md_anpeq15",
-    }
+    },
+    icon = Material("atts/anpeq15"),
 }
 
 local function attachment(item, data, combine)
@@ -190,6 +198,7 @@ for className, v in pairs(attItems) do
 	ITEM.category = "Attachments"
     ITEM.attSearch = v.attSearch
     ITEM.slot = v.slot
+    ITEM.icon = v.icon
 
 	ITEM.functions.use = {
          name = "Attach",
