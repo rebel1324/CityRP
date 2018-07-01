@@ -162,8 +162,11 @@ nut.command.add("stuck", {
 		hook.Add("PlayerHurt", timerName, function()
 			timer.Destroy(timerName)
 			hook.Remove("PlayerHurt", timerName)
-			client:notifyLocalized("unstuckInturrupted", UNSTUCK_PENALTY)
-			client.nextStuck = CurTime() + UNSTUCK_PENALTY
+
+			if (IsValid(client)) then
+				client:notifyLocalized("unstuckInturrupted", UNSTUCK_PENALTY)
+				client.nextStuck = CurTime() + UNSTUCK_PENALTY
+			end
 		end)
 
 		timer.Create(timerName, UNSTUCK_DELAY, 1, function()
