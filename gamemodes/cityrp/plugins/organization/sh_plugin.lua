@@ -84,7 +84,7 @@ if (SERVER) then
         local org = nut.org.loaded[id]
         
         if (org) then
-            local affectedPlayers
+            local affectedPlayers = {}
 
             for k, v in ipairs(player.GetAll()) do
                 local char = v:getChar()
