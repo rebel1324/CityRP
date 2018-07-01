@@ -88,8 +88,8 @@ if (SERVER) then
 				end	
 
 				local weapon = client:Give(weaponInfo.weapon)
-				weapon.policeProperty = true
 				timer.Simple(0.25, function()
+					weapon.policeProperty = true
 					client:SelectWeapon(weaponInfo.weapon)
 				end)
 			end
