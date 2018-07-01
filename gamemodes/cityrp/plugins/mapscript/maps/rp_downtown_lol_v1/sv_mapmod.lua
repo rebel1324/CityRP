@@ -76,6 +76,32 @@ do
                     end 
                 end
             end
-        end
+		end
+		local min, max = Vector(-9411.001953, 9309.968750, -14.968750), Vector(-11479.968750, 8460.031250, 268.625000)
+		-- gets two vector and gives min and max vector for Vector:WithinAA(min, max)
+		local function sortVector(vector1, vector2)
+			local minVector = Vector(0, 0, 0)
+			local maxVector = Vector(0, 0, 0)
+
+			for i = 1, 3 do
+				if (vector1[i] >= vector2[i]) then
+					maxVector[i] = vector1[i]
+					minVector[i] = vector2[i]
+				else
+					maxVector[i] = vector2[i]
+					minVector[i] = vector1[i]
+				end
+			end
+
+			return minVector, maxVector
+		end
+		min, max = sortVector(min, max)
+		function PLUGIN:PlayerShouldTakeDamage(client, hit, dmgInfo)
+			local pos = client:GetPos()
+
+			if (pos:WithinAABox(min, max)) then
+				return false
+			end
+		end
 	end
 end
