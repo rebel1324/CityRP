@@ -190,7 +190,7 @@ for className, v in pairs(attItems) do
 	local ITEM = nut.item.register(className, nil, nil, nil, true)
 	ITEM.name = className
 	ITEM.desc = v.desc
-	ITEM.price = 300
+	ITEM.price = 2000
 	ITEM.model = "models/Items/BoxSRounds.mdl"
 	ITEM.width = 1
 	ITEM.height = 1
