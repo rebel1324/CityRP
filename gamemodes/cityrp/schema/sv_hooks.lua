@@ -439,10 +439,6 @@ end
 
 function SCHEMA:PlayerInitialSpawn(client)
 	netstream.Start(client, "nutLawSync", SCHEMA.laws)
-	-- TODO: International Toggle Options
-	if (true) then
-		client:ConCommand("nut_language korean")
-	end
 end
 
 -- Give Class Loadout.
