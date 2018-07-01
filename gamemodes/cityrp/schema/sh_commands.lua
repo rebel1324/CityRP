@@ -902,7 +902,7 @@ nut.chat.register("cr", {
 
 		local char = listener:getChar()
 
-		if (char and char2) then
+		if (char) then
 			local class = char:getClass()
 			local classDat = nut.class.list[class]
 
@@ -916,7 +916,7 @@ nut.chat.register("cr", {
 	onChatAdd = function(speaker, text)
 		chat.AddText(Color(255, 40, 40), "[911] ", nut.config.get("chatColor"), speaker:Name()..": "..text)
 	end,
-	prefix = {"/911"}
+	prefix = {"/911", "/119"}
 })
 
 nut.command.add("unwanted", {
@@ -1149,17 +1149,10 @@ hook.Add("InitializedSchema", "addMoreShit", function()
 					local class = char:getClass()
 					local classTable = nut.class.list[class]
 					local color = classTable.color
-					
-					if (speaker:IsAdmin()) then
-						if (speaker:IsSuperAdmin()) then
-							if (speaker:SteamID() == "STEAM_0:0:19814083") then
-								chat.AddText(Color(50, 255, 50), "[개발자] ", Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
-							else
-								chat.AddText(Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
-							end
-						else
-							chat.AddText(Color(255, 50, 50), "[어드민]", Color(255, 50, 50), " [OOC] ", color, speaker:Name(), color_white, ": "..text)
-						end
+					local titleColor, titleText = hook.Run("GetPlayerTitle", speaker, text)
+
+					if (titleColor and titleText) then
+						chat.AddText(titleColor, titleText, " ", Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
 					else
 						chat.AddText(Color(255, 50, 50), "[OOC] ", color, speaker:Name(), color_white, ": "..text)
 					end
@@ -1222,12 +1215,14 @@ hook.Add("InitializedSchema", "addMoreShit", function()
 		})
 	
 		-- Advert Chat Type
+		local advertPrice = 500
+		local advectDelay = 20
 		nut.chat.register("advert", {
 			onCanSay =  function(speaker, text)
 				local char = speaker:getChar()
-				return (char:hasMoney(10) and char:takeMoney(10))
+				return (char:hasMoney(advertPrice) and char:takeMoney(advertPrice))
 			end,
-			onCanHear = 1000000,
+			onCanHear = function() return true end,
 			onChatAdd = function(speaker, text)
 				chat.AddText(Color(180, 255, 10), L"advert", nut.config.get("chatColor"), speaker:Name()..": "..text)
 			end,
