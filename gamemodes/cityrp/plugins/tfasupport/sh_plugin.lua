@@ -292,28 +292,38 @@ function PLUGIN:InitializedPlugins()
 										if (inv) then
 											local mods = item:getData("atmod", {})
 											local attData = mods[data]
+											local itemUniqueID, attachTarget = attData[1], attData[2]
 
 											if (attData) then
-												local add = inv:add(attData[1])
+												local add = inv:add(itemUniqueID)
 
 												if (add) then
 													local wepon = client:GetActiveWeapon()
-													if (IsValid(wepon) and wepon:GetClass() == item.class) then
-														hook.Run("OnPlayerAttachment", item, wepon, attData[2], attData[3], false)	
-													else
-														hook.Run("OnPlayerAttachment", item, nil, attData[2], attData[3], false)	
+													if not (IsValid(wepon) and wepon:GetClass() == item.class) then
+														for k, v in pairs(client:GetWeapons()) do
+															local wepClass = v:GetClass()
+															
+															if (wepClass == class) then
+																wepon = v
+															end
+														end
 													end
 
 													mods[data] = nil
-
 													if (table.Count(mods) == 0) then
 														item:setData("atmod", nil)
 													else
 														item:setData("atmod", mods)
 													end
 
-													-- Yeah let them know you did something with your dildo
+													if (IsValid(wepon)) then
+														hook.Run("OnPlayerAttachment", item, wepon, attachTarget, false)	
+													else
+														hook.Run("OnPlayerAttachment", item, nil, attachTarget, false)	
+													end
+
 													client:EmitSound("cw/holster4.wav")
+													return false
 												else
 													client:notifyLocalized("noSpace")
 												end
@@ -345,80 +355,6 @@ function PLUGIN:InitializedPlugins()
 			end
 		end
 	end
-
-	-- Reconfigure Customizable Weaponry in here	
-	do	
-		do
-			--[[
-			CustomizableWeaponry.callbacks:addNew("finishReload", "nutExperience", function(weapon)
-				if (CLIENT) then return end
-
-				local owner = weapon:GetOwner()
-
-				if (IsValid(owner) and owner:IsPlayer()) then
-					local char = owner:getChar()
-
-					if (char) then
-						if (char:getAttrib("gunskill", 0) < 5) then
-							char:updateAttrib("gunskill", 0.003)
-						end
-					end
-				end
-			end)
-
-			CustomizableWeaponry.callbacks:addNew("deployWeapon", "uploadAttachments", function(weapon)
-				if (CLIENT) then return end
-
-				timer.Simple(.1, function()
-					if (IsValid(weapon)) then
-						if (weapon.recalculateStats) then
-							weapon:recalculateStats()
-							
-							netstream.Start(weapon:GetOwner(), "nutUpdateWeapon", weapon)
-						end
-					end
-				end)
-
-				local class = weapon:GetClass():lower()
-				local client = weapon:GetOwner()
-
-				if (!client) then return end
-				if (weapon.attLoaded) then return end
-
-				local char = client:getChar()
-
-				if (char) then
-					local inv = char:getInv()
-					local attList = {}
-
-					for k, v in pairs(inv:getItems()) do
-						if (v.isWeapon and v.class == class) then
-							local attachments = v:getData("atmod")
-
-							if (attachments) then
-								for k, v in pairs(attachments) do
-									table.insert(attList, v[2])
-								end
-							end
-
-							break
-						end
-					end
-
-					timer.Simple(0.2, function()
-						if (IsValid(weapon) and weapon:GetClass() == class and weapon.attachSpecificAttachment) then
-							for _, b in ipairs(attList) do
-								weapon:attachSpecificAttachment(b)
-							end
-						end
-					end)
-
-					weapon.attLoaded = true
-				end
-			end)
-			]]
-		end
-	end
 end
 
 if (SERVER) then
@@ -429,7 +365,7 @@ if (SERVER) then
 				
 				if (attachments) then
 					for slot, attData in pairs(attachments) do
-						weapon:SetTFAAttachment(attData[2], attData[3], true, true)
+						weapon:Attach(attData[2], true, true)
 					end
 
 					TFA_ATTACHMENT_QUEUE[weapon:EntIndex()] = nil
@@ -438,12 +374,16 @@ if (SERVER) then
         end)
 	end
 	
-    function PLUGIN:OnPlayerAttachment(itemObject, weaponEntity, attachmentCategory, attachmentIndex, isAttach)
+	function PLUGIN:OnPlayerAttachment(itemObject, weaponEntity, attachment, isAttach)
 		if (IsValid(weaponEntity)) then
 			if (isAttach) then
-				weaponEntity:SetTFAAttachment(attachmentCategory, attachmentIndex, true, true)
+				if (weaponEntity.Attach) then
+					weaponEntity:Attach(attachment)
+				end
 			else
-				weaponEntity:SetTFAAttachment(attachmentCategory, 0, true, true)
+				if (weaponEntity.Detach) then
+					weaponEntity:Detach(attachment)
+				end
 			end
 		end
 	end

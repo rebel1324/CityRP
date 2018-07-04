@@ -137,7 +137,7 @@ local function attachment(item, data, combine)
                     return false
                 end
 
-                local targetCategory, targetAttachment
+                local targetAttachment
 
                 for cat, info in pairs(weaponAttachments) do
                     if (targetAttachment) then break end
@@ -145,7 +145,7 @@ local function attachment(item, data, combine)
                     if (info.atts) then
                         for index, att in pairs(info.atts) do
                             if (table.HasValue(item.attSearch, att)) then
-                                targetCategory, targetAttachment = cat, index
+                                targetAttachment = att
 
                                 break
                             end
@@ -159,20 +159,27 @@ local function attachment(item, data, combine)
                     return false
                 end
 
-                mods[item.slot] = {item.uniqueID, targetCategory, targetAttachment}
+                mods[item.slot] = {item.uniqueID, targetAttachment}
                 target:setData("atmod", mods)
+
                 local wepon = client:GetActiveWeapon()
-
-                -- If you're holding right weapon, just mod it out.
-                if (IsValid(wepon) and wepon:GetClass() == target.class) then
-					hook.Run("OnPlayerAttachment", item, wepon, targetCategory, targetAttachment, true)	
-                else
-					hook.Run("OnPlayerAttachment", item, nil, targetCategory, targetAttachment, true)	
+                if not (IsValid(wepon) and wepon:GetClass() == target.class) then
+                    for k, v in pairs(client:GetWeapons()) do
+                        local wepClass = v:GetClass()
+                        
+                        if (wepClass == class) then
+                            wepon = v
+                        end
+                    end
                 end
-                
-				-- Yeah let them know you did something with your dildo
-				client:EmitSound("cw/holster4.wav")
 
+                if (IsValid(wepon)) then
+                    hook.Run("OnPlayerAttachment", item, wepon, targetAttachment, true)	
+                else
+                    hook.Run("OnPlayerAttachment", item, nil, targetAttachment, true)	
+                end
+
+                client:EmitSound("cw/holster4.wav")
                 return true
             else
                 client:notifyLocalized("notCW")
