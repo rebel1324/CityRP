@@ -916,7 +916,7 @@ nut.chat.register("cr", {
 	onChatAdd = function(speaker, text)
 		chat.AddText(Color(255, 40, 40), "[911] ", nut.config.get("chatColor"), speaker:Name()..": "..text)
 	end,
-	prefix = {"/911", "/119"}
+	prefix = {"/911", "/119", "/112"}
 })
 
 nut.command.add("unwanted", {
