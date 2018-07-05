@@ -5,9 +5,6 @@ PLUGIN.desc = "Gun Jesus have arrived."
 nut.util.include("sh_configs.lua")
 nut.util.include("sh_languages.lua")
 
-if (true) then
-	return false
-end
 
 if (!CustomizableWeaponry) then
 
