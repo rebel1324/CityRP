@@ -273,6 +273,7 @@ function SCHEMA:CanTool(client, trace, tool, ENT)
 end
 
 function SCHEMA:CanItemBeTransfered(itemObject, curInv, inventory)
+	-- what the fuck is going on
 	if (!itemObject) then
 		if (SERVER) then
 			for k, v in ipairs(player.GetAll()) do
@@ -286,6 +287,7 @@ function SCHEMA:CanItemBeTransfered(itemObject, curInv, inventory)
 		end
 	end
 
+	-- if item is actually transferred to player's inventory.
     if (inventory and curInv) then
 		local a = curInv.owner
 		local b = inventory.owner
@@ -315,48 +317,16 @@ function SCHEMA:CanItemBeTransfered(itemObject, curInv, inventory)
 				return false
 			end
 		end
+
         if (inventory.vars) then
 			if (itemObject and itemObject.isBag) then
-				local bag = inventory.vars.isBag
-
-				if (bag) then
-					if (SERVER) then
-						if (IsValid(owner) and curInv and curInv:getID() != 0) then
-							curInv:sync(owner, true)
-						end
-
-						if (IsValid(newowner) and inventory and inventory:getID() != 0) then
-							inventory:sync(newowner, true)
-						end
+				-- there is no point for recursive search.
+				for itemID, invItem in pairs(inventory:getItems(true)) do
+					if (invItem.outfitCategory == itemObject.outfitCategory) then
+						return false, "sameTypeBagExists"
 					end
-
-					return false
 				end
 			end
-
-            local isWeedag = (inventory.vars.isBag == "weedag")
-
-            if (isWeedag and itemObject and itemObject.uniqueID != "raweed") then
-				if (SERVER) then
-					if (curInv and curInv:getID() != 0) then
-						if (IsValid(owner)) then
-							curInv:sync(owner, true)
-						end
-					end
-
-					if (inventory and inventory:getID() != 0) then
-						if (IsValid(newowner)) then
-							inventory:sync(newowner, true)
-						end
-					end
-
-					if (itemObject.player) then
-						itemObject.player:notifyLocalized("onlyWeed")
-					end
-				end
-			
-                return false
-            end
         end
     end
 end

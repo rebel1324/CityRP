@@ -169,12 +169,14 @@ function ITEM:onCanBeTransfered(oldInventory, newInventory)
 
 	if (newInventory) then
 		local invType = newInventory.vars and newInventory.vars.invType and nut.item.inventoryTypes[newInventory.vars.invType]
+		-- if the target inventory is bag the return false. you can't put bag in the bag.
 		if (invType) then
 			return false
 		end
 
 		local index2 = newInventory:getID()
 
+		-- if you're trying to put the bag in the bag, return false. 
 		if (index == index2) then
 			return false
 		end
@@ -183,10 +185,12 @@ function ITEM:onCanBeTransfered(oldInventory, newInventory)
 
 		if (inv) then
 			for itemID, invItem in pairs(inv:getItems()) do
+				-- if item inside of the bag can't be transfered, then return false.
 				if (hook.Run("CanItemBeTransfered", invItem, oldInventory, newInventory) == false) then
 					return false, "notAllowed"
 				end
 
+				-- if item inside of the bag can't be transfered, then return false.
 				if (invItem.onCanBeTransfered and invItem:onCanBeTransfered(oldInventory, newInventory) == false) then
 					return false, "notAllowed"
 				end
