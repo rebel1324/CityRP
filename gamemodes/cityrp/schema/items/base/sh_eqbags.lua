@@ -182,25 +182,19 @@ function ITEM:onCanBeTransfered(oldInventory, newInventory)
 		local inv = self:getInv()
 
 		if (inv) then
-			for k, v in pairs(inv:getItems()) do
-				if (v:getData("id") == index2) then
-					return false
+			for itemID, invItem in pairs(inv:getItems()) do
+				if (hook.Run("CanItemBeTransfered", invItem, oldInventory, newInventory) == false) then
+					return false, "notAllowed"
 				end
-			end
-		else
-			if (CLIENT) then
-				netstream.Start("logErrorInput", tostring(inv))
+
+				if (invItem.onCanBeTransfered and invItem:onCanBeTransfered(oldInventory, newInventory) == false) then
+					return false, "notAllowed"
+				end
 			end
 		end	
 	end
 	
 	return !newInventory or newInventory:getID() != oldInventory:getID()
-end
-
-if (SERVER) then
-	netstream.Start("logErrorInput", function(client, text)
-		file.Append("TITS.txt", string.format( "[%s]: %s\n",client:Name(), text))
-	end)
 end
 
 -- Called after the item is registered into the item tables.
