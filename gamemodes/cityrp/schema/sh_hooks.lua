@@ -194,19 +194,26 @@ function SCHEMA:InitializedSchema()
 end
 
 local shipmentInfo = {
+	["cw_l85a2"] = {"L85A2", 5, 76500},
+
+	["tfa_bt_famas"] = {"FAMAS", 5, 88000},
 	["cw_ak74"] = {"AK-47", 5, 75000},
 	["cw_ar15"] = {"AR-15", 5, 72500},
-	["cw_fiveseven"] = {"FV Five seveN", 5, 48000},
 	["cw_scarh"] = {"FN SCAR-H", 5, 76500},
 	["cw_g3a3"] = {"G3A3", 5, 82000},
 	["cw_g36c"] = {"H&K G36C", 5, 75000},
-	["cw_ump45"] = {"H&K UMP 45", 5, 60000},
-	["cw_deagle"] = {"IMI Desert Eagle", 5, 53000},
-	["cw_l115"] = {"L115", 5, 130000},
 	["cw_l85a2"] = {"L85A2", 5, 76500},
 	["cw_m14"] = {"M14 EBR2", 5, 81000},
-	["cw_m3super90"] = {"M3 super 90", 5, 60000},
+
+	["cw_ump45"] = {"H&K UMP 45", 5, 60000},
 	["cw_mac11"] = {"MAC-11", 5, 62000},
+	
+	["cw_m3super90"] = {"M3 super 90", 5, 60000},
+	["tfa_bt_b93r"] = {"베레타 93R", 3, 60000},
+	["cw_makarov"] = {"마카로프", 5, 60000},
+
+	["cw_fiveseven"] = {"FV Five seveN", 5, 48000},
+	["cw_deagle"] = {"IMI Desert Eagle", 5, 53000},
 	["cw_mr96"] = {"MR96", 5, 52000},
 	["cw_p99"] = {"P99", 5, 42000},
 	
@@ -318,12 +325,14 @@ function SCHEMA:CanItemBeTransfered(itemObject, curInv, inventory)
 			end
 		end
 
-        if (inventory.vars) then
-			if (itemObject and itemObject.isBag) then
-				-- there is no point for recursive search.
-				for itemID, invItem in pairs(inventory:getItems(true)) do
-					if (invItem.outfitCategory == itemObject.outfitCategory) then
-						return false, "sameTypeBagExists"
+		if (inventory.vars) then
+			if not (curInv == inventory) then
+				if (itemObject and itemObject.isBag) then
+					-- there is no point for recursive search.
+					for itemID, invItem in pairs(inventory:getItems(true)) do
+						if (invItem.outfitCategory == itemObject.outfitCategory) then
+							return false, "sameTypeBagExists"
+						end
 					end
 				end
 			end

@@ -6,7 +6,7 @@ ITEM.invHeight = 3
 ITEM.width = 2
 ITEM.height = 2
 ITEM.outfitCategory = "butt"
-ITEM.price = 80000
+ITEM.price = 100000
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.exRender = true
 ITEM.iconCam = {

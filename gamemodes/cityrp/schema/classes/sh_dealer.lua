@@ -19,14 +19,8 @@ CLASS.business = {
 	["stmbook"] = 1,
 	
 	-- Bags
-	["civbag"] = 1,
-	["civbag2"] = 1,
-	["civbag3"] = 1,
-	["buttbag"] = 1,
-	["gunjang"] = 1,
-	["hugebag"] = 1,
-	["smallbag"] = 1,
-	["largebag"] = 1,
+	["back_tier0"] = 1,
+	["waist_tier0"] = 1,
 
 	-- Weapons
 	["nut_m_hook"] = 1,
