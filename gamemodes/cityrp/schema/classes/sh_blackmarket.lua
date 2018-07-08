@@ -48,9 +48,6 @@ CLASS.business = {
 	["tfa_bt_b93r_shipment"] = 1,
 	["tfa_bt_famas_shipment"] = 1,
 
-	["tfa_bt_b93r"] = 1,
-	["tfa_bt_famas"] = 1,
-
 	["att_rdot"] = 1,
 	["att_holo"] = 1,
 	["att_scope4"] = 1,

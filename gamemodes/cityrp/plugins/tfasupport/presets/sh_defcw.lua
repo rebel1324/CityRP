@@ -170,7 +170,7 @@ PLUGIN.gunData.cw_scarh = {
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",
 		ang = Angle(180, 0,0),
-		pos = Vector(4, 8, 0),
+		pos = Vector(3, -5, 2),
     },
     slot = 2,
     price = 6500,

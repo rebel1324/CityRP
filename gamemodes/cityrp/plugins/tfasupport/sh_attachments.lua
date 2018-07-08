@@ -4,6 +4,8 @@ ATTACHMENT_LASER = 3
 ATTACHMENT_MAGAZINE = 4
 ATTACHMENT_GRIP = 5
 
+ATTACHMENT_SKIN = 99
+
 local attItems = {}
 attItems.att_rdot = {
     name = "Red Dot Sight",
@@ -90,6 +92,17 @@ attItems.att_laser = {
         "cw2_md_anpeq15",
     },
     icon = Material("atts/anpeq15"),
+}
+
+
+attItems.skin_quad = {
+    name = "Quad Damage",
+    desc = "skinDesc",
+    slot = ATTACHMENT_SKIN,
+    attSearch = {
+        "skin_quad",
+    },
+    icon = Material("_skinpaint.png"),
 }
 
 local function attachment(item, data, combine)

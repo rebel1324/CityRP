@@ -107,6 +107,7 @@ DEFAULT_PURCHASE = {
 	["ammo_pistol"] = 1,
 	["ammo_buckshot"] = 1,
 	["ammo_357"] = 1,
+	["ammo_smg1"] = 1,
 	["keypad"] = 1,
 }
 

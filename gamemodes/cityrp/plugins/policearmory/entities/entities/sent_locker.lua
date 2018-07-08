@@ -30,8 +30,8 @@ end
 
 local armory = {
 	{
-		name = "AR-15 소총",
-		weapon = "cw_ar15",
+		name = "AR-15 제식 소총",
+		weapon = "cw_ar15_si",
 	},
 	{
 		name = "UMP-45 기관단총",
