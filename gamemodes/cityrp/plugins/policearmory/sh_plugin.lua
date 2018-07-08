@@ -5,10 +5,7 @@ PLUGIN.desc = "Armory for police classes"
 
 
 function SCHEMA:ResetVariables(client, signal)
-	local char = client:getChar()
-
-	-- When player changed the job or changed the character.
-	if (signal == SIGNAL_JOB) then
+	if (IsValid(client) and client:Alive()) then
         for k, v in pairs(client:GetWeapons()) do
             if (v.policeProperty) then
                 v:Remove() 
