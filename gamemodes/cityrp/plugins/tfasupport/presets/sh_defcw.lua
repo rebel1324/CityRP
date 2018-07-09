@@ -84,7 +84,7 @@ PLUGIN.gunData.cw_m3super90 = {
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",
 		ang = Angle(180, 0,20),
-		pos = Vector(4, 8, -2),
+		pos = Vector(5, 0, 2),
     },
     slot = 2,
     price = 2500,
