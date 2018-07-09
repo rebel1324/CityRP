@@ -90,8 +90,59 @@ else
 		end
 	end
 
+	-- Local function for condition.
+	local function canEffect(client)
+		return (
+			client:getChar() and
+			client:getNetVar("gasMaskOn", false) and
+			!client:ShouldDrawLocalPlayer() and
+			(!nut.gui.char or !nut.gui.char:IsVisible())
+		)
+	end
+
+	local gasmaskTexture2 = Material("gasmask_fnl")
+	local gasmaskTexture = Material("shtr_01")
+
+	-- Draw the Gas Mask Overlay. But other essiential stuffs must be visible.
+	function PLUGIN:HUDPaintBackground()
+		if (canEffect(LocalPlayer())) then
+			w, h = ScrW(), ScrH()
+			gw, gh = h/3*4, h
+
+			surface.SetMaterial(gasmaskTexture)
+
+			render.UpdateScreenEffectTexture()
+			surface.SetMaterial(gasmaskTexture2)
+			surface.SetDrawColor(255, 255, 255)
+			surface.DrawTexturedRect(w/2 - gw/2, h/2 - gh/2, gw, gh)
+
+			surface.SetDrawColor(0, 0, 0)
+			surface.DrawRect(0, 0, w/2 - gw/2, h)
+			surface.DrawRect(0, 0, w, h/2 - gh/2)
+			surface.DrawRect(0, h/2 + gh/2, w, h/2 - gh/2)
+			surface.DrawRect(w/2 + gw/2, 0, w/2 - gw/2, h)
+		end
+	end
+
 	function PLUGIN:PlayerPostThink(client)
 		if (client:getChar()) then
+			if (client:Alive() and client:getNetVar("gasMaskOn", false)) then
+				healthFactor = math.Clamp(client:Health()/client:GetMaxHealth(), 0, 1)
+
+				if (!client.nextBreath or client.nextBreath < CurTime()) then
+					print(client)
+					client:EmitSound(
+						!client.exhale and "gmsk_in.wav" or "gmsk_out.wav", 
+						(LocalPlayer() == client and client:ShouldDrawLocalPlayer()) and 20 or 50, math.random(90, 100) + 15*(1 - healthFactor)
+					)
+					
+					local f = healthFactor*.5
+					client.nextBreath = CurTime() + 1 + f + (client.exhale and f or 0)
+					
+					client.exhale = !client.exhale
+				end
+			end
+		
 			local teargas = client:getNetVar("teargas")
 
 			if (teargas and teargas > CurTime() and client:Alive()) then
