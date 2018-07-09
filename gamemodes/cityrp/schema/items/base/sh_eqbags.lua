@@ -124,25 +124,26 @@ end
 -- Called when the item first appears for a client.
 function ITEM:onSendData()
 	local index = self:getData("id")
+	local client = self.player
+	local char = client:getChar()
+	local charID = char:getID()
 
 	if (index) then
 		local inventory = nut.item.inventories[index]
 
 		if (inventory) then
+			inventory:setOwner(charID)
 			inventory:sync(self.player)
 		else
-			local owner = self.player:getChar():getID()
-
 			nut.item.restoreInv(self:getData("id"), self.invWidth, self.invHeight, function(inventory)
 				inventory.vars.invType = self.uniqueID
-				inventory:setOwner(owner, true)
+				inventory:setOwner(charID, true)
 			end)
 		end
 	else
 		local inventory = nut.item.inventories[self.invID]
-		local client = self.player
 
-		nut.item.newInv(self.player:getChar():getID(), self.uniqueID, function(inventory)
+		nut.item.newInv(charID, self.uniqueID, function(inventory)
 			inventory.vars.invType = self.uniqueID
 			self:setData("id", inventory:getID())
 		end)
@@ -238,7 +239,10 @@ ITEM.postHooks.drop = function(item, result)
 		end
 
 		local index = item:getData("id")
+		local inventory = nut.item.inventories[index]
 
-		nut.db.query("UPDATE nut_inventories SET _charID = 0 WHERE _invID = "..index)
+		if (inventory) then
+			inventory:setOwner(0)
+		end
 	end
 end
