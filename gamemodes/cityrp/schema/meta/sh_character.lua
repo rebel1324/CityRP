@@ -32,7 +32,7 @@ function CHAR:joinClass(class)
 	local classData = nut.class.list[class]
 
 	if (classData.vote and oldclassData.team != classData.team) then
-		if (client.nextVote < CurTime()) then
+		if (client.nextVote and client.nextVote < CurTime()) then
 			client:notifyLocalized("voteWait", math.Round(client.nextVote - CurTime()) )
 
 			return
