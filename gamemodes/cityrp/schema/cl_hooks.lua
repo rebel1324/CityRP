@@ -3,6 +3,9 @@ function SCHEMA:CanCreateCharInfo()
 		faction = true,
 	}
 end
+local gm = gmod.GetGamemode()
+function gm:PaintWorldTips()
+end
 
 hook.Add("BuildHelpMenu", "nutBasicHelp", function(tabs)
 	tabs["commands"] = function(node)
@@ -125,6 +128,7 @@ function SCHEMA:ShouldDrawCrosshair()
 	if (weapon and weapon:IsValid()) then
 		if (weapon.CW20Weapon or weapon.IsTFAWeapon) then 
 			if (weapon.IsTFAWeapon and not client:ShouldDrawLocalPlayer()) then
+				print(weapon.DoDrawCrosshair)
 				if (weapon.DoDrawCrosshair) then
 					weapon:DoDrawCrosshair(ScrW()/2, ScrH()/2)
 				end
@@ -328,10 +332,12 @@ surface.CreateFont("nutJailBig", {
 
 netstream.Hook("nutJailChat", function(arrester, arrested)
 	CHAT_CLASS = {font = "nutJailBig"}
-		local name = arrester:Name()
-		local name2 = arrested:Name()
+		if (IsValid(arrester) and IsValid(arrested)) then
+			local name = arrester:Name()
+			local name2 = arrested:Name()
 
-		chat.AddText(L("arrestNotify", name, name2, nut.config.get("jailTime")))
+			chat.AddText(L("arrestNotify", name, name2, nut.config.get("jailTime")))
+		end
 	CHAT_CLASS = nil
 end)
 
@@ -343,15 +349,17 @@ surface.CreateFont("nutWantedBig", {
 })
 
 netstream.Hook("nutWantedText", function(bool, a, b, c)
-	CHAT_CLASS = {font = "nutWantedBig"}
-		if (bool and b and c) then
-			chat.AddText(Color(200, 10, 10), L("wantedNotify", b:Name(), c))
-		else
-			if (b) then
-				chat.AddText(Color(200, 10, 10), L("unwantedNotify", b:Name()))
+	if (IsValid(b)) then
+		CHAT_CLASS = {font = "nutWantedBig"}
+			if (bool and b and c) then
+				chat.AddText(Color(200, 10, 10), L("wantedNotify", b:Name(), c))
+			else
+				if (b) then
+					chat.AddText(Color(200, 10, 10), L("unwantedNotify", b:Name()))
+				end
 			end
-		end
-	CHAT_CLASS = nil
+		CHAT_CLASS = nil
+	end
 end)
 
 netstream.Hook("nutHitText", function(a, b, c)
@@ -364,9 +372,13 @@ netstream.Hook("nutSearchText", function(bool, a, b, c)
 	CHAT_CLASS = {font = "nutJailBig"}
 		local name = (IsValid(a) and a.Name and a:Name()) or ""
 		if (bool) then
-			chat.AddText(color_white, L("warrantNofity", name, b:Name(), c))
+			if (IsValid(b)) then
+				chat.AddText(color_white, L("warrantNofity", name, b:Name(), c))
+			end
 		else
-			chat.AddText(color_white, L("warrantLiftNofity", name, b:Name()))
+			if (IsValid(b)) then
+				chat.AddText(color_white, L("warrantLiftNofity", name, b:Name()))
+			end
 		end
 	CHAT_CLASS = nil
 end)
