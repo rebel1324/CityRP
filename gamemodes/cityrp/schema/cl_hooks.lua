@@ -128,7 +128,6 @@ function SCHEMA:ShouldDrawCrosshair()
 	if (weapon and weapon:IsValid()) then
 		if (weapon.CW20Weapon or weapon.IsTFAWeapon) then 
 			if (weapon.IsTFAWeapon and not client:ShouldDrawLocalPlayer()) then
-				print(weapon.DoDrawCrosshair)
 				if (weapon.DoDrawCrosshair) then
 					weapon:DoDrawCrosshair(ScrW()/2, ScrH()/2)
 				end
