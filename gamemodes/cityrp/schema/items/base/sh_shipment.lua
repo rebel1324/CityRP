@@ -16,7 +16,7 @@ ITEM.iconCam = {
 }
 
 function ITEM:getDesc()
-	local quantity = self:getQuantity()
+	local quantity = self.getQuantity and self:getQuantity() or 1
 	local itemTable = nut.item.list[self.itemID]
 	local name = itemTable.getName and itemTable:getName() or L(itemTable.name)
 
