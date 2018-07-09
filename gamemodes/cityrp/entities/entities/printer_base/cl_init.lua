@@ -143,7 +143,10 @@ function ENT:Draw()
 	self.upgrades.renderCode = PRINTER_UPGRADE_RENDER
 	self.upgrades.onMouseClick = function()
 		local scr = self.upgrades
-		netstream.Start("printerUpgrade", scr.currentButton, scr.entity) 
+		
+		if (scr) then
+			netstream.Start("printerUpgrade", scr.currentButton, scr.entity) 
+		end
 	end
 end
 
