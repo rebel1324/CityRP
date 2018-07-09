@@ -14,10 +14,30 @@ ITEM.functions.throw = {
 	icon = "icon16/arrow_up.png",
 	onRun = function(item)
 		local client = item.player
+		client.thrownGrenades = client.thrownGrenades or {}
+
+		local cnt = 0
+		for index, ent in pairs(client.thrownGrenades) do
+			if (IsValid(ent)) then
+				cnt = cnt + 1
+			else
+				client.thrownGrenades[index] = nil
+			end
+		end
+
+		if (cnt > 2) then
+			client:notifyLocalized("tooManyGrenades")
+			return false
+		end
+
 		local grd = ents.Create( item.throwent )
 		grd:SetPos( client:EyePos() + client:GetAimVector() * 50 )
 		grd:Spawn()
-		grd:CPPISetOwner(client)
+		if (grd.CPPISetOwner) then
+			grd:CPPISetOwner(client)
+		end
+
+		table.insert(client.thrownGrenades, grd)
 
 		local phys = grd:GetPhysicsObject()
 		phys:SetVelocity( client:GetAimVector() * item.throwforce * math.Rand( .8, 1 ) )
