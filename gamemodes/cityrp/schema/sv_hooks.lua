@@ -235,6 +235,10 @@ end
 
 -- This hook returns whether player can receive the salary or not.
 function SCHEMA:CanPlayerReceiveSalary(client)
+	if (true) then
+		return false
+	end
+
 	local char = client:getChar()
 
 	if (!char.player:Alive()) then
