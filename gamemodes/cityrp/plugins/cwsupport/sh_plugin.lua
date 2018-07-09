@@ -7,6 +7,7 @@ nut.util.include("sh_languages.lua")
 
 
 if (!CustomizableWeaponry) then
+return end
 
 function PLUGIN:InitializedPlugins()
 	table.Merge(nut.lang.stored["korean"], self.koreanTranslation)
@@ -35,7 +36,6 @@ function PLUGIN:InitializedPlugins()
 	end
 end
 	
-return end
 --[[
 	MODIFICATION TUTORIAL
 		- sh_config
