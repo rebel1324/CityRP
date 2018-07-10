@@ -57,6 +57,8 @@ function PLUGIN:InitializedPlugins()
 end
 
 if (SERVER) then
+	TFA_ATTACHMENT_QUEUE = TFA_ATTACHMENT_QUEUE or {}
+	
 	function PLUGIN:TFA_FinalInitAttachments(weapon)
 		timer.Simple(.07, function()
 			if (IsValid(weapon)) then
