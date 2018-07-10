@@ -710,7 +710,9 @@ LANGUAGE = {
 	hoboCanDesc = "사용 키를 누르면 1000원을 기부할 수 있습니다.",
 	hoboCanOwner = "현재 %s원이 쌓였습니다.",
 	donatedHobo = "구걸통에 %s원을 기부하였습니다.",
-	onlyThief = "도둑만이 사용가능합니다."
-	
-	
+	onlyThief = "도둑만이 사용가능합니다.",
+
+	notRightClass = "이 아이템을 사용하기 위한 올바른 직업이 아닙니다.",
+	Respirator = "가스 마스크",
+	gasmaskDesc = "최루탄 및 기타 가스로부터 보호해주는 마스크입니다. 이 마스크는 경찰 전용으로써 경찰이 아닌 경우에는 사용이 불가능 합니다. 죽으면 사라집니다.",
 }

@@ -1,11 +1,11 @@
 ITEM.name = "Respirator"
-ITEM.desc = "Gasmask."
+ITEM.desc = "gasmaskDesc"
 ITEM.model = "models/barneyhelmet_faceplate.mdl"
 function ITEM:onGetDropModel(item) return "models/props_junk/cardboard_box004a.mdl" end
 ITEM.width = 1
 ITEM.height = 1
 ITEM.outfitCategory = "hat"
-ITEM.price = 150
+ITEM.price = 2500
 ITEM.iconCam = {
 	pos = Vector(133.12742614746, 109.28756713867, 78.981819152832),
 	ang = Angle(25, 220, 0),
@@ -13,6 +13,7 @@ ITEM.iconCam = {
 	outline = true,
 	outlineColor = Color(255, 255, 255)
 }
+ITEM.team = {1}
 ITEM.exRender = true
 ITEM.pacData = {
 	[1] = {
@@ -43,9 +44,15 @@ ITEM.pacData = {
 ITEM.removeOnDeath = true
 
 if (SERVER) then
-    local function toggleGas(client, item, bool)
-        netstream.Start(client, "nutToggleGas", bool)
-        client:setNetVar("gasMaskOn", bool)
+	local function toggleGas(client, item, bool)
+		local gasBool = client:getNetVar("gasMaskOn", false)
+
+		if (gasBool != bool) then
+			client:EmitSound(bool and "gasmaskon.wav" or "gasmaskoff.wav", 80)
+			client:ScreenFade(1, Color(0, 0, 0, 255), 1, 0)
+		end
+
+		client:setNetVar("gasMaskOn", bool)
 
         if (bool) then
             local a, b = "ResetVariables", "removeGasVar"
@@ -59,16 +66,16 @@ if (SERVER) then
             end)
         end
     end
-end
 
-ITEM.postHooks.drop = function(item, result, data)
-    toggleGas(item.player, item, false)
-end
+	ITEM.postHooks.drop = function(item, result, data)
+		toggleGas(item.player, item, false)
+	end
 
-ITEM.postHooks.Equip = function(item, result, data)
-    toggleGas(item.player, item, true)
-end
+	ITEM.postHooks.Equip = function(item, result, data)
+		toggleGas(item.player, item, true)
+	end
 
-ITEM.postHooks.EquipUn = function(item, result, data)
-    toggleGas(item.player, item, false)
+	ITEM.postHooks.EquipUn = function(item, result, data)
+		toggleGas(item.player, item, false)
+	end
 end

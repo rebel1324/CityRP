@@ -209,11 +209,14 @@ function SCHEMA:CanPlayerInteractItem(client, action, item)
 	end
 
 	if (itemTable and itemTable.team) then
-		local class = char:getClass()
-		local classData = nut.class.list[class]
+		if (action == "use" or action == "Equip") then
+			local class = char:getClass()
+			local classData = nut.class.list[class]
 
-		if (!table.HasValue(itemTable.team, classData.team)) then
-			return false
+			if (!table.HasValue(itemTable.team, classData.team)) then
+				client:notifyLocalized("notRightClass")
+				return false
+			end
 		end
 	end
 

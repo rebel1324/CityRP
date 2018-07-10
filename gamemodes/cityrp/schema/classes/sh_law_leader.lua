@@ -15,6 +15,7 @@ CLASS.business = {
 	["doorcharge"] = 1,
 	["teargas_shipment"] = .9,	
 	["polivest"] = 1,
+	["gasmask"] = 1,
 }
 CLASS.limit = 1
 CLASS.team = 1
