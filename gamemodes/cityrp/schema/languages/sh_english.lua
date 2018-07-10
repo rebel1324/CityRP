@@ -529,5 +529,10 @@ LANGUAGE = {
 	medVen = "You can buy medical supplies from this",
 
 	CitizenTip = "Citizen",
-	purchaseItem = "Purchase %s"
+	purchaseItem = "Purchase %s",
+
+	--[[
+		TRINKET ATTACHMENT STUFFS
+	]]
+	detatchReusables = "Detach reusable attachments to drop weapon."
 }

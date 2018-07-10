@@ -715,4 +715,53 @@ LANGUAGE = {
 	notRightClass = "이 아이템을 사용하기 위한 올바른 직업이 아닙니다.",
 	Respirator = "가스 마스크",
 	gasmaskDesc = "최루탄 및 기타 가스로부터 보호해주는 마스크입니다. 이 마스크는 경찰 전용으로써 경찰이 아닌 경우에는 사용이 불가능 합니다. 죽으면 사라집니다.",
+
+    changelog = "바뀐 점",
+    quickLockdown = "계엄령 켜기/끄기",
+    lockdownOff = "계엄령이 해제되었습니다.",
+    Detective = "사설탐정",
+    Evidence = "사망사건 보고서",
+    evidence = "증거물",
+    evidenceDesc = "누군가가 죽은 흔적입니다.",
+    discard = "폐기",
+    bookLimitReached = "책으로 올릴 수 있는 능력치 최대를 달성하였습니다.",
+    hitLimitReached = "인형으로 올릴 수 있는 능력치 최대를 달성하였습니다.",
+    coffee = "커피",
+    coffeeDesc = "지구력 능력치를 -1만큼 감소시키지만, 체력 능력치을 2만큼 증가시킵니다.",
+    mapBeacon = "맵 비컨",
+    mapBeaconDesc = "이 장소를 '%s'로 모든 플레이어에 보고합니다.",
+    frameFlag = "URL 사진 깃발",
+    frameRect = "URL 사진 액자",
+    frameRectBig = "URL 사진 대형 액자",
+    frameHort = "URL 사진 직사각형 액자",
+    evidenceWorldDesc = "사망사건 보고서를 보기 위해서는 인벤토리에 넣어야 합니다.",
+    evidenceItemDesc = "사망사건 최종 보고서\n피해자: <color=39, 174, 96>%s</color>\n가해자: <color=192, 57, 43>%s</color>\n사용된 무기: <color=192, 57, 43>%s</color>\n사망 시간: %s\n이 보고서는 법적 효력을 가집니다.\n이 보고서를 이용해 범인 고발하여 경찰이 범인을 처분 하게할 수 있습니다.\n또는 개인적인 부탁을 받아서 이 사람에 대한 처리를 해도 좋습니다.",
+    purchasedItem = "아이템을 구매하여 인벤토리에 넣었습니다.",
+    purchasedItemNonProfit = "누군가가 아이템을 구매하여 %s의 손해를 보았습니다.",
+    purchasedItemProfit = "누군가가 아이템을 구매하여 %s의 이득을 보았습니다.",
+
+    demoteWait = "다음 탄핵까지 %s초를 기다려야 합니다.",
+    voteWait = "다음 투표까지 %s초를 기다려야 합니다.",
+    notCriminal = "이 직업은 범죄직이 아닙니다.",
+
+    beaconMenu = "비컨 메뉴",
+    title = "타이틀",
+    confirm = "확인",
+    icons = "아이콘",
+    doWanted = "증거 고발",
+
+    nutWeaponDefault = "기본 무기",
+    nutWeaponPrimary = "주무장",
+    nutWeaponSecondary = "부무장",
+    nutWeaponTools = "기타 도구",
+
+    armoryDesc = "경찰전용 무료 무기고",
+    armory = "무기고",
+    clickToBuy = "클릭하여 구매합니다.",
+	quickDemoteMenu = "탄핵 메뉴",
+		
+	--[[
+		TRINKET ATTACHMENT STUFFS
+	]]
+	detatchReusables = "먼저 재사용 가능한 부착물을 제거해야합니다."
 }

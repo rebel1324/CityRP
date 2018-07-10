@@ -7,7 +7,7 @@ nut.util.include("sh_configs.lua")
 -- get item generators
 nut.util.include("sh_generate_ammo.lua")
 nut.util.include("sh_generate_attachment.lua")
-nut.util.include("sh_generate_attachment.lua")
+nut.util.include("sh_generate_weapon.lua")
 
 --[[
 	

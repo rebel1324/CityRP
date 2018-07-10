@@ -104,7 +104,12 @@ local function attachment(item, data, combine)
                 end
 
                 client:EmitSound("cw/holster4.wav")
-                return true
+
+                if (item.reusable) then
+                    return false
+                else
+                    return true
+                end
             else
                 client:notifyLocalized("notCW")
 

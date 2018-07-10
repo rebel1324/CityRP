@@ -1,12 +1,13 @@
 
-hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
+hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
+    local result = 0
+
     for k, v in ipairs(weapons.GetList()) do
 
         local class = v.ClassName
 
         if (weapons.IsBasedOn(v.ClassName, "tfa_gun_base")) then
             if (class:find("base")) then continue end
-
 
             -- Configure Weapon's Variables
             v.isGoodWeapon = true
@@ -21,6 +22,8 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
             v.Slot = dat.slot or 2
 
             if (TFA_GENERATE_ITEM) then
+                result = result + 1
+
                 local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
                 ITEM.name = class
                 ITEM.price = dat.price or 4000
@@ -211,23 +214,55 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
                     return (!IsValid(item.entity))
                 end,
                 onRun = function(item, data)
-                            local client = item.player
-                            if (data) then
-                                local char = client:getChar()
+                        local client = item.player
 
-                                if (char) then
-                                    local inv = char:getInv()
+                        if (data) then
+                            local char = client:getChar()
 
-                                    if (inv) then
-                                        local mods = item:getData("atmod", {})
-                                        local attData = mods[data]
-                                        local itemUniqueID, attachTarget = attData[1], attData[2]
+                            if (char) then
+                                local inv = char:getInv()
 
-                                        if (attData) then
+                                if (inv) then
+                                    local mods = item:getData("atmod", {})
+                                    local attData = mods[data]
+                                    local itemUniqueID, attachTarget, isShit = attData[1], attData[2], attData[3]
+
+                                    -- making it sure mate.
+                                    if (attData or hook.Run("ShouldCreateAttachmentItem", item, itemUniqueID) == false) then
+                                        if (isShit) then
+                                            local wepon = client:GetActiveWeapon()
+
+                                            if not (IsValid(wepon) and wepon:GetClass() == item.class) then
+                                                for k, v in pairs(client:GetWeapons()) do
+                                                    local wepClass = v:GetClass()
+                                                    
+                                                    if (wepClass == class) then
+                                                        wepon = v
+                                                    end
+                                                end
+                                            end
+
+                                            mods[data] = nil
+                                            if (table.Count(mods) == 0) then
+                                                item:setData("atmod", nil)
+                                            else
+                                                item:setData("atmod", mods)
+                                            end
+
+                                            if (IsValid(wepon)) then
+                                                hook.Run("OnPlayerAttachment", item, wepon, attachTarget, false)	
+                                            else
+                                                hook.Run("OnPlayerAttachment", item, nil, attachTarget, false)	
+                                            end
+
+                                            client:EmitSound("cw/holster4.wav")
+                                            return false
+                                        else
                                             local add = inv:add(itemUniqueID)
 
                                             if (add) then
                                                 local wepon = client:GetActiveWeapon()
+
                                                 if not (IsValid(wepon) and wepon:GetClass() == item.class) then
                                                     for k, v in pairs(client:GetWeapons()) do
                                                         local wepClass = v:GetClass()
@@ -256,17 +291,18 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
                                             else
                                                 client:notifyLocalized("noSpace")
                                             end
-                                        else
-                                            client:notifyLocalized("notAttachment")
                                         end
+                                    else
+                                        client:notifyLocalized("notAttachment")
                                     end
                                 end
-                            else
-                                client:notifyLocalized("detTarget")
                             end
+                        else
+                            client:notifyLocalized("detTarget")
+                        end
 
-                            return false
-                        end,
+                        return false
+                    end,
                 }
             end
 
@@ -284,5 +320,5 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
         end
     end
     
-    print("TFA Integration: Generated Weapons")
+    print("TFA Integration: Generated " .. result .. " Weapons")
 end)
