@@ -237,11 +237,19 @@ end
 			end
 		end
 		
-		local lastCall = CurTime()
+		local lastCall = FrameNumber()
+		local lastCallPlayer
 		function PLUGIN:PostPlayerDraw(client)
-			-- prevent bullshit calls.
-			local bullshit = CurTime() - lastCall
-			if (bullshit <= 0) then lastCall = CurTime() return else lastCall = CurTime() end
+			do
+				local halt = false
+				if (lastCallPlayer == client) then 
+					if (lastCall == FrameNumber()) then halt = true end
+				end
+				
+				lastCall = FrameNumber()
+				lastCallPlayer = client
+				if (halt) then return false end
+			end
 			
 			flashlightThink(client)
 		end

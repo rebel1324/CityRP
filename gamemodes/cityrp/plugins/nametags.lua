@@ -174,11 +174,21 @@ function btNameTag:drawText(text, x, y, tCol, a)
 end
 
 local ntChar, ntClass, ntClassInfo, ntRagdoll
-local lastCall = CurTime()
-function PLUGIN:PostPlayerDraw(client)
+
+local lastCall = FrameNumber()
+local lastCallPlayer
+hook.Add("PostPlayerDraw", "btNameTag", function(client)
 	-- prevent bullshit calls.
-	local bullshit = CurTime() - lastCall
-	if (bullshit <= 0) then lastCall = CurTime() return else lastCall = CurTime() end
+	do
+		local halt = false
+		if (lastCallPlayer == client) then 
+			if (lastCall == FrameNumber()) then halt = true end
+		end
+		
+		lastCall = FrameNumber()
+		lastCallPlayer = client
+		if (halt) then return false end
+	end
 
 	if (client:GetNoDraw() != true) then
 		ntView = EyePos()
@@ -255,4 +265,4 @@ function PLUGIN:PostPlayerDraw(client)
 		ntClassInfo = nil
 		ntRagdoll = nil		
 	end
-end
+end)
