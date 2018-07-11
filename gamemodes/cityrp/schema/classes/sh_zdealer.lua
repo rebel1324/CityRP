@@ -13,6 +13,14 @@ CLASS.business = {
     ["hat2"] = 1,
     ["hat3"] = 1,
     ["hat4"] = 1,
+
+    trinket_penis = 1,
+    trinket_dice = 1,
+    trinket_communism = 1,
+    trinket_joy = 1,
+    trinket_thinking = 1,
+    trinket_ftuna = 1,
+    trinket_tuna = 1,
 }
 
 function CLASS:OnSet(client)
