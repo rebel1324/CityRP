@@ -174,90 +174,85 @@ function btNameTag:drawText(text, x, y, tCol, a)
 end
 
 local ntChar, ntClass, ntClassInfo, ntRagdoll
-local lastDraw = CurTime()
+local lastCall = CurTime()
+function PLUGIN:PostPlayerDraw(client)
+	-- prevent bullshit calls.
+	local bullshit = CurTime() - lastCall
+	if (bullshit <= 0) then lastCall = CurTime() return else lastCall = CurTime() end
 
-hook.Add("PostDrawTranslucentRenderables", "btNameTag", function(bDrawingDepth, bDrawingSkybox)
-	local localplayer = LocalPlayer()
-	for _, client in pairs(player.GetAll()) do
-		if (client == localplayer and not localplayer:ShouldDrawLocalPlayer()) then
-			continue
-		end
-
-		lastDraw  = CurTime()
-		if (client:GetNoDraw() != true) then
-			ntView = EyePos()
-			ntPos = btNameTag:getHead(client)
-			ntDist = math.Clamp(ntView:Distance(ntPos) / ntMax, 0.25, 1)
-			if (ntDist >= 1) then return end
-			
-			ntPos = ntPos + Vector(0, 0, 10)
-			ntX, ntY = 0, 0
-			ntEye = EyeAngles()
-			ntAng.p = ntEye.p
-			ntAng.y = ntEye.y
-			ntAng.r = ntEye.r
-			ntAng:RotateAroundAxis(ntAng:Up(), -90)
-			ntAng:RotateAroundAxis(ntAng:Forward(), 90)
-			ntX, ntY = 0, 0
+	if (client:GetNoDraw() != true) then
+		ntView = EyePos()
+		ntPos = btNameTag:getHead(client)
+		ntDist = math.Clamp(ntView:Distance(ntPos) / ntMax, 0.25, 1)
+		if (ntDist >= 1) then return end
+		
+		ntPos = ntPos + Vector(0, 0, 10)
+		ntX, ntY = 0, 0
+		ntEye = EyeAngles()
+		ntAng.p = ntEye.p
+		ntAng.y = ntEye.y
+		ntAng.r = ntEye.r
+		ntAng:RotateAroundAxis(ntAng:Up(), -90)
+		ntAng:RotateAroundAxis(ntAng:Forward(), 90)
+		ntX, ntY = 0, 0
 	
-			ntChar = client:getChar()
-			if (ntChar or client:IsBot()) then
-				cam.Start3D2D(ntPos, ntAng, ntScale)
-					xpcall(function()
-					ntCol = Color(255, 255, 255)
+		ntChar = client:getChar()
+		if (ntChar or client:IsBot()) then
+			cam.Start3D2D(ntPos, ntAng, ntScale)
+				xpcall(function()
+				ntCol = Color(255, 255, 255)
 	
-					ntAlpha = 255*(1 - ntDist)
-					
-					ntClass = ntChar:getClass()
-					local description = ntChar:getDesc()
-					
-					if (description and description != "") then
-						if (!client.oldDesc or client.oldDesc != description) then
-							local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
-							client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
-							client.oldDesc = description
-						end
-						
-						for i = 1, #client.oldDescObject do
-							btNameTag:drawText(client.oldDescObject[#client.oldDescObject - i + 1], ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
-							ntY = ntY - 60
-						end
+				ntAlpha = 255*(1 - ntDist)
+				
+				ntClass = ntChar:getClass()
+				local description = ntChar:getDesc()
+				
+				if (description and description != "") then
+					if (!client.oldDesc or client.oldDesc != description) then
+						local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
+						client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
+						client.oldDesc = description
 					end
+					
+					for i = 1, #client.oldDescObject do
+						btNameTag:drawText(client.oldDescObject[#client.oldDescObject - i + 1], ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
+						ntY = ntY - 60
+					end
+				end
 	
-					local name = hook.Run("ShouldAllowScoreboardOverride", client, "name") and hook.Run("GetDisplayedName", client) or client:Nick()
-					if (ntClass or client:IsBot()) then
-						if (client:IsBot()) then
-							btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
-							ntY = ntY - 80
-						else
-							ntClassInfo = nut.class.list[ntClass]
-							if (ntClassInfo) then
-								btNameTag:drawText(L(ntClassInfo.name), ntX, ntY, ColorAlpha(ntCol, ntAlpha), 1)
-								ntY = ntY - 75
-							end
-	
-							btNameTag:drawText(name, ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
-							ntY = ntY - 80
-						end
-					else
-						ntY = ntY - 25
+				local name = hook.Run("ShouldAllowScoreboardOverride", client, "name") and hook.Run("GetDisplayedName", client) or client:Nick()
+				if (ntClass or client:IsBot()) then
+					if (client:IsBot()) then
 						btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
-					end
-	
-					for _, info in ipairs(btNameTag.info) do
-						if (info.canDraw(client, ntChar, ntRagdoll)) then
-							info.doDraw(client, ntX, ntY, ColorAlpha(ntCol, ntAlpha))
-							ntY = ntY -  60
+						ntY = ntY - 80
+					else
+						ntClassInfo = nut.class.list[ntClass]
+						if (ntClassInfo) then
+							btNameTag:drawText(L(ntClassInfo.name), ntX, ntY, ColorAlpha(ntCol, ntAlpha), 1)
+							ntY = ntY - 75
 						end
+	
+						btNameTag:drawText(name, ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
+						ntY = ntY - 80
 					end
-					end, function() end)
-				cam.End3D2D()
-			end
-			
-			ntChar = nil
-			ntClass = nil
-			ntClassInfo = nil
-			ntRagdoll = nil		
+				else
+					ntY = ntY - 25
+					btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
+				end
+	
+				for _, info in ipairs(btNameTag.info) do
+					if (info.canDraw(client, ntChar, ntRagdoll)) then
+						info.doDraw(client, ntX, ntY, ColorAlpha(ntCol, ntAlpha))
+						ntY = ntY -  60
+					end
+				end
+				end, function() end)
+			cam.End3D2D()
 		end
+		
+		ntChar = nil
+		ntClass = nil
+		ntClassInfo = nil
+		ntRagdoll = nil		
 	end
-end)
+end
