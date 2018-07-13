@@ -1484,3 +1484,7 @@ end
 function SCHEMA:PlayerAuthed()
 	hook.Run("PlayerCountChanged")
 end
+
+function GM:ScalePlayerDamage(client, hitGroup, dmgInfo)
+	dmgInfo:ScaleDamage(1)
+end
