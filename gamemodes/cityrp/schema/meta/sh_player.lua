@@ -62,7 +62,7 @@ function PLAYER:isProtected()
                     local uid = v.uniqueID
                     
                     if (vestClass[uid]) then
-                        return vestClass[uid], vestClass
+                        return vestClass[uid], uid
                     end
 				end
 			end
