@@ -175,7 +175,6 @@ PANEL = {}
         "orgInfo",
         "memberInfo",
         "perkInfo",
-        "assetInfo",
         "config",
     }
 
@@ -257,6 +256,7 @@ PANEL = {}
     end
 
     function PANEL:setupContent(num)
+        self.curnum = num
         self.catname:SetText(L(panelInfo[num]))
         self.content:Clear()
         local org = self.org
@@ -273,35 +273,35 @@ PANEL = {}
             orgLevel:SetFont("nutMediumFont")
             orgLevel:SetContentAlignment(4)
             orgLevel:DockMargin(10, 5, 10, 5)
-            orgLevel:SetText(L"orgLevel")
+            orgLevel:SetText(L("orgLevel", org:getData("level", 0)))
             orgLevel:SetTall(25)
             local orgMoney = con:Add("DLabel")
             orgMoney:Dock(TOP)
             orgMoney:SetFont("nutMediumFont")
             orgMoney:SetContentAlignment(4)
             orgMoney:DockMargin(10, 5, 10, 5)
-            orgMoney:SetText(L"orgMoney")
+            orgMoney:SetText(L("orgMoney", org:getData("fund", 0)))
             orgMoney:SetTall(25)
             local orgExp = con:Add("DLabel")
             orgExp:Dock(TOP)
             orgExp:SetFont("nutMediumFont")
             orgExp:SetContentAlignment(4)
             orgExp:DockMargin(10, 5, 10, 5)
-            orgExp:SetText(L"orgExp")
+            orgExp:SetText(L("orgExp", org:getData("exp", 0)))
             orgExp:SetTall(25)
             local orgNextExp = con:Add("DLabel")
             orgNextExp:Dock(TOP)
             orgNextExp:SetFont("nutMediumFont")
             orgNextExp:SetContentAlignment(4)
             orgNextExp:DockMargin(10, 5, 10, 5)
-            orgNextExp:SetText(L"orgNextExp")
+            orgNextExp:SetText(L("orgNextExp", org:getData("exp", 0)))
             orgNextExp:SetTall(25)
             local orgMembers = con:Add("DLabel")
             orgMembers:Dock(TOP)
             orgMembers:SetFont("nutMediumFont")
             orgMembers:SetContentAlignment(4)
             orgMembers:DockMargin(10, 5, 10, 5)
-            orgMembers:SetText(L("orgTotalMembers", 1))
+            orgMembers:SetText(L("orgTotalMembers", org:getMemberCount()))
             orgMembers:SetTall(25)
         elseif (num == 2) then 
             for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
@@ -319,8 +319,6 @@ PANEL = {}
         elseif (num == 3) then
             -- perk management
         elseif (num == 4) then
-            -- asset management
-        elseif (num == 5) then
             local quit = con:Add("nutOrgConfig")
             quit:Dock(TOP)
             quit:setup(TYPE_BUTTON, L"orgExitDesc", L"orgExit", function()
@@ -359,6 +357,15 @@ PANEL = {}
         end
     end
 vgui.Register("nutOrgManager", PANEL, "EditablePanel")
+netstream.Hook("nutOrgUpdateManager", function()
+    if (IsValid(nut.gui.orgman)) then
+        local num = nut.gui.orgman.curnum
+
+        if (num) then
+            nut.gui.orgman:setupContent(num)
+        end
+    end
+end)
 
 PANEL = {}
     function PANEL:Init()
@@ -418,6 +425,24 @@ PANEL = {}
         self.rank = rank
         self.name = name
         self.targetID = targetID
+
+        self.kick.DoClick = function()
+            netstream.Start("nutOrgKick", targetID)
+        end
+        self.ban.DoClick = function()
+            netstream.Start("nutOrgBan", targetID)
+        end
+        self.setrank.DoClick = function()
+            local menu = DermaMenu()
+                for rankID, rankLang in SortedPairs(ORGANIZATION_RANK_NAME) do
+                    if (rankID == ORGANIZATION_OWNER) then continue end
+                    
+                    menu:AddOption(L(rankLang), function()
+                        netstream.Start("nutOrgAssign", targetID, rankID)
+                    end)
+                end
+			menu:Open()
+        end
     end
 vgui.Register("nutOrgMember", PANEL, "DPanel")
 

@@ -19,6 +19,13 @@ nut.util.include("meta/sh_character.lua")
 nut.util.include("meta/sh_organization.lua")
 nut.util.include("vgui/cl_derma.lua")
 nut.util.include("sv_database.lua")
+nut.util.include("sh_perks.lua")
+
+nut.config.add("orgsFee", 1000000, "Money that costs for the organization", nil, {
+	data = {min = 1, max = 10000000},
+	category = "orgs"
+})
+
 
 if (CLIENT) then
     local myPanel
@@ -49,6 +56,22 @@ if (CLIENT) then
         if (IsValid(myPanel)) then
             nut.gui.orgloading:Remove()
             myPanel:Add("nutOrgJoiner")
+        end
+    end)
+
+    netstream.Hook("nutOrgKicked", function()
+        if (IsValid(myPanel)) then
+            if (IsValid(nut.gui.orgman)) then
+                nut.gui.orgman:Remove()
+            end
+            
+            if (IsValid(nut.gui.orgloading)) then
+                nut.gui.orgloading:Remove()
+            end
+
+            timer.Simple(0, function()
+                myPanel:Add("nutOrgJoiner")
+            end)
         end
     end)
 end
@@ -239,8 +262,12 @@ if (SERVER) then
         local char = client:getChar()
 
         if (char) then
+            if (not char:hasMoney(nut.config.get("orgsFee"))) then
+                return false, "cantAfford"
+            end
+
             if (char:getOrganizationInfo()) then
-                return false
+                return false, "orgExists"
             else
                 return true
             end
@@ -250,7 +277,11 @@ if (SERVER) then
     end
 
     function PLUGIN:OnCreateOrganization(client, organization)
+        local char = client:getChar()
 
+        if (char) then
+            char:takeMoney(nut.config.get("orgsFee"))
+        end
     end
 
     function PLUGIN:PlayerCanJoinOrganization()
@@ -336,7 +367,7 @@ if (CLIENT) then
                 local char = nut.char.loaded[charID]
 
                 org.members[rank] = org.members[rank] or {}
-                org.members[rank][charID] = char and char:getName() or true
+                org.members[rank][charID] = char and char:getName() or (isChange or true)
             end
         end)
     end
@@ -365,7 +396,17 @@ else
             local char = client:getChar()
             
             if (char) then
-                if (hook.Run("CanCreateOrganization", client) == false) then return end
+                local bool, reason = hook.Run("CanCreateOrganization", client)
+                if (bool == false) then
+                    if (reason) then
+                        client:notifyLocalized(reason)
+                    end
+
+                    timer.Simple(0, function()
+                        netstream.Start(client, "nutOrgKicked")
+                    end)
+                    return
+                end
 
                 nut.org.create(function(orgObject)
                     orgObject:setOwner(char)
@@ -406,8 +447,13 @@ else
                 local org = char:getOrganizationInfo()
 
                 if (org) then
-                    org:removeCharacter(char)
-                    netstream.Start(client, "nutOrgExited")
+                    local bool, reason = org:removeCharacter(char, true)
+
+                    if (bool == false and reason) then
+                        client:notifyLocalized(reason)
+                    else
+                        netstream.Start(client, "nutOrgExited")
+                    end
                 else
                     client:notifyLocalized("invalidOrg")
                 end
@@ -428,27 +474,129 @@ else
             end
         end)
 
-        netstream.Hook("nutOrgKick", function(client, target)
-            
-        end)
-
-        netstream.Hook("nutOrgAssign", function(client, target, rank)
+        netstream.Hook("nutOrgBan", function(client, target)
             local char = client:getChar()
             
             if (char) then
-                local org = char:getOrganizationInfo()
+                local rank = char:getOrganizationRank()
 
-                if (org) then
-                    --nut.org.delete(org:getID())
+                if (rank >= ORGANIZATION_ADMIN) then
+                    local org = char:getOrganizationInfo()
+    
+                    if (org) then
+                        local banList = org:getData("bans", {})
+                        banList[target] = true
+                        org:setData("bans", {})
+
+                        client:notifyLocalized("orgBannedPlayer")
+                        org:removeCharacter(target)
+                        netstream.Start(client, "nutOrgUpdateManager")
+                        
+                        local targetChar = nut.char.loaded[target]
+                        if (targetChar) then
+                            local targetClient = targetChar:getPlayer()
+
+                            if (IsValid(targetClient)) then
+                                targetClient:notifyLocalized("orgBanned")
+                                netstream.Start(targetClient, "nutOrgKicked")
+                            end
+                        end
+                    else
+                        client:notifyLocalized("invalidOrg")
+                    end
                 else
-                    client:notifyLocalized("invalidOrg")
+                    client:notifyLocalized("notOrgAdmin")
                 end
             end
         end)
 
-        netstream.Hook("nutOrgChangeOwner", function(client, target)
-        
+        netstream.Hook("nutOrgKick", function(client, target)
+            local char = client:getChar()
+            
+            if (char) then
+                local rank = char:getOrganizationRank()
+
+                if (rank >= ORGANIZATION_ADMIN) then
+                    local org = char:getOrganizationInfo()
+    
+                    if (org) then
+                        client:notifyLocalized("orgKickedPlayer")
+                        org:removeCharacter(target)
+                        netstream.Start(client, "nutOrgUpdateManager")
+                        
+                        local targetChar = nut.char.loaded[target]
+                        if (targetChar) then
+                            local targetClient = targetChar:getPlayer()
+
+                            if (IsValid(targetClient)) then
+                                client:notifyLocalized("orgKicked")
+                                netstream.Start(targetClient, "nutOrgKicked")
+                            end
+                        end
+                    else
+                        client:notifyLocalized("invalidOrg")
+                    end
+                else
+                    client:notifyLocalized("notOrgAdmin")
+                end
+            end
         end)
+
+        --[[
+            nutOrgAssign
+            parameter:
+            client [Player]
+            target [Character Index]
+            rank [Rank ENUM]
+        ]]
+        netstream.Hook("nutOrgAssign", function(client, target, changeRank)
+            local char = client:getChar()
+            local charID = char:getID()
+            
+            if (char and target) then
+                local org = char:getOrganizationInfo()
+
+                if (charID == target) then
+                    client:notifyLocalized("rankOrgCantSelf")
+                    return
+                end
+
+                if (org) then
+                    local clientIsMember, clientRank = org:getMember(charID)
+                    local targetIsMember, targetRank = org:getMember(target)
+                    local targetChar = nut.char.loaded[target]
+
+                    if (clientIsMember and targetIsMember and clientRank >= ORGANIZATION_SUPERADMIN) then
+                        if (changeRank >= clientRank) then
+                            client:notifyLocalized("noOrgPermission")
+                        else
+                            local bool, reason = org:adjustMemberRank(target, changeRank) 
+
+                            if (bool) then
+                                client:notifyLocalized("rankOrgAdjusted")
+                                netstream.Start(client, "nutOrgUpdateManager")
+                        
+                                if (targetChar) then
+                                    local targetClient = targetChar:getPlayer()
+
+                                    if (IsValid(targetClient)) then
+                                        targetClient:notifyLocalized("rankOrgAdjustedTarget")
+                                        netstream.Start(targetClient, "nutOrgUpdateManager")
+                                    end
+                                end
+                            else
+                                client:notifyLocalized(reason)
+                            end
+                        end
+                    else
+                        client:notifyLocalized("invalidOrg")
+                    end
+                else
+                    client:notifyLocalized("notOrgAdmin")
+                end
+            end
+        end)
+
 
         netstream.Hook("nutOrgChangeValue", function(client, key, value)
             local char = client:getChar()

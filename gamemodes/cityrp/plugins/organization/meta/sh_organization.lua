@@ -88,18 +88,20 @@ if (SERVER) then
     end
 
     function ORGANIZATION:adjustMemberRank(charID, rank)
-        local charID = (type(char) == "table" and char:getID() or char)
+        local charID = (type(char) == "table" and char:getID() or charID)
 
         if (charID) then
+            local prevName
             for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
                 if (self.members[i] and self.members[i][charID]) then
+                    prevName = self.members[i][charID]
                     self.members[i][charID] = nil
                     break
                 end
             end
 
             self.members[rank] = self.members[rank] or {}
-            self.members[rank][charID] = targetChar and targetChar:getName() or true 
+            self.members[rank][charID] = targetChar and targetChar:getName() or prevName 
 
             local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
             nut.db.updateTable({
@@ -107,7 +109,7 @@ if (SERVER) then
                 _lastModify = timeStamp,
             }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
             
-            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, true)
+            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, prevName)
 
             local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
@@ -122,15 +124,16 @@ if (SERVER) then
         return false, "invalidRequest"
     end
 
-    function ORGANIZATION:removeCharacter(char)
+    function ORGANIZATION:removeCharacter(char, leaving)
         local charID = (type(char) == "table" and char:getID() or char)
         
         local removed = false
-        for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
+        for i = ORGANIZATION_MEMBER, (ORGANIZATION_OWNER - (leaving and 0 or 1)) do
             if (self.members[i] and self.members[i][charID]) then
                 self.members[i][charID] = nil
 
                 removed = true
+                break
             end
         end
         
@@ -142,6 +145,7 @@ if (SERVER) then
             end
 
             nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)
+            self:sync()
             
             if (ORGANIZATION_REMOVE_EMPTY_GROUP == true and self:getMemberCount() == 0) then
                 nut.org.delete(self.id)
@@ -227,8 +231,8 @@ function ORGANIZATION:getMemberCount()
     local count = 0
     
     for i = ORGANIZATION_MEMBER, ORGANIZATION_OWNER do
-        if (self.members[i] and self.members[i][charID]) then
-            count = count + 1
+        if (self.members[i]) then
+            count = count + table.Count(self.members[i])
         end
     end
     

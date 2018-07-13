@@ -4,6 +4,11 @@ function CHAR:getOrganization()
     return self:getData("organization", -1)
 end
 
+
+function CHAR:getOrganizationRank(def)
+    return self:getData("organizationRank", def)
+end
+
 function CHAR:getOrganizationInfo()
     return nut.org.loaded[self:getOrganization()]
 end
@@ -21,6 +26,11 @@ function CHAR:canJoinOrganization(orgID)
         if (client) then
             if (self:getOrganizationInfo()) then
                 return false, "orgJoined"
+            end
+
+            local bans = org:getData("bans", {})
+            if (bans[self:getID()]) then
+                return false, "charBanned"
             end
             
             return hook.Run("PlayerCanJoinOrganization", client, org)
