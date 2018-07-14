@@ -623,8 +623,9 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			arrested:setAction("감옥 타이머", nut.config.get("jailTime"))
 			arrested:StripWeapons()
 			
-			timer.Create(arrested:UniqueID() .. "_jailTimer", nut.config.get("jailTime"), 1, function()
-				if (IsValid(arrested)) then
+			local jailTimer = arrested:UniqueID() .. "_jailTimer"
+			timer.Create(jailTimer, nut.config.get("jailTime"), 1, function()
+				if (IsValid(arrested) and arrested:isArrested()) then
 					arrested:Spawn()
 					arrested:notify("감옥에서 석방되었습니다.")
 					arrested:arrest(false)
@@ -679,6 +680,8 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			arrested:SetPos(pos)
 		else
 			arrested:Spawn()
+			local jailTimer = arrested:UniqueID() .. "_jailTimer"
+			timer.Remove(jailTimer)
 		end
 	end
 end
