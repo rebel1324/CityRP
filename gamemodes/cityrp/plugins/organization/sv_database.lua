@@ -12,14 +12,12 @@ CREATE TABLE IF NOT EXISTS `nut_organization` (
 	PRIMARY KEY (`_id`),
 	UNIQUE INDEX `_id` (`_id`)
 );
-
 CREATE TABLE IF NOT EXISTS `nut_orgmembers` (
 	`_orgID` INT(12) NOT NULL,
 	`_charID` INT(12) NOT NULL,
 	`_rank` INT(1) NOT NULL,
 	`_name` VARCHAR(70) NOT NULL
-);
-]]
+)]]
 
 local SQLITE_CREATE_TABLES = [[
 CREATE TABLE IF NOT EXISTS nut_organization (
@@ -38,17 +36,19 @@ CREATE TABLE IF NOT EXISTS nut_orgmembers (
 	_charID integer,
 	_rank integer,
 	_name text
-);
-]]
+);]]
 
 local DROP_QUERY = [[
 DROP TABLE IF EXISTS nut_organization;
-DROP TABLE IF EXISTS nut_orgmembers;
-]]
+DROP TABLE IF EXISTS nut_orgmembers]]
 
 function PLUGIN:OnLoadTables()
 	if (nut.db.object) then
-		nut.db.query(MYSQL_CREATE_TABLES)
+		local queries = string.Explode(";", MYSQL_CREATE_TABLES)
+
+		for i = 1, #queries do
+			nut.db.query(queries[i], callback)
+		end
 	else
 		nut.db.query(SQLITE_CREATE_TABLES)
 	end
