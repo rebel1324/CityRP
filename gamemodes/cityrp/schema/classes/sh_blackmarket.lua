@@ -43,6 +43,7 @@ CLASS.business = {
 	["cw_m14_shipment"] = 1,
 	["cw_m3super90_shipment"] = 1,
 	["cw_mac11_shipment"] = 1,
+	["cw_m1911_shipment"] = 1,
 	["cw_mr96_shipment"] = 1,
 	["cw_makarov_shipment"] = 1,
 	["tfa_bt_b93r_shipment"] = 1,
