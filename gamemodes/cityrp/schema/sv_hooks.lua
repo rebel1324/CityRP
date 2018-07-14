@@ -3,10 +3,19 @@ SIGNAL_CHAR = 2
 SIGNAL_JOB = 3
 SIGNAL_INITLOAD = 4
 
+function SCHEMA:RegisterPreparedStatements()
+	MsgC(Color(0, 255, 0), "[Nutscript] ADDED CITYRP PREPARED STATEMENTS\n")
+	nut.db.prepare("reserveChange", "UPDATE nut_reserve SET _reserve = ? WHERE _charID = ?", {_reserve = MYSQLOO_INTEGER, _charID = MYSQLOO_INTEGER})
+end
+
 local function savereserve(char)
-	nut.db.updateTable({
-		_reserve = char:getReserve()
-	}, nil, "reserve", "_charID = "..char:getID())
+	if (MYSQLOO_PREPARED) then
+		nut.db.preparedCall("reserveChange", nil, char:getReserve(), char:getID())
+	else
+		nut.db.updateTable({
+			_reserve = char:getReserve()
+		}, nil, "reserve", "_charID = "..char:getID())
+	end
 end
 
 function SCHEMA:OnReserveChanged(char)
@@ -61,33 +70,20 @@ CREATE TABLE IF NOT EXISTS `nut_guestboard` (
 			-- legacy support
 			-- for modernRP users
 			local char = nut.char.loaded[id]
-			local legacy = false
-
-			if (char:getData("reserve")) then
-				local restore = char:getData("reserve", 0)
-
-				char:setReserve(tonumber(restore))
-				char:setData("reserve", nil)
-				legacy = true
-			end
 
 			nut.db.query("SELECT _reserve FROM nut_reserve WHERE _charID = "..id, function(data)
 				if (data and #data > 0) then
 					for k, v in ipairs(data) do
 						local money = tonumber(v._reserve)
 
-						if (!legacy) then
-							char:setReserve(money)
-						end
+						char:setReserve(money)
 					end
 				else
 					nut.db.insertTable({
 						_reserve = 0,
 						_charID = id,
 					}, function(data)
-						if (!legacy) then
-							char:setReserve(0)
-						end
+						char:setReserve(0)
 					end, "reserve")
 				end
 			end)
@@ -156,8 +152,10 @@ end
 
 -- Bank Interest Timer Payload
 function SCHEMA:BankIncomePayload()
-	for k, v in ipairs(player.GetAll()) do
-		local char = v:getChar()
+	local timerIndex = 0
+
+	for k, client in ipairs(player.GetAll()) do
+		local char = client:getChar()
 
 		-- If faction has default salary, give them the salary.
 		if (char) then
@@ -165,15 +163,22 @@ function SCHEMA:BankIncomePayload()
 			local faction = nut.faction.indices[charFaction]
 
 			if (faction.salary) then
-				if (hook.Run("CanPlayerGetBankIncome", v) == false) then
-					return false
-				end
+				-- because i'm fucking lazy lmaoo
+				timer.Simple(timerIndex * .1, function()
+					if (IsValid(client)) then
+						if (hook.Run("CanPlayerGetBankIncome", client) == false) then
+							return false
+						end
+	
+						local profit = math.Round(char:getReserve() * (math.abs(nut.config.get("incomeRate", 1) / 100)))
+						profit = math.min(profit, 100000)
+	
+						client:notify(L("reserveIncome", client, nut.currency.get(profit)))
+						char:addReserve(profit)
+					end
+				end)
 
-				local profit = math.Round(char:getReserve() * (math.abs(nut.config.get("incomeRate", 1) / 100)))
-				profit = math.min(profit, 100000)
-
-				char.player:notify(L("reserveIncome", v, nut.currency.get(profit)))
-				char:addReserve(profit)
+				timerIndex = timerIndex + 1
 			end
 		end
 	end
