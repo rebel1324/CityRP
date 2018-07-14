@@ -45,12 +45,18 @@ if (SERVER) then
         if (charID) then
             rank = rank or ORGANIZATION_MEMBER
             self.members[rank] = self.members[rank] or {}
-            self.members[rank][charID] = targetChar and targetChar:getName() or true -- member level.
-
+            
             local targetChar = nut.char.loaded[charID]
+            self.members[rank][charID] = targetChar and targetChar:getName()  -- member level.
+
             if (SERVER and targetChar) then
-                char:setData("organization", self.id, nil, player.GetAll())
-                char:setData("organizationRank", rank, nil, player.GetAll())
+                targetChar:setData("organization", self.id, nil, player.GetAll())
+                targetChar:setData("organizationRank", rank, nil, player.GetAll())
+
+                local target = targetChar:getPlayer()
+                if (IsValid(target)) then
+                    target:setNetVar("charOrg", self.id)
+                end
             end
 
             local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
@@ -100,18 +106,17 @@ if (SERVER) then
                 end
             end
 
+            local targetChar = nut.char.loaded[charID]
             self.members[rank] = self.members[rank] or {}
             self.members[rank][charID] = targetChar and targetChar:getName() or prevName 
 
             local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
             nut.db.updateTable({
                 _rank = rank,
-                _lastModify = timeStamp,
             }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
             
             netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, prevName)
 
-            local targetChar = nut.char.loaded[charID]
             if (targetChar and SERVER) then
                 targetChar:setData("organizationRank", rank, nil, player.GetAll())
             end
@@ -142,6 +147,11 @@ if (SERVER) then
             if (targetChar and SERVER) then
                 targetChar:setData("organization", nil, nil, player.GetAll())
                 targetChar:setData("organizationRank", nil, nil, player.GetAll())
+
+                local target = targetChar:getPlayer()
+                if (IsValid(target)) then
+                    target:setNetVar("charOrg", nil)
+                end
             end
 
             nut.db.query("DELETE FROM nut_orgmembers WHERE _charID = " .. charID)

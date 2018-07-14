@@ -1,7 +1,17 @@
 local CHAR = FindMetaTable("Character")
 
 function CHAR:getOrganization()
-    return self:getData("organization", -1)
+    if (SERVER) then
+        return self:getData("organization", -1)
+    else
+        local client = self:getPlayer()
+
+        if (IsValid(client)) then
+            return client:getNetVar("charOrg")  
+        else
+            return self:getData("organization", -1)
+        end
+    end
 end
 
 
