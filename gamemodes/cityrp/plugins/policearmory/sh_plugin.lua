@@ -3,8 +3,7 @@ PLUGIN.name = "Police Armory"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "Armory for police classes"
 
-
-function SCHEMA:ResetVariables(client, signal)
+function PLUGIN:ResetVariables(client, signal)
 	if (IsValid(client) and client:Alive()) then
         for k, v in pairs(client:GetWeapons()) do
             if (v.policeProperty) then
