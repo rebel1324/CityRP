@@ -1,5 +1,5 @@
 ITEM.name = "Attachment Object"             -- name of the attachment.
-ITEM.model = "models/Items/grenadeAmmo.mdl" -- model of the attachment
+ITEM.model = "models/Items/BoxSRounds.mdl" -- model of the attachment
 ITEM.width = 1 -- width of the attachment
 ITEM.height = 1 -- height of the attachment
 ITEM.isAttachment = true -- bool to distinguish if the item is attachment or not
@@ -82,6 +82,12 @@ local function attachment(item, data, combine)
 
                     return false
                 end
+                
+                if (item.useQuantity and item:getQuantity() <= 1) then
+                    client:notifyLocalized("needRefill")
+
+                    return false
+                end
 
                 mods[item.slot] = {item.uniqueID, targetAttachment, item.reusable}
                 target:setData("atmod", mods)
@@ -106,6 +112,10 @@ local function attachment(item, data, combine)
                 client:EmitSound("cw/holster4.wav")
 
                 if (item.reusable) then
+                    if (item.useQuantity) then
+                        item:setQuantity(item:getQuantity() - 1, true)
+                    end
+
                     return false
                 else
                     return true
@@ -173,5 +183,26 @@ ITEM.functions.combine = {
     end,
     onRun = function(item, data)
         return attachment(item, data, true)
+    end,
+}
+
+ITEM.functions.refill = {
+    onCanRun = function(item, data)
+        if (item.useQuantity and item.reusable and item.refillItems) then
+            return true
+        end
+    end,
+    onRun = function(item, data)
+        local client = item.player
+
+        if (item.refillItems) then
+            for class, quantity in pairs(item.refillItems) do
+
+            end
+        else
+            client:notify("ERROR: RANT ON BLACK TEA")    
+        end
+
+        return false
     end,
 }
