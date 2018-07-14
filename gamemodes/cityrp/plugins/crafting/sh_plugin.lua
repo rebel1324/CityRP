@@ -123,7 +123,11 @@ function nut.craft.make(client, id)
 		local reqC = craftData.resultItem
 
 		for itemClass, quantity in pairs(reqC) do
-			inv:add(itemClass, quantity)
+			if (quantity == true) then
+				inv:add(itemClass) -- whole shits.
+			else
+				inv:add(itemClass, quantity)
+			end
 		end
 	
 		return true
