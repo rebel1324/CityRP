@@ -337,6 +337,10 @@ function SCHEMA:PlayerDeath(client, inflicter, attacker)
 	local char = client:getChar()
 	
 	if (char) then
+		if (IsValid(attacker) and attacker:IsPlayer() and client != attacker) then
+			client:ChatPrint(L("killedBy", client, attacker:Name()))
+		end
+
 		local class = char:getClass()
 		local classData = nut.class.list[class] or nut.class.list[1]
 		local job = classData.name
