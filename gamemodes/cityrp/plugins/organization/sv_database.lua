@@ -1,24 +1,23 @@
 
 local MYSQL_CREATE_TABLES = [[
 CREATE TABLE IF NOT EXISTS `nut_organization` (
-	`_id` INT(11) NOT NULL AUTO_INCREMENT,
-	`_name` TEXT(32) NOT NULL,
-	`_members` TEXT NOT NULL,
+	`_id` INT(12) NOT NULL AUTO_INCREMENT,
+	`_name` INT(32) NOT NULL,
 	`_level` INT(12) NOT NULL,
-	`_experience` FLOAT(32) NOT NULL,
-	`_money` INT(32) NOT NULL,
+	`_experience` INT(12) NOT NULL,
+	`_money` INT(12) NOT NULL,
 	`_lastModify` DATETIME NOT NULL,
 	`_timeCreated` DATETIME NOT NULL,
-	`_data` TEXT NOT NULL,
-	PRIMARY KEY (`_id`)
+	`_data` VARCHAR(2048) NOT NULL,
+	PRIMARY KEY (`_id`),
+	UNIQUE INDEX `_id` (`_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `nut_orgmembers` (
-	`_orgID` INT(11) NOT NULL,
-	`_charID` INT(11) NOT NULL,
+	`_orgID` INT(12) NOT NULL,
+	`_charID` INT(12) NOT NULL,
 	`_rank` INT(1) NOT NULL,
-	`_name` TEXT NOT NULL,
-	PRIMARY KEY (`_orgID`,`_charID`)
+	`_name` VARCHAR(70) NOT NULL
 );
 ]]
 
@@ -26,7 +25,6 @@ local SQLITE_CREATE_TABLES = [[
 CREATE TABLE IF NOT EXISTS nut_organization (
 	_id integer PRIMARY KEY AUTOINCREMENT,
 	_name text,
-	_members text,
 	_level integer,
 	_experience float,
 	_money float,
