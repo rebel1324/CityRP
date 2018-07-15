@@ -33,46 +33,13 @@ function nut.craft.canMake(client, id)
 					end
 
 					local reqB = craftData.requiredItem
-					local items2remove = {}
+					local items2remove
 
 					if (reqB) then
-						local itemList = inv:getItemsByClass()
-						
-						for class, requirements in pairs(reqB) do
-							local reqLeft = requirements
-							local items = itemList[class]
-							
-							if (items) then
-								for _, itemObject in pairs(items) do
-									local itemQuantity = itemObject:getQuantity()
+						items2remove = inv:removeItems(reqB, nil, nil, nil, true)
 
-									if (reqLeft < 0) then
-										break
-									end
-
-									if ((reqLeft - itemQuantity) < 0) then
-										table.insert(items2remove, {
-											item = itemObject,
-											remove = false,
-											quantity = reqLeft
-										})
-
-										reqLeft = 0
-										break
-									else
-										reqLeft = reqLeft - itemQuantity
-
-										table.insert(items2remove, {
-											item = itemObject,
-											remove = true,
-										})
-									end
-								end
-							end
-							
-							if (reqLeft > 0) then
-								return false, "lowitems"
-							end
+						if (not items2remove) then
+							return false, "reqItems"
 						end
 					end
 
@@ -132,4 +99,17 @@ function nut.craft.make(client, id)
 	
 		return true
 	end
+end
+
+if (SERVER) then
+	netstream.Hook("nutCraftItem", function(client, id)
+		local bool, error = nut.craft.make(client, id)
+		if (bool) then
+			client:EmitSound("ui/good.wav")
+		else
+			if (error) then
+				client:notifyLocalized(error)
+			end
+		end
+	end)
 end

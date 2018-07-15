@@ -9,18 +9,28 @@ ENT.RenderGroup 		= RENDERGROUP_BOTH
 ENT.Category = "NutScript"
 
 if (SERVER) then
-	function ENT:Use(activator)
-		local inventory = self:getInv()
+	function ENT:Initialize()
+		self:SetModel("models/rebel1324/crafting_table.mdl")
+		self:PhysicsInit(SOLID_VPHYSICS)
+		self:SetMoveType(MOVETYPE_VPHYSICS)
+		self:setNetVar("active", false)
+		self:SetUseType(SIMPLE_USE)
+		self.loopsound = CreateSound(self, "plats/elevator_move_loop1.wav")
+		self.receivers = {}
+		local physicsObject = self:GetPhysicsObject()
 
-		if (inventory and (activator.nutNextOpen or 0) < CurTime()) then
+		if (IsValid(physicsObject)) then
+			physicsObject:Wake()
+		end
+	end
+
+	function ENT:Use(activator)
+		if ((activator.nutNextOpen or 0) < CurTime()) then
 			if (activator:getChar()) then
 				activator:setAction("Opening...", 1, function()
 					if (activator:GetPos():Distance(self:GetPos()) <= 100) then
-						self.receivers[activator] = true
-						activator.nutBagEntity = self
 						
-						inventory:sync(activator)
-						netstream.Start(activator, "craftingTableOpen", self, inventory:getID())
+						netstream.Start(activator, "craftingTableOpen")
 					end
 				end)
 			end
@@ -29,6 +39,10 @@ if (SERVER) then
 		end
 	end
 else
+	netstream.Hook("craftingTableOpen", function()
+		vgui.Create("nutCraftingMenu")
+	end)
+
 	function ENT:Draw()
 		self:DrawModel()
 	end

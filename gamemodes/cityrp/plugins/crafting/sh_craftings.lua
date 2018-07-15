@@ -10,20 +10,22 @@ end
 function nut.craft.get(id)
     return nut.craft.list[id]
 end
---[[
-    CRAFT = {}
-        CRAFT.name = "Gold Camo"                -- Name of the craftable thing
-        CRAFT.desc = "skin gold shit mate"      -- Description of the craftable thing
-        CRAFT.requiredAttribute = {}
-        CRAFT.requiredItem = {
-            mineral_silver = 10,
-        }
-        CRAFT.resultItem = {
-            ammo_ar2 = 10,
-        }
-        CRAFT.craftingTable = {},
-        nut.craft.add("a", CRAFT) 
-    CRAFT = nil
-]]
+
+CRAFT = {}
+    CRAFT.name = "refillExpert"                -- Name of the craftable thing
+    CRAFT.desc = "refillDesc"      -- Description of the craftable thing
+    CRAFT.requiredAttribute = {}
+    CRAFT.requiredItem = {
+        refill_advanced = 2,
+        chem_basic_adhesive = 30,
+        mineral_gold = 30,
+    }
+    CRAFT.resultItem = {
+        refill_expert = 10,
+    }
+    CRAFT.craftingTable = {},
+    nut.craft.add("a", CRAFT) 
+CRAFT = nil
+
 
 hook.Run("OnCraftingLoaded")
