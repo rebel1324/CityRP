@@ -14,6 +14,9 @@ ITEM.iconCam = {
 	outline = true,
 	outlineColor = Color(135, 136, 90)
 }
+function ITEM:onGetDropModel()
+	return "models/rebel1324/mats/mnrl.mdl"
+end
 
 
 if (CLIENT) then

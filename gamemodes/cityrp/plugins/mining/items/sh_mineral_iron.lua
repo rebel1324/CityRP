@@ -14,6 +14,9 @@ ITEM.iconCam = {
 	outline = true,
 	outlineColor = Color(255, 255, 255)
 }
+function ITEM:onGetDropModel()
+	return "models/rebel1324/mats/mnrl.mdl"
+end
 
 if (CLIENT) then
 	function ITEM:paintOver(item, w, h)
