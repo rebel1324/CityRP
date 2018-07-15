@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `nut_organization` (
 	`_money` INT(12) NOT NULL,
 	`_lastModify` DATETIME NOT NULL,
 	`_timeCreated` DATETIME NOT NULL,
-	`_data` VARCHAR(2048) NOT NULL,
+	`_data` VARCHAR(2048) NOT NULL COLLATE 'utf8mb4_general_ci',
 	PRIMARY KEY (`_id`),
 	UNIQUE INDEX `_id` (`_id`)
 );
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `nut_orgmembers` (
 	`_orgID` INT(12) NOT NULL,
 	`_charID` INT(12) NOT NULL,
 	`_rank` INT(1) NOT NULL,
-	`_name` VARCHAR(70) NOT NULL
+	`_name` VARCHAR(70) NOT NULL COLLATE 'utf8mb4_general_ci'
 )]]
 
 local SQLITE_CREATE_TABLES = [[
