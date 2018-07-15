@@ -511,11 +511,13 @@ nut.bent.add("synthesizer_guitar", "models/tnf/synth.mdl", "synthesizerGuitar", 
 nut.bent.add("synthesizer_piano", "models/tnf/synth.mdl", "synthesizerPiano", 1, 3000, pianoOnly)
 nut.bent.add("synthesizer_violin", "models/tnf/synth.mdl", "synthesizerViolin", 1, 3000, pianoOnly)
 
-nut.bent.add("jukebox", "models/props_lab/citizenradio.mdl", "jukebox", 1, 10000, djOnly)
+nut.bent.add("wdj_mastercontroller", "models/props_lab/citizenradio.mdl", "deejayController", 1, 10000, djOnly)
+nut.bent.add("wdj_speaker", "models/props_lab/citizenradio.mdl", "deejaySpeaker", 1, 10000, djOnly)
 
+nut.bent.add("wdj_radio", "models/props_lab/citizenradio.mdl", "deejayRadio", 1, 5000, all)
 nut.bent.add("nut_seller", "models/rebel1324/nmrih_cash_register.mdl", "checkoutName", 1, 2500, all)
 
---nut.bent.add("nut_craftingtable", "models/props_wasteland/controlroom_desk001b.mdl", "craftingTable", 1, 500, all)
+nut.bent.add("nut_craftingtable", "models/props_wasteland/controlroom_desk001b.mdl", "craftingTable", 1, 10000, all)
 --nut.bent.add("nut_loadingtable", "models/props_wasteland/controlroom_desk001b.mdl", "loadingTable", 1, 500, all)
 
 nut.bent.add("sent_bingle_simplenoti", "models/props/cs_assault/chaintrainstationsign.mdl", "signSmall", 2, 400, all)

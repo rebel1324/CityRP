@@ -171,7 +171,7 @@ function SCHEMA:BankIncomePayload()
 						end
 	
 						local profit = math.Round(char:getReserve() * (math.abs(nut.config.get("incomeRate", 1) / 100)))
-						profit = math.min(profit, 100000)
+						profit = math.min(profit, 80000)
 	
 						client:notify(L("reserveIncome", client, nut.currency.get(profit)))
 						char:addReserve(profit)

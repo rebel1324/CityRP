@@ -213,7 +213,7 @@ if (CLIENT) then
 				button:SetText(L(d.name))
 				self.menu:AddItem(button)
 
-				function button:DoClick()
+				function button:OnMousePressed()
 					if (d.isStackable == true) then
 						LocalPlayer():ConCommand(Format('say /chargiveitem "%s" "%s" "%s"', LocalPlayer():Name(), d.uniqueID, d.maxQuantity or 1))
 					else
