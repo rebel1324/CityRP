@@ -191,13 +191,31 @@ ITEM.functions.refill = {
         if (item.useQuantity and item.reusable and item.refillItems) then
             return true
         end
+
+        if (item:getQuantity() > 10) then
+            return false
+        end
+
+        return false
     end,
     onRun = function(item, data)
         local client = item.player
 
         if (item.refillItems) then
-            for class, quantity in pairs(item.refillItems) do
+            local char = client:getChar()
+            local inv = char:getInv()
 
+            if (inv) then
+                local isRemoved = inv:removeItems(item.refillItems)
+
+                if (isRemoved) then
+                    item:setQuantity(item:getMaxQuantity())
+                    client:notifyLocalized("skinRefilled")
+                else
+                    client:notifyLocalized("skinRefillNeedItems")
+                end
+
+                return false
             end
         else
             client:notify("ERROR: RANT ON BLACK TEA")    
