@@ -192,67 +192,67 @@ hook.Add("PostPlayerDraw", "btNameTag", function(client)
 			if (visibility < 0) then return end
 
 			cam.Start2D()
-			local scr = ntPos:ToScreen()
-			local scale = math.max((1 - ntDist) - (ntDist) * .7, 0.00001)
-			scale = scale * .8 
-			local ntX, ntY = 0, 0
+				local scr = ntPos:ToScreen()
+				local scale = math.max((1 - ntDist) - (ntDist) * .7, 0.00001)
+				scale = scale * .8 
+				local ntX, ntY = 0, 0
 
-			if (not IsValid(client.mx)) then
-				client.mx = Matrix()
-			end
-			client.mx:SetTranslation(Vector(scr.x, scr.y - 16 - scale * 100, 1))
-			client.mx:SetScale(Vector(scale, scale, 1))
+				if (not IsValid(client.mx)) then
+					client.mx = Matrix()
+				end
+				client.mx:SetTranslation(Vector(scr.x, scr.y - 16 - scale * 100, 1))
+				client.mx:SetScale(Vector(scale, scale, 1))
 
 
-			cam.PushModelMatrix(client.mx)
-				xpcall(function()
-					ntCol = Color(255, 255, 255)
-					ntAlpha = 255*math.min(visibility, (1 - ntDist))
-					ntClass = ntChar:getClass()
+				cam.PushModelMatrix(client.mx)
+					xpcall(function()
+						ntCol = Color(255, 255, 255)
+						ntAlpha = 255*math.min(visibility, (1 - ntDist))
+						ntClass = ntChar:getClass()
 
-					local description = ntChar:getDesc()
-					if (description and description != "") then
-						if (!client.oldDesc or client.oldDesc != description) then
-							local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
-							client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
-							client.oldDesc = description
+						local description = ntChar:getDesc()
+						if (description and description != "") then
+							if (!client.oldDesc or client.oldDesc != description) then
+								local preCalcFont = btNameTag.font[2 + 2*(1 or 0)]
+								client.oldDescObject = nut.util.wrapText(description, 900, preCalcFont)
+								client.oldDesc = description
+							end
+							
+							for i = 1, #client.oldDescObject do
+								btNameTag:drawText(client.oldDescObject[#client.oldDescObject - i + 1], ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
+								ntY = ntY - 60
+							end
 						end
 						
-						for i = 1, #client.oldDescObject do
-							btNameTag:drawText(client.oldDescObject[#client.oldDescObject - i + 1], ntX, ntY, ColorAlpha(ntGreen, ntAlpha), 1)
-							ntY = ntY - 60
-						end
-					end
-					
-					local name = hook.Run("ShouldAllowScoreboardOverride", client, "name") and hook.Run("GetDisplayedName", client) or client:Nick()
-					if (ntClass or client:IsBot()) then
-						if (client:IsBot()) then
-							btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
-							ntY = ntY - 80
-						else
-							ntClassInfo = nut.class.list[ntClass]
-							if (ntClassInfo) then
-								btNameTag:drawText(L(ntClassInfo.name), ntX, ntY, ColorAlpha(ntCol, ntAlpha), 1)
-								ntY = ntY - 75
+						local name = hook.Run("ShouldAllowScoreboardOverride", client, "name") and hook.Run("GetDisplayedName", client) or client:Nick()
+						if (ntClass or client:IsBot()) then
+							if (client:IsBot()) then
+								btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
+								ntY = ntY - 80
+							else
+								ntClassInfo = nut.class.list[ntClass]
+								if (ntClassInfo) then
+									btNameTag:drawText(L(ntClassInfo.name), ntX, ntY, ColorAlpha(ntCol, ntAlpha), 1)
+									ntY = ntY - 75
+								end
+			
+								btNameTag:drawText(name, ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
+								ntY = ntY - 80
 							end
-		
-							btNameTag:drawText(name, ntX, ntY, ColorAlpha(ntClassInfo.color or nut.config.get("color"), ntAlpha))
-							ntY = ntY - 80
+						else
+							ntY = ntY - 25
+							btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
 						end
-					else
-						ntY = ntY - 25
-						btNameTag:drawText(name, ntX, ntY, ColorAlpha(nut.config.get("color"), ntAlpha))
-					end
-					
-					for _, info in ipairs(btNameTag.info) do
-						if (info.canDraw(client, ntChar, ntRagdoll)) then
-							info.doDraw(client, ntX, ntY, ColorAlpha(ntCol, ntAlpha))
-							ntY = ntY -  60
+						
+						for _, info in ipairs(btNameTag.info) do
+							if (info.canDraw(client, ntChar, ntRagdoll)) then
+								info.doDraw(client, ntX, ntY, ColorAlpha(ntCol, ntAlpha))
+								ntY = ntY -  60
+							end
 						end
-					end
-				end, function(...) print(...) end)
+					end, function(...) print(...) end)
 				cam.PopModelMatrix()
-				cam.End2D()
+			cam.End2D()
 			--[[
 				cam.Start3D2D(ntPos, ntAng, ntScale)
 					xpcall(function()
