@@ -1155,16 +1155,9 @@ function SCHEMA:OnPlayerDemoted(client, targetClass, targetClassData)
 		client.bannedClasses[targetClass] = CurTime() + 500
 	end
 end
--- RESTRICTED AS FUCK
-local yay = {
-	["STEAM_0:0:14562033"] = true,
-	["STEAM_0:1:18216292"] = true,
-	["STEAM_0:0:19814083"] = true,
-}
-function SCHEMA:CanPlayerModifyConfig(client)
-	local steamid = client:SteamID()
 
-	if (yay[steamid]) then
+function SCHEMA:CanPlayerModifyConfig(client)
+	if (client:IsSuperAdmin()) then
 		return true
 	end
 
