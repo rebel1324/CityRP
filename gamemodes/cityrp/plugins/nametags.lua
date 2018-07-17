@@ -67,7 +67,7 @@ btNameTag.info = {
 	{
 		canDraw = function(client) return client:IsAFK() end,
 		doDraw = function(client, ntX, ntY, ntCol)
-			local s = btNameTag.afkPhrases[math.floor((CurTime()/4 + ply:EntIndex())%#btNameTag.afkPhrases) + 1]
+			local s = btNameTag.afkPhrases[math.floor((CurTime()/4 + client:EntIndex())%#btNameTag.afkPhrases) + 1]
 			return btNameTag:drawText(s, ntX, ntY, ColorAlpha(ntAFK, ntCol.a), 1)
 		end,
 	},
