@@ -66,7 +66,6 @@ function nut.craft.canMake(client, id)
 	return false, "unknown"
 end
 
-
 function nut.craft.make(client, id)
 	local affectedItems, error = nut.craft.canMake(client, id)
 	
@@ -77,12 +76,14 @@ function nut.craft.make(client, id)
 		local inv = char:getInv()
 		local craftData = nut.craft.get(id)
 
-		for _, itemData in pairs(affectedItems) do
-			if (itemData.remove) then
-				itemData.item:remove()
-			else
-				if (itemData.quantity) then
-					itemData.item:setQuantity(itemData.item:getQuantity() - itemData.quantity)
+		for index, data in ipairs(affectedItems) do
+			local itemObject = data.item
+
+			if (itemObject) then
+				if (data.remove) then
+					inv:remove(itemObject.id)
+				else
+					itemObject:setQuantity(data.quantity)
 				end
 			end
 		end
