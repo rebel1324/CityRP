@@ -10,6 +10,14 @@ function META:DrawAt(pos, ang, fov)
 	cam.End3D()
 end
 
+function NUT_RANDOM_SMOKETEXTURE()
+	if (TFA_GET_RANDOM_SMOKE) then
+		return TFA_GET_RANDOM_SMOKE()
+	else
+		return "particle/smokesprites_000"..math.random(1,9)
+	end
+end
+
 WORLDEMITTER = WORLDEMITTER or ParticleEmitter(Vector(0, 0, 0))
 
 local EFFECT = {}
@@ -51,7 +59,7 @@ function EFFECT:Init( data )
 	smoke:SetRoll(math.Rand(180,480))
 	smoke:SetRollDelta(math.Rand(-3,3))
 
-	local smoke = self.emitter:Add("particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*2)
+	local smoke = self.emitter:Add(NUT_RANDOM_SMOKETEXTURE(), pos + VectorRand()*2)
 	smoke:SetVelocity(Vector())
 	smoke:SetDieTime(math.Rand(.2, .4))
 	smoke:SetStartAlpha(math.Rand(188,211))
@@ -100,7 +108,7 @@ function EFFECT:Init( data )
 	for i = 0, smi do
 		dang:RotateAroundAxis(a1, 360/smi)
 
-		local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*10)
+		local smoke = self.emitter:Add( NUT_RANDOM_SMOKETEXTURE(), pos + VectorRand()*10)
 		smoke:SetVelocity(dang:Right()*math.random(250, 290)*scale)
 		smoke:SetDieTime(math.Rand(.2,.4))
 		smoke:SetStartAlpha(math.Rand(188,211))
@@ -142,7 +150,7 @@ function EFFECT:Init( data )
 		dang:RotateAroundAxis(a1, math.random(-15, 15))
 		dang:RotateAroundAxis(a2, math.random(-15, 15))
 
-		local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*10)
+		local smoke = self.emitter:Add( NUT_RANDOM_SMOKETEXTURE(), pos + VectorRand()*10)
 		smoke:SetVelocity(dang:Forward()*math.random(600, 1500)*((i + 3)/(5 + 3))*scale)
 		smoke:SetDieTime(math.Rand(.3,.6))
 		smoke:SetStartAlpha(math.Rand(188,211))
@@ -167,7 +175,7 @@ function EFFECT:Init( data )
 	smoke:SetRollDelta(math.Rand(-3,3))
 	--]]
 
-	local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + dir * 5)
+	local smoke = self.emitter:Add( NUT_RANDOM_SMOKETEXTURE(), pos + dir * 5)
 	smoke:SetVelocity(dir*350*scale)
 	smoke:SetDieTime(math.Rand(.07,.12))
 	smoke:SetStartAlpha(255)
@@ -240,7 +248,7 @@ function EFFECT:Init( data )
 	for i = 0, smi do
 		dang:RotateAroundAxis(a1, 360/smi)
 
-		local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*10)
+		local smoke = self.emitter:Add( NUT_RANDOM_SMOKETEXTURE(), pos + VectorRand()*10)
 		smoke:SetVelocity(dang:Right()*math.random(250, 290)*scale)
 		smoke:SetDieTime(math.Rand(.2,.4))
 		smoke:SetStartAlpha(math.Rand(188,211))

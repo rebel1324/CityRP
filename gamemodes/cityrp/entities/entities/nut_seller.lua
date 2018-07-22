@@ -8,6 +8,14 @@ ENT.AdminOnly = true
 ENT.RenderGroup 		= RENDERGROUP_BOTH
 ENT.Category = "NutScript - CityRP"
 
+local function smokeMat()
+	if (NUT_RANDOM_SMOKETEXTURE) then
+		return NUT_RANDOM_SMOKETEXTURE()
+	else
+		return "particle/smokesprites_000"..math.random(1,9)
+	end
+end
+
 if (CLIENT) then
 	local EFFECT = {}
 	function EFFECT:Init( data ) 
@@ -56,7 +64,7 @@ if (CLIENT) then
 		end
 		
 		for i = 0, 1 do
-			local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*10)
+			local smoke = self.emitter:Add( smokeMat(), pos + VectorRand()*10)
 			smoke:SetVelocity(VectorRand()*150*scale)
 			smoke:SetDieTime(math.Rand(.1,.3))
 			smoke:SetStartAlpha(math.Rand(222,255))
@@ -71,7 +79,7 @@ if (CLIENT) then
 		end
 
 		for i = 0, 2 do
-			local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos + VectorRand()*10)
+			local smoke = self.emitter:Add( smokeMat(), pos + VectorRand()*10)
 			smoke:SetVelocity(VectorRand()*50*scale)
 			smoke:SetDieTime(math.Rand(.1,1))
 			smoke:SetStartAlpha(math.Rand(222,255))

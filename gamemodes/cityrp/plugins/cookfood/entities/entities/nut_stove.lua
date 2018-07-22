@@ -121,6 +121,14 @@ if (SERVER) then
 		end
 	end
 else
+	local function smokeMat()
+		if (NUT_RANDOM_SMOKETEXTURE) then
+			return NUT_RANDOM_SMOKETEXTURE()
+		else
+			return "particle/smokesprites_000"..math.random(1,9)
+		end
+	end
+
 	function ENT:Initialize()
 		self.emitter = ParticleEmitter(self:GetPos())
 		self.nextEmit = 0
@@ -135,7 +143,7 @@ else
 			render.DrawSprite(position, size, size, Color( 255, 162, 76, 255 ) )
 			
 			if self.nextEmit < CurTime() then
-				local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), position	)
+				local smoke = self.emitter:Add(smokeMat(), position	)
 				smoke:SetVelocity(Vector( 0, 0, 120))
 				smoke:SetDieTime(math.Rand(0.2,1.3))
 				smoke:SetStartAlpha(math.Rand(150,200))
