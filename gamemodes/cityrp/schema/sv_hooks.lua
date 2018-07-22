@@ -1464,6 +1464,9 @@ function SCHEMA:OnPlayerHeal(item, client, target, amount, seconds)
 
 	-- heal all weird shits on the character's body.
 	do
+		if (IsValid(target)) then
+			target:setNetVar("legBroken", nil)
+		end
 		target:healLegs()
 	end
 end
