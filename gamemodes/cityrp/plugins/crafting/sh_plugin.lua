@@ -81,7 +81,13 @@ function nut.craft.make(client, id)
 
 			if (itemObject) then
 				if (data.remove) then
-					inv:remove(itemObject.id)
+					itemObject = itemObject or nut.item.list[itemObject.id]
+
+					if (itemObject) then
+						itemObject:remove()
+					else
+						return false, "something went wrong"
+					end
 				else
 					itemObject:setQuantity(data.quantity)
 				end
