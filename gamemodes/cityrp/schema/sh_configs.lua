@@ -216,26 +216,6 @@ nut.config.add("voteDemote", 25, "Percentage of vote to demote people", nil, {
 	category = "schema"
 })
 
-nut.config.add("vendorWeedInterval", 3600, "Amount of seconds to update Narcotic NPC Shops.",
-	function(oldValue, newValue)
-		if (timer.Exists("nutVendorWeedSell")) then
-			timer.Adjust("nutVendorWeedSell", newValue, 0, SCHEMA.UpdateWeedVendors)
-		end
-	end, {
-	data = {min = 600, max = 7200},
-	category = "schema"
-})
-
-nut.config.add("vendorInterval", 3600, "Amount of seconds to update Black Market Dealer NPC Shops.",
-	function(oldValue, newValue)
-		if (timer.Exists("nutVendorSell")) then
-			timer.Adjust("nutVendorSell", newValue, 0, SCHEMA.UpdateVendors)
-		end
-	end, {
-	data = {min = 600, max = 7200},
-	category = "schema"
-})
-
 nut.config.add("wageInterval", 180, "Amount of seconds to distribute paycheck on players.",
 	function(oldValue, newValue)
 		if (timer.Exists("nutSalary")) then

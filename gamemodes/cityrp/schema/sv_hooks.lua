@@ -1045,10 +1045,6 @@ function SCHEMA:OnMoneyPrinterDestroyed(printer, owner, attacker)
 	end
 end
 
-function SCHEMA:PostLoadData()
-	self:UpdateVendors()
-end
-
 function SCHEMA:OnPlayerStunstickEntity(client, entity, weapon)
 	local class = entity:GetClass()
 	local reutrnValue = ILLEGAL_ENTITY[class]

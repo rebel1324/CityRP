@@ -86,65 +86,6 @@ netstream.Hook("nutHitmanAccept", function(hitman, response)
 	end
 end)
 
-function SCHEMA:UpdateWeedVendors()
-	if (!NUT_VENDORS) then return end
-	
-	for k, v in ipairs(NUT_VENDORS) do
-		if (v:GetClass() == "nut_vendor") then
-			v.scale = math.min(v.scale + 0.4, WEEDTABLE.max)
-		end
-	end
-end
-timer.Create("nutVendorWeedSell", nut.config.get("vendorWeedInterval", 3600), 0, SCHEMA.UpdateWeedVendors)
-
-function SCHEMA:OnCharTradeVendor(client, entity, uniqueID, isSellingToVendor)
-	if (isSellingToVendor) then
-		nut.log.add(client, "sell", uniqueID)
-	else
-		nut.log.add(client, "buy", uniqueID)
-	end
-
-	if (isSellingToVendor) then
-		if (entity:getNetVar("name") == "Narcotic") then
-			if (entity.items and entity.items["raweed"]) then
-				entity.scale = math.max(entity.scale - 0.03, WEEDTABLE.min)
-
-				netstream.Start(client, "nutUpdateWeed", entity, entity.scale)
-			end
-		end
-	end
-end
-
-function SCHEMA:UpdateVendors()
-	if (!NUT_VENDORS) then return end
-
-	for k, v in ipairs(NUT_VENDORS) do
-		if (v:GetClass() == "nut_vendor") then
-			if (v:getNetVar("name") == "Black Market Dealer") then
-				v.currentStock = v.currentStock or 0
-				v.currentStock = (v.currentStock + 1) % #WEAPON_STOCKS
-
-				local data = WEAPON_STOCKS[v.currentStock + 1] or WEAPON_STOCKS[1]
-
-				if (data) then
-					v:setNetVar("desc", data.desc)
-					v.items = {}
-
-					for itemID, stockData in pairs(data.stocks) do
-						v.items[itemID] = v.items[itemID] or {}
-
-						v.items[itemID][VENDOR_MODE] = VENDOR_SELLONLY
-						v.items[itemID][VENDOR_PRICE] = stockData.price
-						v.items[itemID][VENDOR_MAXSTOCK] = stockData.amount
-						v.items[itemID][VENDOR_STOCK] = stockData.amount
-					end
-				end
-			end
-		end
-	end
-end
-timer.Create("nutVendorSell", nut.config.get("vendorInterval", 3600), 0, SCHEMA.UpdateVendors)
-
 local whitelist = {
 	["Text"] = true,
 	["Font"] = true,
@@ -175,7 +116,6 @@ netstream.Hook("nutBingle", function(client, entity, mod, value)
 		end
 	end
 end)
-
 
 nut.map = nut.map or {}
 nut.map.ents = {}
