@@ -148,36 +148,6 @@ WEEDTABLE = {
 	max = 1.3,
 }
 
-
-WEAPON_STOCKS = {
-	[1] = {
-		desc = "sellRifles",
-		stocks = {
-			["ma85_wf_ar04"] = {amount = 3, price = 5000},
-			["ma85_wf_ar06"] = {amount = 3, price = 4000},
-			["ma85_wf_ar26"] = {amount = 3, price = 4000},
-			["ma85_wf_ar11"] = {amount = 3, price = 6000},
-			["ma85_wf_ar24"] = {amount = 3, price = 6000},
-			["ma85_wf_shg05"] = {amount = 3, price = 12000},
-		},
-	},
-	[2] = {
-		desc = "sellHeavyWeapons",
-		stocks = {
-			["ma85_wf_mg07"] = {amount = 2, price = 15000},
-		},
-	},
-	[3] = {
-		desc = "sellSniperRifles",
-		stocks = {
-			["ma85_wf_sr34"] = {amount = 1, price = 12000},
-			["ma85_wf_sr39"] = {amount = 1, price = 17000},
-			["ma85_wf_sr04"] = {amount = 1, price = 25000},
-			["ma85_wf_sr34_gold"] = {amount = 1, price = 30000},
-		},
-	},
-}
-
 -- Adding Schema Specific Configs.
 nut.config.setDefault("font", "Bitstream Vera Sans")
 
@@ -304,61 +274,32 @@ nut.config.add("doorTax", 100, "door tax.", nil, {
 
 
 -- yeah yeah i'm going to make this short, okay?
-local function pianoOnly(client)
+local function accesibleOnlyForJob(client, jobClass)
 	local char = client:getChar()
 
 	if (char) then
 		local class = char:getClass()
 
-		if (class != CLASS_PIANIST) then return end
+		if (class != jobClass) then return end
 
 		return true
 	end
 
-	return
+	return false
 end
 
-local function djOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		if (class != CLASS_DEEJAY) then return end
-
-		return true
-	end
-
-	return
-end
-
-local function cookOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		if (class != CLASS_COOK) then return end
-
-		return true
-	end
-
-	return
-end
-
-local function dealerOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		if !(class == CLASS_BLACKDEALER or
-			class == CLASS_DEALER) then return end
-
-		return true
-	end
-
-	return
+local function all(client) return true end
+local function pianoOnly(client) return accesibleOnlyForJob(client, CLASS_PIANIST) end
+local function djOnly(client) return accesibleOnlyForJob(client, CLASS_DEEJAY) end
+local function cookOnly(client) return accesibleOnlyForJob(client, CLASS_COOK) end
+local function docOnly(client) return accesibleOnlyForJob(client, CLASS_DOCTOR) end
+local function hoboOnly(client) return accesibleOnlyForJob(client, CLASS_HOBO) end
+local function busiOnly(client) return accesibleOnlyForJob(client, CLASS_BUSINESS) end
+local function dealerOnly(client) 
+	return (
+		accesibleOnlyForJob(client, CLASS_BLACKDEALER) or
+		accesibleOnlyForJob(client, CLASS_DEALER)
+	)
 end
 
 local function mobOnly(client)
@@ -379,57 +320,6 @@ local function mobOnly(client)
 	return
 end
 
-local function notLaw(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-		local classData = nut.class.list[class]
-
-		if (!classData) then return end
-		if (classData.law == true) then return end
-
-		return true
-	end
-
-	return
-end
-
-local function docOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		return class == CLASS_DOCTOR
-	end
-
-	return
-end
-
-local function hoboOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		return class == CLASS_HOBO
-	end
-
-	return
-end
-
-local function busiOnly(client)
-	local char = client:getChar()
-
-	if (char) then
-		local class = char:getClass()
-
-		return class == CLASS_BUSINESS
-	end
-
-	return
-end
 
 local function onlyLaw(client)
 	local char = client:getChar()
@@ -447,7 +337,9 @@ local function onlyLaw(client)
 	return
 end
 
-local function all(client) return true end
+local function notLaw(client)
+	return not onlyLaw(client)
+end
 
 function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyCondition)
 	local condt = buyCondition or defaultCond
@@ -462,15 +354,6 @@ function nut.bent.add(entClass, entModel, entName, entMax, entPrice, buyConditio
 	}
 
 	return nut.bent.list[entClass]
-end
-
-function nut.bent.jobInclude()
-end
-
-function nut.bent.jobExclude()
-end
-
-function nut.bent.jobTeam()
 end
 
 nut.bent.add("printer_tier1", "models/rebel1324/mprint.mdl", "printerNameTier1", 1, 20000, notLaw)
@@ -515,24 +398,14 @@ nut.tips = {
 	'Did you know? Punching-bag dolls will train your strength skill when hit.',
 	'Did you know? Reading books are great for boosting your stats!',
 	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
-	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
-	'If you\'d like, you can hide these tips via the quick settings. These can be found by holding \'C\' and clicking the gear in the upper right hand corner.',
 	'Did you know? Shooting target dolls will train your firearms skill.',
 	'Certain traders will only sell things to you if you have the right job.',
 	'Did you know? Mobsters, gangsters, and police can communicate with eachother directly using the \'/team\' command.',
 	'Bug reports are resolved much quicker if you attach an image or video.',
-	'Bug reports are resolved much quicker if you attach an image or video.',
-	'Bug reports are resolved much quicker if you attach an image or video.',
 	'Did you know? You can earn ssome extra money using money printers.',
 	'Police receive rewards for confiscating money printers.',
 	'Please separate in-character chat and out of character chat!',
-	'Please separate in-character chat and out of character chat!',
 	'Please check MOTD and IC / OOC before asking for help.',
-	'Please check MOTD and IC / OOC before asking for help.',
-	'Please check MOTD and IC / OOC before asking for help.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-	'Having an issue? You can file a report with an administrator using the report command.',
-	'Having an issue? You can file a report with an administrator using the report command.',
 	'Having an issue? You can file a report with an administrator using the report command.',
 }
 
