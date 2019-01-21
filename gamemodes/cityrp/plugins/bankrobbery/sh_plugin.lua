@@ -158,7 +158,7 @@ else
 				return false, "notCriminal"
 			end
 		else
-			return false, "what the fuck"
+			return false, "notNormal"
 		end
 
 		-- get police

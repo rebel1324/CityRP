@@ -6,7 +6,7 @@ ITEM.desc = "Good crate to open shits"
 ITEM.category = "Crate"
 ITEM.price = 50000
 
--- This item is only for fucking internal use There is no take  .
+-- Are you looking for lootboxes.
 ITEM.functions = {}
 ITEM.functions.open = { 
 	name = "Open",

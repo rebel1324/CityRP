@@ -288,7 +288,7 @@ if (CLIENT) then
 			if (CURRENT_SCREEN_MODULE) then
 				if (use or fire) then
 					if (CURRENT_SCREEN_MODULE.doorRender) then
-						if (DOORSOMETHING) then
+						if (DOOR_USE_FUNCTION) then
 							if (CURRENT_SCREEN_MODULE.onMouseClick) then
 								CURRENT_SCREEN_MODULE:onMouseClick(IN_USE)
 							end

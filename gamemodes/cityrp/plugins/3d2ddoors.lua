@@ -7,7 +7,7 @@ if (SERVER) then
 		hook.Run("ShowTeam", client)
 	end)
 	
-	local fuckoff = function(client, door, state)
+	local doorFunction = function(client, door, state)
 		if (IsValid(client) and client:GetPos():Distance(door:GetPos()) > 96) then
 			return
 		end
@@ -50,7 +50,7 @@ if (SERVER) then
 		) then
 			local time = nut.config.get("doorLockTime", 1)
 			client:setAction("@locking", time, function()
-				fuckoff(client, door, true)
+				doorFunction(client, door, true)
 			end)
 		end
 	end)
@@ -63,7 +63,7 @@ if (SERVER) then
 		) then
 			local time = nut.config.get("doorLockTime", 1)
 			client:setAction("@unlocking", time, function()
-				fuckoff(client, door, false)
+				doorFunction(client, door, false)
 			end)
 		end
 	end)
@@ -216,7 +216,7 @@ if (CLIENT) then
 			local margin = 5
 			local sqsize = 32
 
-			-- fuck off it's not good
+			-- TODO: Fix the performance
 			local cnt = 0
 			for k, v in pairs(commands) do 
 				if (v.canDraw and v.canDraw(entity) == false) then continue end
@@ -225,7 +225,7 @@ if (CLIENT) then
 
 			local totalsizew = cnt * sqsize + cnt * margin
 
-			DOORSOMETHING = false
+			DOOR_USE_FUNCTION = false
 			for k, v in pairs(commands) do
 				local dx, dy = ax + aa - totalsizew/2, ay - sqsize/2
 				v.active = scr:cursorInBox(dx, dy, sqsize, sqsize)
@@ -233,7 +233,7 @@ if (CLIENT) then
 				if (v.canDraw and v.canDraw(entity) == false) then continue end
 
 				if (v.active) then
-					DOORSOMETHING = true
+					DOOR_USE_FUNCTION = true
 				end
 
 				surface.SetDrawColor(0, 0, 0, alpha * (v.active and 1 or 0.7))

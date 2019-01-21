@@ -164,7 +164,7 @@ if (SERVER) then
         end
     end
 
-    -- There is no way to remove the fucking stacked shit
+    -- There is no way to remove the stack.
     function PLAYER:addAttribBoostStack(attrib, amount, time)
         local uniqueID = RealTime()
         local char = self:getChar()

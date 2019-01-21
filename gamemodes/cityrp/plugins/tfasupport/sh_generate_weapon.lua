@@ -127,8 +127,7 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
                     end
                 end
                 
-                -- TODO: Remove THOTS
-                -- jesus fuck this is one messy shit
+                -- TODO: Make it better
                 -- On player eqipped the item, Gives a weapon to player and load the ammo data from the item.
                 ITEM.functions.Equip = {
                     name = "Equip",

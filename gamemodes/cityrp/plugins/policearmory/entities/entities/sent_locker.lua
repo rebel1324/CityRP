@@ -183,7 +183,7 @@ if (CLIENT) then
 
 		self.screen.w, self.screen.h, self.screen.scale = 60, 85, .2
 
-		-- fuckoff
+		-- TODO: Delete dev function
 		self.screen.renderCode = renderCode
 
 		-- Make the local "onMouseClick" function as the Touchable Screen Object's Input event.

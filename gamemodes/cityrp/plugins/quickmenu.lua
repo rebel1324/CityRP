@@ -3,25 +3,23 @@ PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin adds Quick Inventory Key in F3."
 
 if (CLIENT) then
-	CURRNET_INVENTORY_MEME = nil
+	local quickInventoryPanel = nil
 
 	netstream.Hook("quickMenu", function()
-		if (CURRNET_INVENTORY_MEME) then
-			CURRNET_INVENTORY_MEME:Remove()
+		if (quickInventoryPanel) then
+			quickInventoryPanel:Remove()
 		end
 
 		local inventory = LocalPlayer():getChar():getInv()
 
 		if (inventory) then
-			local shitPanel = inventory:show()
+			quickInventoryPanel = inventory:show()
 			
-			function shitPanel:OnKeyCodePressed(key)
+			function quickInventoryPanel:OnKeyCodePressed(key)
 				if (key == 94) then
 					shitPanel:Remove()
 				end
 			end
-
-			CURRNET_INVENTORY_MEME = shitPanel 
 		end
 	end)
 else

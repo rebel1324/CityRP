@@ -57,7 +57,7 @@ do
 				[2655] = 1,
 			}
 			
-			hook.Add("AcceptInput", "shitfucker", function(a, b , c)
+			hook.Add("AcceptInput", "secureUnlocker", function(a, b , c)
 				local id = a:MapCreationID()
 				
 				if (b == "Use") then

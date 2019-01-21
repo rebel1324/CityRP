@@ -177,10 +177,10 @@ if (SERVER) then
 	end
 
 	function ENT:Use(activator)
-		if (fuckoff and fuckoff > CurTime()) then return end
+		if (self.nextUse and self.nextUse > CurTime()) then return end
 
 		if (activator == self:CPPIGetOwner()) then
-			fuckoff = CurTime() + 1
+			self.nextUse = CurTime() + 1
 			netstream.Start(activator, "nutCashMachine", self, self:getSellingItems())
 		end
 	end

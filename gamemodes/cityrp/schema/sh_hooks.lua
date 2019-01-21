@@ -280,7 +280,7 @@ function SCHEMA:CanTool(client, trace, tool, ENT)
 end
 
 function SCHEMA:CanItemBeTransfered(itemObject, curInv, inventory)
-	-- what the fuck is going on
+	-- Abnormal Null ItemObject Request
 	if (!itemObject) then
 		if (SERVER) then
 			for k, v in ipairs(player.GetAll()) do

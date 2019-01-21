@@ -167,7 +167,6 @@ function SCHEMA:BankIncomePayload()
 			local faction = nut.faction.indices[charFaction]
 
 			if (faction.salary) then
-				-- because i'm fucking lazy lmaoo
 				timer.Simple(timerIndex * .1, function()
 					if (IsValid(client)) then
 						if (hook.Run("CanPlayerGetBankIncome", client) == false) then
@@ -281,7 +280,7 @@ function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
 		-- TODO: reduce iteration count
 		for k, v in ipairs(ents.GetAll()) do
 			if (v:GetPersistent()) then continue end
-			if (v:GetNWBool("fuckoff")) then continue end
+			if (v:GetNWBool("permaBingle")) then continue end
 
 			if (v:CPPIGetOwner() == client) then
 				v:Remove()
@@ -293,7 +292,7 @@ function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
 		local char = client:getChar()
 		client:arrest(false)
 	end
-	// TODO: Add fucking jail-bail re-jailer
+	// TODO: Add jail-bail re-jailer
 end
 
 function SCHEMA:OnPlayerDropWeapon(client, item, entity)
@@ -387,7 +386,7 @@ function SCHEMA:PlayerDeath(client, inflicter, attacker)
 	end
 end
 
--- Don't let them spray thier fucking spray without spraycan
+-- Don't let them spray their spray without spraycan
 function SCHEMA:PlayerSpray(client)
 	return true
 	--return (client:getChar():getInv():hasItem("spraycan")) or false
@@ -585,7 +584,7 @@ function SCHEMA:PlayerDisconnected(client)
 	-- TODO: reduce iteration count
 	for k, v in ipairs(ents.GetAll()) do
 		if (v:GetPersistent()) then continue end
-		if (v:GetNWBool("fuckoff")) then continue end
+		if (v:GetNWBool("permaBingle")) then continue end
 		
 		if (v:CPPIGetOwner() == client) then
 			v:Remove()
@@ -819,7 +818,7 @@ function SCHEMA:SaveData()
 			continue
 		end
 
-		if (class:find("bingle") and v:GetNWBool("fuckoff")) then
+		if (class:find("bingle") and v:GetNWBool("permaBingle")) then
 			table.insert(savedEntities, {
 				class = class, 
 				pos = v:GetPos(),
@@ -890,7 +889,7 @@ function SCHEMA:LoadData()
 			ent:SetColorBack(v.colback)
 			ent:SetColorText(v.coltext)
 			ent:SetColorOut(v.colout)
-			ent:SetNWBool("fuckoff", true)
+			ent:SetNWBool("permaBingle", true)
 		end
 	end
 

@@ -134,7 +134,7 @@ if (SERVER) then
 		self:SetResult(rewardIndex)
 
 		-- this will do the stuff.
-		timer.Create("slotGiveReward_fuckoff_" .. client:SteamID() .. self:EntIndex(), 2, 1, function()
+		timer.Create("slotMachine_Reward_" .. client:SteamID() .. self:EntIndex(), 2, 1, function()
 			if (self and self:IsValid()) then
 				self:SetGame(false)
 

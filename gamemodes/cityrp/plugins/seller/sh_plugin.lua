@@ -67,7 +67,7 @@ if (SERVER) then
 			if (!IsValid(item)) then
 				return client:notifyLocalized("illegalAccess")
 			end
-			-- fucker
+			
 			local price = math.Round(math.max(0, tonumber(text) or 0))
 			
 			item:setNetVar("sellPrice", price)

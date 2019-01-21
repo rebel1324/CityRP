@@ -190,7 +190,7 @@ else
 			coAng:RotateAroundAxis(coAng:Right(), -90)
 			self.screen.w, self.screen.h, self.screen.scale = 50, 50, .2
 
-			-- fuckoff
+			-- TODO: Remove dev code.
 			self.screen.renderCode = renderCode
 
 			local dist = LocalPlayer():GetPos():Distance(self:GetPos())

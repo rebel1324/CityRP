@@ -25,8 +25,7 @@ function meta:getStashMax()
 	return nut.config.get("maxStash", 10)
 end
 
--- I'm so fucking lazy
--- Stash vgui needs more better sync.
+-- TODO: Stash vgui needs more better sync.
 if (CLIENT) then
 	netstream.Hook("stashIn", function(id)
 		if (nut.gui.stash and nut.gui.stash:IsVisible()) then

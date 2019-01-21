@@ -1,4 +1,4 @@
-print("this is getting loaded just before fucking CityRP loaded.")
+print("this is getting loaded just before CityRP loaded.")
 -- This hook prevents default Nutscript plugins to load.
 local noLoad = {
 	chatbox  = false, -- CityRP is using XPChat as default chat.
