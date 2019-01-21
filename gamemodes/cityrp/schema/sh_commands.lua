@@ -217,7 +217,6 @@ nut.command.add("lawboard", {
 			return false
 		end
 			
-		
 		if (IsValid(client.lawboard)) then
 			client.lawboard:Remove()
 		end
@@ -227,7 +226,6 @@ nut.command.add("lawboard", {
 		traceData.endpos = traceData.start + client:GetAimVector() * 256
 		traceData.filter = client
 		trace = util.TraceLine(traceData)
-		
 
 		local entity = ents.Create("nut_lawboard")
 		entity:SetPos(trace.HitPos)
@@ -284,6 +282,8 @@ nut.command.add("bankdeposit", {
 
 		if (IsValid(atmEntity) and hook.Run("CanUseBank", client, atmEntity)) then
 			local amount = tonumber(table.concat(arguments, ""))
+			amount = math.max(0, amount)
+
 			local char = client:getChar()
 
 			if (amount and amount > 0 and char) then
@@ -395,6 +395,7 @@ nut.command.add("setprice", {
 
 		if (target and target:IsValid()) then
 			local price = tonumber(table.concat(arguments, ""))
+			price = math.max(0, price)
 
 			if (!price or price < 0) then return end
 			if (target.vending and price) then
