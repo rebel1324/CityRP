@@ -150,7 +150,7 @@ else
 		self.screen.w, self.screen.h, self.screen.scale = 225, 120, .2
 
 		-- TODO: Remove dev code.
-		self.screen.renderCode = renderCode
+		-- self.screen.renderCode = renderCode
 
 		-- If The Screen has no Focus(If player is not touching it), Increase Idle Screen's Alpha.
 		if (self.screen.hasFocus) then

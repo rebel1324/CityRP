@@ -27,7 +27,6 @@ nut.config.add("orgsFee", 1000000, "Money that costs for the organization", nil,
 	category = "orgs"
 })
 
-
 if (CLIENT) then
     local myPanel
     hook.Add("CreateMenuButtons", "nutOrganization", function(tabs)
