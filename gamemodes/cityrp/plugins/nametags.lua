@@ -193,7 +193,7 @@ hook.Add("PostPlayerDraw", "btNameTag", function(client)
 
 			cam.Start2D()
 				local scr = ntPos:ToScreen()
-				local scale = math.max((1 - ntDist) - (ntDist) * .7, 0.00001)
+				local scale = math.max(math.abs(1 - ntDist) * .8, 0.00001)
 				scale = scale * .8 
 				local ntX, ntY = 0, 0
 

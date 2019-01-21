@@ -92,16 +92,18 @@ if (SERVER) then
 
 		if (self:GetDTBool(1) and self:GetDTInt(0) == self.maxGrowth) then
 			local inv = char:getInv()
-			local wow = inv:add("raweed")
+			local wow = 
 
-			if (wow) then
-				self:SetDTBool(1, false)
-				self:SetDTInt(0, 0)
+			inv:add("raweed"):next(function(item)
+				if (IsValid(self) and IsValid(client)) then
+					self:SetDTBool(1, false)
+					self:SetDTInt(0, 0)
 
-				client:notifyLocalized("moneyTaken", "생 대마")
-			end
+					client:notifyLocalized("moneyTaken", "생 대마")
+				end
+			end, function(error)
 
-			return
+			end)
 		end
 	end
 

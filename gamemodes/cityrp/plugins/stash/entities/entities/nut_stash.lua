@@ -35,7 +35,7 @@ if (SERVER) then
 	end
 
 	function ENT:Use(activator)
-		requestStash(activator)
+		hook.Run("DoStashRequest", activator)
 	end
 else
 	function ENT:Initialize()

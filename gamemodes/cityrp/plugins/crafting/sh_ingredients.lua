@@ -43,7 +43,7 @@ local generateItems = {
     }
 }
 
-function PLUGIN:InitializedPlugins()
+function PLUGIN:InitializedItems()
     for prefix, items in pairs(generateItems) do
         for uniqueID, itemInfo in pairs(items) do
             local uniqueID = prefix .. "_" .. uniqueID

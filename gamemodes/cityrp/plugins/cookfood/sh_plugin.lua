@@ -1,3 +1,7 @@
+--[[
+	WARNING: THIS COOKFOOD PLUGIN'S ENTITY IS NOW ONLY WORKS IN GRID INVENTORY.
+]]
+
 local PLUGIN = PLUGIN
 PLUGIN.name = "Cook Food"
 PLUGIN.author = "Black Tea"
@@ -46,7 +50,7 @@ if (CLIENT) then
 	local color = Color(39, 174, 96)
 
 	do
-		 nut.bar.add(function()
+		nut.bar.add(function()
 			return (1 - LocalPlayer():getHungerPercent())
 		end, color, nil, "hunger")
 	end
@@ -69,51 +73,19 @@ if (CLIENT) then
 
 	local timers = {5, 15, 30}
 
-	netstream.Hook("stvOpen", function(entity, index)
-		local inventory = nut.item.inventories[index]
-
-		if (IsValid(entity) and inventory and inventory.slots) then
-			nut.gui.inv1 = vgui.Create("nutInventory")
-			nut.gui.inv1:ShowCloseButton(true)
-
-			local inventory2 = LocalPlayer():getChar():getInv()
-
-			if (inventory2) then
-				nut.gui.inv1:setInventory(inventory2)
-			end
-
-			local panel = vgui.Create("nutInventory")
-			panel:ShowCloseButton(true)
-			panel:SetTitle("Cookable Object")
-			panel:setInventory(inventory)
-			panel:MoveLeftOf(nut.gui.inv1, 4)
-			panel.OnClose = function(this)
-				if (IsValid(nut.gui.inv1) and !IsValid(nut.gui.menu)) then
-					nut.gui.inv1:Remove()
-				end
-
-				netstream.Start("invExit")
-			end
-			
-			function nut.gui.inv1:OnClose()
-				if (IsValid(panel) and !IsValid(nut.gui.menu)) then
-					panel:Remove()
-				end
-
-				netstream.Start("invExit")
-			end
-
+	hook.Add("OnCreateStoragePanel", "nutStovePanel", function(playerInventoryPanel, storageInventoryPanel, entityStorage)
+		if (entityStorage.isCooker) then
 			local actPanel = vgui.Create("DPanel")
 			actPanel:SetDrawOnTop(true)
-			actPanel:SetSize(100, panel:GetTall())
+			actPanel:SetSize(100, storageInventoryPanel:GetTall())
 			actPanel.Think = function(this)
-				if (!panel or !panel:IsValid() or !panel:IsVisible()) then
+				if (!storageInventoryPanel or !storageInventoryPanel:IsValid() or !storageInventoryPanel:IsVisible()) then
 					this:Remove()
 
 					return
 				end
 
-				local x, y = panel:GetPos()
+				local x, y = storageInventoryPanel:GetPos()
 				this:SetPos(x - this:GetWide() - 5, y)
 			end
 
@@ -124,18 +96,21 @@ if (CLIENT) then
 				btn:DockMargin(5, 5, 5, 0)
 
 				function btn.DoClick()
-					netstream.Start("stvActive", entity, v)
+					netstream.Start("stvActive", entityStorage, v)
 				end
 			end
-
-			nut.gui["inv"..index] = panel
-		end
+		end 
 	end)
 else
 	local PLUGIN = PLUGIN
 
+	function PLUGIN:CanSaveCookers()
+		return false
+	end
+
 	function PLUGIN:LoadData()
-		if (true) then return end
+		local result = hook.Run("CanSaveCookers")
+		if (result == false) then return end
 		
 		local savedTable = self:getData() or {}
 
@@ -149,7 +124,8 @@ else
 	end
 	
 	function PLUGIN:SaveData()
-		if (true) then return end
+		local result = hook.Run("CanSaveCookers")
+		if (result == false) then return end
 
 		local savedTable = {}
 
@@ -177,6 +153,8 @@ else
 		local timerName = client:SteamID() .. "_HUNGER_TIMER"
 		timer.Create(timerName, 2, 0, function() 
 			if (IsValid(client)) then
+				if (hook.Run("CanHungerTick", client, percent) == false) then return end
+
 				local percent = (1 - client:getHungerPercent())
 
 				if (percent <= 0) then

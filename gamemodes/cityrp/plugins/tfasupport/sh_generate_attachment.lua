@@ -118,5 +118,5 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
         ITEM.icon = v.icon
     end
 
-    print("TFA Integration: Generated Attachments")
+    print("[+] TFA Integration: Generated Attachments")
 end)

@@ -155,6 +155,10 @@ function SCHEMA:BankIncomePayload()
 	local timerIndex = 0
 
 	for k, client in ipairs(player.GetAll()) do
+		if (client.IsAFK and client:IsAFK()) then
+			continue
+		end
+		
 		local char = client:getChar()
 
 		-- If faction has default salary, give them the salary.
@@ -289,16 +293,7 @@ function SCHEMA:PlayerLoadedChar(client, netChar, prevChar)
 		local char = client:getChar()
 		client:arrest(false)
 	end
-
-
-	local char = client:getChar()
-	if (char) then
-		if (char:getArrest()) then
-			return
-		else
-			client:setNetVar("jailTime", nil)
-		end
-	end
+	// TODO: Add fucking jail-bail re-jailer
 end
 
 function SCHEMA:OnPlayerDropWeapon(client, item, entity)
@@ -369,28 +364,23 @@ function SCHEMA:PlayerDeath(client, inflicter, attacker)
 		local inv = char:getInv()
 		local items = inv:getItems()
 
-		for k, v in pairs(items) do
-			inv = nut.item.inventories[v.invID]
+		for _, itemObject in pairs(items) do
+			inv = nut.item.inventories[itemObject.invID]
 
-			if (v.removeOnDeath) then
-				if (v.outfitCategory) then
-					if (v:getData("equip", false)) then
-						v:remove()
-					end
-				else
-					v:remove()
-				end
+			if (itemObject.removeOnDeath) then
+				itemObject:remove()
+				continue
 			end
 
-			if (v.dropOnDeath) then
-				local ent = item2world(inv, v, client:GetPos() + Vector(0, 0, 10))
+			if (itemObject.dropOnDeath) then
+				local ent = item2world(inv, itemObject, client:GetPos() + Vector(0, 0, 10))
 
-				hook.Run("OnPlayerDropItem", client, v, ent)
+				hook.Run("OnPlayerDropItem", client, itemObject, ent)
 			end
 
-			if (v.isWeapon) then
-				if (v:getData("equip")) then
-					v:remove()
+			if (itemObject.isWeapon) then
+				if (itemObject:getData("equip")) then
+					itemObject:remove()
 				end
 			end
 		end
@@ -619,16 +609,29 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 			nut.log.add(arrester, "arrest", arrested)
 		end
 
-		if (IsValid(arrester)) then
-			arrester:notify(arrested:Nick() .. " 님을 " .. nut.config.get("jailTime") ..  " 초 동안 체포하였습니다." )
-		end
-
 		if (IsValid(arrested)) then
-			arrested:notify("당신은 체포되었습니다. 수감시간: " .. nut.config.get("jailTime") ..  " 초." )
-			arrested:Spawn()
+			local char = arrested:getChar()
+			local inv = char:getInv():getItems()
+
+			if (arrested:isWanted()) then
+				char:setData("wanted", false, nil, player.GetAll())
+			end
+			
+			for _, itemObject in pairs(inv) do
+				print(itemObject.name)
+				if (itemObject.isWeapon) then
+					itemObject:remove()
+				else
+					if (itemObject:getData("equip")) then
+						itemObject:setData("equip", nil)
+					end
+				end
+			end
+
 			if (self.prisonPositions and #self.prisonPositions > 0) then
 				arrested:SetPos(table.Random(self.prisonPositions))
 			end
+
 			arrested:setAction("감옥 타이머", nut.config.get("jailTime"))
 			arrested:StripWeapons()
 			
@@ -639,58 +642,29 @@ function SCHEMA:OnPlayerArrested(arrester, arrested, isArrest)
 					arrested:notify("감옥에서 석방되었습니다.")
 					arrested:arrest(false)
 				end
-            end)
+			end)
+			
+			hook.Run("PlayerHitArrested", arrester, arrested, isArrest)
 		end
 	else
 		if (IsValid(arrester)) then
 			nut.log.add(arrester, "unarrest")
 		end
+
 		if (IsValid(arrested)) then
 			nut.log.add(arrested, "unarrested")
-		end
-	end
 
-	if (isArrest) then
-		local char = arrested:getChar()
-		local inv = char:getInv():getItems()
-
-		if (char:getWanted()) then
-			char:setData("wanted", false, nil, player.GetAll())
+			local jailTimer = arrested:UniqueID() .. "_jailTimer"
+			timer.Remove(jailTimer)
 		end
 
-		for k, v in ipairs(inv) do
-			if (v:getData("equip")) then
-				v:setData("equip", nil)
-			end
-		end
-
-		local prison = SCHEMA.prisonPositions
-
-		arrested:StripWeapons()
-
-		if (#prison > 0) then
-			arrested:SetPos(table.Random(prison))
-		end
-
-		if (arrester) then
-			netstream.Start(player.GetAll(), "nutJailChat", arrester, arrested)
-		end
-
-		if (arrested:isWanted()) then
-			char:setData("wanted", false, nil, player.GetAll())
-		end
-
-		hook.Run("PlayerHitArrested", arrester, arrested, isArrest)
-	else
-		if (arrester) then
+		if (IsValid(arrester) and IsValid(arrested)) then
 			local pos = arrested:GetPos()
 
 			arrested:Spawn()
 			arrested:SetPos(pos)
 		else
 			arrested:Spawn()
-			local jailTimer = arrested:UniqueID() .. "_jailTimer"
-			timer.Remove(jailTimer)
 		end
 	end
 end
@@ -1364,14 +1338,16 @@ function SCHEMA:OnPlayerPurchaseDoor(client, entity, purchase, childFunc)
 	end)
 end 
 
-function SCHEMA:OnCharDisconnect(char, client)
-	if (client.uneqTeam) then
-		for k, v in pairs(client.uneqTeam) do
-			if (v) then
-				v:setData("equip", nil)
-			end
+function SCHEMA:OnCharDisconnect(client, char)
+	if (char) then
+		local inv = char:getInv()
 
-			client.uneqTeam[k] = nil
+		if (inv) then
+			for _, itemObject in pairs(inv:getItems()) do
+				if (itemObject.team) then
+					itemObject:setData("equip", false)
+				end
+			end
 		end
 	end
 end
@@ -1404,13 +1380,14 @@ function SCHEMA:ResetVariables(client, signal)
 	end
 
 	if (signal == SIGNAL_JOB) then
-		if (client.uneqTeam) then
-			for k, v in pairs(client.uneqTeam) do
-				if (v) then
-					v:setData("equip", nil)
-				end
+		local inv = char:getInv()
 
-				client.uneqTeam[k] = nil
+		if (inv) then
+			for _, itemObject in pairs(inv:getItems()) do
+				if (itemObject.team) then
+					itemObject:setData("equip", nil)
+					client:removePart(itemObject.uniqueID)
+				end
 			end
 		end
 	end
@@ -1495,4 +1472,18 @@ end
 
 function GM:ScalePlayerDamage(client, hitGroup, dmgInfo)
 	dmgInfo:ScaleDamage(1)
+end
+
+function SCHEMA:CanHungerTick(client)
+	if (client:isArrested()) then
+		return false
+	end
+
+	if (IsPurge) then
+		return false
+	end
+end
+
+function GM:PlayerSpawnVehicle(client, model, name, data)
+	if (client:IsSuperAdmin()) then return true end
 end

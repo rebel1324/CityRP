@@ -90,10 +90,10 @@ if (CLIENT) then
 		local client = LocalPlayer()
 		
 		if (client and client:getChar() and client:getStolenMoney() > 0) then
-			local tx, ty = nut.util.drawText("On Bank Robbery!", 36, 40, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutBigFont")
-			local a, b = nut.util.drawText("Time Left: " .. math.Round(math.max(0, client:getNetVar("rTimer") - CurTime())) .. " seconds", 40, 40 + ty*.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
+			local tx, ty = nut.util.drawText("은행 털이 중!", 36, 40, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutBigFont")
+			local a, b = nut.util.drawText("남은 시간: " .. math.Round(math.max(0, client:getNetVar("rTimer") - CurTime())) .. " seconds", 40, 40 + ty*.9, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
 			a, b = a + tx, b + ty*.9
-			tx, ty = nut.util.drawText("Stolen Money: " .. nut.currency.get(client:getStolenMoney()), 40, 40 + b, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
+			tx, ty = nut.util.drawText("털은 돈: " .. nut.currency.get(client:getStolenMoney()), 40, 40 + b, Color(255, 255, 255, 255), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, "nutMediumFont")
 		end
 	end	
 else
@@ -131,7 +131,7 @@ else
 
 		if (!client:isWanted()) then
 			nut.log.add(client, "robbery")
-			client:wanted(true, "Bank Robbery", client)
+			client:wanted(true, "은행 털이!", client)
 		end		
 	end
 

@@ -71,6 +71,7 @@ end
 
 if (CLIENT) then
 	local nutDoor = nut.plugin.list["doors"]
+	
 	local LUASCREEN = LuaScreen()
 	LUASCREEN.noClipping = true
 	LUASCREEN.scale = .1

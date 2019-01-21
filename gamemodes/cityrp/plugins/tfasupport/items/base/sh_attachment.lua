@@ -17,6 +17,8 @@ ITEM.maxQuantity = 1 -- maximum use of attachment
 ]]
 
 local function attachment(item, data, combine)
+    local d = deferred.new()
+
     local client = item.player
     local char = client:getChar()
     local inv = char:getInv()
@@ -42,9 +44,7 @@ local function attachment(item, data, combine)
     end
 
     if (not target) then
-        client:notifyLocalized("noWeapon")
-
-        return false
+        return d:reject("noWeapon")
     else
         local class = target.class
         local SWEP = weapons.Get(class)
@@ -56,9 +56,7 @@ local function attachment(item, data, combine)
             if (weaponAttachments) then		                                
                 -- Is the Weapon Slot Filled?
                 if (mods[item.slot]) then
-                    client:notifyLocalized("alreadyAttached")
-
-                    return false
+                    return d:reject("alreadyAttached")
                 end
 
                 local targetAttachment
@@ -78,15 +76,11 @@ local function attachment(item, data, combine)
                 end
 
                 if (not targetAttachment) then
-                    client:notifyLocalized("cantAttached")
-
-                    return false
+                    return d:reject("cantAttached")
                 end
                 
                 if (item.useQuantity and item:getQuantity() <= 1) then
-                    client:notifyLocalized("needRefill")
-
-                    return false
+                    return d:reject("needRefill")
                 end
 
                 mods[item.slot] = {item.uniqueID, targetAttachment, item.reusable}
@@ -116,20 +110,17 @@ local function attachment(item, data, combine)
                         item:setQuantity(item:getQuantity() - 1, true)
                     end
 
-                    return false
+                    return d:resolve(false)
                 else
-                    return true
+                    return d:resolve(true)
                 end
             else
-                client:notifyLocalized("notCW")
-
-                return false
+                return d:reject("notCW")
             end
         end
     end
 
-    client:notifyLocalized("noWeapon")
-    return false
+    return d:reject("noWeapon")
 end
 
 ITEM.functions.use = {
@@ -165,26 +156,30 @@ ITEM.functions.use = {
         return (!IsValid(item.entity))
     end,
     onRun = function(item, data)
-         return attachment(item, data, false)
+        attachment(item, data, false):next(function(remove)
+            if (remove == true) then
+                item:remove()
+            end
+        end, function(error)
+            item.player:notifyLocalized(error)
+            return false
+        end)
 	end,
 }
 
-ITEM.functions.combine = {
-    onCanRun = function(item, data)
-        local targetItem = nut.item.instances[data]
-        
-        if (data and targetItem) then
-            if (!IsValid(item.entity) and targetItem.isWeapon and targetItem.isTFA) then
-                return true
-            else
-                return false
+function ITEM:onCombineTo(other)
+    local client = self.player
+
+    if (other.isWeapon and other.isTFA) then
+        attachment(self, other:getID(), true):next(function(remove)
+            if (remove == true) then
+                self:remove()
             end
-        end
-    end,
-    onRun = function(item, data)
-        return attachment(item, data, true)
-    end,
-}
+        end, function(error)
+            client:notifyLocalized(error)
+        end)
+    end
+end
 
 ITEM.functions.refill = {
     onCanRun = function(item, data)

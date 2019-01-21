@@ -98,7 +98,7 @@ function ENT:Think()
 		phys:EnableMotion(true)
 	end
 
- 	if not IsValid(self:Getowning_ent()) then
+ 	if not IsValid(self:Getowning_ent()) or self:WaterLevel() > 0 then
 		self:Destruct()
 		self:Remove()
 	end

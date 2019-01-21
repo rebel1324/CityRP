@@ -705,3 +705,9 @@ if (CLIENT) then
 		end
 	end)
 end
+
+function SCHEMA:CanDisplayClass(k,v )
+	if (v.needKiosk) then
+		return false
+	end
+end

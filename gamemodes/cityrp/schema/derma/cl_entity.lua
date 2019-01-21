@@ -89,12 +89,14 @@ PANEL = {}
         self.list:Clear()
         
         for k, v in SortedPairs(nut.bent.list) do
-            if (v.condition(LocalPlayer())) then
+            if (v.condition and v.condition(LocalPlayer())) then
                 local panel = vgui.Create("nutEntitiesPanel", self.list)
                 panel:setEntity(v)
                 table.insert(self.entityPanels, panel)
 
                 self.list:AddItem(panel)
+            else
+                print(k, v)
             end
         end
     end

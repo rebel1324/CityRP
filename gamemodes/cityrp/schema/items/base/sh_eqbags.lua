@@ -1,53 +1,50 @@
+local INVENTORY_TYPE_ID = "grid"
+
 ITEM.name = "Bag"
-ITEM.desc = "A bag to hold items."
+ITEM.desc = "A bag to hold more items."
 ITEM.model = "models/props_c17/suitcase001a.mdl"
 ITEM.category = "Storage"
-ITEM.width = 1
-ITEM.height = 1
-ITEM.invWidth = 4
-ITEM.invHeight = 2
 ITEM.isBag = true
+
 ITEM.outfitCategory = "bags"
 ITEM.pacData = {}
+ITEM.width = 1
+ITEM.height = 1
 
-function ITEM:getDesc()
-	if (self.entity and IsValid(self.entity)) then
-		return L("eqbagDescEntity", self.invWidth or 4, self.invHeight or 2)
-	end
-
-	return L("eqbagDesc", self.invWidth or 4, self.invHeight or 2)
-end
+-- The size of the inventory held by this item.
+ITEM.invWidth = 2
+ITEM.invHeight = 2
 
 ITEM.functions.View = {
 	icon = "icon16/briefcase.png",
 	onClick = function(item)
-		local index = item:getData("id")
+		local inventory = item:getInv()
+		if (not inventory) then return false end
 
-		if (index) then
-			local panel = nut.gui["inv"..index]
-			local parent = item.invID and nut.gui["inv"..item.invID] or nil
-			local inventory = nut.item.inventories[index]
-			
-			if (IsValid(panel)) then
-				panel:Remove()
-			end
+		local panel = nut.gui["inv"..inventory:getID()]
+		local parent = item.invID and nut.gui["inv"..item.invID] or nil
 
-			if (inventory and inventory.slots) then
-				panel = vgui.Create("nutInventory", parent)
-				panel:setInventory(inventory)
-				panel:ShowCloseButton(true)
-				panel:SetTitle(item.name)
-
-				nut.gui["inv"..index] = panel
-			else
-				ErrorNoHalt("[NutScript] Attempt to view an uninitialized inventory '"..index.."'\n")
-			end
+		if (IsValid(panel)) then
+			panel:Remove()
 		end
 
+		if (inventory) then
+			local panel = nut.inventory.show(inventory, parent)
+			if (IsValid(panel)) then
+				panel:ShowCloseButton(true)
+				panel:SetTitle(item:getName())
+			end
+		else
+			local itemID = item:getID()
+			local index = item:getData("id", "nil")
+			ErrorNoHalt(
+				"Invalid inventory "..index.." for bag item "..itemID.."\n"
+			)
+		end
 		return false
 	end,
 	onCanRun = function(item)
-		return !IsValid(item.entity) and item:getData("id") and item:getData("equip") == true
+		return !IsValid(item.entity) and item:getInv() and item:getData("equip") == true
 	end
 }
 
@@ -103,108 +100,119 @@ ITEM.functions.Equip = {
 	end
 }
 
--- Called when a new instance of this item has been made.
-function ITEM:onInstanced(invID, x, y)
-	local inventory = nut.item.inventories[invID]
+function ITEM:onInstanced()
+	local data = {
+		item = self:getID(),
+		w = self.invWidth,
+		h = self.invHeight
+	}
+	nut.inventory.instance(INVENTORY_TYPE_ID, data)
+		:next(function(inventory)
+			self:setData("id", inventory:getID())
+			hook.Run("SetupBagInventoryAccessRules", inventory)
+			inventory:sync()
+			self:resolveInvAwaiters(inventory)
+		end)
+end
 
-	nut.item.newInv(inventory and inventory.owner or 0, self.uniqueID, function(inventory)
-		inventory.vars.isBag = self.uniqueID
-		self:setData("id", inventory:getID())
-	end)
+function ITEM:onRestored()
+	local invID = self:getData("id")
+	if (invID) then
+		nut.inventory.loadByID(invID)
+			:next(function(inventory)
+				hook.Run("SetupBagInventoryAccessRules", inventory)
+				self:resolveInvAwaiters(inventory)
+			end)
+	end
+end
+
+function ITEM:onRemoved()
+	local invID = self:getData("id")
+	if (invID) then
+		nut.inventory.deleteByID(invID)
+	end
 end
 
 function ITEM:getInv()
-	local index = self:getData("id")
+	return nut.inventory.instances[self:getData("id")]
+end
 
-	if (index) then
-		return nut.item.inventories[index]
+function ITEM:onSync(recipient)
+	local inventory = self:getInv()
+	if (inventory) then
+		inventory:sync(recipient)
 	end
 end
 
--- Called when the item first appears for a client.
-function ITEM:onSendData()
-	local index = self:getData("id")
-	local client = self.player
-	local char = client:getChar()
-	local charID = char:getID()
+function ITEM.postHooks:drop()
+	local invID = self:getData("id")
+	if (invID) then
+		net.Start("nutInventoryDelete")
+			net.WriteType(invID)
+		net.Send(self.player)
+	end
+end
 
-	if (index) then
-		local inventory = nut.item.inventories[index]
+function ITEM:onCombine(other)
+	local client = self.player
+	local invID = self:getInv() and self:getInv():getID() or nil
+	if (not invID) then return end
+
+	-- If other item was combined onto this item, put it in the bag.
+	local res = hook.Run(
+		"HandleItemTransferRequest",
+		client,
+		other:getID(),
+		nil,
+		nil,
+		invID
+	)
+	if (not res) then return end
+
+	-- If an attempt was made, either report the error or make a
+	-- "success" sound.
+	res:next(function(res)
+		if (not IsValid(client)) then return end
+		if (istable(res) and type(res.error) == "string") then
+			return client:notifyLocalized(res.error)
+		end
+		client:EmitSound(
+			"physics/cardboard/cardboard_box_impact_soft2.wav",
+			50
+		)
+	end)
+end
+
+if (SERVER) then
+	function ITEM:onDisposed()
+		local inventory = self:getInv()
+		if (inventory) then
+			inventory:destroy()
+		end
+	end
+
+	function ITEM:resolveInvAwaiters(inventory)
+		if (self.awaitingInv) then
+			for _, d in ipairs(self.awaitingInv) do
+				d:resolve(inventory)
+			end
+			self.awaitingInv = nil
+		end
+	end
+
+	function ITEM:awaitInv()
+		local d = deferred.new()
+		local inventory = self:getInv()
 
 		if (inventory) then
-			inventory:setOwner(charID)
-			inventory:sync(self.player)
+			d:resolve(inventory)
 		else
-			nut.item.restoreInv(self:getData("id"), self.invWidth, self.invHeight, function(inventory)
-				inventory.vars.invType = self.uniqueID
-				inventory:setOwner(charID, true)
-			end)
-		end
-	else
-		local inventory = nut.item.inventories[self.invID]
-
-		nut.item.newInv(charID, self.uniqueID, function(inventory)
-			inventory.vars.invType = self.uniqueID
-			self:setData("id", inventory:getID())
-		end)
-	end
-end
-
--- Called before the item is permanently deleted.
-function ITEM:onRemoved()
-	local index = self:getData("id")
-
-	if (index) then
-		nut.db.query("DELETE FROM nut_items WHERE _invID = "..index)
-		nut.db.query("DELETE FROM nut_inventories WHERE _invID = "..index)
-	end
-end
-
--- Called when the item should tell whether or not it can be transfered between inventories.
-function ITEM:onCanBeTransfered(oldInventory, newInventory)
-	if (newInventory and self:getData("equip")) then
-		return false
-	end
-
-	local index = self:getData("id")
-
-	if (newInventory) then
-		local invType = newInventory.vars and newInventory.vars.invType and nut.item.inventoryTypes[newInventory.vars.invType]
-		-- if the target inventory is bag the return false. you can't put bag in the bag.
-		if (invType) then
-			return false
+			self.awaitingInv = self.awaitingInv or {}
+			self.awaitingInv[#self.awaitingInv + 1] = d
 		end
 
-		local index2 = newInventory:getID()
-
-		-- if you're trying to put the bag in the bag, return false. 
-		if (index == index2) then
-			return false
-		end
-
-		local inv = self:getInv()
-
-		if (inv) then
-			for itemID, invItem in pairs(inv:getItems()) do
-				-- if item inside of the bag can't be transfered, then return false.
-				if (hook.Run("CanItemBeTransfered", invItem, oldInventory, newInventory) == false) then
-					return false, "notAllowed"
-				end
-
-				-- if item inside of the bag can't be transfered, then return false.
-				if (invItem.onCanBeTransfered and invItem:onCanBeTransfered(oldInventory, newInventory) == false) then
-					return false, "notAllowed"
-				end
-			end
-		end	
+		return d
 	end
-	
-	return !newInventory or newInventory:getID() != oldInventory:getID()
-end
-
--- Called after the item is registered into the item tables.
-function ITEM:onRegistered()
-	nut.item.registerInv(self.uniqueID, self.invWidth, self.invHeight, true)
 end
 
 -- Inventory drawing
@@ -236,13 +244,6 @@ ITEM.postHooks.drop = function(item, result)
 	if (SERVER) then
 		if (item:getData("equip")) then
 			item:removePart(item.player)
-		end
-
-		local index = item:getData("id")
-		local inventory = nut.item.inventories[index]
-
-		if (inventory) then
-			inventory:setOwner(0)
 		end
 	end
 end

@@ -74,5 +74,5 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateAmmo", function(self)
         end
     end
     
-    print("TFA Integration: Generated Ammo Types")
+    print("[+] TFA Integration: Generated Ammo Types")
 end)

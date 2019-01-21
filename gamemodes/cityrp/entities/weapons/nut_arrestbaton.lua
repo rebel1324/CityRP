@@ -94,7 +94,7 @@ function SWEP:PrimaryAttack()
 		local entity = trace.Entity
 
 		if (IsValid(entity) and entity:IsPlayer()) then
-			entity:setNetVar("Handcuffed", false)
+			entity:setNetVar("tying", false)
 			entity:arrest(true, self.Owner)
 		end
 	end
@@ -137,16 +137,8 @@ function SWEP:SecondaryAttack()
 		local entity = trace.Entity
 
 		if (IsValid(entity) and entity:IsPlayer()) then
-			--entity:arrest(false, self.Owner)
-		if entity:arrest() == true then
-			entity:Spawn()
-			entity:notify("You have been released from prison by " .. self.Owner:Nick() .. ".")
-			timer.Stop(entity:UniqueID() .. "_jailTimer")
-			entity:arrest(false)
-		else
-			self.Owner:notify("They're not arrested!")
+			entity:arrest(false, self.Owner)
 		end
-	end
 	end
 end
 

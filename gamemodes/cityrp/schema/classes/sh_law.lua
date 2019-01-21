@@ -19,14 +19,17 @@ CLASS.limit = 8
 CLASS.team = 1
 CLASS.color = Color(25, 25, 170)
 CLASS.model = {
-	"models/humans/nypd1940/male_01.mdl",
-	"models/humans/nypd1940/male_02.mdl",
-	"models/humans/nypd1940/male_03.mdl",
-	"models/humans/nypd1940/male_04.mdl",
-	"models/humans/nypd1940/male_05.mdl",
-	"models/humans/nypd1940/male_06.mdl",
-	"models/humans/nypd1940/male_09.mdl"
+	"models/taggart/police01/male_01.mdl",
+	"models/taggart/police01/male_02.mdl",
+	"models/taggart/police01/male_03.mdl",
+	"models/taggart/police01/male_04.mdl",
+	"models/taggart/police01/male_05.mdl",
+	"models/taggart/police01/male_06.mdl",
+	"models/taggart/police01/male_07.mdl",
+	"models/taggart/police01/male_08.mdl",
+	"models/taggart/police01/male_09.mdl"
 }
+CLASS.needKiosk = true
 
 function CLASS:onSet(client)
 	for k, v in ipairs(self.weapons) do

@@ -49,9 +49,11 @@ function PLUGIN:InitializedPlugins()
 		hook.Remove("HUDPaint", "TFA_TRIGGERCLIENTLOAD")
 		hook.Remove("Tick", "TFABallisticsTick")
 	end
+end
 
+function PLUGIN:InitializedItems()
 	if (TFA_GENERATE_ITEM) then
-		print("TFA Generate items")
+		print("[+] Generating TFA Weapons and Attachments")
 		hook.Run("OnGenerateTFAItems", self)
 	end
 end

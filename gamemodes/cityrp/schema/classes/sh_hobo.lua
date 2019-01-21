@@ -6,7 +6,7 @@ CLASS.business = {}
 CLASS.color = Color(100, 45, 0)
 CLASS.limit = 4
 CLASS.model = {
-	"models/jessev92/player/l4d/m9-hunter.mdl"
+	"models/h-d/2sg/simonplayer.mdl"
 }
 CLASS.weapons = {
 	"wowozela",

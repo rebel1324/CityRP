@@ -144,54 +144,6 @@ function SCHEMA:PlayerDoMelee(client, hit)
 	end
 end
 
-function SCHEMA:InitializedSchema()
-	-- Initialize Salary Timer.
-	if (SERVER) then
-		timer.Create("nutSalary", nut.config.get("wageInterval", 180), 0, SCHEMA.SalaryPayload)
-		timer.Create("nutGrabage", nut.config.get("garbageInterval", 20), 0, SCHEMA.CrapPayload)
-		timer.Create("nutBankIncome", nut.config.get("incomeInterval", 180), 0, SCHEMA.BankIncomePayload)
-		timer.Create("nutDoorTax", nut.config.get("doorTaxInterval", 180), 0, SCHEMA.BuildingTaxPayload)
-	else
-		-- 커맨드 번역
-	end
-
-	for class, data in ipairs(nut.class.list) do
-		if (data.business) then
-			data.business = table.Merge(data.business, DEFAULT_PURCHASE)
-		end
-	end
-	
-	-- lol i'm so lazy
-	-- 미안 내가 너무 게을러서..
-	for k, v in ipairs(weapons.GetList()) do
-		local class = v.ClassName
-
-		if (class:find("nut_m") and !class:find("base")) then
-			local uniqueID = class:lower()
-			local dat = {}
-
-			local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
-			ITEM.name = uniqueID
-			ITEM.desc = "사람을 효과적으로 때릴수 있는 무기"
-			ITEM.model = v.WorldModel
-			ITEM.price = dat.price or 1000
-			ITEM.width = dat.width or 1
-			ITEM.height = dat.height or 2
-			ITEM.class = class
-			ITEM.weaponCategory = "melee"
-
-			if (CLIENT) then
-				if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
-					ITEM.name = v.PrintName 
-
-					nut.lang.stored["english"]["cw_" .. uniqueID] = v.PrintName 
-					nut.lang.stored["korean"]["cw_" .. uniqueID] = v.PrintName 
-				end
-			end
-			ITEM = nil
-		end
-	end
-end
 
 local shipmentInfo = {
 	["cw_l85a2"] = {"L85A2", 5, 76500},
@@ -224,6 +176,62 @@ local shipmentInfo = {
 	["flare"] = {"빨간 신호탄", 5, 10000},	
 }
 
+function SCHEMA:InitializedSchema()
+	-- Initialize Salary Timer.
+	if (SERVER) then
+		timer.Create("nutSalary", nut.config.get("wageInterval", 180), 0, SCHEMA.SalaryPayload)
+		timer.Create("nutGrabage", nut.config.get("garbageInterval", 20), 0, SCHEMA.CrapPayload)
+		timer.Create("nutBankIncome", 3600, 0, SCHEMA.BankIncomePayload)
+		timer.Create("nutDoorTax", nut.config.get("doorTaxInterval", 180), 0, SCHEMA.BuildingTaxPayload)
+	else
+		-- 커맨드 번역
+	end
+
+	for class, data in ipairs(nut.class.list) do
+		if (data.business) then
+			data.business = table.Merge(data.business, DEFAULT_PURCHASE)
+		end
+	end
+	
+end
+
+function SCHEMA:InitializedItems()
+	for k, v in ipairs(weapons.GetList()) do
+		local class = v.ClassName
+
+		if (class:find("nut_m") and !class:find("base")) then
+			local uniqueID = class:lower()
+			local dat = {}
+
+			local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
+			ITEM.name = uniqueID
+			ITEM.desc = "사람을 효과적으로 때릴수 있는 무기"
+			ITEM.model = v.WorldModel
+			ITEM.price = dat.price or 1000
+			ITEM.width = dat.width or 1
+			ITEM.height = dat.height or 2
+			ITEM.class = class
+			ITEM.weaponCategory = "melee"
+
+			if (CLIENT) then
+				if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
+					ITEM.name = v.PrintName 
+
+					nut.lang.stored["english"]["cw_" .. uniqueID] = v.PrintName 
+					nut.lang.stored["korean"]["cw_" .. uniqueID] = v.PrintName 
+				end
+			end
+		end
+	end
+	
+	for id, data in pairs(shipmentInfo) do
+		local ITEM = nut.item.register(id .. "_shipment", "base_shipment", nil, nil, true)
+		ITEM.name = data[1] .. " 한 박스"
+		ITEM.itemID = id
+		ITEM.maxQuantity = data[2]
+		ITEM.price = data[3]
+	end
+end
 
 function SCHEMA:InitializedPlugins()
 	if (nut.xhair) then
@@ -240,15 +248,6 @@ function SCHEMA:InitializedPlugins()
 		nut.xhair.entIgnore = table.Merge(nut.xhair.entIgnore, {
 			nut_atm = true,
 		})
-	end
-	
-	for id, data in pairs(shipmentInfo) do
-		local ITEM = nut.item.register(id .. "_shipment", "base_shipment", nil, nil, true)
-			ITEM.name = data[1] .. " 한 박스"
-			ITEM.itemID = id
-			ITEM.maxQuantity = data[2]
-			ITEM.price = data[3]
-		ITEM = nil
 	end
 end
 
@@ -349,7 +348,15 @@ function SCHEMA:Move(client, movedata)
         if (client:isLegBroken()) then
             local speed = movedata:GetMaxSpeed() * .4
             movedata:SetMaxSpeed( speed )
-            movedata:SetMaxClientSpeed( speed )
+			movedata:SetMaxClientSpeed( speed )
+		else
+			local data = nut.class.list[char:getClass()]
+
+			if (data and data.law) then
+				local speed = movedata:GetMaxSpeed() * 1.1
+				movedata:SetMaxSpeed( speed )
+				movedata:SetMaxClientSpeed( speed )
+        	end
         end
     end
 end

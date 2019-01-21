@@ -162,7 +162,6 @@ nut.util.include("meta/sh_player.lua")
 nut.util.include("meta/sh_entity.lua")
 nut.util.include("meta/sh_character.lua")
 nut.util.include("sh_dev.lua") -- Developer Functions
-nut.util.include("sh_character.lua")
 nut.util.include("sv_schema.lua")
 
 -- Mafia Model Animation Registeration
@@ -174,14 +173,27 @@ nut.anim.setModelClass("models/fearless/mafia09.mdl", "player")
 nut.anim.setModelClass("models/fearless/don1.mdl", "player")
 
 -- Police Model Animation Registeration
-nut.anim.setModelClass("models/humans/nypd1940/male_01.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_02.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_03.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_04.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_05.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_06.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_07.mdl", "player")
-nut.anim.setModelClass("models/humans/nypd1940/male_09.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_01.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_02.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_03.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_04.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_05.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_06.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_07.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_08.mdl", "player")
+nut.anim.setModelClass("models/taggart/police01/male_09.mdl", "player")
+
+nut.anim.setModelClass("models/player/police_agent/commissaire_01.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_02.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_03.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_04.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_05.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_06.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_07.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_08.mdl", "player")
+nut.anim.setModelClass("models/player/police_agent/commissaire_09.mdl", "player")
+
+nut.anim.setModelClass("models/h-d/2sg/simonplayer.mdl", "player")
 
 -- Black Tea Citizen Model Registeration
 nut.anim.setModelClass("models/btcitizen/male_01.mdl", "player")
@@ -212,19 +224,6 @@ nut.anim.setModelClass("models/btcitizen/female_11.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_12.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_13.mdl", "player")
 nut.anim.setModelClass("models/btcitizen/female_14.mdl", "player")
-
--- This hook prevents default Nutscript plugins to load.
-local noLoad = {
-	chatbox  = false, -- CityRP is using XPChat as default chat.
-	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
-	thirdperson = false, -- CityRP does not use Thridperson.
-	spawnsaver = false, -- CityRP does not use spawnsaver (returning back to defualt location)
-	saveitems = false, -- CityRP does not save any items on the map.
-	recognition = false, -- CityRP does not need recognition.
-}
-function SCHEMA:PluginShouldLoad(uniqueID)
-	return noLoad[uniqueID] -- true = don't load the specified plugin.
-end
 
 if (SERVER) then
 	if timer.Exists("CheckHookTimes") then

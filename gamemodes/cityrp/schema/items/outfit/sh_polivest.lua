@@ -52,17 +52,9 @@ end
 -- On item is dropped, Remove a weapon from the player and keep the ammo in the item.
 ITEM:hook("Equip", function(item)
 	item.player:EmitSound("items/ammo_pickup.wav", 80)
-
-    -- Register Item in the Unequip Pool
-    item.player.uneqTeam = item.player.uneqTeam or {}
-    item.player.uneqTeam[item:getID()] = item
 end)
 ITEM:hook("Unequip", function(item)
 	item.player:EmitSound("items/ammo_pickup.wav", 80)
-
-    -- Unregister Item in the Unequip Pool
-    item.player.uneqTeam = item.player.uneqTeam or {}
-    item.player.uneqTeam[item:getID()] = nil
 end)
 
 ITEM.isEquipment = true

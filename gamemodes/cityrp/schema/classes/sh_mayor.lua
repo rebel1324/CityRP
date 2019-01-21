@@ -10,6 +10,7 @@ CLASS.business = {}
 CLASS.limit = 1
 CLASS.team = 1
 CLASS.color = Color(150, 20, 20)
+CLASS.needKiosk = true
 
 function CLASS:onSet(client)
 	for k, v in ipairs(self.weapons) do

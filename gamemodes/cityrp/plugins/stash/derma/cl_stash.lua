@@ -10,12 +10,6 @@ local PANEL = {}
 		self:MakePopup()
 		self:Center()
 
-		local noticeBar = self:Add("nutNoticeBar")
-		noticeBar:Dock(TOP)
-		noticeBar:setType(4)
-		noticeBar:setText(L("stashTip"))
-		noticeBar:DockMargin(3, 0, 3, 5)
-
 		self.stash = self:Add("nutStashItemList")
 		self.stash:Dock(LEFT)
 		self.stash:SetWide(self:GetWide() * 0.5 - 7)

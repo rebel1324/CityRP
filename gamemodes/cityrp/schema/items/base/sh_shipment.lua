@@ -1,4 +1,4 @@
-ITEM.name = "Shipment"
+ITEM.name = "Shipment Base"
 ITEM.itemID = "ammo_ar2"
 ITEM.price = 200
 ITEM.width = 3
@@ -48,25 +48,26 @@ ITEM.functions.use = {
 		local client = item.player
 		local char = client:getChar()
 
-		if (!char) then return false end
+		if (char) then
+			local inventory = char:getInv()
 
-		local inv = char:getInv()
+			if (inventory) then
+				local spawnItemTable = nut.item.list[item.itemID]
 
-		if (!inv) then return false end
-
-		local itemTable = nut.item.list[item.itemID]
-
-		if (!itemTable) then return false end
-
-		if (!inv:add(item.itemID, itemTable.maxQuantity or 1)) then
-			return false
+				if (spawnItemTable) then
+					inventory:add(item.itemID):next(function(spawnedItem)
+						if (item:getQuantity() <= 1) then
+							item:remove()
+						else
+							item:setQuantity(item:getQuantity() - 1)
+						end
+					end, function(error)
+						client:notify("something gone wrong.")
+					end)
+				end				
+			end
 		end
 
-		if (item:getQuantity() <= 1) then
-			return true
-		end
-
-		item:setQuantity(item:getQuantity() - 1)
 		return false
 	end,
 }
@@ -84,27 +85,27 @@ ITEM.functions.spawn = {
 		local client = item.player
 		local char = client:getChar()
 
-		if (!char) then return false end
+		if (char) then
+			local spawnItemTable = nut.item.list[item.itemID]
 
-		local inv = char:getInv()
-
-		if (!inv) then return false end
-
-		local itemTable = nut.item.list[item.itemID]
-
-		if (!itemTable) then return false end
-
-		local itemEntity = item.entity
-
-		if (!IsValid(itemEntity)) then return false end
+			if (spawnItemTable) then
+				local itemEntity = item.entity
 				
-		nut.item.spawn(item.itemID, itemEntity:GetPos() + itemEntity:GetUp() * 20)
+				if (IsValid(itemEntity)) then 
 
-		if (item:getQuantity() <= 1) then
-			return true
+					nut.item.spawn(item.itemID, itemEntity:GetPos() + itemEntity:GetUp() * 20):next(function(spawnedItem)
+						if (item:getQuantity() <= 1) then
+							item:remove()
+						else
+							item:setQuantity(item:getQuantity() - 1)
+						end
+					end, function(error)
+						client:notify("something gone wrong.")
+					end)
+				end
+			end
 		end
 
-		item:setQuantity(item:getQuantity() - 1)
 		return false
 	end,
 }

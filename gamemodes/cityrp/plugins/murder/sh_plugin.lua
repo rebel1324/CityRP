@@ -28,6 +28,10 @@ function PLUGIN:PlayerDeath(victim, inflictor, attacker)
         return
     end
 
+    if (IsPurge) then
+        return
+    end
+
     local ent = ents.Create("nut_evidence")
     ent.victim = victim
     ent.attacker = attacker

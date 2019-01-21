@@ -21,14 +21,15 @@ CLASS.limit = 1
 CLASS.team = 1
 CLASS.color = Color(20, 20, 255)
 CLASS.model = {
-	"models/humans/nypd1940/male_01.mdl",
-	"models/humans/nypd1940/male_02.mdl",
-	"models/humans/nypd1940/male_03.mdl",
-	"models/humans/nypd1940/male_04.mdl",
-	"models/humans/nypd1940/male_05.mdl",
-	"models/humans/nypd1940/male_06.mdl",
-	"models/humans/nypd1940/male_07.mdl",
-	"models/humans/nypd1940/male_09.mdl"
+	"models/player/police_agent/commissaire_01.mdl",
+	"models/player/police_agent/commissaire_02.mdl",
+	"models/player/police_agent/commissaire_03.mdl",
+	"models/player/police_agent/commissaire_04.mdl",
+	"models/player/police_agent/commissaire_05.mdl",
+	"models/player/police_agent/commissaire_06.mdl",
+	"models/player/police_agent/commissaire_07.mdl",
+	"models/player/police_agent/commissaire_08.mdl",
+	"models/player/police_agent/commissaire_09.mdl"
 }
 
 function CLASS:onSet(client)

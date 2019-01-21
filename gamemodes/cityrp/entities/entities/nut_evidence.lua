@@ -74,47 +74,37 @@ if (SERVER) then
 
 				if (inv) then
 					-- singular item. so i don't give a shit.
-					local item, reason = inv:add("evidence")
-
-					if (item) then
-						item = reason
-
-						-- need some time to database get initialized.
+					inv:add("evidence"):next(function(item)
 						local victim, attacker, inflictor, deathTime = self.victim, self.attacker, self.inflictor, self.deathTime
-						timer.Simple(.2, function()
-							local items = nut.util.parseItem(item)
-							
-							for k, item in ipairs(items) do
-								if (IsValid(victim)) then
-									if (victim:IsPlayer()) then
-										item:setData("victim", victim:Name())
-									else
-										item:setData("victim", victim:GetClass())
-										item:setData("shitDeath", true)
-									end
-								end
 
-								if (IsValid(attacker)) then
-									if (attacker:IsPlayer()) then
-										item:setData("attacker", attacker:Name())
-									else
-										item:setData("attacker", attacker:GetClass())
-										item:setData("shitDeath", true)
-									end
-								else
-									item:setData("attacker", "미상의 공격자")
-									item:setData("shitDeath", true)
-								end
-
-								item:setData("inflictor", inflictor and inflictor:GetClass() or "무기 없음")
-								item:setData("deathTime", deathTime or "미상 시간")
+						if (IsValid(victim)) then
+							if (victim:IsPlayer()) then
+								item:setData("victim", victim:Name())
+							else
+								item:setData("victim", victim:GetClass())
+								item:setData("shitDeath", true)
 							end
-						end)
+						end
+
+						if (IsValid(attacker)) then
+							if (attacker:IsPlayer()) then
+								item:setData("attacker", attacker:Name())
+							else
+								item:setData("attacker", attacker:GetClass())
+								item:setData("shitDeath", true)
+							end
+						else
+							item:setData("attacker", "미상의 공격자")
+							item:setData("shitDeath", true)
+						end
+
+						item:setData("inflictor", inflictor and inflictor:GetClass() or "무기 없음")
+						item:setData("deathTime", deathTime or "미상 시간")
 
 						self:Remove()
-					else
-						client:notifyLocalized(reason)
-					end
+					end, function(error)
+						client:notifyLocalized(error)
+					end)
 				end
 			end
 		end

@@ -1,2 +1,2 @@
-ATTRIBUTE.name = "Crafting"
+ATTRIBUTE.name = "Generic Crafting"
 ATTRIBUTE.desc = "Level of generic crafting."

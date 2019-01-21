@@ -14,16 +14,17 @@ function nut.craft.canMake(client, id)
 
 	if (id) then
 		if (char) then
-			local inv = char:getInv()
+			local char = client:getChar()
+			local inventory = char:getInv()
 
-			if (inv) then
+			if (inventory) then
 				local craftData = nut.craft.get(id)
 
 				if (craftData) then
-					local reqA = craftData.requiredAttribute
+					local attributeRequirement = craftData.requiredAttribute
 
-					if (reqA) then
-						for id, req in pairs(reqA) do
+					if (attributeRequirement) then
+						for id, req in pairs(attributeRequirement) do
 							local at = char:getAttrib(id, 0)
 
 							if (at < req) then
@@ -32,13 +33,20 @@ function nut.craft.canMake(client, id)
 						end
 					end
 
-					local reqB = craftData.requiredItem
-					local items2remove
+					local itemRequirement = craftData.requiredItem
 
-					if (reqB) then
-						items2remove = inv:removeItems(reqB, nil, nil, nil, true)
+					if (itemRequirement) then
+						local pass = true
+						for itemType, quantity in pairs(itemRequirement) do
+							local currentItemQuantity = inventory:getItemCount(itemType)
 
-						if (not items2remove) then
+							if (currentItemQuantity < quantity) then
+								pass = false
+								break
+							end
+						end
+
+						if (pass == false) then
 							return false, "reqItems"
 						end
 					end
@@ -49,7 +57,7 @@ function nut.craft.canMake(client, id)
 						return false, reason
 					end
 
-					return items2remove
+					return true
 				else
 					return false, "invalidCraft"
 				end
@@ -67,56 +75,91 @@ function nut.craft.canMake(client, id)
 end
 
 function nut.craft.make(client, id)
-	local affectedItems, error = nut.craft.canMake(client, id)
+	local d = deferred.new()
+	local affectedItems, reason = nut.craft.canMake(client, id)
 	
-	if (not affectedItems) then
-		return bool, error
+	if (affectedItems == false) then
+		return d:reject(reason)
 	else
-		local char = client:getChar()
-		local inv = char:getInv()
 		local craftData = nut.craft.get(id)
+		
+		if (craftData) then
+			local char = client:getChar()
+			local inventory = char:getInv()
 
-		for index, data in ipairs(affectedItems) do
-			local itemObject = data.item
+			if (inventory) then
+				local remainingItems = table.Copy(craftData.requiredItem) -- now it's a counter.
+				local items = inventory:getItems()
+				
+				local actions = {}
+				
+				for id, item in pairs(items) do
+					local remainingItem = remainingItems[item.uniqueID]
 
-			if (itemObject) then
-				if (data.remove) then
-					itemObject = itemObject or nut.item.list[itemObject.id]
-
-					if (itemObject) then
-						itemObject:remove()
-					else
-						return false, "something went wrong"
+					if (remainingItem) then
+						local q = item:getQuantity()
+						if (q <= remainingItem) then
+							remainingItems[item.uniqueID] = remainingItems[item.uniqueID] - q
+							actions[item] = -1
+						else
+							remainingItems[item.uniqueID] = 0
+							actions[item] = q - remainingItem
+						end
 					end
-				else
-					itemObject:setQuantity(data.quantity)
 				end
-			end
-		end
 
-		local reqC = craftData.resultItem
+				local promises = {}
+				for item, quantity in pairs(actions) do
+					if (quantity <= 0) then
+						table.insert(promises, item:remove())
+					else
+						table.insert(promises, function()
+							local d = deferred.new()
+								item:setQuantity(quantity)
+							return d
+						end)
+					end
+				end
 
-		for itemClass, quantity in pairs(reqC) do
-			if (quantity == true) then
-				inv:add(itemClass) -- whole shits.
-			else
-				inv:add(itemClass, quantity)
+				deferred.all(promises):next(function()
+					local reqC = craftData.resultItem
+
+					for itemClass, quantity in pairs(reqC) do
+						if (quantity == true) then
+							inventory:add(itemClass):next(function(craftedItem)
+								d:resolve(craftedItem)
+							end, function(err)
+								d:reject(error)
+							end) -- whole shits.
+						else
+							inventory:add(itemClass, quantity):next(function(craftedItem)
+								d:resolve(craftedItem)
+							end, function(err)
+								d:reject(error)
+							end)
+						end
+					end
+				end, function(error)
+					d:reject(error)
+				end)
 			end
+		else
+			return d:reject(reason)
 		end
-	
-		return true
 	end
+
+	return d
 end
 
 if (SERVER) then
 	netstream.Hook("nutCraftItem", function(client, id)
-		local bool, error = nut.craft.make(client, id)
-		if (bool) then
-			client:EmitSound("ui/good.wav")
-		else
-			if (error) then
-				client:notifyLocalized(error)
+		nut.craft.make(client, id):next(function(item)
+			if (IsValid(client) and IsValid(item)) then
+				client:notifyLocalized("craftedItem", L(item:getName(), client))
+				client:EmitSound("ui/good.wav")
 			end
-		end
+		end, function(error)
+			client:notifyLocalized(error)
+		end)
 	end)
 end

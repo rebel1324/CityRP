@@ -119,13 +119,14 @@ if (SERVER) then
 							local inv = char:getInv()
 
 							if (inv) then
-								local item, reason = inv:add(itemClass)
-
-								if (item) then
+								local char = client:getChar()
+								local inventory = char:getInv()
+								
+								inventory:add(itemClass):next(function(item)
 									client:notifyLocalized("minedSomething", itemClass)
-								else
-									client:notifyLocalized(reason)
-								end
+								end, function(error)
+									client:notifyLocalized(error)
+								end)
 							end
 						end
 

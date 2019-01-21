@@ -384,6 +384,8 @@ function PLUGIN:HUDPaint()
 		local class = char:getClass()
 		local classData = nut.class.list[class]
 
+		if (!classData) then return end
+
 		bx, by = margin, h - margin + height*-0.1
 		local tx, ty = draw.SimpleText(L(classData.name), "nutHUDNumericName", bx + width*.03, by - height*2, color_white, 3, 4)
 		draw.SimpleText("+" ..nut.currency.get(classData.salary), "nutHUDNumeric", bx + width*.03 + tx + 5, by - height*2, color_white, 3, 4)

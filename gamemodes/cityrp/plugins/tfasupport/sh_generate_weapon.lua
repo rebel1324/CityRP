@@ -22,9 +22,14 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
             v.Slot = dat.slot or 2
 
             if (TFA_GENERATE_ITEM) then
+                local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
+                if (!ITEM) then
+                    print(ITEM)
+                    continue
+                end
+
                 result = result + 1
 
-                local ITEM = nut.item.register(class:lower(), "base_weapons", nil, nil, true)
                 ITEM.name = class
                 ITEM.price = dat.price or 4000
                 ITEM.exRender = dat.exRender or false
@@ -190,30 +195,30 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
                 }
 
                 ITEM.functions.zDetach = {
-                name = "Detach",
-                tip = "useTip",
-                icon = "icon16/wrench.png",
-                isMulti = true,
-                multiOptions = function(item, client)
-                    local targets = {}
+                    name = "Detach",
+                    tip = "useTip",
+                    icon = "icon16/wrench.png",
+                    isMulti = true,
+                    multiOptions = function(item, client)
+                        local targets = {}
 
-                    for k, v in pairs(item:getData("atmod", {})) do
-                        table.insert(targets, {
-                            name = L(v[1] or "ERROR"),
-                            data = k,
-                        })
-                    end
+                        for k, v in pairs(item:getData("atmod", {})) do
+                            table.insert(targets, {
+                                name = L(v[1] or "ERROR"),
+                                data = k,
+                            })
+                        end
 
-                    return targets
-                end,
-                onCanRun = function(item)
-                    if (table.Count(item:getData("atmod", {})) <= 0) then
-                        return false
-                    end
-                    
-                    return (!IsValid(item.entity))
-                end,
-                onRun = function(item, data)
+                        return targets
+                    end,
+                    onCanRun = function(item)
+                        if (table.Count(item:getData("atmod", {})) <= 0) then
+                            return false
+                        end
+                        
+                        return (!IsValid(item.entity))
+                    end,
+                    onRun = function(item, data)
                         local client = item.player
 
                         if (data) then
@@ -258,9 +263,7 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
                                             client:EmitSound("cw/holster4.wav")
                                             return false
                                         else
-                                            local add = inv:add(itemUniqueID)
-
-                                            if (add) then
+                                            inv:add(itemUniqueID):next(function(newItem)
                                                 local wepon = client:GetActiveWeapon()
 
                                                 if not (IsValid(wepon) and wepon:GetClass() == item.class) then
@@ -287,10 +290,9 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
                                                 end
 
                                                 client:EmitSound("cw/holster4.wav")
-                                                return false
-                                            else
+                                            end, function(err)
                                                 client:notifyLocalized("noSpace")
-                                            end
+                                            end)
                                         end
                                     else
                                         client:notifyLocalized("notAttachment")
@@ -304,21 +306,20 @@ hook.Add("OnGenerateTFAItems", "TFA_GenerateWeapons", function(self)
                         return false
                     end,
                 }
-            end
 
-            HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
+                HOLSTER_DRAWINFO[ITEM.class] = ITEM.holsterDrawInfo
+                -- Register Language name for the gun.
+                if (CLIENT) then
+                    if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
+                        ITEM.name = v.PrintName 
 
-            -- Register Language name for the gun.
-            if (CLIENT) then
-                if (nut.lang.stored["english"] and nut.lang.stored["korean"]) then
-                    ITEM.name = v.PrintName 
-
-                    nut.lang.stored["english"][class] = v.PrintName 
-                    nut.lang.stored["korean"][class] = v.PrintName 
+                        nut.lang.stored["english"][class] = v.PrintName 
+                        nut.lang.stored["korean"][class] = v.PrintName 
+                    end
                 end
             end
         end
     end
     
-    print("TFA Integration: Generated " .. result .. " Weapons")
+    print("[+] TFA Integration: Generated " .. result .. " Weapons")
 end)

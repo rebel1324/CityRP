@@ -137,26 +137,28 @@ function PLUGIN:OnPlayerInteractItem(client, action, item, result)
 end
 
 function PLUGIN:OnCreateItemInteractionMenu(panel, menu, itemTable)
-	local inventory = panel:GetParent()
-	local client = LocalPlayer()
-	
-	-- lol, kanbare clientss!
-	local nearCashier, entity
-	for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
-		if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
-			nearCashier = true
-			entity = v
-			break
+	if (panel) then
+		local inventory = panel:GetParent()
+		local client = LocalPlayer()
+		
+		-- lol, kanbare clientss!
+		local nearCashier, entity
+		for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
+			if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
+				nearCashier = true
+				entity = v
+				break
+			end
 		end
-	end
-	
-	if (nearCashier) then
-		menu:AddOption(L("priceSet"), function()
-			local itemID = itemTable:getID()
-			Derma_StringRequest(L("enterPrice"), L("enterPrice"), "", function(text)
-				netstream.Start("sellerSetPrice", text, entity, itemID)
-			end)
-		end):SetImage("icon16/money.png")
+		
+		if (nearCashier) then
+			menu:AddOption(L("priceSet"), function()
+				local itemID = itemTable:getID()
+				Derma_StringRequest(L("enterPrice"), L("enterPrice"), "", function(text)
+					netstream.Start("sellerSetPrice", text, entity, itemID)
+				end)
+			end):SetImage("icon16/money.png")
+		end
 	end
 end
 

@@ -490,6 +490,7 @@ nut.command.add("beclass", {
 			
 			if (nut.class.list[num]) then
 				local v = nut.class.list[num]
+				if (v.needKiosk) then return end
 
 				if (char:joinClass(num)) then
 					if (!v.vote) then
@@ -509,6 +510,7 @@ nut.command.add("beclass", {
 					if (nut.util.stringMatches(v.uniqueID, class) or nut.util.stringMatches(L(v.name, client), class)) then
 
 						local v = nut.class.list[k]
+						if (v.needKiosk) then return end
 
 						if (char:joinClass(k)) then
 							if (!v.vote) then
@@ -543,6 +545,10 @@ nut.command.add("demote", {
 		local reason = table.concat(arguments, " ", 2)
 
 		if !(target and IsValid(target)) then
+			return
+		end
+
+		if (client:isArrested()) then
 			return
 		end
 

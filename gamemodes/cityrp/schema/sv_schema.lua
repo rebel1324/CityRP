@@ -87,6 +87,8 @@ netstream.Hook("nutHitmanAccept", function(hitman, response)
 end)
 
 function SCHEMA:UpdateWeedVendors()
+	if (!NUT_VENDORS) then return end
+	
 	for k, v in ipairs(NUT_VENDORS) do
 		if (v:GetClass() == "nut_vendor") then
 			v.scale = math.min(v.scale + 0.4, WEEDTABLE.max)
@@ -114,6 +116,8 @@ function SCHEMA:OnCharTradeVendor(client, entity, uniqueID, isSellingToVendor)
 end
 
 function SCHEMA:UpdateVendors()
+	if (!NUT_VENDORS) then return end
+
 	for k, v in ipairs(NUT_VENDORS) do
 		if (v:GetClass() == "nut_vendor") then
 			if (v:getNetVar("name") == "Black Market Dealer") then

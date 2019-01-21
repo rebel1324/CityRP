@@ -307,3 +307,5 @@ if (CLIENT) then
 		end
 	end)
 end
+
+hook.Run("LuaScreenInitialized")
