@@ -1,6 +1,8 @@
 WEAPON_REQSKILLS = {}
 NUT_VOTE_TIME = 15
 NUT_JOB_DELAY = 200
+NUT_MIN_PRICE = 100
+NUT_MAX_PRICE = 10000
 
 -- 아이템 스킬 필요도 초기화 함수
 local function addRequire(itemID, reqAttribs)

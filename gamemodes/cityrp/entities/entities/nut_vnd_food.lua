@@ -74,18 +74,6 @@ if (SERVER) then
 		e:SetStart(self:GetPos() + self:OBBCenter())
 		e:SetScale(0.1)
 		util.Effect( "vendorGas", e )
-
-		--[[
-			local seq = self:LookupSequence("open")
-			self:ResetSequence(seq)
-	
-			timer.Simple(2, function()
-				if (self and IsValid(self)) then
-					local seq = self:LookupSequence("closed")
-					self:ResetSequence(seq)
-				end
-			end)
-		]]--
 	end
 
 	function ENT:dispenseItem(client)
@@ -93,49 +81,57 @@ if (SERVER) then
 			self.nextAct = CurTime() + .5
 			
 			local char = client:getChar()
-
 			if (char) then
-				local price = self:GetNW2Int("price", 100)
+				local inventory = char:getInv()
 
-				if (char:hasMoney(price)) then
-					local item = nut.item.list[self.item]
+				if (inventory) then
+					local price = math.Clamp(self:GetNW2Int("price", 100), NUT_MIN_PRICE, NUT_MAX_PRICE)
+					
+					if (char:hasMoney(price)) then
+						local itemType = nut.item.list[self.item]
+						
+						if (itemType) then
+							local entityOwner = self:getOwner()
 
-					if (!item) then
-						client:notifyLocalized("notValid")
-					end
+							if (IsValid(entityOwner)) then
+								local ownerChar = entityOwner:getChar()
 
-					local owner = self:getOwner()
-					local ownerChar = owner:getChar()
-					local profit = price - item.price
+								if (ownerChar) then
+									local profit = price - itemType.price
 
-					if (profit <= 0) then
-						if (ownerChar:getReserve() - profit < 0) then
-							owner:notifyLocalized("cantAfford")
+									if (profit <= 0) then
+										if (ownerChar:getReserve() - profit < 0) then
+											entityOwner:notifyLocalized("cantAfford")
+										end
+									end
 
-							return
-						end
-					end
+									inventory:add(self.item):next(function()
+										self:onDispenseItem(client)
+										ownerChar:giveMoney(profit)
 
-					if (char:getInv():add(self.item)) then
-						self:onDispenseItem(client)
+										if (profit < 0) then
+											owner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))
+										elseif (profit != 0) then
+											owner:notifyLocalized("purchasedItemProfit", nut.currency.get(profit))
+										end
 
-						if (owner and owner:IsValid()) then
-							ownerChar:giveMoney(profit)
-
-							if (profit < 0) then
-								owner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))
-							elseif (profit != 0) then
-								owner:notifyLocalized("purchasedItemProfit", nut.currency.get(profit))
+										client:notifyLocalized("purchasedItem")
+										char:giveMoney(-price)
+									end, function(error)
+										client:notifyLocalized("noSpace")
+									end)
+								else
+									client:notifyLocalized("notValid")
+								end	
+							else
+								client:notifyLocalized("notValid")
 							end
+						else
+							client:notifyLocalized("notValid")
 						end
-
-						client:notifyLocalized("purchasedItem")
-						char:giveMoney(-price)
 					else
-						client:notifyLocalized("noSpace")
+						client:notifyLocalized("cantAfford")
 					end
-				else 
-					client:notifyLocalized("cantAfford")
 				end
 			end
 		end
