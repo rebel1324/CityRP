@@ -17,7 +17,7 @@ if (CLIENT) then
 			
 			function quickInventoryPanel:OnKeyCodePressed(key)
 				if (key == 94) then
-					shitPanel:Remove()
+					quickInventoryPanel:Remove()
 				end
 			end
 		end
