@@ -3,6 +3,57 @@ PLUGIN.author = "Black Tea"
 PLUGIN.desc = "This plugin adds Quick Inventory Key in F3."
 
 if (CLIENT) then
+	local fastUseFuncs = {
+		"use",
+		"throw",
+		"View",
+		"Equip",
+		"EquipUn",
+	}
+
+	function PLUGIN:InterceptClickItemIcon(inventoryPanel, itemIconPanel, pressedKeyCode)
+		local combinationA = input.IsKeyDown(KEY_LCONTROL) -- Fast Use / Undefined
+		local combinationB = input.IsKeyDown(KEY_LALT) -- Undefined / Fast Drop
+		local combinationC = input.IsKeyDown(KEY_LSHIFT) -- Undefined / Fast Split
+
+		if (pressedKeyCode == MOUSE_RIGHT) then
+		elseif (pressedKeyCode == MOUSE_LEFT) then
+			if (combinationA) then
+				local itemTable = itemIconPanel.itemTable
+
+				if (itemTable) then
+					for _, action in ipairs(fastUseFuncs) do
+						local actionInfo = itemTable.functions and itemTable.functions[action]
+
+						if (actionInfo) then
+							if (isfunction(actionInfo.onCanRun) and not actionInfo.onCanRun(itemTable)) then
+								continue
+							end
+
+							itemTable.player = LocalPlayer()
+								local send = true
+
+								if (actionInfo.onClick) then
+									send = actionInfo.onClick(itemTable)
+								end
+
+								if (actionInfo.sound) then
+									surface.PlaySound(actionInfo.sound)
+								end
+
+								if (send != false) then
+									netstream.Start("invAct", action, itemTable.id, inventoryPanel.invID)
+								end
+							itemTable.player = nil
+
+							return true
+						end
+					end
+				end
+			end
+		end
+	end
+
 	local quickInventoryPanel = nil
 
 	netstream.Hook("quickMenu", function()
