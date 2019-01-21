@@ -162,8 +162,9 @@ ITEM.functions.use = {
             end
         end, function(error)
             item.player:notifyLocalized(error)
-            return false
         end)
+        
+        return false
 	end,
 }
 
