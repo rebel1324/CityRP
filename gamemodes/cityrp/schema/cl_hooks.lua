@@ -574,16 +574,6 @@ netstream.Hook("nutLockdown", function(bool)
 	CHAT_CLASS = nil
 end)
 
-function SCHEMA:PostDrawInventory(pnl)
-	if (pnl and pnl:IsVisible()) then
-		local x, y = pnl:GetPos()
-		local w, h = pnl:GetSize()
-		local color = nut.config.get("color")
-		local tx, ty = nut.util.drawText(L("ctrlInv"), x + 5, y + h, ColorAlpha(color, 255))
-		tx, ty = nut.util.drawText(L("ctrlInv2"), x + 5, y + h + ty, ColorAlpha(color, 255))
-	end
-end
-
 function SCHEMA:ShouldDrawEntityInfo()
 	if (LocalPlayer():getChar()) then
 		if (IsValid(entity)) then

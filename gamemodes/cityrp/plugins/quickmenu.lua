@@ -11,6 +11,16 @@ if (CLIENT) then
 		"EquipUn",
 	}
 
+	function PLUGIN:PostDrawInventory(pnl)
+		if (pnl and pnl:IsVisible()) then
+			local x, y = pnl:GetPos()
+			local w, h = pnl:GetSize()
+			local color = nut.config.get("color")
+			local tx, ty = nut.util.drawText(L("ctrlInv"), x + 5, y + h, ColorAlpha(color, 255))
+			tx, ty = nut.util.drawText(L("ctrlInv2"), x + 5, y + h + ty, ColorAlpha(color, 255))
+		end
+	end
+
 	function PLUGIN:InterceptClickItemIcon(inventoryPanel, itemIconPanel, pressedKeyCode)
 		local combinationA = input.IsKeyDown(KEY_LCONTROL) -- Fast Use / Undefined
 		local combinationB = input.IsKeyDown(KEY_LALT) -- Undefined / Fast Drop
@@ -65,6 +75,9 @@ if (CLIENT) then
 
 		if (inventory) then
 			quickInventoryPanel = inventory:show()
+			hook.Add("PostRenderVGUI", quickInventoryPanel, function()
+				hook.Run("PostDrawInventory", quickInventoryPanel)
+			end)
 			
 			function quickInventoryPanel:OnKeyCodePressed(key)
 				if (key == 94) then
