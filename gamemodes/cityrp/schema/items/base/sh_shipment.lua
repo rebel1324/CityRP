@@ -20,7 +20,7 @@ function ITEM:getDesc()
 	local itemTable = nut.item.list[self.itemID]
 	local name = itemTable.getName and itemTable:getName() or L(itemTable.name)
 
-	return L(shipmentDesc, name, quantity)
+	return L("shipmentDesc", name, quantity)
 end
 
 if (CLIENT) then
