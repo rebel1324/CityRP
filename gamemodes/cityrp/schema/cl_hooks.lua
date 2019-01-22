@@ -548,6 +548,7 @@ netstream.Hook("searchPly", function(target, index)
 		netstream.Start("searchExit")
 	end
 	panel:viewOnly(true)
+	
 
 	local oldClose = nut.gui.inv1.OnClose
 	nut.gui.inv1.OnClose = function()

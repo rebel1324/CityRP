@@ -74,6 +74,10 @@ if (CLIENT) then
 		local inventory = LocalPlayer():getChar():getInv()
 
 		if (inventory) then
+			if (SOUND_INVENTORY_OPEN) then
+				LocalPlayer():EmitSound(unpack(SOUND_INVENTORY_OPEN))
+			end
+
 			quickInventoryPanel = inventory:show()
 			hook.Add("PostRenderVGUI", quickInventoryPanel, function()
 				hook.Run("PostDrawInventory", quickInventoryPanel)

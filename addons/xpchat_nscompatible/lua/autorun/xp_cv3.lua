@@ -156,7 +156,11 @@ function chat.AddText(...)
 
 	chathud:AddText(...)
 
-	chat.PlaySound()
+	if (SOUND_CUSTOM_CHAT_SOUND and SOUND_CUSTOM_CHAT_SOUND != "") then
+		surface.PlaySound(SOUND_CUSTOM_CHAT_SOUND)
+	else
+		chat.PlaySound()
+	end
 end
 
 local green = Color(120, 219, 87)
