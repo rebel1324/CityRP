@@ -14,13 +14,13 @@ ITEM.iconCam = {
 	entAng = Angle(0, 0, 0),
 	fov = 6.1035808677348,
 }
-
+	
 function ITEM:getDesc()
 	local quantity = self.getQuantity and self:getQuantity() or 1
 	local itemTable = nut.item.list[self.itemID]
 	local name = itemTable.getName and itemTable:getName() or L(itemTable.name)
 
-	return "특정 물건이 여러개 들어있는 상자 (" .. name .. "x" .. quantity .. ")"
+	return L(shipmentDesc, name, quantity)
 end
 
 if (CLIENT) then

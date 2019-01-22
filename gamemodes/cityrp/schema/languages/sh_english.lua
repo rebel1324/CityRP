@@ -531,6 +531,8 @@ LANGUAGE = {
 	CitizenTip = "Citizen",
 	purchaseItem = "Purchase %s",
 
+	shipmentDesc = "A Shipment that contains items inside. (%sx%s)",
+
 	--[[
 		TRINKET ATTACHMENT STUFFS
 	]]

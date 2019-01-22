@@ -635,6 +635,8 @@ LANGUAGE = {
     Detach = "부품 떼기",
     primary = "주무기",
 	secondary = "보조무기",
+
+	shipmentDesc = "특정 물건이 여러개 들어있는 상자 (%sx%s)",
 	
 	entATM = "ATM",
 	entStash = "보관함",
