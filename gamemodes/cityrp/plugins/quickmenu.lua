@@ -79,6 +79,7 @@ if (CLIENT) then
 			end
 
 			quickInventoryPanel = inventory:show()
+			quickInventoryPanel:ShowCloseButton(true)
 			hook.Add("PostRenderVGUI", quickInventoryPanel, function()
 				hook.Run("PostDrawInventory", quickInventoryPanel)
 			end)
