@@ -16,27 +16,40 @@ function ITEM:getDesc()
 end
 
 local function healPlayer(item, client, target, amount, seconds)
-	hook.Run("OnPlayerHeal", item, client, target, amount, seconds)
+	local d = deferred.new()
 
-	if (client:Alive() and target:Alive()) then
-		local id = "nutHeal_"..FrameTime()
-		timer.Create(id, 1, seconds, function()
-			if (!target:IsValid() or !target:Alive()) then
-				timer.Destroy(id)	
+	if (IsValid(client) and client:IsPlayer()) then
+		if (IsValid(target) and target:IsPlayer()) then
+			if (target:Alive()) then
+				hook.Run("OnPlayerHeal", item, client, target, amount, seconds)
+			
+				local id = "nutHeal_"..FrameTime()
+				timer.Create(id, 1, seconds, function()
+					if (!target:IsValid() or !target:Alive()) then
+						timer.Destroy(id)	
+					end
+
+					target:SetHealth(math.Clamp(target:Health() + (amount/seconds), 0, target:GetMaxHealth()))
+				end)
+
+				d:resolve()
+			else
+				d:reject("notAlive")
 			end
-
-			target:SetHealth(math.Clamp(target:Health() + (amount/seconds), 0, target:GetMaxHealth()))
-		end)
+		else
+			d:reject("noTarget")
+		end
+	else
+		d:reject("error")
 	end
+
+	return d
 end
 
-local function onUse(item)
-	item.player:EmitSound("items/medshot4.wav", 80, 110)
-	item.player:ScreenFade(1, Color(0, 255, 0, 100), .4, 0)
+local function onUse(client)
+	client:EmitSound("items/medshot4.wav", 80, 110)
+	client:ScreenFade(1, Color(0, 255, 0, 100), .4, 0)
 end
-
-ITEM:hook("use", onUse)
-ITEM:hook("usef", onUse)
 
 -- On player uneqipped the item, Removes a weapon from the player and keep the ammo in the item.
 ITEM.functions.use = { -- sorry, for name order.
@@ -44,9 +57,15 @@ ITEM.functions.use = { -- sorry, for name order.
 	tip = "useTip",
 	icon = "icon16/add.png",
 	onRun = function(item)
-		if (item.player:Alive()) then
-			healPlayer(item, item.player, item.player, item.healAmount, item.healSeconds)
-		end
+		local client = item.player
+		healPlayer(item, client, client, item.healAmount, item.healSeconds):next(function()
+			onUse(client)
+			item:remove()
+		end, function(error)
+			client:notifyLocalized(error)
+		end)
+
+		return false
 	end,
 }
 
@@ -60,11 +79,12 @@ ITEM.functions.usef = { -- sorry, for name order.
 		local trace = client:GetEyeTraceNoCursor() -- We don't need cursors.
 		local target = trace.Entity
 
-		if (target and target:IsValid() and target:IsPlayer() and target:Alive()) then
-			healPlayer(item, item.player, target, item.healAmount, item.healSeconds)
-
-			return true
-		end
+		healPlayer(item, client, target, item.healAmount, item.healSeconds):next(function()
+			onUse(target)
+			item:remove()
+		end, function(error)
+			client:notifyLocalized(error)
+		end)
 
 		return false
 	end,
