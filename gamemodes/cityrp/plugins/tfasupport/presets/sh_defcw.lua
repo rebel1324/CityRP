@@ -276,11 +276,11 @@ PLUGIN.gunData.tfa_bt_famas = {
     exRender = true,
 }
 
-PLUGIN.modelCam["models/weapons/cw2_super_shorty.mdl"] = {
-	pos = Vector(6.5172553062439, 204.1408996582, 1.3671083450317),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 54.890121459961, 0),
-	fov = 5.9490485491673,
+PLUGIN.modelCam["models/weapons/w_cst_shorty.mdl"] = {
+	pos = Vector(252.48545837402, 214.82986450195, 159.13603210449),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-15.011669158936, -30.580829620361, 4.7643661499023),
+	fov = 3.9958051806238,
 }
 
 PLUGIN.modelCam["models/weapons/w_pist_deagle.mdl"] = {
@@ -297,11 +297,11 @@ PLUGIN.modelCam["models/weapons/w_snip_g3sg1.mdl"] = {
 	fov = 9.9362424901482,
 }
 
-PLUGIN.modelCam["models/weapons/w_cstm_m14.mdl"] = {
-	pos = Vector(9.6280202865601, 215.85713195801, 1.4841167926788),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 36.883327484131, 0),
-	fov = 8.7414882658742,
+PLUGIN.modelCam["models/weapons/w_cstm_m14_fixed.mdl"] = {
+	pos = Vector(443.23965454102, 374.5380859375, 275.59396362305),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 3.4156038817053,
 }
 
 PLUGIN.modelCam["models/weapons/w_cstm_l96.mdl"] = {
@@ -311,13 +311,6 @@ PLUGIN.modelCam["models/weapons/w_cstm_l96.mdl"] = {
 	fov = 10.421837319987,
 }
 
-PLUGIN.modelCam["models/weapons/w_cw20_l85a2.mdl"] = {
-	pos = Vector(19.428443908691, 202.55032348633, 9.1177797317505),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 36.883327484131, 0),
-	fov = 8.6216611514778,
-}
-
 PLUGIN.modelCam["models/weapons/w_pist_fiveseven.mdl"] = {
 	pos = Vector(2.1300146579742, 180.55000305176, 3.4476456642151),
 	ang = Angle(0, 270, 0),
@@ -325,18 +318,18 @@ PLUGIN.modelCam["models/weapons/w_pist_fiveseven.mdl"] = {
 	fov = 4.5621007687203,
 }
 
-PLUGIN.modelCam["models/cw2/rifles/w_scarh.mdl"] = {
-	pos = Vector(8.6337070465088, 169.57571411133, 2.1013042926788),
+PLUGIN.modelCam["models/weapons/w_cst_scarh_final.mdl"] = {
+	pos = Vector(-2.1220071315765, 150.04786682129, 6.2936806678772),
 	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 29.084047317505, 0),
-	fov = 12.965640196697,
+	entAng = Angle(-3.787, 30, 0),
+	fov = 13.529411764706,
 }
 
-PLUGIN.modelCam["models/weapons/w_smg_ump45.mdl"] = {
-	pos = Vector(-1.1694897413254, 160.07693481445, 4.4684619903564),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 38.736545562744, 0),
-	fov = 8.8235294117647,
+PLUGIN.modelCam["models/weapons/w_ump45_lod5.mdl"] = {
+	pos = Vector(357.09408569336, 309.82495117188, 224.47633361816),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 2.938623608572,
 }
 
 PLUGIN.modelCam["models/weapons/w_pist_p228.mdl"] = {
@@ -353,12 +346,13 @@ PLUGIN.modelCam["models/weapons/w_rif_ak47.mdl"] = {
 	fov = 9.812805906836,
 }
 
-PLUGIN.modelCam["models/cw2/rifles/w_vss.mdl"] = {
-	pos = Vector(0.82021301984787, 179.21702575684, 0),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, -145.88235473633, 0),
-	fov = 11.945853603603,
+PLUGIN.modelCam["models/weapons/w_vss_ref_fixed.mdl"] = {
+	pos = Vector(427.34042358398, 363.78158569336, 265.79931640625),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 3.6219556453644,
 }
+
 
 PLUGIN.modelCam["models/weapons/w_cst_mac11.mdl"] = {
 	pos = Vector(6.7652416229248, 211.20362854004, 2.3867554664612),
@@ -367,11 +361,11 @@ PLUGIN.modelCam["models/weapons/w_cst_mac11.mdl"] = {
 	fov = 3.7250538846989,
 }
 
-PLUGIN.modelCam["models/cw2/pistols/w_makarov.mdl"] = {
-	pos = Vector(123.64306640625, 100.75135040283, 77.306968688965),
+PLUGIN.modelCam["models/weapons/w_makarov_pm_fixed.mdl"] = {
+	pos = Vector(167.82807922363, 151.09216308594, 109.30722808838),
 	ang = Angle(25, 220, 0),
-	entAng = Angle(20.648195266724, -114.04077911377, 10.725868225098),
-	fov = 4.381269021042,
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 1.7464742828871,
 }
 
 PLUGIN.modelCam["models/weapons/w_357.mdl"] = {
@@ -381,32 +375,33 @@ PLUGIN.modelCam["models/weapons/w_357.mdl"] = {
 	fov = 4.9325098920262,
 }
 
-PLUGIN.modelCam["models/weapons/w_cstm_m3super90.mdl"] = {
-	pos = Vector(8.5331335067749, 202.66839599609, 2.0376529693604),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 38.723258972168, 0),
-	fov = 9.8763202691489,
+PLUGIN.modelCam["models/weapons/w_cst_m3super_final.mdl"] = {
+	pos = Vector(417.77877807617, 352.96966552734, 259.76663208008),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 3.4020710921291,
 }
 
-PLUGIN.modelCam["models/weapons/w_smg_mp5.mdl"] = {
-	pos = Vector(2.964239358902, 152.63439941406, 6.1234111785889),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 38.723258972168, 0),
-	fov = 11.558437874162,
+
+PLUGIN.modelCam["models/weapons/w_smg_mp5_fixed.mdl"] = {
+	pos = Vector(329.02020263672, 285.48892211914, 208.23828125),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 3.5542832640134,
 }
 
-PLUGIN.modelCam["models/weapons/cw_pist_m1911.mdl"] = {
-	pos = Vector(4.9751634597778, 203.60511779785, 1.0891706943512),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 38.723258972168, 0),
-	fov = 4.0906703096891,
+PLUGIN.modelCam["models/weapons/w_cst_m1911_final.mdl"] = {
+	pos = Vector(140.8942565918, 127.30924224854, 92.607894897461),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 4.5731798974762,
 }
 
-PLUGIN.modelCam["models/weapons/cw20_g36c.mdl"] = {
-	pos = Vector(5.5794100761414, 197.44989013672, 1.6380152702332),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 29.316911697388, 0),
-	fov = 8.5122821219794,
+PLUGIN.modelCam["models/weapons/w_cst_g36c_final.mdl"] = {
+	pos = Vector(312.99502563477, 271.8977355957, 199.06329345703),
+	ang = Angle(25, 220, 0),
+	entAng = Angle(-18.67234992981, -19.880283355713, 4.7643661499023),
+	fov = 3.6631384436958,
 }
 
 PLUGIN.modelCam["models/weapons/w_rif_m4a1.mdl"] = {
@@ -437,39 +432,11 @@ PLUGIN.modelCam["models/weapons/w_famas_fixed2.mdl"] = {
 	fov = 9.2475881449487,
 }
 
-PLUGIN.modelCam["models/weapons/w_smg_mp5_fixed.mdl"] = {
-	pos = Vector(-5.2409820556641, 214.97982788086, 4.6314568519592),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 34.549160003662, 0),
-	fov = 7.7586493743608,
-}
-
-PLUGIN.modelCam["models/weapons/w_vss_ref_fixed.mdl"] = {
-	pos = Vector(-1.4711834192276, 164.42837524414, 5.2078266143799),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 34.549160003662, 0),
-	fov = 13.128245043962,
-}
-
-PLUGIN.modelCam["models/weapons/w_makarov_pm_fixed.mdl"] = {
-	pos = Vector(-6.3976974487305, 166.43608093262, 4.5312027931213),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 34.549160003662, 0),
-	fov = 2.6943803906458,
-}
-
 PLUGIN.modelCam["models/weapons/w_cst_mac11_final.mdl"] = {
 	pos = Vector(-6.6080560684204, 209.88610839844, 3.1193404197693),
 	ang = Angle(0, 270, 0),
 	entAng = Angle(0, 34.549160003662, 0),
 	fov = 4.1176470588235,
-}
-
-PLUGIN.modelCam["models/weapons/w_cstm_m14_fixed.mdl"] = {
-	pos = Vector(0.14628590643406, 261.53366088867, 6.2042570114136),
-	ang = Angle(0, 270, 0),
-	entAng = Angle(0, 34.549160003662, 0),
-	fov = 8.8235294117647,
 }
 
 PLUGIN.modelCam["models/weapons/w_cstm_l85a4_fixed.mdl"] = {
