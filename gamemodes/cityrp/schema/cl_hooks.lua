@@ -602,7 +602,8 @@ end
 
 -- Override all wack ass things
 local GM = GM or GAMEMODE
-function GM:DrawEntityInfo()
+function GM:ShouldDrawPlayerInfo()
+	return false
 end
 
 nut.map = nut.map or {}

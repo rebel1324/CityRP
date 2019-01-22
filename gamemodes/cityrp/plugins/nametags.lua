@@ -253,14 +253,6 @@ hook.Add("PostPlayerDraw", "btNameTag", function(client)
 					end, function(...) print(...) end)
 				cam.PopModelMatrix()
 			cam.End2D()
-			--[[
-				cam.Start3D2D(ntPos, ntAng, ntScale)
-					xpcall(function()
-					
-		
-					end, function() end)
-				cam.End3D2D()
-			]]
 		end
 		
 		ntChar = nil

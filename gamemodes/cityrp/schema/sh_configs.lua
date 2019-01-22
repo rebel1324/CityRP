@@ -134,14 +134,6 @@ ILLEGAL_ENTITY = {
 	["nut_d_pot"] = 0.8,
 }
 
-USABLE_FUNCS = {
-	"use",
-	"throw",
-	"View",
-	"Equip",
-	"EquipUn",
-}
-
 WEEDTABLE = {
 	price = 500,
 	min = 0.7,

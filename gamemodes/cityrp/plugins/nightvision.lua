@@ -2,7 +2,6 @@ PLUGIN.name = "나이트 비전 - Nutscript"
 PLUGIN.author = "Black Tea"
 PLUGIN.desc = "cSpy의 나이트비전 스크립트 컨버전입니다."
 
-
 if (CLIENT) then
     NV_Status = false
     NV_NIGHTTYPE = 1
