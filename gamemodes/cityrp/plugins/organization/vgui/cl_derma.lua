@@ -263,11 +263,12 @@ PANEL = {}
         local con = self.content
         if (num == 1) then 
             -- basic organization info
+            --[[
             local noticeBar = con:Add("nutNoticeBar")
             noticeBar:Dock(TOP)
             noticeBar:setType(7)
             noticeBar:setText(L("orgNameDescTip"))
-            noticeBar:DockMargin(5, 5, 5, 5)
+            noticeBar:DockMargin(5, 5, 5, 5)]]
             local orgLevel = con:Add("DLabel")
             orgLevel:Dock(TOP)
             orgLevel:SetFont("nutMediumFont")

@@ -33,6 +33,7 @@ if (SERVER) then
 		nut.inventory.instance(data.invType, data.invData)
 			:next(function(inventory)
 				if (IsValid(self)) then
+					inventory.isStorage = true
 					self:setInventory(inventory)
 					if (isfunction(data.onSpawn)) then
 						data.onSpawn(storage)
