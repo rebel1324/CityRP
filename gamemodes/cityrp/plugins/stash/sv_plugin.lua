@@ -168,7 +168,7 @@ function PLUGIN:DoStashRequest(client)
 	end)
 end
 
-if (true or not STASH_INVENTORY_MEASURE) then
+if (not STASH_INVENTORY_MEASURE) then
 	STASH_INVENTORY_MEASURE = nut.inventory.types["grid"]:new()
 	STASH_INVENTORY_MEASURE.data = {w = 8, h = 8}
 	STASH_INVENTORY_MEASURE.virtual = true
