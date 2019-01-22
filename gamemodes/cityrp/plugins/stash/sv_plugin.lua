@@ -115,7 +115,7 @@ function meta:setStash(tbl)
 	saveStash(self)
 end
 
-local function findStash()
+local function findStash(client)
 	local d = deferred.new()
 
 	for _, entity in ipairs(ents.FindInSphere(client:GetPos(), 128)) do
@@ -132,7 +132,7 @@ function PLUGIN:DoStashRequest(client)
 	local stashItems = char:getStash()
 	local queryTable = {}
 
-	findStash():next(function()
+	findStash(client):next(function()
 		-- Insert items to load.
 		for k, v in pairs(stashItems) do
 			table.insert(queryTable, k)
@@ -182,7 +182,7 @@ netstream.Hook("stashIn", function(client, itemID)
 		local inventory = nut.item.inventories[item.invID]
 
 		if (item and inventory) then
-			findStash():next(function(stashEntity)
+			findStash(client):next(function(stashEntity)
 				if (IsValid(stashEntity)) then
 					if (char:getStashMax() == char:getStashCount()) then
 						client:notifyLocalized("stashFull")
@@ -244,7 +244,7 @@ netstream.Hook("stashOut", function(client, itemID)
 		local inventory = char:getInv()
 
 		if (item and inventory) then
-			findStash():next(function(stashEntity)
+			findStash(client):next(function(stashEntity)
 				if (IsValid(stashEntity)) then
 					if (char:getStashMax() == char:getStashCount()) then
 						client:notifyLocalized("stashFull")
