@@ -62,7 +62,7 @@ ITEM.functions.use = {
 							item:setQuantity(item:getQuantity() - 1)
 						end
 					end, function(error)
-						client:notify("something gone wrong.")
+						client:notifyLocalized(error)
 					end)
 				end				
 			end
@@ -100,7 +100,7 @@ ITEM.functions.spawn = {
 							item:setQuantity(item:getQuantity() - 1)
 						end
 					end, function(error)
-						client:notify("something gone wrong.")
+						client:notifyLocalized(error)
 					end)
 				end
 			end
