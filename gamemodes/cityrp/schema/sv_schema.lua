@@ -3,66 +3,56 @@ if (!FPP_MySQLConfig) then
 end
 
 nut.vote.list = nut.vote.list or {}
-nut.vote.incr = nut.vote.incr or 0
 
 function nut.vote.start(title, recipient, callback)
-	local id = nut.vote.incr
-	nut.vote.list[id] = {
-		players = {},
-		callback = callback,
-	}
+	local d = deferred.new()
+	local id = string.format("%08d", math.random(0, 99999999))
+
+	nut.vote.list[id] = {}
 
 	for k, v in ipairs(recipient) do
-		nut.vote.list[id].players[v:UniqueID()] = -1
+		nut.vote.list[id][v:UniqueID()] = -1
 	end
 
+	netstream.Start(recipient, "voteRequired", id, title)
 	timer.Create("nutVote_"..id, NUT_VOTE_TIME, 1, function()
-		nut.vote.list[id].callback(nut.vote.list[id])
+		local result = table.Copy(nut.vote.list[id])
+		nut.vote.list[id] = nil
+
+		d:resolve(result)
 	end)
 
-	netstream.Start(recipient, "voteRequired", id, title)
-
-	nut.vote.incr = id + 1
+	return d
 end
 
 netstream.Hook("nutVote", function(client, id, response)
 	if (nut.vote.list[id]) then
-		nut.vote.list[id].players[client:UniqueID()] = tonumber(response)
-	end
-
-	local votedPlayers = nut.vote.list[id].players
-	local unVoted = 0
-
-	for k, v in pairs(votedPlayers) do
-		if (v == -1) then
-			unVoted = unVoted + 1
-		end
-	end
-
-	if (unVoted == 0) then
-		nut.vote.list[id].callback(nut.vote.list[id])
-		timer.Remove("nutVote_"..id)
+		nut.vote.list[id][client:UniqueID()] = tonumber(response)
 	end
 end)
 
-function nut.vote.simple(title, newCallback)
-	nut.vote.start(title, player.GetAll(), function(vote)
-		local poll = vote.players
-		local min = #poll / 2
-		local agree, disagree, surrender = 0, 0, 0
+function nut.vote.simple(title)
+	local d = deferred.new()
+
+	nut.vote.start(title, player.GetAll()):next(function(poll)
+		local context = {table.Count(poll), 0, 0, 0}
 
 		for k, v in pairs(poll) do
 			if (v == 1) then
-				agree = agree + 1
+				context[2] = context[2] + 1 -- agree
 			elseif (v == 0) then
-				disagree = disagree + 1
+				context[3] = context[3] + 1 -- surrender
 			elseif (v == -1) then
-				surrender = surrender + 1
+				context[4] = context[4] + 1 -- disagree
 			end
 		end
 
-		newCallback(poll, agree, disagree, surrender)
+		d:resolve(context)
+	end, function(err)
+		d:reject(err)
 	end)
+
+	return d
 end
 
 netstream.Hook("nutHitmanAccept", function(hitman, response)

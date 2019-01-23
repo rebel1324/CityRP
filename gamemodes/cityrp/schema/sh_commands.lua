@@ -491,7 +491,7 @@ nut.command.add("beclass", {
 			
 			if (nut.class.list[num]) then
 				local v = nut.class.list[num]
-				if (v.needKiosk) then return end
+				--if (v.needKiosk) then return end
 
 				if (char:joinClass(num)) then
 					if (!v.vote) then
@@ -511,7 +511,7 @@ nut.command.add("beclass", {
 					if (nut.util.stringMatches(v.uniqueID, class) or nut.util.stringMatches(L(v.name, client), class)) then
 
 						local v = nut.class.list[k]
-						if (v.needKiosk) then return end
+						--if (v.needKiosk) then return end
 
 						if (char:joinClass(k)) then
 							if (!v.vote) then
@@ -585,16 +585,15 @@ nut.command.add("demote", {
 				target.onDemote = true
 
 				target.nextDemote = CurTime() + 120
-				nut.vote.simple(textWant, function(p, ye, no, su)
+				nut.vote.simple(textWant, function(context)
+					local voteTotal, voteAgree, voteSurrender, voteDisagree = unpack(context)
 					if (IsValid(target) and targetChar) then
 						target.onDemote = false
 
 						if (targetClass == targetChar:getClass()) then
-							local minimum = table.Count(p) * (nut.config.get("voteDemote", 25) / 100)
+							local minimum = table.Count(voteTotal) * (nut.config.get("voteDemote", 25) / 100)
 
-							if (ye >= minimum) then
-								local lol = nut.class.list[CLASS_CIVILIAN]
-
+							if (voteAgree >= minimum) then
 								targetChar:joinClass(CLASS_CIVILIAN)
 								
 								hook.Run("OnPlayerDemoted", target, targetClass, targetClassData)

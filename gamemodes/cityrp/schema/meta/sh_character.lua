@@ -53,13 +53,14 @@ function CHAR:joinClass(class)
 
 		local textWant = L("jobVoteContext", client, client:Name(), L(classData.name, client))
 
-		nut.vote.simple(textWant, function(p, ye, no, su)
+		nut.vote.simple(textWant, function(context)
+			local voteTotal, voteAgree, voteSurrender, voteDisagree = unpack(context)
 			client.onVote = false
 
-			local minimum = table.Count(p) * (nut.config.get("voteJob", 25) / 100)
+			local minimum = table.Count(voteTotal) * (nut.config.get("voteJob", 25) / 100)
 
-			if (ye >= minimum) then
-				if (!class) then
+			if (voteAgree >= minimum) then
+				if (not class) then
 					self:kickClass()
 
 					return
@@ -80,7 +81,7 @@ function CHAR:joinClass(class)
 			end
 		end)
 	else
-		if (!class) then
+		if (not class) then
 			self:kickClass()
 
 			return
