@@ -110,9 +110,9 @@ if (SERVER) then
 										ownerChar:giveMoney(profit)
 
 										if (profit < 0) then
-											owner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))
+											entityOwner:notifyLocalized("purchasedItemNonProfit", nut.currency.get(profit))
 										elseif (profit != 0) then
-											owner:notifyLocalized("purchasedItemProfit", nut.currency.get(profit))
+											entityOwner:notifyLocalized("purchasedItemProfit", nut.currency.get(profit))
 										end
 
 										client:notifyLocalized("purchasedItem")
