@@ -192,10 +192,9 @@ else
 			self:Center()
 			self:MakePopup()
 
-			local noticeBar = self:Add("nutNoticeBar")
+			local noticeBar = self:Add("DLabel")
 			noticeBar:Dock(TOP)
-			noticeBar:setType(4)
-			noticeBar:setText(L("cashierTip"))
+			noticeBar:SetText(L("cashierTip"))
 			noticeBar:DockMargin(3, 0, 3, 5)
 
 			self.scroll = self:Add("DScrollPanel")

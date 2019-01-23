@@ -56,26 +56,36 @@ if (SERVER) then
 		end
 	end)
 
+	SELLER_LIMIT = 15
 	netstream.Hook("sellerSetPrice", function(client, text, entity, itemID)
 		if (entity:GetPos():Distance(client:GetPos()) > 512) then
 			return client:notifyLocalized("tooFar")
 		end
 
-		local item = nut.item.instances[itemID]
-		if (item) then
-			local item = item:transfer()
-			if (!IsValid(item)) then
-				return client:notifyLocalized("illegalAccess")
-			end
-			
-			local price = math.Round(math.max(0, tonumber(text) or 0))
-			
-			item:setNetVar("sellPrice", price)
-			item:setNetVar("sellOwner", client)
-			item:CPPISetOwner(client)
+		if (#entity.stocks > SELLER_LIMIT) then
+			return client:notifyLocalized("tooManySellingItems")
+		end
 
-			entity.stocks = entity.stocks or {}
-			table.insert(entity.stocks, item)
+		local item = nut.item.instances[itemID]
+
+		if (item) then			
+			item:removeFromInventory(true):next(function()
+				item = item:spawn(client)
+				nut.log.add(item.player, "itemDrop", item.name, 1)
+				
+				if (!IsValid(item)) then
+					return client:notifyLocalized("illegalAccess")
+				end
+
+				local price = math.Round(math.max(0, tonumber(text) or 0))
+
+				item:setNetVar("sellPrice", price)
+				item:setNetVar("sellOwner", client)
+				item:CPPISetOwner(client)
+
+				entity.stocks = entity.stocks or {}
+				table.insert(entity.stocks, item)
+			end)
 		else
 			return client:notifyLocalized("illegalAccess")
 		end
@@ -136,28 +146,41 @@ function PLUGIN:OnPlayerInteractItem(client, action, item, result)
 	end
 end
 
-function PLUGIN:OnCreateItemInteractionMenu(panel, menu, itemTable)
-	if (panel) then
-		local inventory = panel:GetParent()
-		local client = LocalPlayer()
-		
-		-- lol, kanbare clientss!
-		local nearCashier, entity
-		for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
-			if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
-				nearCashier = true
-				entity = v
-				break
+function PLUGIN:OnCreateItemInteractionMenu(itemPanel, dermaMenu, itemTable)
+	if (itemTable) then
+		local inventory = nut.inventory.instances[itemTable.invID]
+
+		if (inventory and not inventory.isStorage) then
+			local client = LocalPlayer()
+			
+			-- lol, kanbare clientss!
+			local nearCashier, entity
+			for k, v in ipairs(ents.FindInSphere(client:GetPos(), 512)) do
+				if (v:GetClass() == "nut_seller" and v:CPPIGetOwner() == client) then
+					nearCashier = true
+					entity = v
+					break
+				end
 			end
-		end
-		
-		if (nearCashier) then
-			menu:AddOption(L("priceSet"), function()
-				local itemID = itemTable:getID()
-				Derma_StringRequest(L("enterPrice"), L("enterPrice"), "", function(text)
-					netstream.Start("sellerSetPrice", text, entity, itemID)
-				end)
-			end):SetImage("icon16/money.png")
+			
+			if (nearCashier) then
+				dermaMenu:AddOption(L("priceSet"), function()
+					local itemID = itemTable:getID()
+					
+					local snd = cashierSound or SOUND_INVENTORY_INTERACT
+					if (snd) then
+						if (type(snd) == 'table') then
+							LocalPlayer():EmitSound(unpack(snd))
+						elseif (type(snd) == 'string') then
+							surface.PlaySound(snd)
+						end
+					end
+
+					Derma_StringRequest(L("enterPrice"), L("enterPrice"), "", function(text)
+						netstream.Start("sellerSetPrice", text, entity, itemID)
+					end)
+				end):SetImage("icon16/money.png")
+			end
 		end
 	end
 end
