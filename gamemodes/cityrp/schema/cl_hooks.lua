@@ -521,46 +521,26 @@ function SCHEMA:CanPlayerViewInventory()
 	end
 end
 
+function SCHEMA:InterceptClickItemIcon(inventoryPanel, itemIconPanel, keyCode) 
+	if (inventoryPanel:GetParent().readOnly == true) then
+		return true
+	end
+end
+
 netstream.Hook("searchPly", function(target, index)
-	-- 솔직히 이거 뜯어내서 netstream한다면 내가 인정하고 아무말도 안할게
-	-- 배포하지만 마라
 	local inventory = nut.item.inventories[index]
 
-	if (!inventory) then
-		return netstream.Start("searchExit")
-	end
+	if (inventory) then
+		local panel = nut.inventory.show(inventory)
+		panel.readOnly = true
+		panel:ShowCloseButton(true)
+		oldClosed = panel.OnClose
 
-	nut.gui.inv1 = vgui.Create("nutInventory")
-	nut.gui.inv1:ShowCloseButton(true)
-	nut.gui.inv1:setInventory(LocalPlayer():getChar():getInv())
-	nut.gui.inv1:viewOnly(true)
-
-	local panel = vgui.Create("nutInventory")
-	panel:ShowCloseButton(true)
-	panel:SetTitle(target:Name())
-	panel:setInventory(inventory)
-	panel:MoveLeftOf(nut.gui.inv1, 4)
-	panel.OnClose = function(this)
-		if (IsValid(nut.gui.inv1) and !IsValid(nut.gui.menu)) then
-			nut.gui.inv1:Remove()
+		function panel:OnClose()
+			oldClosed(self)
+			netstream.Start("searchExit")
 		end
-
-		netstream.Start("searchExit")
 	end
-	panel:viewOnly(true)
-	
-
-	local oldClose = nut.gui.inv1.OnClose
-	nut.gui.inv1.OnClose = function()
-		if (IsValid(panel) and !IsValid(nut.gui.menu)) then
-			panel:Remove()
-		end
-
-		netstream.Start("searchExit")
-		nut.gui.inv1.OnClose = oldClose
-	end
-
-	nut.gui["inv"..index] = panel	
 end)
 
 local lockdown = "npc/overwatch/cityvoice/f_confirmcivilstatus_1_spkr.wav"
