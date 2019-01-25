@@ -16,7 +16,7 @@ ITEM.functions.use = { -- sorry, for name order.
 		if (dist > 96) then client:notifyLocalized("tooFar") return false end
 
 		if (target and target:IsValid()) then
-			if (target:GetClass() == "nut_storage" or target.lockable) then
+			if (target.isStorageEntity or target.lockable) then
 				if (!IsValid(target.keypad)) then
 					client:notifyLocalized("keypadSetup") 
 					client:notifyLocalized("keypadSetup2") 

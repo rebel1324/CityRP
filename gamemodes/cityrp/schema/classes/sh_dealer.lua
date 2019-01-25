@@ -34,6 +34,9 @@ CLASS.business = {
 	["cannedbean"] = 1,	
 	["sodabottle"] = 1,	
 	["sodacan"] = 1,	
+
+	-- Keypad
+	["keypad"] = 1,
 }
 
 function CLASS:OnSet(client)

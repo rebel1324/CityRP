@@ -1,12 +1,14 @@
 AddCSLuaFile()
 
---ENT.Base = "keypad"
+ENT.Base = "keypad"
+ENT.Type = "anim"
 ENT.PrintName = "Keypad"
 ENT.Author = "Black Tea"
 ENT.Category = "NutScript - Security"
 ENT.Spawnable = true
 ENT.AdminOnly = false
 ENT.RenderGroup = RENDERGROUP_BOTH
+ENT.Model = Model("models/props_lab/keypad.mdl")
 
 function ENT:SpawnFunction(client, trace, className)
 	if (!trace.Hit or trace.HitSky) then return end
@@ -23,9 +25,8 @@ function ENT:SpawnFunction(client, trace, className)
 		ent:SetParent(target)
 		ent:SetPos(spawnPosition - trace.HitNormal*13)
 		ent:SetAngles(angles)
+		ent:SetModel(self.Model)
 		ent:Spawn()
-		ent:Activate()
-		ent:ManipulateBoneScale(0, Vector(1, 1, 1)*.5)
 
 		target.keypad = ent
 		target:setNetVar("locked", true)
@@ -84,6 +85,8 @@ function ENT:Process(granted)
 			storage:setNetVar("locked", true)
 		end
 	else
+		local storage = self:GetParent()
+		storage:setNetVar("locked", true)
 		self:EmitSound("buttons/button11.wav")
 	end
 end
