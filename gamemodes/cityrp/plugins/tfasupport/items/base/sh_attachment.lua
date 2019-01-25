@@ -156,12 +156,13 @@ ITEM.functions.use = {
         return (!IsValid(item.entity))
     end,
     onRun = function(item, data)
+        local client = item.player
         attachment(item, data, false):next(function(remove)
             if (remove == true) then
                 item:remove()
             end
         end, function(error)
-            item.player:notifyLocalized(error)
+            client:notifyLocalized(error)
         end)
         
         return false

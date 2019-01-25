@@ -3,6 +3,7 @@ ATTACHMENT_BARREL = 2
 ATTACHMENT_LASER = 3
 ATTACHMENT_MAGAZINE = 4
 ATTACHMENT_GRIP = 5
+ATTACHMENT_MOD = 6
 
 ATTACHMENT_SKIN = 99
 
@@ -37,7 +38,7 @@ attItems.att_scope4 = {
     slot = ATTACHMENT_SIGHT,
     attSearch = {
         "cw2_md_acog",
-        "cw2_md_schmidt_shortdot",
+        --"cw2_md_schmidt_shortdot",
     },
     icon = Material("atts/acog"),
 }
@@ -97,15 +98,16 @@ attItems.att_laser = {
     icon = Material("atts/anpeq15"),
 }
 
-attItems.skin_quad = {
-    name = "Quad Damage",
-    desc = "skinDesc",
-    slot = ATTACHMENT_SKIN,
+attItems.att_longbarrel = {
+    name = "Long Barrel",
+    desc = "attLongBarrel",
+    slot = ATTACHMENT_MOD,
     attSearch = {
-        "skin_quad",
+        "cw2_mr96_long",
     },
-    icon = Material("_skinpaint.png"),
+    icon = Material("atts/longbarrel_revolver"),
 }
+
 
 hook.Add("OnGenerateTFAItems", "TFA_GenerateAttachments", function(self)
     for className, v in pairs(attItems) do

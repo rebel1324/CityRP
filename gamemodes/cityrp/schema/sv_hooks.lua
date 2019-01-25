@@ -691,7 +691,7 @@ function SCHEMA:OnPlayerJoinClass(client, class, oldclass, silent)
 	local infoa = nut.class.list[tonumber(oldclass)]
 	nut.log.add(client, "job", info, infoa)
 	
-	client.nextBe = CurTime() + NUT_JOB_DELAY
+	client.nextBe = CurTime() + 0
 
 	if (!silent) then
 		for k, v in ipairs(player.GetAll()) do

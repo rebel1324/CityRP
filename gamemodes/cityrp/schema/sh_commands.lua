@@ -910,9 +910,9 @@ nut.chat.register("cr", {
 
 		if (char) then
 			local class = char:getClass()
-			local classDat = nut.class.list[class]
+			local classData = nut.class.list[class]
 
-			if (classDat.law) then
+			if (classData and classData.law) then
 				return true
 			end
 		end	
