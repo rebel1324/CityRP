@@ -1426,9 +1426,6 @@ function SCHEMA:PlayerAuthed()
 	hook.Run("PlayerCountChanged")
 end
 
-function GM:ScalePlayerDamage(client, hitGroup, dmgInfo)
-	dmgInfo:ScaleDamage(1)
-end
 
 function SCHEMA:CanHungerTick(client)
 	if (client:isArrested()) then
@@ -1438,6 +1435,22 @@ function SCHEMA:CanHungerTick(client)
 	if (IsPurge) then
 		return false
 	end
+end
+
+function SCHEMA:CanSearchPlayer(client, classData, target)
+	if (classData.law) then 
+		client:notifyLocalized("noLaw")
+		return false
+	end
+
+	if (target:getNetVar("restricted") != true) then
+		client:notifyLocalized("notTied")
+		return false
+	end
+end
+
+function GM:ScalePlayerDamage(client, hitGroup, dmgInfo)
+	dmgInfo:ScaleDamage(1)
 end
 
 function GM:PlayerSpawnVehicle(client, model, name, data)

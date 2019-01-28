@@ -26,21 +26,18 @@ function CHAR:hasReserve(amt)
 end
 
 function CHAR:joinClass(class)
-	local client = self:getPlayer()
-	local oldclass = self:getClass()
-	local oldclassData = nut.class.list[oldclass]
-	local classData = nut.class.list[class]
+	local client, oldclass = self:getPlayer(), self:getClass()
+	local oldclassData, classData = nut.class.list[oldclass], nut.class.list[class]
 
 	if (classData.vote and oldclassData.team != classData.team) then
-		if (client.nextVote and client.nextVote < CurTime()) then
-			client:notifyLocalized("voteWait", math.Round(client.nextVote - CurTime()) )
-
+		client.onVote = false
+		if (client.nextVote and client.nextVote > CurTime()) then
+			client:notifyLocalized("voteWait", math.Round(client.nextVote - CurTime()))
 			return
 		end
 
 		if (client.onVote) then
 			client:notifyLocalized("alreadyClassVote")
-
 			return
 		end
 
@@ -49,15 +46,15 @@ function CHAR:joinClass(class)
 		end
 
 		client.onVote = true
-		client.nextVote = CurTime() + 200
+		client.nextVote = CurTime() + 1
 
 		local textWant = L("jobVoteContext", client, client:Name(), L(classData.name, client))
 
-		nut.vote.simple(textWant, function(context)
-			local voteTotal, voteAgree, voteSurrender, voteDisagree = unpack(context)
+		nut.vote.simple(textWant):next(function(context)
 			client.onVote = false
 
-			local minimum = table.Count(voteTotal) * (nut.config.get("voteJob", 25) / 100)
+			local voteTotal, voteAgree, voteSurrender, voteDisagree = unpack(context)
+			local minimum = voteTotal * (nut.config.get("voteJob", 25) / 100)
 
 			if (voteAgree >= minimum) then
 				if (not class) then

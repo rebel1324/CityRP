@@ -2,8 +2,6 @@ PLUGIN.name = "Tying"
 PLUGIN.author = "Chessnut"
 PLUGIN.desc = "Adds the ability to tie players."
 
-nut.util.include("sh_charsearch.lua")
-
 if (SERVER) then
 	function PLUGIN:PlayerLoadout(client)
 		client:setNetVar("restricted")

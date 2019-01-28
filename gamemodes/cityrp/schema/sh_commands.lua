@@ -182,8 +182,8 @@ nut.command.add("search", {
 		local char = client:getChar()
 		local class = char:getClass()
 		local classData = nut.class.list[class]
-
-		if (classData.law) then
+		
+		if (hook.Run("CanSearchPlayer", client, classData, target) != false) then
 			traceData = {}
 			traceData.start = client:GetShootPos()
 			traceData.endpos = traceData.start + client:GetAimVector() * 256
@@ -197,8 +197,6 @@ nut.command.add("search", {
 				
 				nut.log.add(client, "search", target)
 			end
-		else
-			client:notifyLocalized("notLaw")
 		end
 	end,
 	alias = {"수색"}
@@ -487,50 +485,35 @@ nut.command.add("beclass", {
 				return
 			end
 
-			local num = isnumber(tonumber(class)) and tonumber(class) or -1
-			
-			if (nut.class.list[num]) then
-				local v = nut.class.list[num]
-				--if (v.needKiosk) then return end
+			local classIndex = isnumber(tonumber(class)) and tonumber(class) or -1
+			local classData = nut.class.list[classIndex]
+			for index, data in ipairs(nut.class.list) do
+				if (nut.util.stringMatches(data.uniqueID, class) or nut.util.stringMatches(L(data.name, client), class)) then
+					if (nut.class.list[index]) then
+						classData = nut.class.list[index]
+						classIndex = index
+					end
+				end
+			end
 
-				if (char:joinClass(num)) then
-					if (!v.vote) then
-						client:notifyLocalized("becomeClass", L(v.name, client))
+			if (classData) then
+				if (char:joinClass(classIndex)) then
+					if (!classData.vote) then
+						client:notifyLocalized("becomeClass", L(classData.name, client))
 					end
 
 					return
 				else
-					if (!v.vote) then
-						client:notifyLocalized("becomeClassFail", L(v.name, client))
+					if (!classData.vote) then
+						client:notifyLocalized("becomeClassFail", L(classData.name, client))
 					end
 
 					return
 				end
 			else
-				for k, v in ipairs(nut.class.list) do
-					if (nut.util.stringMatches(v.uniqueID, class) or nut.util.stringMatches(L(v.name, client), class)) then
-
-						local v = nut.class.list[k]
-						--if (v.needKiosk) then return end
-
-						if (char:joinClass(k)) then
-							if (!v.vote) then
-								client:notifyLocalized("becomeClass", L(v.name, client))
-							end
-
-							return
-						else
-							if (!v.vote) then
-								client:notifyLocalized("becomeClassFail", L(v.name, client))
-							end
-
-							return
-						end
-					end
-				end
+				client:notifyLocalized("invalid", L("class", client))
 			end
 			
-			client:notifyLocalized("invalid", L("class", client))
 		else
 			client:notifyLocalized("illegalAccess")
 		end
@@ -585,13 +568,13 @@ nut.command.add("demote", {
 				target.onDemote = true
 
 				target.nextDemote = CurTime() + 120
-				nut.vote.simple(textWant, function(context)
+				nut.vote.simple(textWant):next(function(context)
 					local voteTotal, voteAgree, voteSurrender, voteDisagree = unpack(context)
 					if (IsValid(target) and targetChar) then
 						target.onDemote = false
 
 						if (targetClass == targetChar:getClass()) then
-							local minimum = table.Count(voteTotal) * (nut.config.get("voteDemote", 25) / 100)
+							local minimum = voteTotal * (nut.config.get("voteDemote", 25) / 100)
 
 							if (voteAgree >= minimum) then
 								targetChar:joinClass(CLASS_CIVILIAN)
