@@ -29,7 +29,7 @@ local PANEL = {}
 			value = (value == 0 and cnt or value)
 
 			if (data.func) then
-				data.func(self.Entity, data.outfits[value], data)
+				data.func(self.Entity, value, data)
 			end
 		end
 
