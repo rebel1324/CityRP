@@ -15,8 +15,8 @@ PLUGIN.gunData.cw_fiveseven = {
 PLUGIN.gunData.cw_m1911 = {
     holster = {
 		bone = "ValveBiped.Bip01_R_Thigh",
-		ang = Angle(-0, -0,90),
-		pos = Vector(-2, 4, -4),
+		ang = Angle(-0, -0,80),
+		pos = Vector(-5, 15, -5),
     },
     slot = 1,
     price = 1000,
@@ -108,8 +108,8 @@ PLUGIN.gunData.cw_mac11 = {
 PLUGIN.gunData.cw_ump45 = {
     holster = {
 		bone = "ValveBiped.Bip01_Spine2",
-		ang = Angle(180, -10,10),
-		pos = Vector(4, 0, 4),
+		ang = Angle(180, 10,15),
+		pos = Vector(9, -8, 4),
     },
     slot = 2,
     price = 3000,
