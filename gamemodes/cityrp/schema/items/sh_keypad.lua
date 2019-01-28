@@ -31,8 +31,7 @@ ITEM.functions.use = { -- sorry, for name order.
 					ent:SetPos(spawnPosition - trace.HitNormal*13)
 					ent:SetAngles(angles)
 					ent:Spawn()
-					ent:Activate()
-					ent:ManipulateBoneScale(0, Vector(1, 1, 1)*.5)
+					ent:SetSecure(true)
 					ent:CPPISetOwner(client)
 
 					target.keypad = ent
