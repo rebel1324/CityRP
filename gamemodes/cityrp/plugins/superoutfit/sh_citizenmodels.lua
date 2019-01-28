@@ -231,13 +231,14 @@ end
 
 local function changePart(entity, wearID, outfitData)
 	if (IsValid(entity)) then
-		if (outfitData.bodygroup and outfitData.outfits) then
+		if (outfitData.outfits) then
 			local wearOutfitData = outfitData.outfits[wearID]
 
 			if (wearOutfitData) then
-				if (wearOutfitData.group) then
+				if (outfitData.bodygroup and wearOutfitData.group) then
 					entity:SetBodygroup(outfitData.bodygroup, wearOutfitData.group or 0)
 				end
+
 				if (wearOutfitData.mat) then
 					local matIndex = findMatIndex(entity, wearOutfitData.find, outfitData)
 
@@ -364,9 +365,9 @@ OUTFIT_REGISTERED = {
 			name = "gloves",
 			bodygroup = 4,
 			outfits = {
-				{data = 0, name = "bodygroup", price = 4500},
-				{data = 1, name = "bodygroup", price = 4500},
-				{data = 2, name = "bodygroup", price = 4500},
+				{group = 0, name = "bodygroup", price = 4500},
+				{group = 1, name = "bodygroup", price = 4500},
+				{group = 2, name = "bodygroup", price = 4500},
 			},
 			func = changePart				
 		},
@@ -494,9 +495,9 @@ OUTFIT_REGISTERED = {
 			name = "gloves",
 			bodygroup = 4,
 			outfits = {
-				{data = 0, name = "bodygroup", price = 4500},
-				{data = 1, name = "bodygroup", price = 4500},
-				{data = 2, name = "bodygroup", price = 4500},
+				{group = 0, name = "bodygroup", price = 4500},
+				{group = 1, name = "bodygroup", price = 4500},
+				{group = 2, name = "bodygroup", price = 4500},
 			},
 			func = changePart				
 		},
