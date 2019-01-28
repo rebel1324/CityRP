@@ -20,6 +20,8 @@ SOUND_INVENTORY_TRANSFER = {"nui/switch4.ogg", 40, 100}
 SOUND_INVENTORY_INTERACT = {"nui/switch5.ogg", 40, 100}
 SOUND_INVENTORY_OPEN = {"nui/invopen.wav", 50, 120}
 
+SOUND_VENDOR_CLICK = {"nui/switch5.ogg", 50, 120}
+
 hook.Add("InterceptClickItemIcon", "__ASD", function(inventoryPanel, itemIconPanel, pressedKeyCode)
 	if (pressedKeyCode == MOUSE_RIGHT) then
         LocalPlayer():EmitSound(unpack(SOUND_INVENTORY_MENU))

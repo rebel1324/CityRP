@@ -17,7 +17,7 @@ local playerMeta = FindMetaTable("Player")
 function playerMeta:CanAddEffects()
 	local entity = Entity(self:getLocalVar("ragdoll", 0))
 	local ragdoll = self:GetRagdollEntity()
-	if ((nut.gui.char and !nut.gui.char:IsVisible()) and
+	if ((nut.gui.character and !nut.gui.character:IsVisible()) and
 		(NUT_CVAR_EFFECTS and NUT_CVAR_EFFECTS:GetBool()) and
 		!self:ShouldDrawLocalPlayer() and
 		IsValid(self) and
@@ -157,8 +157,8 @@ else
 			rest = 1 - clmp(velLen/40, 0, 1)
 			curStep = curStep + (vel/math.pi)*(ft*2.15)
 			
-			newAng.p = angles.p + sin(curStep*15) * vel * .6 * bobFactor + sin(RealTime()) * rest * bobFactor
-			newAng.y = angles.y + cos(curStep*7.5) * vel * .8 * bobFactor + cos(RealTime()*.5) * rest * .5 * (bobFactor * (5 * (vel/1)))
+			newAng.p = angles.p + sin(curStep*15) * vel * .3 * bobFactor + sin(RealTime()) * rest * bobFactor
+			newAng.y = angles.y + cos(curStep*7.5) * vel * .4 * bobFactor + cos(RealTime()*.5) * rest * .5 * (bobFactor * (5 * (vel/1)))
 	
 			if (suddenDistraction > 0) then
 				newAng.p = newAng.p + sin(RealTime()*5) * (1 * suddenDistraction)
