@@ -18,6 +18,8 @@ local CITIZEN_MODELS = {
 	"models/btcitizen/female_06.mdl",
 	"models/btcitizen/female_07.mdl",
 	"models/btcitizen/female_08.mdl",
+	"models/btcitizen/female_09.mdl",
+	"models/btcitizen/female_10.mdl",
 	"models/btcitizen/male_01.mdl",
 	"models/btcitizen/male_02.mdl",
 	"models/btcitizen/male_03.mdl",
