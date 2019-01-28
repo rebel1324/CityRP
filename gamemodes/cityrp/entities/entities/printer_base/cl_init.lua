@@ -27,46 +27,53 @@ local rectSize = 80
 local function PRINTER_UPGRADE_RENDER(self, ent, w, h)
 	local mx, my = self:mousePos()
 
-	if (!self.hasFocus) then
-		surface.SetDrawColor(0, 0, 0, 200)
+	if (self.entity:getNetVar("locked")) then
+		surface.SetDrawColor(200, 20, 20, 200)
 		surface.DrawRect(0, 0, w, h)
-		nut.util.drawText(L"upgradePrinterTouch", w/2, h/2, color_white, 1, 1, "nutATMTitleFont")
+		nut.util.drawText(L"locked", w/2, h/2, color_white, 1, 1, "nutATMTitleFont")
 	else
-		surface.SetDrawColor(0, 0, 0, 200)
-		surface.DrawRect(0, 0, w, h)
+		if (!self.hasFocus) then
+			surface.SetDrawColor(0, 0, 0, 200)
+			surface.DrawRect(0, 0, w, h)
+			nut.util.drawText(L"upgradePrinterTouch", w/2, h/2, color_white, 1, 1, "nutATMTitleFont")
+		else
+			surface.SetDrawColor(0, 0, 0, 200)
+			surface.DrawRect(0, 0, w, h)
 
-		local ah = h*0.2
-		local aw = w - rectSize * 1.4
-		self.currentButton = nil
-		
-		nut.util.drawText(L"upgradePrinter", 40, ah, color_white, 3, 3, "nutATMTitleFont")
+			local ah = h*0.2
+			local aw = w - rectSize * 1.4
+			self.currentButton = nil
+			
+			nut.util.drawText(L"upgradePrinter", 40, ah, color_white, 3, 3, "nutATMTitleFont")
 
-		ah = ah - 5
-		
-		local entity = self.entity
-		for upgrade, _ in pairs(entity.printerUpgrades) do
-			local ba, bb = aw, ah
-			local bc, bd = rectSize, rectSize
+			ah = ah - 5
+			
+			local entity = self.entity
+			for upgrade, _ in pairs(entity.printerUpgrades) do
+				local ba, bb = aw, ah
+				local bc, bd = rectSize, rectSize
 
-			local bool = self:cursorInBox(ba, bb, bc, bd)
+				local bool = self:cursorInBox(ba, bb, bc, bd)
 
-			if (bool) then
-				surface.SetDrawColor(60, 70, 110)
-				self.currentButton = upgrade
-			else
-				surface.SetDrawColor(80, 89, 123)
+				if (bool) then
+					surface.SetDrawColor(60, 70, 110)
+					self.currentButton = upgrade
+				else
+					surface.SetDrawColor(80, 89, 123)
+				end
+
+				surface.DrawRect(ba, bb, bc, bd)
+				draw.DrawText( upgradeIcons[upgrade], "nutPrinterIcons", ba + bc * .5, ah + 11, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER )
+				aw = aw - rectSize * 1.1
 			end
-
-			surface.DrawRect(ba, bb, bc, bd)
-			draw.DrawText( upgradeIcons[upgrade], "nutPrinterIcons", ba + bc * .5, ah + 11, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER )
-			aw = aw - rectSize * 1.1
-		end
-		
-		if (self.hasFocus) then
-			surface.SetDrawColor(255, 255, 255)
-			surface.DrawRect(mx, my, 5, 5)
+			
+			if (self.hasFocus) then
+				surface.SetDrawColor(255, 255, 255)
+				surface.DrawRect(mx, my, 5, 5)
+			end
 		end
 	end
+
 end
 
 function ENT:Initialize()

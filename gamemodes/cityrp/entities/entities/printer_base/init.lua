@@ -144,6 +144,11 @@ function ENT:Work()
 end
 
 function ENT:Use(client)
+	if (self:getNetVar("locked")) then
+		client:notify("printerLocked")
+		return
+	end
+
 	if (client:IsPlayer()) then
 		if (self:GetMoney() <= 0) then
 			self:SetEnabled(!self:GetEnabled())
