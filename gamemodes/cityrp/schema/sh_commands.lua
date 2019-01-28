@@ -1086,14 +1086,13 @@ nut.command.add("password", {
 
 		if (target and target:IsValid()) then
 			local password = table.concat(arguments, "")
-			
 			if (password:len() > 4 or !tonumber(password)) then
 				client:notifyLocalized("illegalAccess")
 
 				return 
 			end
 
-			if (target:GetClass() == "nut_keypad" and password) then
+			if (target.IsKeypad and password) then
 				if (target:CPPIGetOwner() == client) then
 					client:notifyLocalized("passwordChanged", password)
 
@@ -1102,6 +1101,8 @@ nut.command.add("password", {
 					client:notifyLocalized("notOwned")
 				end
 			end
+		else
+			client:notifyLocalized("notValid")
 		end
 	end,
 	alias = {"비번", "비밀번호"}
@@ -1180,7 +1181,7 @@ hook.Add("InitializedSchema", "addMoreShit", function()
 					local class = char:getClass()
 					local classTable = nut.class.list[class]
 					local color = classTable.color
-					chat.AddText(color, speaker:Name(), color_white, ": "..text)
+					chat.AddText(color, speaker:Name(), nut.config.get("chatColor"), ": "..text)
 				end
 			end,
 		})
@@ -1214,7 +1215,7 @@ hook.Add("InitializedSchema", "addMoreShit", function()
 					local classTable = nut.class.list[class]
 					local color = classTable.color
 	
-					chat.AddText(Color(255, 50, 50), "[팀]", color, speaker:Name(), color_white, ": "..text)
+					chat.AddText(Color(255, 50, 50), "[팀]", color, speaker:Name(), nut.config.get("chatColor"), ": "..text)
 				end
 			end,
 			prefix = {"/t", "/팀", "/g"}
