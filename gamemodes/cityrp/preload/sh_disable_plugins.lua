@@ -1,6 +1,7 @@
 print("this is getting loaded just before CityRP loaded.")
 -- This hook prevents default Nutscript plugins to load.
 local noLoad = {
+	act = false, -- dont load old act.
 	chatbox  = false, -- CityRP is using XPChat as default chat.
 	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
 	thirdperson = false, -- CityRP does not use Thridperson.
