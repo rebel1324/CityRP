@@ -179,22 +179,20 @@ nut.command.add("stuck", {
 
 nut.command.add("search", {
 	onRun = function(client, arguments)
-		local char = client:getChar()
-		local class = char:getClass()
-		local classData = nut.class.list[class]
+		local traceData = {}
+		traceData.start = client:GetShootPos()
+		traceData.endpos = traceData.start + client:GetAimVector() * 256
+		traceData.filter = client
+		trace = util.TraceLine(traceData)
 		
-		if (hook.Run("CanSearchPlayer", client, classData, target) != false) then
-			traceData = {}
-			traceData.start = client:GetShootPos()
-			traceData.endpos = traceData.start + client:GetAimVector() * 256
-			traceData.filter = client
-			trace = util.TraceLine(traceData)
-
-			local target = trace.Entity
-			
-			if (IsValid(target)) then
+		local target = trace.Entity
+		if (IsValid(target)) then
+			local char = client:getChar()
+			local class = char:getClass()
+			local classData = nut.class.list[class]
+			if (hook.Run("CanSearchPlayer", client, classData, target) != false) then
 				hook.Run("OnPlayerSearch", client, target)
-				
+					
 				nut.log.add(client, "search", target)
 			end
 		end
