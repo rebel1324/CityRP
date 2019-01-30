@@ -174,11 +174,9 @@ function PLUGIN:PrePlayerLoadedChar(client)
 end
 
 function PLUGIN:PlayerLoadedChar(client, netChar, prevChar)
-	if (prevChar) then
-        wait(.02):next(function()
-			if (IsValid(client)) then
-				nut.outfit.apply(client)
-			end
-        end)
-	end
+	wait(.02):next(function()
+		if (IsValid(client)) then
+			nut.outfit.apply(client)
+		end
+	end)
 end
