@@ -1438,7 +1438,7 @@ function SCHEMA:CanHungerTick(client)
 end
 
 function SCHEMA:CanSearchPlayer(client, classData, target)
-	if (classData.law) then 
+	if (not classData.law) then 
 		client:notifyLocalized("noLaw")
 		return false
 	end
