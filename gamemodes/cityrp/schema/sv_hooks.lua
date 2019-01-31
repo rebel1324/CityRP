@@ -353,6 +353,7 @@ function SCHEMA:PlayerDeath(client, inflicter, attacker)
 			char.lostMoney = math.Round(char:getMoney() * (nut.config.get("dpBank", 10) / 100))
 			if ( char.lostMoney > 10 ) then
 				char:giveMoney(-char.lostMoney)
+				hook.Run("OnPlayerLostMoney", client, inflicter, attacker, char.lostMoney)
 				else
 			end
 		end
