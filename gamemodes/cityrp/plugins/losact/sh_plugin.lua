@@ -69,13 +69,16 @@ for k, v in pairs(PLUGIN.acts) do
 	nut.command.add("act"..k, data)
 end
 
-function PLUGIN:UpdateAnimation(client, moveData)
+local GMBASE = baseclass.Get("gamemode_base")
+local GME = gmod.GetGamemode()
+function GME:UpdateAnimation(client, velocity, maxseqgroundspeed)
 	local angles = client:getNetVar("actAng")
 
 	if (angles) then
-		client:SetPlaybackRate(1)
-		print(client:GetPlaybackRate())
 		client:SetRenderAngles(angles)
+		client:SetPlaybackRate(1)
+	else	
+		return GMBASE.UpdateAnimation(self, client, velocity, maxseqgroundspeed)
 	end
 end
 
