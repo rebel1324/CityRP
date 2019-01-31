@@ -13,3 +13,9 @@ local noLoad = {
 hook.Add("PluginShouldLoad", "CityRPSupressor", function(uniqueID) 
 	return noLoad[uniqueID] -- true = don't load the specified plugin.
 end)
+
+local GME = gmod.GetGamemode()
+function GME:MouthMoveAnimation() // sorry, you're blocked.
+end
+function GME:GrabEarAnimation() // sorry, you're blocked.
+end
