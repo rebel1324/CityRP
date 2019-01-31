@@ -1,6 +1,9 @@
 
 local ORGANIZATION = nut.org.meta or {}
 ORGANIZATION.__index = ORGANIZATION
+ORGANIZATION.id = ORGANIZATION.id or 0
+ORGANIZATION.data = ORGANIZATION.data or {}
+
 debug.getregistry().Organization = ORGANIZATION -- hi mark
 
 ORGANIZATION_OWNER = 5
@@ -32,11 +35,11 @@ end
 
 if (SERVER) then
     function ORGANIZATION:__tostring()
-        return "organization [" .. self.id .. "]"
+        return "organization [" .. (self.id or 0) .. "]"
     end
 
     function ORGANIZATION:__eq(other)
-        return (self.id == other.id)
+        return (self:getID() == other:getID())
     end
 
     function ORGANIZATION:addCharacter(char, rank, callback)
@@ -59,19 +62,7 @@ if (SERVER) then
                 end
             end
 
-            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-                
-            nut.db.updateTable({
-                _lastModify = timeStamp,
-            }, nil, "organization", "_id = ".. self.id)
-
-            nut.db.insertTable({
-                _orgID = self.id,
-                _charID = charID, 
-                _rank = rank,
-                _name = char:getName()
-            }, function(succ) 
-            end, "orgmembers")
+            nut.org.join(self.id, charID)
 
             netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID)
         else
@@ -84,13 +75,11 @@ if (SERVER) then
     function ORGANIZATION:setName(text)
         self.name = text
 
-        local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-        nut.db.updateTable({
-            _name = text,
-            _lastModify = timeStamp,
-        }, nil, "organization", "_id = ".. self.id)
-
-        netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
+        nut.org.setName(self.id, text):next(function()
+            netstream.Start(player.GetAll(), "nutOrgSyncValue", self.id, "name", text)
+        end, function(error)
+            ErrorNoHalt(error)
+        end)
     end
 
     function ORGANIZATION:adjustMemberRank(charID, rank)
@@ -110,16 +99,16 @@ if (SERVER) then
             self.members[rank] = self.members[rank] or {}
             self.members[rank][charID] = targetChar and targetChar:getName() or prevName 
 
-            local timeStamp = os.date("%Y-%m-%d %H:%M:%S", os.time())
-            nut.db.updateTable({
-                _rank = rank,
-            }, nil, "orgmembers", "_charID = ".. charID .. " AND _orgID = " .. self.id)
-            
-            netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, prevName)
+            nut.org.charRank(charID, self.id, rank):next(function()
+                print("waht")
+                netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, prevName)
 
-            if (targetChar and SERVER) then
-                targetChar:setData("organizationRank", rank, nil, player.GetAll())
-            end
+                if (targetChar and SERVER) then
+                    targetChar:setData("organizationRank", rank, nil, player.GetAll())
+                end
+            end, function(error)
+                ErrorNoHalt(error)
+            end)
 
             return true
         else

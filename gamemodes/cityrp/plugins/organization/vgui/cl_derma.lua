@@ -145,13 +145,12 @@ local TYPE_NUMBER = 4
 local WIDTH, HEIGHT = math.max(ScrW() * .5, 500), math.max(ScrW() * .3, 480)
 
 local PANEL = {}
-
     function PANEL:Init()
-        if (IsValid(nut.gui.orgloading)) then
+        if (IsValid(nut.gui.orgLoading)) then
             self:Remove()
-            return
         end
-        nut.gui.orgloading = self
+
+        nut.gui.orgLoading = self
         self:SetSize(self:GetParent():GetSize())
     end
 
@@ -185,6 +184,10 @@ PANEL = {}
     end
 
     function PANEL:Init()
+        if (IsValid(nut.gui.orgLoading)) then
+            self:Remove()
+        end
+        
         nut.gui.orgman = self
         self:SetSize(self:GetParent():GetSize())
         self.namepanel = self:Add("DPanel")
@@ -485,6 +488,10 @@ vgui.Register("nutOrgConfig", PANEL, "DPanel")
 local WIDTH, HEIGHT = math.Clamp(ScrW() * .5, 400, 800), math.max(ScrW() * .3, 480)
 local PANEL = {}
     function PANEL:Init()
+        if (IsValid(nut.gui.orgLoading)) then
+            self:Remove()
+        end
+
         nut.gui.orgjoin = self
         self:SetSize(self:GetParent():GetSize())
         self.descpanel = self:Add("DPanel")
@@ -531,6 +538,10 @@ vgui.Register("nutOrgJoiner", PANEL, "EditablePanel")
 
 PANEL = {}
     function PANEL:Init()
+        if (IsValid(nut.gui.orgLoading)) then
+            self:Remove()
+        end
+
         self:SetTall(40)
         self.meme = self:Add("DPanel")
         self.meme:Dock(LEFT)

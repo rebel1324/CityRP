@@ -4,31 +4,31 @@ if (CLIENT) then
     
     do
         netstream.Hook("nutOrgJoined", function()
-            if (IsValid(myPanel)) then
-                nut.gui.orgloading:Remove()
-                myPanel:Add("nutOrgManager")
+            if (IsValid(nut.gui.orgMenu)) then
+                nut.gui.orgLoading:Remove()
+                nut.gui.orgMenu:Add("nutOrgManager")
             end
         end)
     
         netstream.Hook("nutOrgExited", function()
-            if (IsValid(myPanel)) then
-                nut.gui.orgloading:Remove()
-                myPanel:Add("nutOrgJoiner")
+            if (IsValid(nut.gui.orgMenu)) then
+                nut.gui.orgLoading:Remove()
+                nut.gui.orgMenu:Add("nutOrgJoiner")
             end
         end)
     
         netstream.Hook("nutOrgKicked", function()
-            if (IsValid(myPanel)) then
+            if (IsValid(nut.gui.orgMenu)) then
                 if (IsValid(nut.gui.orgman)) then
                     nut.gui.orgman:Remove()
                 end
                 
-                if (IsValid(nut.gui.orgloading)) then
-                    nut.gui.orgloading:Remove()
+                if (IsValid(nut.gui.orgLoading)) then
+                    nut.gui.orgLoading:Remove()
                 end
     
                 timer.Simple(0, function()
-                    myPanel:Add("nutOrgJoiner")
+                    nut.gui.orgMenu:Add("nutOrgJoiner")
                 end)
             end
         end)
@@ -138,6 +138,7 @@ else
             
             if (char) then
                 local bool, reason = hook.Run("CanCreateOrganization", client)
+
                 if (bool == false) then
                     if (reason) then
                         client:notifyLocalized(reason)
@@ -149,13 +150,16 @@ else
                     return
                 end
 
-                nut.org.create(function(orgObject)
+                nut.org.create():next(function(orgObject)
                     orgObject:setOwner(char)
                     orgObject:setName(data.name)
                     orgObject:setData("desc", data.desc)
-                    netstream.Start(client, "nutOrgJoined")
+                    timer.Simple(0.1, function()
+                        netstream.Start(client, "nutOrgJoined")
+                    end)
 
                     hook.Run("OnCreateOrganization", client, orgObject)
+                end, function(error)
                 end)
             end
         end)
@@ -171,7 +175,9 @@ else
 
                     if (bool != false) then
                         org:addCharacter(char, ORGANIZATION_MEMBER)
-                        netstream.Start(client, "nutOrgJoined")
+                        timer.Simple(0.1, function()
+                            netstream.Start(client, "nutOrgJoined")
+                        end)
                     else
                         client:notifyLocalized(reason)
                     end
@@ -193,7 +199,9 @@ else
                     if (bool == false and reason) then
                         client:notifyLocalized(reason)
                     else
-                        netstream.Start(client, "nutOrgExited")
+                        timer.Simple(.1, function()
+                            netstream.Start(client, "nutOrgExited")
+                        end)
                     end
                 else
                     client:notifyLocalized("invalidOrg")
@@ -239,7 +247,9 @@ else
 
                             if (IsValid(targetClient)) then
                                 targetClient:notifyLocalized("orgBanned")
-                                netstream.Start(targetClient, "nutOrgKicked")
+                                timer.Simple(0.1, function()
+                                    netstream.Start(targetClient, "nutOrgKicked")
+                                end)
                             end
                         end
                     else
@@ -270,8 +280,10 @@ else
                             local targetClient = targetChar:getPlayer()
 
                             if (IsValid(targetClient)) then
-                                client:notifyLocalized("orgKicked")
-                                netstream.Start(targetClient, "nutOrgKicked")
+                                target:notifyLocalized("orgKicked")
+                                timer.Simple(.1, function()
+                                    netstream.Start(targetClient, "nutOrgKicked")
+                                end)
                             end
                         end
                     else
