@@ -4,7 +4,7 @@ ITEM.width = 1
 ITEM.height = 1
 ITEM.desc = "ashole"
 ITEM.outfitCategory = "vest"
-ITEM.price = 3500
+ITEM.price = 10000
 ITEM.removeOnDeath = true
 
 function ITEM:getDesc()	
@@ -71,9 +71,9 @@ if (CLIENT) then
 			surface.DrawRect(w - 14, h - 14, 8, 8)
 		end
 
-			local def = item.defaultHealth
-			local health = item:getData("health", def)/def*100
-			local color = Color(255, health*255, health*255)
-			nut.util.drawText(Format("%d", health) .. "%", 4, h - 3, color, 0, 4, "nutSmallFont")
+		local def = item.defaultHealth
+		local health = item:getData("health", def)/def*100
+		local color = Color(255, health*255, health*255)
+		nut.util.drawText(Format("%d", health) .. "%", 4, h - 3, color, 0, 4, "nutSmallFont")
 	end
 end
