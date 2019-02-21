@@ -36,29 +36,29 @@ else
 		self.nextEmit = 0
 	end
 
+	local GLOW_MATERIAL = Material("sprites/glow04_noz.vmt")
 	function ENT:DrawTranslucent()
-		if (self:getNetVar("gone")) then
-			if (self.nextEmit < CurTime()) then
-				local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), self:GetPos() + self:OBBCenter() + self:GetRight() * -13)
+		if self:getNetVar("active") then
+			local position = 	self:GetPos() + ( self:GetUp() *20 ) + 	( self:GetRight() * 11) + ( self:GetForward() *3)
+			local size = 20 + math.sin( RealTime()*15 ) * 5
+			render.SetMaterial(GLOW_MATERIAL)
+			render.DrawSprite(position, size, size, Color( 255, 162, 76, 255 ) )
+			
+			if self.nextEmit < CurTime() then
+				local smoke = self.emitter:Add( "particle/smokesprites_000"..math.random(1,9), position	)
 				smoke:SetVelocity(Vector( 0, 0, 120))
 				smoke:SetDieTime(math.Rand(0.2,1.3))
 				smoke:SetStartAlpha(math.Rand(150,200))
 				smoke:SetEndAlpha(0)
-				smoke:SetStartSize(math.random(4,14))
-				smoke:SetEndSize(math.random(40,60))
+				smoke:SetStartSize(math.random(0,5))
+				smoke:SetEndSize(math.random(20,30))
 				smoke:SetRoll(math.Rand(180,480))
 				smoke:SetRollDelta(math.Rand(-3,3))
 				smoke:SetColor(50,50,50)
-				smoke:SetGravity( Vector( 0, 0, 120 ) )
+				smoke:SetGravity( Vector( 0, 0, 10 ) )
 				smoke:SetAirResistance(200)
-
 				self.nextEmit = CurTime() + .1
 			end
 		end
-
-		local position = self:GetPos() + self:GetForward() * -12 + self:GetUp() * 13 + self:GetRight() * -11.5
-
-		render.SetMaterial(GLOW_MATERIAL)
-		render.DrawSprite(position, 14, 14, self:getNetVar("active", false) and COLOR_ACTIVE or COLOR_INACTIVE)
 	end
 end
