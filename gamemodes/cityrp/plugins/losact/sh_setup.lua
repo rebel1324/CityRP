@@ -1,6 +1,22 @@
 ACT_ENDSEQ = 0
 ACT_STARTSEQ = 1
 
+PLUGIN.acts["stand1"] = {
+	["player"] = {sequence = {"pose_standing_01"}, untimed = true}
+}
+PLUGIN.acts["stand2"] = {
+	["player"] = {sequence = {"pose_standing_02"}, untimed = true}
+}
+PLUGIN.acts["stand3"] = {
+	["player"] = {sequence = {"pose_standing_03"}, untimed = true}
+}
+PLUGIN.acts["stand4"] = {
+	["player"] = {sequence = {"pose_standing_04"}, untimed = true}
+}
+
+PLUGIN.acts["sit2"] = {
+	["player"] = {sequence = {"pose_ducking_01"}, untimed = true}
+}
 PLUGIN.acts["sit"] = {
 	["player"] = {sequence = {"sit_zen"}, untimed = true}
 }
@@ -26,6 +42,9 @@ PLUGIN.acts["dance"] = {
 			"custom_laugh6",
 			"custom_laugh7",
 			"custom_laugh8",
+			"taunt_dance",
+			"taunt_muscle",
+			"taunt_robot",
 		}
 	}
 }

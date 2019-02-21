@@ -50,17 +50,27 @@ for k, v in pairs(PLUGIN.acts) do
 
 					local sequence
 
+					local heckMate = tonumber(arguments[1])
+
 					if (type(info.sequence) == "table") then
 						sequence = table.Random(info.sequence)
+
+						if (heckMate) then
+							sequence = info.sequence[math.Clamp(heckMate, 1, #info.sequence)]
+						end
 					else
 						sequence = info.sequence
 					end
 
 					local duration = client:forceSequence(sequence, nil, info.untimed and 0 or nil)
 
-					client.nutSeqUntimed = info.untimed
-					client.nutNextAct = CurTime() + (info.untimed and 4 or duration) + 1
-					client:setNetVar("actAng", client:GetAngles())
+					if (not duration) then
+						client:notifyLocalized("notValid")
+					else
+						client.nutSeqUntimed = info.untimed
+						client.nutNextAct = CurTime() + (info.untimed and 4 or duration) + 1
+						client:setNetVar("actAng", client:GetAngles())
+					end
 				else
 					return "@modelNoSeq"
 				end
