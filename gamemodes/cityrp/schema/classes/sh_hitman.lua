@@ -6,7 +6,7 @@ CLASS.business = {
 CLASS.weapons = {
 	"nut_m_pipe",
 }
-CLASS.limit = 1
+CLASS.limit = 2
 CLASS.color = Color(255, 50, 0)
 
 function CLASS:onSet(client)

@@ -3,7 +3,7 @@ CLASS.faction = FACTION_CITIZEN
 CLASS.salary = 250
 CLASS.law = true
 CLASS.weapons = {
-	"cw_p99",
+	"tfa_bt_glock",
 	"nut_stunstick",
 	"nut_arrestbaton",
 	"keypad_cracker",

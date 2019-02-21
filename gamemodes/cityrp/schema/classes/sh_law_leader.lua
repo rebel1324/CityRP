@@ -4,7 +4,7 @@ CLASS.salary = 230
 CLASS.law = true
 CLASS.vote = true
 CLASS.weapons = {
-	"cw_p99",
+	"tfa_bt_glock",
 	"cw_mp5",
 	"nut_stunstick",
 	"nut_arrestbaton",
