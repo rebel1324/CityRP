@@ -437,24 +437,38 @@ nut.command.add("buyentity", {
 							local trace = util.TraceLine(data)
 
 							local pos = trace.HitPos + trace.HitNormal * 5
-							local ent = ents.Create(entTable.class)
+							
+							if (entTable.spawnFunction) then
+								local ent = entTable.spawnFunction(client, pos)
 
-							if (IsValid(ent)) then
-								local ca, cb = ent:GetCollisionBounds()
-								ent:SetPos(pos + cb)
-								ent:Spawn()
-								ent:Activate()
+								if (IsValid(ent)) then
+									char:giveMoney(-entTable.price)
 
-								char:giveMoney(-entTable.price)
+									hook.Run("EntityPurchased", client, char, ent, entTable)
 
-								if (ent.OnSpawned) then
-									ent.OnSpawned(client, char)
+									client:notify(L("purchaseEntity", client, entTable.name, nut.currency.get(price)))
 								end
+							else
+								local ent = ents.Create(entTable.class)
 
-								hook.Run("EntityPurchased", client, char, ent, entTable)
+								if (IsValid(ent)) then
+									local ca, cb = ent:GetCollisionBounds()
+									ent:SetPos(pos + cb)
+									ent:Spawn()
+									ent:Activate()
 
-								client:notify(L("purchaseEntity", client, entTable.name, nut.currency.get(price)))
+									char:giveMoney(-entTable.price)
+
+									if (ent.OnSpawned) then
+										ent.OnSpawned(client, char)
+									end
+
+									hook.Run("EntityPurchased", client, char, ent, entTable)
+
+									client:notify(L("purchaseEntity", client, entTable.name, nut.currency.get(price)))
+								end
 							end
+							
 						end
 					else
 						client:notify(L("cantAfford", client))
