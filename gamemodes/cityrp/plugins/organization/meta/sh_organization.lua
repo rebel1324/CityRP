@@ -94,13 +94,11 @@ if (SERVER) then
                     break
                 end
             end
-
             local targetChar = nut.char.loaded[charID]
             self.members[rank] = self.members[rank] or {}
             self.members[rank][charID] = targetChar and targetChar:getName() or prevName 
 
             nut.org.charRank(charID, self.id, rank):next(function()
-                print("waht")
                 netstream.Start(player.GetAll(), "nutOrgSyncMember", self.id, rank, charID, prevName)
 
                 if (targetChar and SERVER) then
