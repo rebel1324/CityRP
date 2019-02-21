@@ -36,8 +36,18 @@ if (SERVER) then
 
 		if (attacker and attacker:IsValid() and attacker:IsPlayer()) then
 			local weapon = attacker:GetActiveWeapon()
+			if (self.fuck) then
+				return
+			end
+			self.fuck = true
 
-			if (weapon and weapon:IsValid() and weapon.recalculateStats) then
+			timer.Simple(0, function()
+				if (IsValid(self)) then
+					self.fuck = false
+				end
+			end)
+
+			if (weapon and weapon:IsValid() and (weapon.IsCW or weapon.IsTFA)) then
 				if (attacker:getChar():getAttrib("gunskill") < 10) then
 					attacker:getChar():updateAttrib("gunskill", 0.001)
 				elseif (attacker:getChar():getAttrib("gunskill") < 20) then
