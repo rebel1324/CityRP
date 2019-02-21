@@ -17,7 +17,7 @@ ENT.StorageInfo = {
 		h = 1
 	}
 }
-ENT.cookerModel = "models/props_wasteland/prison_shelf002a.mdl"
+ENT.cookerModel = "models/props/cs_office/microwave.mdl"
 
 function ENT:getStorageInfo()
 	return self.StorageInfo
