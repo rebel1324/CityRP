@@ -29,6 +29,10 @@ function CHAR:joinClass(class)
 	local client, oldclass = self:getPlayer(), self:getClass()
 	local oldclassData, classData = nut.class.list[oldclass], nut.class.list[class]
 
+	if (hook.Run("CanPlayerChangeJob", client) == false) then
+		return
+	end
+
 	if (classData.vote and oldclassData.team != classData.team) then
 		client.onVote = false
 		if (client.nextVote and client.nextVote > CurTime()) then
@@ -46,7 +50,7 @@ function CHAR:joinClass(class)
 		end
 
 		client.onVote = true
-		client.nextVote = CurTime() + 1
+		client.nextVote = CurTime() + 300
 
 		local textWant = L("jobVoteContext", client, client:Name(), L(classData.name, client))
 
