@@ -692,7 +692,7 @@ function SCHEMA:OnPlayerJoinClass(client, class, oldclass, silent)
 	local infoa = nut.class.list[tonumber(oldclass)]
 	nut.log.add(client, "job", info, infoa)
 	
-	client.nextBe = CurTime() + 0
+	client.nextBe = CurTime() + 300
 
 	if (!silent) then
 		for k, v in ipairs(player.GetAll()) do
@@ -861,6 +861,25 @@ function SCHEMA:LoadData()
 	self:loadGarbage()
 	-- Load Map Entities
 	local savedEntities = self:getData() or {}
+	
+	for k, v in ipairs(ents.GetAll()) do
+		local class = v:GetClass():lower()
+
+		if (class == "frame_billboard") then
+			v:Remove()
+			
+			continue
+		end
+
+		if (class:find("bingle") and v:GetNWBool("permaBingle")) then
+			v:Remove()
+			continue
+		end
+			
+		if (saveEnts[class]) then
+			v:Remove()
+		end
+	end
 	
 	for k, v in ipairs(savedEntities) do
 		local ent = ents.Create(v.class)
